@@ -1,0 +1,40 @@
+{
+                    "title": "Large Embedded Example",
+                    "description": "this supports [named links](https://discordapp.com) on top of the previously shown subset of markdown. ```\nyes, even code blocks```",
+                  //"url": "https://discordapp.com",
+                    "color": 15609848,
+                    "timestamp": `${bot.user.createdAt}`,
+                    "footer": {
+                        "icon_url": `${bot.user.displayAvatarURL}`,
+                        "text": "footer text"
+                    },
+                    "thumbnail": {
+                        "url": `${bot.user.displayAvatarURL}`
+                    },
+                    "image": {
+                        "url": `${bot.user.displayAvatarURL}`
+                    },
+                    "author": {
+                        "name": `${bot.user.username}`,
+                     // "url": "https://discordapp.com",
+                        "icon_url": `${bot.user.displayAvatarURL}`
+                    },
+                    "fields": [{
+                        "name": "Field 1",
+                        "value": "Field 1 example message"
+                    }, {
+                        "name": "Field 2",
+                        "value": "Field 2 example long message with underlines\nThis line jumped!"
+                    }, {
+                        "name": "Field 3",
+                        "value": "Field 3 example message"
+                    }, {
+                        "name": "Inline 1",
+                        "value": "these last two",
+                        "inline": true
+                    }, {
+                        "name": "Inline 2",
+                        "value": "are inline fields",
+                        "inline": true
+                    }]
+                }
