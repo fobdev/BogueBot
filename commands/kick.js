@@ -8,30 +8,18 @@ module.exports.run = async(bot, message, args) => {
 
     let kick_reason = args.join(" ").slice(22);
 
-    if (kick_reason === "") {
-        const kickfail_embed = new Discord.RichEmbed()
-            .setTitle("Incorrect use of the command")
-            .setColor("#FF0000")
-            .addField("You must have to add a reason to kick this user",
-                "**Try using: **``" + `${botconfig.prefix}kick [user] [reason]` +
-                "``**\nOr use: **``" + `${botconfig.prefix}help kick` +
-                "``**\nFor detailed information about the command.**")
-        message.channel.send(kickfail_embed);
-    } else {
-        const kick_embed = new Discord.RichEmbed()
-            .setAuthor(`${bot.user.username} kick`, bot.user.displayAvatarURL)
-            .setColor("#FF0000")
-            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-            .addField("Usuario expulso", `| ${kick_user} | ID: ${kick_user.id}`)
-            .addField("Motivo", kick_reason);
+    const kick_embed = new Discord.RichEmbed()
+        .setAuthor(`${bot.user.username} Kick`, bot.user.displayAvatarURL)
+        .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
-        message.guild.member(kick_user).kick(kick_reason);
-        message.channel.send(kick_embed);
+    var has_reason = kick_reason !== "";
 
-    }
-    return;
+    message.guild.member(kick_user).kick(kick_reason);
+
+    
+
+
 }
-
 module.exports.help = {
     name: "kick"
 }

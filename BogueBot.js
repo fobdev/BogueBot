@@ -9,6 +9,8 @@ const bot = new Discord.Client({
 
 bot.commands = new Discord.Collection();
 
+var banned = false;
+var kicked = false;
 fs.readdir('./commands/', (err, files) => {
     if (err) console.log(err);
 
@@ -53,14 +55,17 @@ bot.on('guildDelete', guild => {
     console.log(`${bot.user.username} left server ${guild.name}`)
 });
 
+
 bot.on('guildMemberAdd', member => {
+    console.log(`MEMBER:[${member.displayName}] joined server -> [${member.guild.name}].`);
     const channel = member.guild.channels.find(ch => ch.name === 'general');
-    console.log(`${bot.user.username} joined -> ${guild.name}.`);
     if (!channel) {
         console.log(`No channel named 'general' found in ${guild.name}.`);
         return;
     }
-    channel.send(`**${member} o` + ("i" * 20) + "**");
+    
+    channel.send(`**${member} oiiiiiiiiiiiiiiiiiii**`);
+    console.log(`Welcome message to [${member.displayName}] in [${member.guild.name}] sent sucessfully.`);
 });
 
 bot.on('guildMemberRemove', member => {

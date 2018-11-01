@@ -22,6 +22,7 @@ module.exports.run = async(bot, message, args) => {
     //     return message.channel.send(`${del_arg} ${messages} de ${clear_user} foram excluídas no canal **${message.channel.name}**`);
     // }
 
+
     const delfail_embed = new Discord.RichEmbed()
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
@@ -30,19 +31,28 @@ module.exports.run = async(bot, message, args) => {
             "``**\nOu usa: **``" + `${botconfig.prefix}help clearme` +
             "``**\npara informação detalhada sobre o comando**");
 
-    if (del_arg > 100 || del_arg === "" || del_arg <= 0) {
+    if (del_arg > 100 ||del_arg <= 0) {
         return message.channel.send(delfail_embed);
     } else {
         try {
-        	message.delete();
-            message.channel.bulkDelete(del_arg);
-            return message.channel.send(new Discord.RichEmbed()
-                .setTitle(`${del_arg} ${messages} foram excluídas no canal **${message.channel.name}**`)
-                .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
-                .setColor("#00FF00"));
+            const perm_embed = new Discord.RichEmbed();
 
-        } catch (TypeError) {
-            console.log("Invalid input, code did not executed as expected.");
+            if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
+                message.delete();
+                message.channel.bulkDelete(del_arg);
+
+                return message.channel.send(perm_embed
+                    .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
+                    .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
+                    .setColor("#00FF00"));
+            } else {
+                return message.channel.send(perm_embed
+                    .setTitle("Usuário não tem permissão para excluir mensagens.")
+                    .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
+                    .setColor("#FF0000"));
+            }
+        } catch (e) {
+            console.log(e);
             return message.channel.send(delfail_embed);
         }
     }
