@@ -1,8 +1,8 @@
 {
-  "name": "bottest",
+  "name": "BogueBot",
   "version": "1.0.0",
-  "description": "just for study",
-  "main": "index.js",
+  "description": "General Porpuse discord bot",
+  "main": "BogueBot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
