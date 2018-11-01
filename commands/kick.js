@@ -19,7 +19,7 @@ module.exports.run = async(bot, message, args) => {
         message.channel.send(kickfail_embed);
     } else {
         const kick_embed = new Discord.RichEmbed()
-            .setAuthor(`${bot.user.username} matou <@${kick_user}>`, bot.user.displayAvatarURL)
+            .setAuthor(`${bot.user.username} kick`, bot.user.displayAvatarURL)
             .setColor("#FF0000")
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
             .addField("Usuario expulso", `| ${kick_user} | ID: ${kick_user.id}`)
