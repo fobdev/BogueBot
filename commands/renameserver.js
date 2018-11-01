@@ -19,8 +19,6 @@ module.exports.run = async(bot, message, args) => {
     }
 
 
-    console.log(`User '${message.author.username}'` +
-        ` sent [${message}] at server '${message.guild.name}' `);
 
     return message.channel.send(new Discord.RichEmbed()
         .setTitle(`Server name changed to '${newname}'`)

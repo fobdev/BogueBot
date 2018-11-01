@@ -28,9 +28,6 @@ module.exports.run = async(bot, message, args) => {
 
         message.guild.member(ban_user).ban(ban_reason);
         message.channel.send(ban_embed);
-
-        console.log(`User '${message.author.username}'` +
-            ` sent [${message}] at server '${message.guild.name}' `);
     }
     return;
 }

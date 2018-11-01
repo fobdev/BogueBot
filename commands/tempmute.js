@@ -6,7 +6,7 @@ module.exports.run = async(bot, message, args) => {
     let tomute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     if (!tomute) return message.channel.send("``User not found. Try typing @name``");
 
-    let muterole = message.guild.roles.find(`name`, "muted");
+    let muterole = message.guild.roles.find(role => role.name === 'muted');
 
     // create a new role
     if (!muterole) {
@@ -19,8 +19,7 @@ module.exports.run = async(bot, message, args) => {
 
             message.guild.channels.forEach(async(channel, id) => {
                 await channel.overwritePermissions(muterole, {
-                    SEND_MESSAGES: false,
-                    ADD_REACTIONS: false
+                    SEND_MESSAGES: false
                 });
             });
         } catch (e) {
@@ -42,7 +41,7 @@ module.exports.run = async(bot, message, args) => {
     }
     await (tomute.addRole(muterole.id));
     message.channel.send(`**<@${tomute.id}> has been muted for ${ms(ms(mutetime))}**`);
-	console.log(`${message.author.username} muted user[${tomute.displayName}] for ${ms(ms(mutetime))}.`);
+	console.log(`${message.author.username} muted user [${tomute.displayName}] for ${ms(ms(mutetime))}.`);
 
     setTimeout(function() {
         tomute.removeRole(muterole.id);

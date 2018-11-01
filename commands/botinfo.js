@@ -12,8 +12,6 @@ module.exports.run = async(bot, message, args) => {
         .addField("My goal", "Study porpuses.")
         .addField("Created at", bot.user.createdAt);
 
-    console.log(`User '${message.author.username}'` +
-        ` sent [${message}] at server '${message.guild.name}' `);
 
     return message.channel.send(bot_embed);
 }

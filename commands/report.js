@@ -21,8 +21,6 @@ module.exports.run = async(bot, message, args) => {
         message.delete().catch(O_o => {});
         message.channel.send(report_embed);
 
-        console.log(`User '${message.author.username}'` +
-            ` sent [${message}] at server '${message.guild.name}' `);
     }
     return;
 }
