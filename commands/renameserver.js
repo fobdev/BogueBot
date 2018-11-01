@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     var newname = args.join(" ");
     message.guild.setName(newname);
@@ -17,8 +17,6 @@ module.exports.run = async(bot, message, args) => {
 
         return message.channel.send(newnamefail_embed);
     }
-
-
 
     return message.channel.send(new Discord.RichEmbed()
         .setTitle(`Server name changed to '${newname}'`)

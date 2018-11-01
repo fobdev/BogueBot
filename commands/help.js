@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     console.log(`User '${message.author.username}'` +
         ` sent [${message}] at server '${message.guild.name}' `);
@@ -12,8 +12,8 @@ module.exports.run = async(bot, message, args) => {
     const authority_commands =
         "|``renameserver``|``report``|``kick``|``ban``|``tempmute``|";
 
-    const misc_commands = 
-    "|``bogue``|";
+    const misc_commands =
+        "|``bogue``|";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
@@ -53,7 +53,7 @@ module.exports.run = async(bot, message, args) => {
             break;
         case "clear":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}clear`,
-                "Exclui um certo número de mensagens do canal que foi enviado o comando.\n"+
+                "Exclui um certo número de mensagens do canal que foi enviado o comando.\n" +
                 "No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas por vez.\n" +
                 "**Uso: ``" + `${botconfig.prefix}clear [numero de mensagens]` + "``**"));
             break;

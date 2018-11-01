@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     if (!kick_user) return message.channel.send("**User not found.**");
@@ -16,9 +16,7 @@ module.exports.run = async(bot, message, args) => {
 
     message.guild.member(kick_user).kick(kick_reason);
 
-    
-
-
+    return message.channel.send(kick_embed);
 }
 module.exports.help = {
     name: "kick"

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     let bot_description = "A discord bot by Fobenga just for study porpuses.";
     let bot_embed = new Discord.RichEmbed()

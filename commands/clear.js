@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json")
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     // let clear_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     // if (!clear_user) return message.channel.send(new Discord.RichEmbed()
@@ -31,7 +31,7 @@ module.exports.run = async(bot, message, args) => {
             "``**\nOu usa: **``" + `${botconfig.prefix}help clearme` +
             "``**\npara informação detalhada sobre o comando**");
 
-    if (del_arg > 100 ||del_arg <= 0) {
+    if (del_arg > 100 || del_arg <= 0) {
         return message.channel.send(delfail_embed);
     } else {
         try {

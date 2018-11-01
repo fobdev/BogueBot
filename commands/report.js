@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
 
     let r_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     if (!r_user) return message.channel.send(`**User not found.**`);
@@ -18,7 +18,7 @@ module.exports.run = async(bot, message, args) => {
             .addField("Reported by", `| ${message.author} | ID: ${message.author.id}`)
             .addField("Reason", reason);
 
-        message.delete().catch(O_o => {});
+        message.delete().catch(O_o => { });
         message.channel.send(report_embed);
 
     }

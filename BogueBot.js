@@ -9,8 +9,6 @@ const bot = new Discord.Client({
 
 bot.commands = new Discord.Collection();
 
-var banned = false;
-var kicked = false;
 fs.readdir('./commands/', (err, files) => {
     if (err) console.log(err);
 
@@ -26,7 +24,7 @@ fs.readdir('./commands/', (err, files) => {
     });
 });
 
-bot.on('ready', async() => {
+bot.on('ready', async () => {
     var current_servers = bot.guilds.array();
 
     console.log("---------------------------------");
@@ -63,11 +61,13 @@ bot.on('guildMemberAdd', member => {
         console.log(`No channel named 'general' found in ${guild.name}.`);
         return;
     }
-    
+
     channel.send(`**${member} oiiiiiiiiiiiiiiiiiii**`);
     console.log(`Welcome message to [${member.displayName}] in [${member.guild.name}] sent sucessfully.`);
 });
 
+var kicked = false;
+var banned = false;
 bot.on('guildMemberRemove', member => {
     const channel = member.guild.channels.find(ch => ch.name === 'general');
     if (!channel) return;
@@ -75,7 +75,6 @@ bot.on('guildMemberRemove', member => {
 });
 
 var everyonecount = 0;
-var dmed = false;
 
 bot.on('message', async message => {
     if (message.author.bot) return;
