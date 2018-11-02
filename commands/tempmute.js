@@ -49,7 +49,7 @@ module.exports.run = async (bot, message, args) => {
             console.log(`User[${tomute.displayName}] has been unmuted.`);
         }, ms(mutetime));
     } else {
-        return message.channel.send(new RichEmbed()
+        return message.channel.send(new Discord.RichEmbed()
             .setTitle("Você não tem permissão para usar esse comando.")
             .setColor("#FF0000")
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL));

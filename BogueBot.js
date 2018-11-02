@@ -24,16 +24,22 @@ fs.readdir('./commands/', (err, files) => {
     });
 });
 
-bot.on('ready', async () => {
-    var current_servers = bot.guilds.array();
 
+
+function servers_show() {
+    var current_servers = bot.guilds.array();
     console.log("---------------------------------");
-    console.log(`${bot.user.username} is online!`);
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
     for (var i = 0; i < current_servers.length; i++) {
         console.log(`${i + 1} - [${current_servers[i]}]`);
     }
     console.log("---------------------------------");
+}
+
+bot.on('ready', async() => {
+    console.log("---------------------------------");
+    console.log(`${bot.user.username} is online!`);
+    servers_show();
 
     bot.user.setActivity(`${botconfig.prefix}help para a redpill.`, {
         type: 'PLAYING'
@@ -46,13 +52,15 @@ bot.on('guildCreate', guild => {
         console.log("No channel named 'general' found in this server.")
         return;
     }
+    console.log(`${bot.user.username} joined server [${guild.name}].`)
+    servers_show();
     channel.send("**Conheçam Hades.**");
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} left server ${guild.name}`)
+    console.log(`${bot.user.username} left server [${guild.name}]`)
+    servers_show();
 });
-
 
 bot.on('guildMemberAdd', member => {
     console.log(`MEMBER:[${member.displayName}] joined server -> [${member.guild.name}].`);
@@ -66,11 +74,10 @@ bot.on('guildMemberAdd', member => {
     console.log(`Welcome message to [${member.displayName}] in [${member.guild.name}] sent sucessfully.`);
 });
 
-var kicked = false;
-var banned = false;
 bot.on('guildMemberRemove', member => {
     const channel = member.guild.channels.find(ch => ch.name === 'general');
     if (!channel) return;
+    console.log(`User [${member}] left server [${member.guild.name}]`)
     channel.send(`**${member} kito tnc**`);
 });
 
