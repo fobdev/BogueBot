@@ -77,7 +77,7 @@ bot.on('guildMemberAdd', member => {
 bot.on('guildMemberRemove', member => {
     const channel = member.guild.channels.find(ch => ch.name === 'general');
     if (!channel) return;
-    console.log(`User [${member}] left server [${member.guild.name}]`)
+    console.log(`User [${member.displayName}] left server [${member.guild.name}]`)
     channel.send(`**${member} kito tnc**`);
 });
 

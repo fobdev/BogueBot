@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
@@ -17,7 +16,6 @@ module.exports.run = async (bot, message, args) => {
                     " em qualquer servidor:",
                     `${link}`)));
     }
-
 }
 
 module.exports.help = {

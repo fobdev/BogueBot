@@ -1,23 +1,31 @@
 const Discord = require("discord.js");
+const botconfig = require("../botconfig.json");
 const ms = require("ms");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async(bot, message, args) => {
     if (message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
         let tomute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        if (!tomute) return message.channel.send("``User not found. Try typing @name``");
+        let muterole = message.guild.roles.find(role => role.name === 'mutado');
 
-        let muterole = message.guild.roles.find(role => role.name === 'muted');
+        const mute_embed = new Discord.RichEmbed()
+            .setTitle(`${bot.user.username} Mute`)
+            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+
+        if (!tomute) return message.channel.send(mute_embed
+            .addTitle(`${bot.user.username} Erro`)
+            .addField("Usuário não encontrado",
+                "Tente usar " + `${botconfig.prefix}tempmute` + " [@membro] [tempo]``"));
 
         // create a new role
         if (!muterole) {
             try {
                 muterole = await message.guild.createRole({
-                    name: "muted",
+                    name: "mutado",
                     color: "#000000",
                     permissions: []
-                })
+                });
 
-                message.guild.channels.forEach(async (channel, id) => {
+                message.guild.channels.forEach(async(channel, id) => {
                     await channel.overwritePermissions(muterole, {
                         SEND_MESSAGES: false
                     });
@@ -30,23 +38,34 @@ module.exports.run = async (bot, message, args) => {
 
         let mutetime = args[1];
         if (!mutetime) {
-            const mute_err = new Discord.RichEmbed()
-                .setTitle("Error - You Didn't especified a time.")
+            mute_embed
+                .setTitle(`${bot.user.username} Erro`)
                 .setColor("#FF0000")
-                .addField("Try using:", "``>tempmute [user] [time](s/m/h)``")
-                .addField("Example", "``>tempmute @user 10s``\nMutes the user for 10 seconds")
-                .addField("Usage", "s - seconds \nm - minutes\nh - hours");
+                .addField("Tempo não especificado", `Tente usar: ${botconfig.prefix}tempmute [@membro] [tempo](s/m/h)`)
+                .addField("Exemplo", "``" + `${botconfig.prefix}tempmute [@membro] 10s` +
+                    "``\nMuta o usuário por 10 segundos.");
 
-            return message.channel.send(mute_err);
+            return message.channel.send(mute_embed);
         }
         await (tomute.addRole(muterole.id));
-        message.channel.send(`**<@${tomute.id}> has been muted for ${ms(ms(mutetime))}**`);
+
+        message.channel.send(mute_embed
+            .setTitle(`**${tomute.displayName}** foi mutado por ${ms(ms(mutetime))}`)
+            .setColor("00FF00"));
+
         console.log(`${message.author.username} muted user [${tomute.displayName}] for ${ms(ms(mutetime))}.`);
 
-        setTimeout(function () {
-            tomute.removeRole(muterole.id);
-            message.channel.send(`**<@${tomute.id}> has been unmuted.**`);
-            console.log(`User[${tomute.displayName}] has been unmuted.`);
+        setTimeout(function() {
+
+            if (!tomute.roles.find(role => role.name === 'mutado')) {
+                return;
+            } else {
+                tomute.removeRole(muterole.id);
+                message.channel.send(mute_embed
+                    .setTitle(`**${tomute.displayName}** foi desmutado`)
+                    .setColor("00FF00"));
+                console.log(`Membro [${tomute.displayName}] foi desmutado.`);
+            }
         }, ms(mutetime));
     } else {
         return message.channel.send(new Discord.RichEmbed()
@@ -54,10 +73,7 @@ module.exports.run = async (bot, message, args) => {
             .setColor("#FF0000")
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL));
     }
-    return;
 }
-
-
 module.exports.help = {
     name: "tempmute"
 }

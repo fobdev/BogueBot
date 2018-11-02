@@ -1,16 +1,13 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async (bot, message, args) => {
-
-    console.log(`User '${message.author.username}'` +
-        ` sent [${message}] at server '${message.guild.name}' `);
+module.exports.run = async(bot, message, args) => {
 
     const utility_commands =
-        "|``help``|``serverinfo``|``botinfo``|``authme``|``clear``|";
+        "|``help``|``clear``|``authme``|";
 
     const authority_commands =
-        "|``renameserver``|``report``|``kick``|``ban``|``tempmute``|";
+        "|``mute``|``desmute``|``tempmute``|``kick``|``ban``|``report``|``renameserver``|";
 
     const misc_commands =
         "|``bogue``|";
@@ -25,6 +22,7 @@ module.exports.run = async (bot, message, args) => {
         .setColor("#00FF00")
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
+        // .addField("Aleatórios", misc_commands);
 
 
     let helpcommand = args.join(" ");
@@ -38,14 +36,6 @@ module.exports.run = async (bot, message, args) => {
         case "help":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}help`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));
-            break;
-        case "serverinfo":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}serverinfo`,
-                "Exiba as informações do servidor."));
-            break;
-        case "botinfo":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}botinfo`,
-                `Mostra todas as informações do ${bot.name}`));
             break;
         case "authme":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}authme`,
@@ -80,7 +70,17 @@ module.exports.run = async (bot, message, args) => {
         case "tempmute":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}tempmute`,
                 "Silenciar um usuário temporariamente | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}tempmute [@usuário]` + "``**"));
+                "**Uso:``" + `${botconfig.prefix}tempmute [@usuário] [tempo](s/m/h)` + "``**"));
+            break;
+        case "desmute":
+            return message.channel.send(commands_embed.addField(`${botconfig.prefix}desmute`,
+                "Desmuta o usuário, apenas utilizável caso o usuário já estiver mutado | **(apenas para administradores)**\n" +
+                "**Uso:``" + `${botconfig.prefix}desmute [@usuário]` + "``**"));
+            break;
+        case "mute":
+            return message.channel.send(commands_embed.addField(`${botconfig.prefix}mute`,
+                "Silenciar um usuário | **(apenas para administradores)**\n" +
+                "**Uso:``" + `${botconfig.prefix}mute [@usuário]` + "``**"));
             break;
         default:
             break;
