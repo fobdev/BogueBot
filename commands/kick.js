@@ -1,22 +1,37 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async(bot, message, args) => {
+    if (message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
 
-    let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    if (!kick_user) return message.channel.send("**User not found.**");
+        let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+        if (!kick_user) return message.channel.send("**User not found.**");
 
-    let kick_reason = args.join(" ").slice(22);
+        let kick_reason = args.join(" ").slice(22);
 
-    const kick_embed = new Discord.RichEmbed()
-        .setAuthor(`${bot.user.username} Kick`, bot.user.displayAvatarURL)
-        .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+        const kick_embed = new Discord.RichEmbed()
+            .setAuthor(`${bot.user.username} Kick`, bot.user.displayAvatarURL)
+            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
-    var has_reason = kick_reason !== "";
+        if (kick_reason === "") {
+            message.guild.member(kick_user).kick();
+        } else {
+            message.guild.member(kick_user).kick(kick_reason);
+            kick_embed.addField("Motivo", `${kick_reason}`)
+        }
 
-    message.guild.member(kick_user).kick(kick_reason);
+        return message.channel.send(kick_embed
+            .setTitle("Usuário foi expulso do servidor")
+            .addField("Usuário", `${kick_user}`)
+            .setColor("#00FF00"));
 
-    return message.channel.send(kick_embed);
+    } else {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle("Você não tem permissão para usar esse comando.")
+            .setColor("#FF0000")
+            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL));
+    }
+    return;
 }
 module.exports.help = {
     name: "kick"
