@@ -132,4 +132,12 @@ bot.on('message', async message => {
     }
 });
 
-bot.login(bot_token.token)
+function logintry() {
+    try{
+    bot.login(bot_token.token)
+    }
+    catch(e){
+        console.log("Internet Connection Error, unable to initialize bot.");
+    }
+}
+logintry();

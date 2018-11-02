@@ -11,9 +11,15 @@ module.exports.run = async(bot, message, args) => {
             .setTitle(`${bot.user.username} Mute`)
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
+        if(tomute.hasPermission('ADMINISTRATOR')){
+            return message.channel.send(mute_embed
+                .setTitle("VocÃª nÃ£o pode silenciar um administrador.")
+                .setColor("#FF0000"));
+        }
+
         if (!tomute) return message.channel.send(mute_embed
             .addTitle(`${bot.user.username} Erro`)
-            .addField("Usuário não encontrado",
+            .addField("UsuÃ¡rio nÃ£o encontrado",
                 "Tente usar " + `${botconfig.prefix}tempmute` + " [@membro] [tempo]``"));
 
         // create a new role
@@ -41,9 +47,13 @@ module.exports.run = async(bot, message, args) => {
             mute_embed
                 .setTitle(`${bot.user.username} Erro`)
                 .setColor("#FF0000")
-                .addField("Tempo não especificado", `Tente usar: ${botconfig.prefix}tempmute [@membro] [tempo](s/m/h)`)
-                .addField("Exemplo", "``" + `${botconfig.prefix}tempmute [@membro] 10s` +
-                    "``\nMuta o usuário por 10 segundos.");
+                .addField("Tempo nÃ£o especificado", "``" +`Tente usar: ${botconfig.prefix}tempmute ` + "[@membro] [tempo](s/m/h)``")
+                .addField("Exemplos", "``" + `${botconfig.prefix}tempmute [@membro] 10s` +
+                    "``\nMuta o usuÃ¡rio por 10 segundos.\n"+
+                    "``" + `${botconfig.prefix}tempmute [@membro] 5m` +
+                    "``\nMuta o usuÃ¡rio por 5 minutos.\n" +
+                    "``" + `${botconfig.prefix}tempmute [@membro] 1h` +
+                    "``\nMuta o usuÃ¡rio por 1 hora.");
 
             return message.channel.send(mute_embed);
         }
@@ -69,7 +79,7 @@ module.exports.run = async(bot, message, args) => {
         }, ms(mutetime));
     } else {
         return message.channel.send(new Discord.RichEmbed()
-            .setTitle("Você não tem permissão para usar esse comando.")
+            .setTitle("VocÃª nÃ£o tem permissÃ£o para usar esse comando.")
             .setColor("#FF0000")
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL));
     }

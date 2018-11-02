@@ -9,6 +9,12 @@ module.exports.run = async(bot, message, args) => {
             .setTitle(`${bot.user.username} Mutar`)
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
+        if(mute.hasPermission('ADMINISTRATOR')){
+            return message.channel.send(mute_embed
+                .setTitle("Você não pode silenciar um administrador.")
+                .setColor("#FF0000"));
+        }
+
         if (!muterole) {
             try {
                 muterole = await message.guild.createRole({
