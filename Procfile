@@ -1,1 +1,1 @@
-worker: nodemon BogueBot.js
+worker: node BogueBot.js
