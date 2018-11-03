@@ -111,7 +111,7 @@ bot.on('message', async message =>
 
     if (message.isMentioned(bot.user))
     {
-        return message.channel.send("oie");
+        return message.channel.send("tua mae");
     }
 
     if (message.mentions.everyone)
