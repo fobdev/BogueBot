@@ -110,6 +110,8 @@ module.exports.run = async(bot, message, args) => {
             }
             break;
         default:
+            return message.channel.send(commands_embed.addField(`Comando não encontrado, tente novamente.`)
+                .setColor("#FF0000"));
             break;
     }
     return message.channel.send(help_embed);
