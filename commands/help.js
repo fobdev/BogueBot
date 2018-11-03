@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
+module.exports.run = async(bot, message, args) =>
+{
 
     const utility_commands =
         "|``help``|``clear``|``auth``|";
@@ -32,7 +33,8 @@ module.exports.run = async(bot, message, args) => {
         .setTitle(`Lista de comandos do ${bot.user.username}`)
         .setColor("#00FF00");
 
-    switch (helpcommand) {
+    switch (helpcommand)
+    {
         case "help":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}${this.help.name}`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));

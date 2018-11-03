@@ -1,8 +1,10 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) => {
-    if (message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
+module.exports.run = async(bot, message, args) =>
+{
+    if (message.guild.member(message.author).hasPermission('KICK_MEMBERS'))
+    {
 
         let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
         if (!kick_user) return message.channel.send("**User not found.**");
@@ -12,15 +14,19 @@ module.exports.run = async(bot, message, args) => {
         const kick_embed = new Discord.RichEmbed()
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
-        if(kick_user.hasPermission('ADMINISTRATOR')){
+        if (kick_user.hasPermission('ADMINISTRATOR'))
+        {
             return message.channel.send(kick_embed
                 .setTitle("Você não pode expulsar um administrador.")
                 .setColor("#FF0000"));
         }
 
-        if (kick_reason === "") {
+        if (kick_reason === "")
+        {
             message.guild.member(kick_user).kick();
-        } else {
+        }
+        else
+        {
             message.guild.member(kick_user).kick(kick_reason);
             kick_embed.addField("Motivo", `${kick_reason}`)
         }
@@ -29,7 +35,9 @@ module.exports.run = async(bot, message, args) => {
             .addField("Usuário foi expulso do servidor", `${kick_user}`)
             .setColor("#00FF00"));
 
-    } else {
+    }
+    else
+    {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle("Você não tem permissão para usar esse comando.")
             .setColor("#FF0000")
