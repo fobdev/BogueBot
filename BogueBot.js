@@ -46,7 +46,8 @@ bot.on('ready', async () =>
     console.log(`${bot.user.username} is online!`);
     servers_show();
 
-    bot.user.setActivity(`${botconfig.prefix}help para a redpill.`,
+    const helpfile = require("./commands/help.js");
+    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} para a redpill.`,
     {
         type: 'PLAYING'
     });
@@ -109,11 +110,6 @@ bot.on('message', async message =>
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
 
-    if (message.isMentioned(bot.user))
-    {
-        return message.channel.send("tua mae");
-    }
-
     if (message.mentions.everyone)
     {
         everyonecount++;
@@ -156,4 +152,4 @@ bot.on('message', async message =>
 });
 
 bot.login(process.env.BOT_TOKEN);
-// bot.login(bot_token.token)
+//bot.login(bot_token.token)
