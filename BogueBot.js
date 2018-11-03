@@ -109,6 +109,11 @@ bot.on('message', async message =>
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
 
+    if (message.mentions.members.id(bot.user.id))
+    {
+        return message.channel.send("oie");
+    }
+
     if (message.mentions.everyone)
     {
         everyonecount++;
