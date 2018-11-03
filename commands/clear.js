@@ -27,8 +27,8 @@ module.exports.run = async (bot, message, args) => {
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
-            "**Tenta usar: **``" + `${botconfig.prefix}clearme [100]` +
-            "``**\nOu usa: **``" + `${botconfig.prefix}help clearme` +
+            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [100]` +
+            "``**\nOu usar: **``" + `${botconfig.prefix}help ${this.help.name}` +
             "``**\npara informação detalhada sobre o comando**");
 
     if (del_arg > 100 || del_arg <= 0) {
@@ -38,9 +38,9 @@ module.exports.run = async (bot, message, args) => {
             const perm_embed = new Discord.RichEmbed();
 
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
-                message.delete();
+                await message.delete();
+                
                 message.channel.bulkDelete(del_arg);
-
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
                     .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
