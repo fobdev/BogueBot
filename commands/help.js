@@ -53,7 +53,7 @@ module.exports.run = async(bot, message, args) => {
             break;
         case "renameserver":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}renameserver`,
-                "Renomeia o servidor, é possível apenas criar nomes entre 3 a 100 caracteres. |" +
+                "Renomeia o servidor, é possível apenas criar nomes entre 2 a 100 caracteres. |" +
                 " **(apenas para administradores)**\n" +
                 "**Uso: ``" + `${botconfig.prefix}renameserver [novo nome]` + "``**"));
             break;
