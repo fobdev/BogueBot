@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args) =>
         "|``mute``|``desmute``|``tempmute``|``kick``|``ban``|``report``|``renameserver``|";
 
     const misc_commands =
-        "|``mae``|";
+        "|``bogue``|";
 
     const user_commands =
         "|``avatar``|"
@@ -24,10 +24,10 @@ module.exports.run = async (bot, message, args) =>
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
-        .addField("\nUsuário", user_commands)
-        .addField("\nUtilidade", utility_commands)
-        .addField("\nAutoridade", authority_commands)
-        .addField("\nAleatórios", misc_commands);
+        .addField("Usuário", user_commands)
+        .addField("Utilidade", utility_commands)
+        .addField("Autoridade", authority_commands);
+    // .addField("Aleatórios", misc_commands);
 
 
     let helpcommand = args.join(" ");
