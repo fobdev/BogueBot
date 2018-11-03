@@ -40,7 +40,7 @@ function servers_show()
     console.log("---------------------------------");
 }
 
-bot.on('ready', async() =>
+bot.on('ready', async () =>
 {
     console.log("---------------------------------");
     console.log(`${bot.user.username} is online!`);

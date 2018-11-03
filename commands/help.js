@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) =>
+module.exports.run = async (bot, message, args) =>
 {
 
     const utility_commands =
@@ -13,6 +13,9 @@ module.exports.run = async(bot, message, args) =>
     const misc_commands =
         "|``bogue``|";
 
+    const user_commands =
+        "|``avatar``|"
+
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
         .setDescription(`Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.` +
@@ -21,8 +24,9 @@ module.exports.run = async(bot, message, args) =>
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
+        .addField("Autoridade", authority_commands)
         .addField("Utilidade", utility_commands)
-        .addField("Autoridade", authority_commands);
+        .addField("Usuário", user_commands);
     // .addField("Aleatórios", misc_commands);
 
 
@@ -38,6 +42,14 @@ module.exports.run = async(bot, message, args) =>
         case "help":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}${this.help.name}`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));
+            break;
+        case "avatar":
+            {
+                const file = require("./avatar.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Exibe o avatar em tamanho grande do membro marcado\n" +
+                    `Uso: ${botconfig.prefix}${file.help.name} [@membro]`));
+            }
             break;
         case "auth":
             {
