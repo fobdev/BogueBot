@@ -1,5 +1,5 @@
 const botconfig = require("./botconfig.json");
-// const bot_token = require("./bottoken.json");
+//const bot_token = require("./bottoken.json");
 const Discord = require("discord.js");
 const fs = require("fs");
 
@@ -109,10 +109,9 @@ bot.on('message', async message =>
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
 
-    if (message.mentions.users(bot))
+    if (message.isMentioned(bot.user))
     {
         return message.channel.send("oie");
-
     }
 
     if (message.mentions.everyone)
