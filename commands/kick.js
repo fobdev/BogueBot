@@ -10,8 +10,13 @@ module.exports.run = async(bot, message, args) => {
         let kick_reason = args.join(" ").slice(22);
 
         const kick_embed = new Discord.RichEmbed()
-            .setAuthor(`${bot.user.username} Kick`, bot.user.displayAvatarURL)
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+
+        if(kick_user.hasPermission('ADMINISTRATOR')){
+            return message.channel.send(kick_embed
+                .setTitle("Você não pode expulsar um administrador.")
+                .setColor("#FF0000"));
+        }
 
         if (kick_reason === "") {
             message.guild.member(kick_user).kick();
@@ -21,8 +26,7 @@ module.exports.run = async(bot, message, args) => {
         }
 
         return message.channel.send(kick_embed
-            .setTitle("Usuário foi expulso do servidor")
-            .addField("Usuário", `${kick_user}`)
+            .addField("Usuário foi expulso do servidor", `${kick_user}`)
             .setColor("#00FF00"));
 
     } else {

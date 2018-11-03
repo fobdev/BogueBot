@@ -4,7 +4,7 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async(bot, message, args) => {
 
     const utility_commands =
-        "|``help``|``clear``|``authme``|";
+        "|``help``|``clear``|``bogue``|";
 
     const authority_commands =
         "|``mute``|``desmute``|``tempmute``|``kick``|``ban``|``report``|``renameserver``|";

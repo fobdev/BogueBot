@@ -9,6 +9,12 @@ module.exports.run = async(bot, message, args) => {
             .setTitle(`${bot.user.username} Mutar`)
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
+        if (!mute) {
+            return message.channel.send(unmute_embed
+                .setTitle("Uso incorreto do comando")
+                .addField("Tente usar", `${botconfig.prefix}${this.help.name} [@user]`));
+        }
+
         if (mute.hasPermission('ADMINISTRATOR')) {
             return message.channel.send(mute_embed
                 .setTitle("Você não pode silenciar um administrador.")

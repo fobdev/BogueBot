@@ -1,26 +1,30 @@
 const Discord = require("discord.js");
+const botconfig = require("../botconfig.json");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async(bot, message, args) => {
 
     let r_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    if (!r_user) return message.channel.send(`**User not found.**`);
-
     let reason = args.join(" ").slice(22);
 
+    const report_embed = new Discord.RichEmbed()
+        .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL);
+
+    if (!r_user) return message.channel.send(report_embed
+        .setTitle("Usuário não encontrado.")
+        .setColor("#FF0000"));
+
     if (reason === "") {
-        message.channel.send("``You must have to add a reason to report this user, try using\n>report [user] [reason]``");
+        message.channel.send(report_embed
+            .addField("Você deve especificar um motivo para denunciar esse usuário",
+                "``" + `${botconfig.prefix}${this.help.name} [@usuário] [motivo]` + "``")
+            .setColor("#FF0000"));
     } else {
-        const report_embed = new Discord.RichEmbed()
-            .setTitle("User Report")
-            .setAuthor("BilaBot Report User", bot.user.displayAvatarURL)
-            .setColor("#FF0000")
-            .addField("Reported User", `| ${r_user} | ID: ${r_user.id}`)
-            .addField("Reported by", `| ${message.author} | ID: ${message.author.id}`)
-            .addField("Reason", reason);
-
-        message.delete().catch(O_o => { });
-        message.channel.send(report_embed);
-
+        message.delete();
+        message.channel.send(report_embed
+            .setColor("#00FF00")
+            .addField("Úsuário denunciado", `| ${r_user} | ID: ${r_user.id}`)
+            .addField("Denunciado por", `| ${message.author} | ID: ${message.author.id}`)
+            .addField("Motivo", reason));
     }
     return;
 }

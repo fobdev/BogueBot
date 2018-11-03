@@ -24,8 +24,6 @@ fs.readdir('./commands/', (err, files) => {
     });
 });
 
-
-
 function servers_show() {
     var current_servers = bot.guilds.array();
     console.log("---------------------------------");
@@ -84,6 +82,7 @@ bot.on('guildMemberRemove', member => {
 var everyonecount = 0;
 
 bot.on('message', async message => {
+
     if (message.author.bot) return;
     if (message.channel.type === "dm") {
         return message.channel.send("Don't talk to me or to my son ever again.");
