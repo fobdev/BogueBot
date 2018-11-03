@@ -22,7 +22,7 @@ module.exports.run = async(bot, message, args) => {
         .setColor("#00FF00")
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
-        // .addField("Aleatórios", misc_commands);
+    // .addField("Aleatórios", misc_commands);
 
 
     let helpcommand = args.join(" ");
@@ -34,53 +34,80 @@ module.exports.run = async(bot, message, args) => {
 
     switch (helpcommand) {
         case "help":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}help`,
+            return message.channel.send(commands_embed.addField(`${botconfig.prefix}${this.help.name}`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));
             break;
         case "auth":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}authme`,
-                `Envia um link para convidar o ${bot.name} para qualquer servidor.`));
+            {
+                const file = require("./auth.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    `Envia um link para convidar o ${bot.name} para qualquer servidor.`));
+            }
             break;
         case "clear":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}clear`,
-                "Exclui um certo número de mensagens do canal que foi enviado o comando.\n" +
-                "No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas por vez.\n" +
-                "**Uso: ``" + `${botconfig.prefix}clear [numero de mensagens]` + "``**"));
+            {
+                const file = require("./clear.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Exclui um certo número de mensagens do canal que foi enviado o comando.\n" +
+                    "No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas por vez.\n" +
+                    "**Uso: ``" + `${botconfig.prefix}${file.help.name} [numero de mensagens]` + "``**"));
+            }
             break;
         case "report":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}report`,
-                "Reporta um usuário\n**Uso: ``" + `${botconfig.prefix}report [@usuário] [motivo]` + "``"));
+            {
+                const file = require("./report.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Reporta um usuário\n**Uso: ``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``"));
+            }
             break;
         case "renameserver":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}renameserver`,
-                "Renomeia o servidor, é possível apenas criar nomes entre 2 a 100 caracteres. |" +
-                " **(apenas para administradores)**\n" +
-                "**Uso: ``" + `${botconfig.prefix}renameserver [novo nome]` + "``**"));
+            {
+                const file = require("./renameserver.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Renomeia o servidor, é possível apenas criar nomes entre 2 a 100 caracteres. |" +
+                    " **(apenas para administradores)**\n" +
+                    "**Uso: ``" + `${botconfig.prefix}${file.help.name} [novo nome]` + "``**"));
+            }
             break;
         case "kick":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}kick`,
-                "Expulsa um usuário do servidor | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}kick [@usuário] [motivo]` + "``**"));
+            {
+                const file = require("./kick.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Expulsa um usuário do servidor | **(apenas para administradores)**\n" +
+                    "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``**"));
+            }
             break;
         case "ban":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}ban`,
-                "Banir usuário | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}ban [@usuário] [motivo]` + "``**"));
+            {
+                const file = require("./ban.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Banir usuário | **(apenas para administradores)**\n" +
+                    "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``**"));
+            }
             break;
         case "tempmute":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}tempmute`,
-                "Silenciar um usuário temporariamente | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}tempmute [@usuário] [tempo](s/m/h)` + "``**"));
+            {
+                const file = require("./tempmute.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Silenciar um usuário temporariamente | **(apenas para administradores)**\n" +
+                    "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [tempo](s/m/h)` + "``**"));
+            }
             break;
         case "desmute":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}desmute`,
-                "Desmuta o usuário, apenas utilizável caso o usuário já estiver mutado | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}desmute [@usuário]` + "``**"));
+            {
+                const file = require("./desmute.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Desmuta o usuário, apenas utilizável caso o usuário já estiver mutado | **(apenas para administradores)**\n" +
+                    "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário]` + "``**"));
+            }
             break;
         case "mute":
-            return message.channel.send(commands_embed.addField(`${botconfig.prefix}mute`,
-                "Silenciar um usuário | **(apenas para administradores)**\n" +
-                "**Uso:``" + `${botconfig.prefix}mute [@usuário]` + "``**"));
+            {
+                const file = require("./mute.js")
+                return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
+                    "Silenciar um usuário | **(apenas para administradores)**\n" +
+                    "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário]` + "``**"));
+            }
             break;
         default:
             break;
