@@ -24,9 +24,9 @@ module.exports.run = async (bot, message, args) =>
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
-        .addField("Autoridade", authority_commands)
+        .addField("Usuário", user_commands)
         .addField("Utilidade", utility_commands)
-        .addField("Usuário", user_commands);
+        .addField("Autoridade", authority_commands);
     // .addField("Aleatórios", misc_commands);
 
 
