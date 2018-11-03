@@ -111,6 +111,7 @@ bot.on('message', async message =>
 
     if (message.isMentioned(bot.user))
     {
+        console.log(`${bot.user.username} replied to ${message.user.username}.`);
         return message.channel.send("oie");
     }
 
