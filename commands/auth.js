@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
     let help = args.join(" ");;
     if (help === 'help') {
         return message.channel.send(new Discord.RichEmbed()
-            .setTitle("Authme Help"));
+            .setTitle(`${this.help.name} Help`));
     } else {
         return bot.generateInvite(8)
             .then(link => message.channel.send(new Discord.RichEmbed()
@@ -19,5 +19,5 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "authme"
+    name: "auth"
 }

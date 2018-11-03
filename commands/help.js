@@ -4,7 +4,7 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async(bot, message, args) => {
 
     const utility_commands =
-        "|``help``|``clear``|``bogue``|";
+        "|``help``|``clear``|``auth``|";
 
     const authority_commands =
         "|``mute``|``desmute``|``tempmute``|``kick``|``ban``|``report``|``renameserver``|";
@@ -37,7 +37,7 @@ module.exports.run = async(bot, message, args) => {
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}help`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));
             break;
-        case "authme":
+        case "auth":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}authme`,
                 `Envia um link para convidar o ${bot.name} para qualquer servidor.`));
             break;
