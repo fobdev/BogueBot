@@ -13,7 +13,7 @@ module.exports.run = async(bot, message, args) => {
         .setTitle("Usuário não encontrado.")
         .setColor("#FF0000"));
 
-    if (!ban_user.hasPermission('ADMINISTRATOR')) {
+    if (ban_user.hasPermission('ADMINISTRATOR')) {
         return message.channel.send(ban_embed
             .setTitle("Você não pode banir um administrador.")
             .setColor("#FF0000"));
