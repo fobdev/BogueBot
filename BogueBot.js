@@ -55,9 +55,9 @@ bot.on('ready', async () =>
 
 bot.on('guildCreate', guild =>
 {
-    const join_embed = new Discord.RichEmbed()
-        .setAuthor(`${bot.user.username}`);
-    .setTitle(`**${bot.user.username}**`)
+    // const join_embed = new Discord.RichEmbed()
+    //     .setAuthor(`${bot.user.username}`)
+    //     .setTitle(`**${bot.user.username}**`);
 
     const channel = guild.channels.find(ch => ch.name === 'general');
     if (!channel)
