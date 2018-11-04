@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args) =>
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
-        .addField("Musica", song_commands)
+        .addField("Musica", music_commands)
         .addField("Usuário", user_commands)
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
