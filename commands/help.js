@@ -14,7 +14,10 @@ module.exports.run = async (bot, message, args) =>
         "|``bogue``|";
 
     const user_commands =
-        "|``avatar``|"
+        "|``avatar``|";
+
+    const music_commands =
+        "|``play``|"
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
@@ -24,6 +27,7 @@ module.exports.run = async (bot, message, args) =>
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
+        .addField("Musica", song_commands)
         .addField("Usuário", user_commands)
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
