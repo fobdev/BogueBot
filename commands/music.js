@@ -19,7 +19,6 @@ module.exports.run = async (bot, message, args) =>
 			.setColor("FF0000"));
 	}
 
-
 	var song_info = await ytdl.getInfo(url);
 	var song = {
 		title: song_info.title,
