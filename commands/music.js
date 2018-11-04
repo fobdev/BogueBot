@@ -3,6 +3,11 @@ const ytdl = require("ytdl-core");
 
 const queue = new Map();
 
+var song_info = await ytdl.getInfo(url);
+const song = {
+	title: song_info.title,
+	url: song_info.video_url
+};
 
 module.exports.run = async (bot, message, args) =>
 {
@@ -37,11 +42,7 @@ module.exports.run = async (bot, message, args) =>
 			.setColor("FF0000"));
 	}
 
-	var song_info = await ytdl.getInfo(url);
-	const song = {
-		title: song_info.title,
-		url: song_info.video_url
-	};
+
 
 	if (!serverQueue)
 	{
@@ -62,7 +63,7 @@ module.exports.run = async (bot, message, args) =>
 		{
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
-			play(message, message.guild, queueConstruct.songs[0]);
+			play(bot, message, message.guild, queueConstruct.songs[0]);
 
 		}
 		catch (e)
@@ -88,10 +89,11 @@ module.exports.run = async (bot, message, args) =>
 	return;
 }
 
-function play(message, guild, song)
+function play(bot, message, guild, song)
 {
-	const voice_embed = new Discord.RichEmbed()
-		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+	message.channel.send(new Discord.RichEmbed()
+		.setTitle(`Agora tocando **${song.title}**`)
+		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL));
 
 	const serverQueue = queue.get(guild.id);
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
@@ -114,7 +116,7 @@ function play(message, guild, song)
 		serverQueue.songs.shift();
 
 		// Always play the first entry after shift() was called.
-		play(message, guild, serverQueue.songs[0]);
+		play(bot, message, guild, serverQueue.songs[0]);
 	});
 
 	dispatcher.on('error', error => console.log(error));
