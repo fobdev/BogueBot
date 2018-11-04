@@ -1,14 +1,35 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 
+const queue = new Map();
+
+
 module.exports.run = async (bot, message, args) =>
 {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
 	const url = args.join(" ");
-
 	const voiceChannel = message.member.voiceChannel;
+	const serverQueue = queue.get(message.guild.id);
+
+	if (url === "leave")
+	{
+		if (!voiceChannel)
+		{
+			return message.channel.send(voice_embed
+				.setTitle("Você não está em um canal de voz.")
+				.setColor("#FF0000"));
+		}
+		else
+		{
+			voiceChannel.leave();
+			return message.channel.send(voice_embed
+				.setTitle("Saindo do canal de voz.")
+				.setColor("#00FF00"));
+		}
+	}
+
 	if (!voiceChannel)
 	{
 		return message.channel.send(voice_embed
@@ -16,43 +37,87 @@ module.exports.run = async (bot, message, args) =>
 			.setColor("FF0000"));
 	}
 
-	try
-	{
-		var connection = await voiceChannel.join();
-	}
-	catch (e)
-	{
-		console.log(`Bot could not join a voice channel: + ${e}`);
-		return message.channel.send(voice_embed
-			.setTitle("Não foi possível conectar ao canal de voz.")
-			.setColor("#FF0000"));
-	}
+	var song_info = await ytdl.getInfo(url);
+	const song = {
+		title: song_info.title,
+		url: song_info.video_url
+	};
 
-	if (url == 'leave')
+	if (!serverQueue)
 	{
-		voiceChannel.leave();
+		const queueConstruct = {
+			textChannel: message.channel,
+			voiceChannel: voiceChannel,
+			connection: null,
+			songs: [],
+			volume: 5,
+			playing: true
+		};
+
+		queue.set(message.guild.id, queueConstruct);
+
+		queueConstruct.songs.push(song);
+
+		try
+		{
+			var connection = await voiceChannel.join();
+			queueConstruct.connection = connection;
+			play(message, message.guild, queueConstruct.songs[0]);
+
+		}
+		catch (e)
+		{
+			console.log(`Bot could not join a voice channel: + ${e}`);
+
+			queue.delete(message.guild.id);
+
+			return message.channel.send(voice_embed
+				.setTitle("Não foi possível conectar ao canal de voz.")
+				.setColor("#FF0000"));
+		}
 	}
 	else
 	{
-		const dispatcher = await connection.playStream(ytdl(url));
-		const song_info = await ytdl.getInfo(url);
-
-		message.channel.send(voice_embed
-			.setTitle(`Tocando agora **${song_info.title}**`)
+		serverQueue.songs.push(song);
+		console.log(serverQueue.songs);
+		return message.channel.send(voice_embed
+			.setTitle(`**${song.title}** foi adicionado à fila`)
 			.setColor("#00FF00"));
-
-		dispatcher.on('end', () =>
-		{
-			console.log("song ended.")
-			voiceChannel.leave();
-		});
-
-		dispatcher.on('error', error =>
-		{
-			console.log(error)
-		});
 	}
 
+	return;
+}
+
+function play(message, guild, song)
+{
+	const voice_embed = new Discord.RichEmbed()
+		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+
+	const serverQueue = queue.get(guild.id);
+	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
+
+	if (!song)
+	{
+		serverQueue.voiceChannel.leave();
+		queue.delete(guild.id);
+
+		return message.channel.send(voice_embed
+			.setTitle("Fim da queue, saí do canal de voz.")
+			.setColor("#00FF00"));
+	}
+
+	dispatcher.on('end', () =>
+	{
+		console.log("song ended.")
+
+		// Removes the first entry and puts the second one in it.
+		serverQueue.songs.shift();
+
+		// Always play the first entry after shift() was called.
+		play(guild, serverQueue.songs[0]);
+	});
+
+	dispatcher.on('error', error => console.log(error));
 }
 
 module.exports.help = {
