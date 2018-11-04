@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 const ms = require("ms");
 
-module.exports.run = async(bot, message, args) =>
+module.exports.run = async (bot, message, args) =>
 {
     if (message.guild.member(message.author).hasPermission('MANAGE_ROLES'))
     {
@@ -37,7 +37,7 @@ module.exports.run = async(bot, message, args) =>
                     permissions: []
                 });
 
-                message.guild.channels.forEach(async(channel, id) =>
+                message.guild.channels.forEach(async (channel, id) =>
                 {
                     await channel.overwritePermissions(muterole,
                     {
@@ -68,7 +68,24 @@ module.exports.run = async(bot, message, args) =>
 
             return message.channel.send(mute_embed);
         }
-        await (tomute.addRole(muterole.id));
+
+        try
+        {
+            await (tomute.addRole(muterole.id));
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+        finally
+        {
+            return message.channel.send(mute_embed
+                .setTitle("O comando foi inserido de forma incorreta")
+                .addField("Tente usar", "``" + `${botconfig.prefix}${this.help.name}` + " [@membro] [tempo](s/m/h)``")
+                .addField("Ou usar", "``" + `${botconfig.prefix}help ${this.help.name}` +
+                    "`` para informações detalhadas sobre o comando.")
+                .setColor("FF0000"));
+        }
 
         message.channel.send(mute_embed
             .setTitle(`**${tomute.displayName}** foi mutado por ${ms(ms(mutetime))}`)
