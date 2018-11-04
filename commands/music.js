@@ -19,7 +19,6 @@ module.exports.run = async (bot, message, args) =>
 	try
 	{
 		var connection = await voiceChannel.join();
-
 	}
 	catch (e)
 	{
@@ -57,5 +56,5 @@ module.exports.run = async (bot, message, args) =>
 }
 
 module.exports.help = {
-	name: "play"
+	name: "music"
 }
