@@ -9,7 +9,6 @@
   "author": "me",
   "license": "ISC",
   "dependencies": {
-    "bufferutil": "^4.0.0",
     "discord.js": "^11.4.2",
     "ms": "^2.1.1",
     "opusscript": "0.0.6"
