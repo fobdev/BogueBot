@@ -90,9 +90,6 @@ module.exports.run = async (bot, message, args) =>
 
 function play(bot, message, guild, song)
 {
-	message.channel.send(new Discord.RichEmbed()
-		.setTitle(`Agora tocando **${song.title}**`)
-		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL));
 
 	const serverQueue = queue.get(guild.id);
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
@@ -106,6 +103,10 @@ function play(bot, message, guild, song)
 			.setTitle("Fim da queue, saí do canal de voz.")
 			.setColor("#00FF00"));
 	}
+
+	message.channel.send(new Discord.RichEmbed()
+		.setTitle(`Agora tocando **${song.title}**`)
+		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL));
 
 	dispatcher.on('end', () =>
 	{
