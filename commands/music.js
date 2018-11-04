@@ -21,7 +21,6 @@ module.exports.run = async (bot, message, args) =>
 		}
 		else
 		{
-			voiceChannel.leave();
 			queue.delete(message.guild.id);
 			return message.channel.send(voice_embed
 				.setTitle("Saindo do canal de voz.")
@@ -98,8 +97,8 @@ function play(bot, message, guild, song)
 
 	if (!song)
 	{
-		serverQueue.voiceChannel.leave();
 		queue.delete(guild.id);
+		serverQueue.voiceChannel.leave();
 
 		return message.channel.send(voice_embed
 			.setTitle("Fim da queue, saí do canal de voz.")
