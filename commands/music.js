@@ -114,7 +114,7 @@ function play(message, guild, song)
 		serverQueue.songs.shift();
 
 		// Always play the first entry after shift() was called.
-		play(guild, serverQueue.songs[0]);
+		play(message, guild, serverQueue.songs[0]);
 	});
 
 	dispatcher.on('error', error => console.log(error));
