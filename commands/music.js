@@ -3,12 +3,6 @@ const ytdl = require("ytdl-core");
 
 const queue = new Map();
 
-var song_info = await ytdl.getInfo(url);
-const song = {
-	title: song_info.title,
-	url: song_info.video_url
-};
-
 module.exports.run = async (bot, message, args) =>
 {
 	const voice_embed = new Discord.RichEmbed()
@@ -43,6 +37,11 @@ module.exports.run = async (bot, message, args) =>
 	}
 
 
+	var song_info = await ytdl.getInfo(url);
+	const song = {
+		title: song_info.title,
+		url: song_info.video_url
+	};
 
 	if (!serverQueue)
 	{
