@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) =>
+module.exports.run = async (bot, message, args) =>
 {
     if (message.guild.member(message.author).hasPermission('KICK_MEMBERS'))
     {
@@ -21,20 +21,20 @@ module.exports.run = async(bot, message, args) =>
                 .setColor("#FF0000"));
         }
 
+        kick_embed.addField("Usuário foi expulso do servidor", `${kick_user}`);
         if (kick_reason === "")
         {
             message.guild.member(kick_user).kick();
+            return message.channel.send(kick_embed
+                .setColor("#00FF00"));
         }
         else
         {
             message.guild.member(kick_user).kick(kick_reason);
-            kick_embed.addField("Motivo", `${kick_reason}`)
+            return message.channel.send(kick_embed
+                .setColor("#00FF00")
+                .addField("Motivo", `${kick_reason}`));
         }
-
-        return message.channel.send(kick_embed
-            .addField("Usuário foi expulso do servidor", `${kick_user}`)
-            .setColor("#00FF00"));
-
     }
     else
     {
