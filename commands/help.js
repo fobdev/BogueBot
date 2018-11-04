@@ -5,19 +5,19 @@ module.exports.run = async (bot, message, args) =>
 {
 
     const utility_commands =
-        "|``help``|``clear``|``auth``|";
+        "**| help  |  clear  |  auth  |**";
 
     const authority_commands =
-        "|``mute``|``desmute``|``tempmute``|``kick``|``ban``|``report``|``renameserver``|";
+        "**|  mute  |  desmute  |  tempmute  |  kick  |  ban  |  report  |  renameserver  |**";
 
     const misc_commands =
-        "|``bogue``|";
+        "**|  bogue  |**";
 
     const user_commands =
-        "|``avatar``|";
+        "**|  avatar  |**";
 
     const music_commands =
-        "|``play``|"
+        "**|  music  |**"
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
