@@ -106,7 +106,8 @@ function play(bot, message, guild, song)
 
 	message.channel.send(new Discord.RichEmbed()
 		.setTitle(`Agora tocando **${song.title}**`)
-		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL));
+		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL)
+		.setColor("#00FF00"));
 
 	dispatcher.on('end', () =>
 	{
