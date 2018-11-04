@@ -8,10 +8,9 @@ module.exports.run = async (bot, message, args) =>
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
-	const url = args.join(" ");
 	const voiceChannel = message.member.voiceChannel;
 	const serverQueue = queue.get(message.guild.id);
-
+	const url = args.join(" ");
 	if (url === "leave")
 	{
 		if (!voiceChannel)
@@ -27,65 +26,67 @@ module.exports.run = async (bot, message, args) =>
 				.setTitle("Saindo do canal de voz.")
 				.setColor("#00FF00"));
 		}
-	}
 
-	if (!voiceChannel)
-	{
-		return message.channel.send(voice_embed
-			.setTitle("Você não está em um canal de voz.")
-			.setColor("FF0000"));
-	}
-
-
-	var song_info = await ytdl.getInfo(url);
-	const song = {
-		title: song_info.title,
-		url: song_info.video_url
-	};
-
-	if (!serverQueue)
-	{
-		const queueConstruct = {
-			textChannel: message.channel,
-			voiceChannel: voiceChannel,
-			connection: null,
-			songs: [],
-			volume: 5,
-			playing: true
-		};
-
-		queue.set(message.guild.id, queueConstruct);
-
-		queueConstruct.songs.push(song);
-
-		try
-		{
-			var connection = await voiceChannel.join();
-			queueConstruct.connection = connection;
-			play(bot, message, message.guild, queueConstruct.songs[0]);
-
-		}
-		catch (e)
-		{
-			console.log(`Bot could not join a voice channel: + ${e}`);
-
-			queue.delete(message.guild.id);
-
-			return message.channel.send(voice_embed
-				.setTitle("Não foi possível conectar ao canal de voz.")
-				.setColor("#FF0000"));
-		}
 	}
 	else
 	{
-		serverQueue.songs.push(song);
-		console.log(serverQueue.songs);
-		return message.channel.send(voice_embed
-			.setTitle(`**${song.title}** foi adicionado à fila`)
-			.setColor("#00FF00"));
-	}
 
-	return;
+		if (!voiceChannel)
+		{
+			return message.channel.send(voice_embed
+				.setTitle("Você não está em um canal de voz.")
+				.setColor("FF0000"));
+		}
+
+
+		var song_info = await ytdl.getInfo(url);
+		var song = {
+			title: song_info.title,
+			url: song_info.video_url
+		};
+
+		if (!serverQueue)
+		{
+			const queueConstruct = {
+				textChannel: message.channel,
+				voiceChannel: voiceChannel,
+				connection: null,
+				songs: [],
+				volume: 5,
+				playing: true
+			};
+
+			queue.set(message.guild.id, queueConstruct);
+
+			queueConstruct.songs.push(song);
+
+			try
+			{
+				var connection = await voiceChannel.join();
+				queueConstruct.connection = connection;
+				play(bot, message, message.guild, queueConstruct.songs[0]);
+
+			}
+			catch (e)
+			{
+				console.log(`Bot could not join a voice channel: + ${e}`);
+
+				queue.delete(message.guild.id);
+
+				return message.channel.send(voice_embed
+					.setTitle("Não foi possível conectar ao canal de voz.")
+					.setColor("#FF0000"));
+			}
+		}
+		else
+		{
+			serverQueue.songs.push(song);
+			console.log(serverQueue.songs);
+			return message.channel.send(voice_embed
+				.setTitle(`**${song.title}** foi adicionado à fila`)
+				.setColor("#00FF00"));
+		}
+	}
 }
 
 function play(bot, message, guild, song)
