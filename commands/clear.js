@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json")
 
-module.exports.run = async(bot, message, args) =>
+module.exports.run = async (bot, message, args) =>
 {
 
     // let clear_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
@@ -50,7 +50,10 @@ module.exports.run = async(bot, message, args) =>
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
                     .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
-                    .setColor("#00FF00"));
+                    .setColor("#00FF00")).then(message =>
+                {
+                    message.delete(1000 * 3);
+                });
             }
             else
             {
