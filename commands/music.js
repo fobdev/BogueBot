@@ -64,7 +64,7 @@ module.exports.run = async (bot, message, args) =>
 		console.log(serverQueue.songs);
 		await message.delete();
 		return message.channel.send(voice_embed
-			.setTitle(`**${song.title}** foi adicionado à fila`)
+			.setTitle(`Foi adicionado à fila: **${song.title}** `)
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
@@ -87,8 +87,7 @@ function play(bot, message, guild, song)
 
 	message.delete();
 	message.channel.send(new Discord.RichEmbed()
-		.setTitle(`Agora tocando **${song.title}**`)
-		.setFooter(`Chamado por ${bot.user.username}`, bot.user.displayAvatarURL)
+		.addField(`Agora tocando **${song.title}**`, song.url)
 		.setURL(song.url)
 		.setColor("#00FF00"));
 
