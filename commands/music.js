@@ -57,4 +57,8 @@ module.exports.run = async (bot, message, args) =>
 
 module.exports.help = {
 	name: "music"
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 11ae1d12eed69ca34b5defef9717cdb3816dd788
