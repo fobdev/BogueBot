@@ -1,5 +1,5 @@
 const botconfig = require("./botconfig.json");
-//const bot_token = require("./bottoken.json");
+// const bot_token = require("./bottoken.json");
 const Discord = require("discord.js");
 const fs = require("fs");
 
@@ -55,18 +55,15 @@ bot.on('ready', async () =>
 
 bot.on('guildCreate', guild =>
 {
-    // const join_embed = new Discord.RichEmbed()
-    //     .setAuthor(`${bot.user.username}`)
-    //     .setTitle(`**${bot.user.username}**`);
+
+    const welcome_embed = new Discord.RichEmbed();
 
     const channel = guild.channels.find(ch => ch.name === 'general');
-    if (!channel)
-    {
-        console.log("No channel named 'general' found in this server.")
-        return;
-    }
+    if (!channel) return console.log("No channel named 'general' found in this server.");
+
     console.log(`${bot.user.username} joined server [${guild.name}].`)
     servers_show();
+
     channel.send("**Conheçam Hades.**");
 });
 
@@ -152,6 +149,7 @@ bot.on('message', async message =>
             ` sent [${message}] at server '${message.guild.name}' `);
 
         if (command_file) command_file.run(bot, message, args);
+
     }
 });
 

@@ -19,6 +19,7 @@ module.exports.run = async (bot, message, args) =>
 	try
 	{
 		var connection = await voiceChannel.join();
+
 	}
 	catch (e)
 	{
@@ -28,9 +29,19 @@ module.exports.run = async (bot, message, args) =>
 			.setColor("#FF0000"));
 	}
 
-	if (url != 'leave')
+	if (url == 'leave')
 	{
-		const dispatcher = connection.playStream(ytdl(url));
+		voiceChannel.leave();
+	}
+	else
+	{
+		const dispatcher = await connection.playStream(ytdl(url));
+		const song_info = await ytdl.getInfo(url);
+
+		message.channel.send(voice_embed
+			.setTitle(`Tocando agora **${song_info.title}**`)
+			.setColor("#00FF00"));
+
 		dispatcher.on('end', () =>
 		{
 			console.log("song ended.")
@@ -41,10 +52,6 @@ module.exports.run = async (bot, message, args) =>
 		{
 			console.log(error)
 		});
-	}
-	else
-	{
-		voiceChannel.leave();
 	}
 
 }
