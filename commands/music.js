@@ -21,7 +21,8 @@ module.exports.run = async (bot, message, args) =>
 		}
 		else
 		{
-			queue.delete(message.guild.id);
+			await queue.delete(message.guild.id);
+			voiceChannel.leave();
 			return message.channel.send(voice_embed
 				.setTitle("Saindo do canal de voz.")
 				.setColor("#00FF00"));
