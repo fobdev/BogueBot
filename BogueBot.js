@@ -1,5 +1,5 @@
 const botconfig = require("./botconfig.json");
-//const bot_token = require("./bottoken.json");
+// const bot_token = require("./bottoken.json");
 const Discord = require("discord.js");
 const fs = require("fs");
 
@@ -46,7 +46,12 @@ bot.on('ready', async () => {
 });
 
 bot.on('guildCreate', guild => {
-    const welcome_embed = new Discord.RichEmbed();
+    const welcome_embed = new Discord.RichEmbed()
+        .setAuthor(`${bot.user.username}`, bot.user.displayAvatarURL)
+        .setFooter("Fobenga")
+        .setTimestamp(bot.user.createdAt)
+        .addBlankField(false)
+        .addField();
 
     const channel = guild.channels.find(ch => ch.name === 'general');
     if (!channel) return console.log("No channel named 'general' found in this server.");
@@ -70,7 +75,7 @@ bot.on('guildMemberAdd', member => {
         return;
     }
 
-    channel.send(`**${member} oiiiiiiiiiiiiiiiiiii**`);
+    channel.send(`${member} oiiiiiiiiiiiiiiiiiii`);
     console.log(`Welcome message to [${member.displayName}] in [${member.guild.name}] sent sucessfully.`);
 });
 

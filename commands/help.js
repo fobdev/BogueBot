@@ -9,14 +9,11 @@ module.exports.run = async (bot, message, args) => {
     const authority_commands =
         "**|  mute  |  desmute  |  tempmute  |  kick  |  ban  |  report  |  renameserver  |**";
 
-    //   const misc_commands =
-    //       "**|  bogue  |**";
-
     const user_commands =
         "**|  avatar  |**";
 
     const music_commands =
-        "**|  music  |**"
+        "**|  music  |**";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
@@ -30,12 +27,8 @@ module.exports.run = async (bot, message, args) => {
         .addField("Usuário", user_commands)
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
-    // .addField("Aleatórios", misc_commands);
-
 
     let helpcommand = args.join(" ");
-    let field = "";
-
     let commands_embed = new Discord.RichEmbed()
         .setTitle(`Lista de comandos do ${bot.user.username}`)
         .setColor("#00FF00");
@@ -44,7 +37,6 @@ module.exports.run = async (bot, message, args) => {
         case "help":
             return message.channel.send(commands_embed.addField(`${botconfig.prefix}${this.help.name}`,
                 `Mostra todos os comandos disponíveis do ${bot.user.username} até o momento.`));
-            break;
         case "avatar":
             {
                 const file = require("./avatar.js")
@@ -52,14 +44,12 @@ module.exports.run = async (bot, message, args) => {
                     "Exibe o avatar em tamanho grande do membro marcado\n" +
                     `Uso: ${botconfig.prefix}${file.help.name} [@membro]`));
             }
-            break;
         case "auth":
             {
                 const file = require("./auth.js")
                 return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
                     `Envia um link para convidar o ${bot.name} para qualquer servidor.`));
             }
-            break;
         case "clear":
             {
                 const file = require("./clear.js")
@@ -68,14 +58,12 @@ module.exports.run = async (bot, message, args) => {
                     "No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas por vez.\n" +
                     "**Uso: ``" + `${botconfig.prefix}${file.help.name} [numero de mensagens]` + "``**"));
             }
-            break;
         case "report":
             {
                 const file = require("./report.js")
                 return message.channel.send(commands_embed.addField(`${botconfig.prefix}${file.help.name}`,
                     "Reporta um usuário\n**Uso: ``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``"));
             }
-            break;
         case "renameserver":
             {
                 const file = require("./renameserver.js")
@@ -84,7 +72,6 @@ module.exports.run = async (bot, message, args) => {
                     " **(apenas para administradores)**\n" +
                     "**Uso: ``" + `${botconfig.prefix}${file.help.name} [novo nome]` + "``**"));
             }
-            break;
         case "kick":
             {
                 const file = require("./kick.js")
@@ -92,7 +79,6 @@ module.exports.run = async (bot, message, args) => {
                     "Expulsa um usuário do servidor | **(apenas para administradores)**\n" +
                     "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``**"));
             }
-            break;
         case "ban":
             {
                 const file = require("./ban.js")
@@ -100,7 +86,6 @@ module.exports.run = async (bot, message, args) => {
                     "Banir usuário | **(apenas para administradores)**\n" +
                     "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [motivo]` + "``**"));
             }
-            break;
         case "tempmute":
             {
                 const file = require("./tempmute.js")
@@ -108,7 +93,6 @@ module.exports.run = async (bot, message, args) => {
                     "Silenciar um usuário temporariamente | **(apenas para administradores)**\n" +
                     "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário] [tempo](s/m/h)` + "``**"));
             }
-            break;
         case "desmute":
             {
                 const file = require("./desmute.js")
@@ -116,7 +100,6 @@ module.exports.run = async (bot, message, args) => {
                     "Desmuta o usuário, apenas utilizável caso o usuário já estiver mutado | **(apenas para administradores)**\n" +
                     "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário]` + "``**"));
             }
-            break;
         case "mute":
             {
                 const file = require("./mute.js")
@@ -124,7 +107,6 @@ module.exports.run = async (bot, message, args) => {
                     "Silenciar um usuário | **(apenas para administradores)**\n" +
                     "**Uso:``" + `${botconfig.prefix}${file.help.name} [@usuário]` + "``**"));
             }
-            break;
         default:
             break;
     }
