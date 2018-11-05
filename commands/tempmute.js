@@ -2,10 +2,8 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 const ms = require("ms");
 
-module.exports.run = async (bot, message, args) =>
-{
-    if (message.guild.member(message.author).hasPermission('MANAGE_ROLES'))
-    {
+module.exports.run = async (bot, message, args) => {
+    if (message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
         let tomute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
         let muterole = message.guild.roles.find(role => role.name === 'mutado');
 
@@ -13,8 +11,7 @@ module.exports.run = async (bot, message, args) =>
             .setTitle(`${bot.user.username} Mute`)
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
-        if (tomute.hasPermission('ADMINISTRATOR'))
-        {
+        if (tomute.hasPermission('ADMINISTRATOR')) {
             return message.channel.send(mute_embed
                 .setTitle("Você não pode silenciar um administrador.")
                 .setColor("#FF0000"));
@@ -26,35 +23,27 @@ module.exports.run = async (bot, message, args) =>
                 "Tente usar " + `${botconfig.prefix}tempmute` + " [@membro] [tempo]``"));
 
         // create a new role
-        if (!muterole)
-        {
-            try
-            {
-                muterole = await message.guild.createRole(
-                {
+        if (!muterole) {
+            try {
+                muterole = await message.guild.createRole({
                     name: "mutado",
                     color: "#000000",
                     permissions: []
                 });
 
-                message.guild.channels.forEach(async (channel, id) =>
-                {
-                    await channel.overwritePermissions(muterole,
-                    {
+                message.guild.channels.forEach(async (channel, id) => {
+                    await channel.overwritePermissions(muterole, {
                         SEND_MESSAGES: false
                     });
                 });
-            }
-            catch (e)
-            {
+            } catch (e) {
                 console.log(e.stack);
             }
         }
         // new role made
 
         let mutetime = args[1];
-        if (!mutetime)
-        {
+        if (!mutetime) {
             mute_embed
                 .setTitle(`${bot.user.username} Erro`)
                 .setColor("#FF0000")
@@ -69,16 +58,11 @@ module.exports.run = async (bot, message, args) =>
             return message.channel.send(mute_embed);
         }
 
-        try
-        {
+        try {
             await (tomute.addRole(muterole.id));
-        }
-        catch (e)
-        {
+        } catch (e) {
             console.log(e);
-        }
-        finally
-        {
+        } finally {
             return message.channel.send(mute_embed
                 .setTitle("O comando foi inserido de forma incorreta")
                 .addField("Tente usar", "``" + `${botconfig.prefix}${this.help.name}` + " [@membro] [tempo](s/m/h)``")
@@ -93,15 +77,11 @@ module.exports.run = async (bot, message, args) =>
 
         console.log(`${message.author.username} muted user [${tomute.displayName}] for ${ms(ms(mutetime))}.`);
 
-        setTimeout(function()
-        {
+        setTimeout(function () {
 
-            if (!tomute.roles.find(role => role.name === 'mutado'))
-            {
+            if (!tomute.roles.find(role => role.name === 'mutado')) {
                 return;
-            }
-            else
-            {
+            } else {
                 tomute.removeRole(muterole.id);
                 message.channel.send(mute_embed
                     .setTitle(`**${tomute.displayName}** foi desmutado`)
@@ -109,9 +89,7 @@ module.exports.run = async (bot, message, args) =>
                 console.log(`Membro [${tomute.displayName}] foi desmutado.`);
             }
         }, ms(mutetime));
-    }
-    else
-    {
+    } else {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle("Você não tem permissão para usar esse comando.")
             .setColor("#FF0000")

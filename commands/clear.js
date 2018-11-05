@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json")
 
-module.exports.run = async (bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
 
     // let clear_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     // if (!clear_user) return message.channel.send(new Discord.RichEmbed()
@@ -32,39 +31,29 @@ module.exports.run = async (bot, message, args) =>
             "``**\nOu usar: **``" + `${botconfig.prefix}help ${this.help.name}` +
             "``**\npara informação detalhada sobre o comando**");
 
-    if (del_arg > 100 || del_arg <= 0)
-    {
+    if (del_arg > 100 || del_arg <= 0) {
         return message.channel.send(delfail_embed);
-    }
-    else
-    {
-        try
-        {
+    } else {
+        try {
             const perm_embed = new Discord.RichEmbed();
 
-            if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES'))
-            {
+            if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();
 
                 message.channel.bulkDelete(del_arg);
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
                     .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
-                    .setColor("#00FF00")).then(message =>
-                {
+                    .setColor("#00FF00")).then(message => {
                     message.delete(1000 * 3);
                 });
-            }
-            else
-            {
+            } else {
                 return message.channel.send(perm_embed
                     .setTitle("Usuário não tem permissão para excluir mensagens.")
                     .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
                     .setColor("#FF0000"));
             }
-        }
-        catch (e)
-        {
+        } catch (e) {
             console.log(e);
             return message.channel.send(delfail_embed);
         }

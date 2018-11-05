@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async (bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
 
     let r_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     let reason = args.join(" ").slice(22);
@@ -14,15 +13,12 @@ module.exports.run = async (bot, message, args) =>
         .setTitle("Usuário não encontrado.")
         .setColor("#FF0000"));
 
-    if (reason === "")
-    {
+    if (reason === "") {
         message.channel.send(report_embed
             .addField("Você deve especificar um motivo para denunciar esse usuário",
                 "``" + `${botconfig.prefix}${this.help.name} [@usuário] [motivo]` + "``")
             .setColor("#FF0000"));
-    }
-    else
-    {
+    } else {
         message.delete();
         message.channel.send(report_embed
             .setColor("#00FF00")

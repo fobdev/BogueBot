@@ -1,16 +1,12 @@
 const Discord = require("discord.js");
 
-module.exports.run = async(bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
 
     let help = args.join(" ");;
-    if (help === 'help')
-    {
+    if (help === 'help') {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle(`${this.help.name} Help`));
-    }
-    else
-    {
+    } else {
         return bot.generateInvite(8)
             .then(link => message.channel.send(new Discord.RichEmbed()
                 .setDescription(`Link de autenticação do ${bot.user.username}`)

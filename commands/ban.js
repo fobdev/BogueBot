@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 
-module.exports.run = async(bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
 
     let ban_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     let ban_reason = args.join(" ").slice(22);
@@ -14,15 +13,13 @@ module.exports.run = async(bot, message, args) =>
         .setTitle("Usuário não encontrado.")
         .setColor("#FF0000"));
 
-    if (ban_user.hasPermission('ADMINISTRATOR'))
-    {
+    if (ban_user.hasPermission('ADMINISTRATOR')) {
         return message.channel.send(ban_embed
             .setTitle("Você não pode banir um administrador.")
             .setColor("#FF0000"));
     }
 
-    if (ban_reason === "")
-    {
+    if (ban_reason === "") {
         message.channel.send(ban_embed
             .setTitle("Uso incorreto do comando")
             .setColor("#FF0000")
@@ -30,9 +27,7 @@ module.exports.run = async(bot, message, args) =>
                 "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [@usuário] [motivo]` +
                 "``**\nOu usa: **``" + `${botconfig.prefix}${this.help.name} ban` +
                 "``**\npara informação detalhada sobre o comando**"));
-    }
-    else
-    {
+    } else {
         message.guild.member(ban_user).ban(ban_reason);
 
         message.channel.send(ban_embed

@@ -3,8 +3,7 @@ const ytdl = require("ytdl-core");
 
 const queue = new Map();
 
-module.exports.run = async (bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
@@ -12,8 +11,7 @@ module.exports.run = async (bot, message, args) =>
 	var serverQueue = queue.get(message.guild.id);
 	const url = args.join(" ");
 
-	if (!voiceChannel)
-	{
+	if (!voiceChannel) {
 		return message.channel.send(voice_embed
 			.setTitle("Você não está em um canal de voz.")
 			.setColor("FF0000"));
@@ -25,8 +23,7 @@ module.exports.run = async (bot, message, args) =>
 		url: song_info.video_url
 	};
 
-	if (!serverQueue)
-	{
+	if (!serverQueue) {
 		const queueConstruct = {
 			textChannel: message.channel,
 			voiceChannel: voiceChannel,
@@ -40,15 +37,12 @@ module.exports.run = async (bot, message, args) =>
 
 		queueConstruct.songs.push(song);
 
-		try
-		{
+		try {
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
 			play(bot, message, message.guild, queueConstruct.songs[0]);
 
-		}
-		catch (e)
-		{
+		} catch (e) {
 			console.log(`Bot could not join a voice channel: + ${e}`);
 
 			queue.delete(message.guild.id);
@@ -57,9 +51,7 @@ module.exports.run = async (bot, message, args) =>
 				.setTitle("Não foi possível conectar ao canal de voz.")
 				.setColor("#FF0000"));
 		}
-	}
-	else
-	{
+	} else {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
 		await message.delete();
@@ -70,13 +62,11 @@ module.exports.run = async (bot, message, args) =>
 	}
 }
 
-function play(bot, message, guild, song)
-{
+function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 
-	if (!song)
-	{
+	if (!song) {
 		queue.delete(guild.id);
 		serverQueue.voiceChannel.leave();
 
@@ -91,8 +81,7 @@ function play(bot, message, guild, song)
 		.setURL(song.url)
 		.setColor("#00FF00"));
 
-	dispatcher.on('end', () =>
-	{
+	dispatcher.on('end', () => {
 		console.log("song ended.");
 		console.log("Current musics in queue:");
 		console.log(serverQueue.songs);
