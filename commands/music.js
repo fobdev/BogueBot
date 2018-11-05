@@ -93,8 +93,9 @@ function play(bot, message, guild, song)
 
 	dispatcher.on('end', () =>
 	{
-		console.log("song ended.")
-
+		console.log("song ended.");
+		console.log("Current musics in queue:");
+		console.log(serverQueue.songs);
 		serverQueue.songs.shift();
 		play(bot, message, guild, serverQueue.songs[0]);
 	});

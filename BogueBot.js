@@ -57,7 +57,7 @@ bot.on('guildCreate', guild =>
 {
 
     const welcome_embed = new Discord.RichEmbed();
-
+    
     const channel = guild.channels.find(ch => ch.name === 'general');
     if (!channel) return console.log("No channel named 'general' found in this server.");
 

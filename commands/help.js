@@ -10,8 +10,8 @@ module.exports.run = async (bot, message, args) =>
     const authority_commands =
         "**|  mute  |  desmute  |  tempmute  |  kick  |  ban  |  report  |  renameserver  |**";
 
-    const misc_commands =
-        "**|  bogue  |**";
+  //   const misc_commands =
+  //       "**|  bogue  |**";
 
     const user_commands =
         "**|  avatar  |**";
