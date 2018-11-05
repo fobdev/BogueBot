@@ -3,3 +3,4 @@ bottoken.json
 .vs/ProjectSettings.json
 .vs/BogueBot/v15/.suo
 *.bat
+.vscode/settings.json
