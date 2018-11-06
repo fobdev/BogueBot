@@ -45,12 +45,13 @@ module.exports.run = async (bot, message, args) => {
 		switch (url) {
 			case "pause":
 				{
-					if (playing) {
-						playing = false;
+					try {
 						dispatcher.pause();
 						return message.channel.send(arg_embed
 							.setTitle("Reprodução pausada."));
-					} else {
+					} catch (error) {
+						console.log(error);
+					} finally {
 						return message.channel.send(arg_embed
 							.setTitle("Não tem nada tocando para ser pausado.")
 							.setColor("#FF0000"));
@@ -58,11 +59,16 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "play":
 				{
-					if (!playing) {
-						playing = true;
+					try {
 						dispatcher.resume();
 						return message.channel.send(arg_embed
 							.setTitle("Reprodução continuada."));
+					} catch (error) {
+						console.log(error);
+					} finally {
+						return message.channel.send(arg_embed
+							.setTitle("Você primeiro precisa pausar algo para depois continuar.")
+							.setColor("#FF0000"));
 					}
 				}
 			case "leave":
