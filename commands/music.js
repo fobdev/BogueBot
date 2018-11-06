@@ -126,16 +126,18 @@ function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 
 	var dispatcher;
-	if (!leaving)
+	if (!leaving) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
-	if (skipping) {
-		dispatcher.end();
 	} else return;
 
 	message.channel.send(new Discord.RichEmbed()
 		.addField(`Agora tocando **${song.title}**`, song.url)
 		.setURL(song.url)
 		.setColor("#00FF00"));
+
+	if (skipping) {
+		dispatcher.end();
+	}
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
