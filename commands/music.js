@@ -139,7 +139,7 @@ module.exports.run = async (bot, message, args) => {
 					}
 
 					queue_embed.addBlankField();
-					queue_embed.setFooter(`**${serverQueue.song.length} na fila atual - Total de ${timing(fulltime)}**`);
+					queue_embed.setFooter(`**${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}**`);
 					return message.channel.send(queue_embed);
 				}
 			}
