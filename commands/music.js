@@ -49,6 +49,20 @@ module.exports.run = async (bot, message, args) => {
 
 		var playing = true;
 		switch (url) {
+			case "search":
+				{
+					var search_embed = new Discord.RichEmbed()
+						.setTitle("YouTube Search")
+						.setColor("#00FF00");
+
+					ytdl.getInfo(args[2]).then(info => {
+						for (let i = 0; i < 5; i++) {
+							search_embed.addField(`Result ${i}`, info.items[i].url);
+						}
+						message.channel.send(search_embed);
+					});
+				}
+
 			case "pause":
 				{
 					try {
@@ -163,9 +177,9 @@ function play(bot, message, guild, song) {
 	var minutes = Math.floor(song.length / 60);
 	var seconds = song.length % 60;
 	message.channel.send(new Discord.RichEmbed()
-		.addField("Agora tocando", `**[${song.title}](${song.url})**`)
+		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Duração", `${minutes}:${seconds}`)
+		.addField("Duração", `${minutes}:${seconds}`, true)
 		.addField("Artista", song.media_artist, true)
 		.addField("Álbum", song.media_album, true)
 		.setThumbnail(song.thumbnail)
