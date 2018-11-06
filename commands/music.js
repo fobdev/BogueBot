@@ -81,7 +81,6 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
-	skipping = false;
 	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
@@ -138,6 +137,10 @@ function play(bot, message, guild, song) {
 	if (skipping) {
 		dispatcher.end();
 	}
+
+	dispatcher.on('start', () => {
+		skipping = false;
+	});
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
