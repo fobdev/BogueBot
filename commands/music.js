@@ -34,7 +34,8 @@ module.exports.run = async (bot, message, args) => {
 		song_info = await ytdl.getInfo(url);
 		song = {
 			title: song_info.title,
-			url: song_info.video_url
+			url: song_info.video_url,
+			thumbnail: song_info.thumbnail_url
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -159,6 +160,7 @@ function play(bot, message, guild, song) {
 	message.channel.send(new Discord.RichEmbed()
 		.addField(`Agora tocando **${song.title}**`, song.url)
 		.setURL(song.url)
+		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00"));
 
 	dispatcher.on('end', () => {
