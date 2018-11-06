@@ -121,7 +121,7 @@ module.exports.run = async (bot, message, args) => {
 					if (serverQueue.songs.length === 1) {
 						return message.channel.send(queue_embed
 							.setTitle("Não tem músicas na fila")
-						);
+							.setColor("#FF0000"));
 					}
 
 					for (let i = 1; i < serverQueue.songs.length; i++) {
