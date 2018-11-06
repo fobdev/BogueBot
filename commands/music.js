@@ -10,13 +10,31 @@ module.exports.run = async (bot, message, args) => {
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	const url = args.join(" ");
+	let yt_url = true;
+	if (url === 'play' ||
+		url === 'pause' ||
+		url === 'leave' ||
+		url === 'skip' ||
+		url === 'queue' ||
+		url === 'volume') {
+		yt_url = false;
+	}
 
 	if (!voiceChannel) {
 		return message.channel.send(voice_embed
 			.setTitle("Você não está em um canal de voz.")
 			.setColor("FF0000"));
+	}
+
+	var song_info;
+	var song;
+	if (yt_url) {
+		song_info = await ytdl.getInfo(url);
+		song = {
+			title: song_info.title,
+			url: song_info.video_url
+		};
 	} else {
-		// if the input is not a youtube url
 		switch (url) {
 			case "play":
 				{
@@ -24,35 +42,33 @@ module.exports.run = async (bot, message, args) => {
 						.setTitle("Play was called")
 						.setColor("#00FF00"));
 				}
-				break;
 			case "pause":
 				{
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Pause was called")
 						.setColor("#00FF00"));
 				}
-				break;
 			case "leave":
 				{
+					voiceChannel.leave();
+					queue.delete(message.guild.id);
+
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Leave was called")
 						.setColor("#00FF00"));
 				}
-				break;
 			case "skip":
 				{
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Skip was called")
 						.setColor("#00FF00"));
 				}
-				break;
 			case "queue":
 				{
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Queue was called")
 						.setColor("#00FF00"));
 				}
-				break;
 			case "volume":
 				{
 					return message.channel.send(new Discord.RichEmbed()
@@ -63,12 +79,6 @@ module.exports.run = async (bot, message, args) => {
 				break;
 		}
 	}
-
-	var song_info = await ytdl.getInfo(url);
-	var song = {
-		title: song_info.title,
-		url: song_info.video_url
-	};
 
 	if (!serverQueue) {
 		const queueConstruct = {
