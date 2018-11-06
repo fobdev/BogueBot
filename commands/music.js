@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
 			url: song_info.video_url,
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
-			media: song_info.media
+			author: message.author.username
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -158,11 +158,10 @@ function play(bot, message, guild, song) {
 	} else return;
 
 	message.channel.send(new Discord.RichEmbed()
-		.addField(`Agora tocando **${song.title}**`, song.url)
+		.addField(`Agora tocando`, `**[${song.title}](song.url)**`)
+		.addField("Adicionado", song.author)
 		.setThumbnail(song.thumbnail)
-		.setColor("#00FF00")
-		.addField("Duração", song.length, true)
-		.addField("Media", song.media, true));
+		.setColor("#00FF00"));
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
@@ -172,9 +171,13 @@ function play(bot, message, guild, song) {
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
-			return message.channel.send(new Discord.RichEmbed()
-				.setTitle("Fim da queue, saí do canal de voz.")
-				.setColor("#00FF00"));
+
+			if (!leaving)
+				message.channel.send(new Discord.RichEmbed()
+					.setTitle("Fim da queue, saí do canal de voz.")
+					.setColor("#00FF00"))
+
+			return;
 		}
 
 		serverQueue.songs.shift();
