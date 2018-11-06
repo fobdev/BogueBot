@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
 		url === 'pause' ||
 		url === 'leave' ||
 		url === 'skip' ||
-		url === 'queue' ||
+		url === 'queue' || args[3] !== 'undefined' ||
 		url === 'volume') {
 		yt_url = false;
 	}
