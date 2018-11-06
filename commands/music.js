@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 
 const queue = new Map();
+var leaving = false;
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
@@ -49,9 +50,9 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "leave":
 				{
+					leaving = true;
 					voiceChannel.leave();
 					queue.delete(message.guild.id);
-
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Leave was called")
 						.setColor("#00FF00"));
@@ -120,7 +121,12 @@ module.exports.run = async (bot, message, args) => {
 
 function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
+
+	var dispatcher;
+	if (!leaving)
+		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
+	else return;
+
 	if (!song) {
 		queue.delete(guild.id);
 		serverQueue.voiceChannel.leave();
