@@ -31,6 +31,7 @@ module.exports.run = async (bot, message, args) => {
 
 	var song_info;
 	var song;
+
 	if (yt_url) {
 		song_info = await ytdl.getInfo(url);
 		song = {
@@ -44,85 +45,97 @@ module.exports.run = async (bot, message, args) => {
 			media_writers: song_info.media.writers,
 			media_type: song_info.media.category
 		};
-	} else {
-		const arg_embed = new Discord.RichEmbed()
-			.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-			.setColor("#00FF00");
+	}
 
-		var playing = true;
-		switch (url) {
-			case "pause":
-				{
-					try {
-						dispatcher.pause();
-						return message.channel.send(arg_embed
-							.setTitle("Reprodução pausada."));
-					} catch (error) {
-						console.log(error);
-						return message.channel.send(arg_embed
-							.setTitle("Não tem nada tocando para ser pausado.")
-							.setColor("#FF0000"));
-					}
-				}
-			case "play":
-				{
-					try {
-						dispatcher.resume();
-						return message.channel.send(arg_embed
-							.setTitle("Reprodução continuada."));
-					} catch (error) {
-						console.log(error);
-						return message.channel.send(arg_embed
-							.setTitle("Você primeiro precisa pausar algo para depois continuar.")
-							.setColor("#FF0000"));
-					}
-				}
-			case "leave":
-				{
-					try {
-						leaving = true;
-						voiceChannel.leave();
-						queue.delete(message.guild.id);
-						return message.channel.send(arg_embed
-							.setTitle("Saí do canal de voz e apaguei minha fila."));
-					} catch (error) {
-						console.log(error);
-					}
-				}
-			case "queue":
-				{
+	const arg_embed = new Discord.RichEmbed()
+		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+		.setColor("#00FF00");
 
-					// will be a long job
-
+	switch (url) {
+		case "pause":
+			{
+				try {
+					dispatcher.pause();
 					return message.channel.send(arg_embed
-						.setTitle("Trabalhando nesse comando..."));
-				}
-			case "skip":
-				{
-					try {
-						dispatcher.end();
-						await message.channel.send(arg_embed
-							.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
-
-						return;
-					} catch (error) {
-						console.log(error);
-						return message.channel.send(arg_embed
-							.setTitle("Não tem nada tocando que possa ser pulado.")
-							.setColor("#FF0000"));
-					}
-				}
-			case "volume":
-				{
-
-					// not important do later lol
-
+						.setTitle("Reprodução pausada."));
+				} catch (error) {
+					console.log(error);
 					return message.channel.send(arg_embed
-						.setTitle("Trabalhando nesse comando..."));
+						.setTitle("Não tem nada tocando para ser pausado.")
+						.setColor("#FF0000"));
 				}
-			default:
-				break;
-		}
+			}
+		case "play":
+			{
+				try {
+					dispatcher.resume();
+					return message.channel.send(arg_embed
+						.setTitle("Reprodução continuada."));
+				} catch (error) {
+					console.log(error);
+					return message.channel.send(arg_embed
+						.setTitle("Você primeiro precisa pausar algo para depois continuar.")
+						.setColor("#FF0000"));
+				}
+			}
+		case "leave":
+			{
+				try {
+					leaving = true;
+					voiceChannel.leave();
+					queue.delete(message.guild.id);
+					return message.channel.send(arg_embed
+						.setTitle("Saí do canal de voz e apaguei minha fila."));
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		case "queue":
+			{
+				var toskip = args[3];
+
+				if (toskip) {
+					for (let i = 0; i <= toskip; i++) {
+						await dispatcher.end();
+					}
+				} else {
+					var queue_embed = new Discord.RichEmbed()
+						.addField("Agora tocando: ", serverQueue.songs[0].title)
+						.addBlankField()
+						.setColor("#00FF00");
+
+					for (let i = 1; i < serverQueue.songs.length; i++) {
+						queue_embed.addField(`${i} - **${serverQueue.songs[i].title}**`,
+							`Duração: ${serverQueue.songs[i].length}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+					}
+					return message.channel.send(queue_embed);
+				}
+			}
+			break;
+		case "skip":
+			{
+				try {
+					dispatcher.end();
+					await message.channel.send(arg_embed
+						.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
+					return;
+				} catch (error) {
+					console.log(error);
+					return message.channel.send(arg_embed
+						.setTitle("Não tem nada tocando que possa ser pulado.")
+						.setColor("#FF0000"));
+				}
+			}
+		case "volume":
+			{
+
+				// not important do later lol
+
+				return message.channel.send(arg_embed
+					.setTitle("Trabalhando nesse comando..."));
+			}
+		default:
+			break;
 	}
 
 	leaving = false;
