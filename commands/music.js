@@ -80,6 +80,7 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
+	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
 			textChannel: message.channel,
