@@ -86,6 +86,7 @@ module.exports.run = async (bot, message, args) => {
 				}
 			}
 		case "leave":
+		case "l":
 			{
 				try {
 					leaving = true;
@@ -94,10 +95,11 @@ module.exports.run = async (bot, message, args) => {
 					return message.channel.send(arg_embed
 						.setTitle("Saí do canal de voz e apaguei minha fila."));
 				} catch (error) {
-					console.log(error);
+					return console.log(error);
 				}
 			}
 		case "queue":
+		case "q":
 			{
 				if (args[1]) {
 					for (let i = 0; i < args[1] - 1; i++) {
@@ -108,8 +110,9 @@ module.exports.run = async (bot, message, args) => {
 					jumped = false;
 					await dispatcher.end();
 					await message.channel.send(new Discord.RichEmbed()
-						.setTitle(`Queue pulada para a posição ${args[1]}`)
-						.setColor("#00FF00"))
+						.setTitle(`Fila pulada para a posição **${args[1]}**`)
+						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+						.setColor("#00FF00"));
 
 					return;
 				} else {
@@ -124,14 +127,24 @@ module.exports.run = async (bot, message, args) => {
 							.setColor("#FF0000"));
 					}
 
+					queue_embed.addBlankField();
 					for (let i = 1; i < serverQueue.songs.length; i++) {
 						queue_embed.addField(`${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**`,
 							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 					}
+
+					var fulltime = 0;
+					for (let i = 0; i < serverQueue.songs.length; i++) {
+						fulltime += serverQueue.songs[i].song_seconds;
+					}
+
+					queue_embed.addBlankField();
+					queue_embed.setFooter(`**${serverQueue.song.length} na fila atual - Total de ${timing(fulltime)}**`);
 					return message.channel.send(queue_embed);
 				}
 			}
 		case "skip":
+		case "s":
 			{
 				try {
 					dispatcher.end();
@@ -266,5 +279,6 @@ function timing(song_seconds) {
 }
 
 module.exports.help = {
-	name: "music"
+	name: "music",
+	name: "m"
 }
