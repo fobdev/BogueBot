@@ -147,7 +147,7 @@ function play(bot, message, guild, song) {
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
-			return message.channel.send(voice_embed
+			return message.channel.send(new Discord.RichEmbed()
 				.setTitle("Fim da queue, saí do canal de voz.")
 				.setColor("#00FF00"));
 		}
