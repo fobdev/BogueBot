@@ -41,21 +41,38 @@ module.exports.run = async (bot, message, args) => {
 			.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 			.setColor("#00FF00");
 
+		var playing = true;
 		switch (url) {
 			case "pause":
 				{
-					dispatcher.pause();
-					return message.channel.send(arg_embed
-						.setTitle("Pause was called"));
+					if (playing) {
+						playing = false;
+						dispatcher.pause();
+						return message.channel.send(arg_embed
+							.setTitle("Reprodução pausada."));
+					} else {
+						return message.channel.send(arg_embed
+							.setTitle("Não tem nada tocando para ser pausado.")
+							.setColor("#FF0000"));
+					}
 				}
 			case "play":
 				{
-					dispatcher.resume();
-					return message.channel.send(arg_embed
-						.setTitle("Play was called"));
+					if (!playing) {
+						playing = true;
+						dispatcher.resume();
+						return message.channel.send(arg_embed
+							.setTitle("Reprodução continuada."));
+					}
 				}
 			case "leave":
 				{
+					if (!bot.member.voiceChannel) {
+						return message.channel.send(arg_embed
+							.setTitle("Não estou conectado a nenhum canal de voz.")
+							.setColor("#FF0000"));
+					}
+
 					leaving = true;
 					voiceChannel.leave();
 					queue.delete(message.guild.id);
@@ -68,13 +85,13 @@ module.exports.run = async (bot, message, args) => {
 					// will be a long job
 
 					return message.channel.send(arg_embed
-						.setTitle("Queue was called"));
+						.setTitle("Trabalhando nesse comando..."));
 				}
 			case "skip":
 				{
 					dispatcher.end();
 					return message.channel.send(arg_embed
-						.setTitle("A musica foi pulada."));
+						.setTitle("Trabalhando nesse comando..."));
 				}
 			case "volume":
 				{
@@ -82,7 +99,7 @@ module.exports.run = async (bot, message, args) => {
 					// not important do later lol
 
 					return message.channel.send(arg_embed
-						.setTitle("Volume was called"));
+						.setTitle("Trabalhando nesse comando..."));
 				}
 			default:
 				break;
