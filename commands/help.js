@@ -13,7 +13,11 @@ module.exports.run = async (bot, message, args) => {
         "**|  avatar  |**";
 
     const music_commands =
-        "**|  music  |**";
+        "**| >music [url] |** Toca uma URL do YouTube\n" +
+        "**| >music skip |** Pula para o próximo video da fila.\n" +
+        "**| >music pause |** Pausa o vídeo.\n" +
+        "**| >music play |** Continua o vídeo de onde foi pausado.\n" +
+        "**| >music leave |** Sai do canal de voz e apaga a fila.";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
@@ -23,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
         .setTimestamp(bot.user.createdAt)
         .setFooter("Fobenga")
         .setColor("#00FF00")
-        .addField("Musica", music_commands)
+        .addField("Musica", music_commands, true)
         .addField("Usuário", user_commands)
         .addField("Utilidade", utility_commands)
         .addField("Autoridade", authority_commands);
