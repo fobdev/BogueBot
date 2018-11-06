@@ -5,6 +5,7 @@ const ms = require("ms");
 const queue = new Map();
 var leaving = false;
 var dispatcher;
+var jumped = false;
 
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
@@ -99,17 +100,26 @@ module.exports.run = async (bot, message, args) => {
 		case "queue":
 			{
 				if (args[1]) {
-					for (let i = 0; i <= args[1]; i++)
+					for (let i = 0; i <= args[1]; i++) {
+						jumped = true;
 						await dispatcher.end();
+					}
 
+					jumped = false;
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`Queue pulada para a posição ${args[1]}`)
 						.setColor("#00FF00"));
 				} else {
 					var queue_embed = new Discord.RichEmbed()
 						.addField("Agora tocando: ", serverQueue.songs[0].title)
-						.addBlankField()
+						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
+
+					if (serverQueue.songs.length === 1) {
+						return message.channel.send(queue_embed
+							.setTitle("Não tem músicas na fila")
+						);
+					}
 
 					for (let i = 1; i < serverQueue.songs.length; i++) {
 						queue_embed.addField(`${i} - **${serverQueue.songs[i].title}**`,
@@ -118,7 +128,6 @@ module.exports.run = async (bot, message, args) => {
 					return message.channel.send(queue_embed);
 				}
 			}
-			break;
 		case "skip":
 			{
 				try {
@@ -221,7 +230,8 @@ function play(bot, message, guild, song) {
 			.addField("Escritores", `*${writers_str}*`, true)
 	}
 
-	message.channel.send(music_embed);
+	if (!jumped)
+		message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
 		console.log(`${song.title} finished.`);
