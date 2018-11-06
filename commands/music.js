@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
+const ms = require("ms");
 
 const queue = new Map();
 var leaving = false;
@@ -38,9 +39,8 @@ module.exports.run = async (bot, message, args) => {
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
 			author: message.author.id,
-			media_song: song_info.media.song,
 			media_artist: song_info.media.artist,
-			media_album: song_info.media.image
+			media_album: song_info.media.
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -163,7 +163,7 @@ function play(bot, message, guild, song) {
 	message.channel.send(new Discord.RichEmbed()
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Musica", song.media_song, true)
+		.addField("Duração", ms(song.length))
 		.addField("Artista", song.media_artist, true)
 		.addField("Álbum", song.media_album, true)
 		.setThumbnail(song.thumbnail)
