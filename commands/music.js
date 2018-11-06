@@ -12,14 +12,20 @@ module.exports.run = async (bot, message, args) => {
 
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
-	const url = args.join(" ");
+	console.log(`|ARG 0: ${args[0]} | ARG 1: ${args[1]}|`);
+	var url = args[0];
 	let yt_url = true;
 	if (url === 'play' ||
 		url === 'pause' ||
 		url === 'leave' ||
 		url === 'skip' ||
-		url === 'queue' || args[3] !== 'undefined' ||
+		url === 'queue' ||
 		url === 'volume') {
+
+		console.log("accepted");
+		// console.log(`arg2:${args[2]}`);
+		// console.log(url);
+
 		yt_url = false;
 	}
 
@@ -92,11 +98,12 @@ module.exports.run = async (bot, message, args) => {
 			}
 		case "queue":
 			{
-				var toskip = args[3];
-
-				if (toskip) {
-					for (let i = 0; i <= toskip; i++) {
+				if (args[1]) {
+					for (let i = 0; i <= args[1]; i++) {
 						await dispatcher.end();
+						return message.channel.send(new Discord.RichEmbed()
+							.setTitle(`Queue pulada para a posição ${args[1]}`)
+							.setColor("#00FF00"));
 					}
 				} else {
 					var queue_embed = new Discord.RichEmbed()
