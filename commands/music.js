@@ -18,9 +18,9 @@ module.exports.run = async (bot, message, args) => {
 	let yt_url = true;
 	if (url === 'play' ||
 		url === 'pause' ||
-		url === 'leave' ||
-		url === 'skip' ||
-		url === 'queue' ||
+		url === 'leave' || url === 'l' ||
+		url === 'skip' || url === 's' ||
+		url === 'queue' || url === 'q' ||
 		url === 'volume') {
 
 		console.log("accepted");
