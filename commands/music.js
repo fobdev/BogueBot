@@ -37,7 +37,10 @@ module.exports.run = async (bot, message, args) => {
 			url: song_info.video_url,
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
-			author: message.author.username
+			author: message.author.id,
+			media_song: song_info.media.song,
+			media_artist: song_info.media.artist,
+			media_album: song_info.media.image
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -158,8 +161,11 @@ function play(bot, message, guild, song) {
 	} else return;
 
 	message.channel.send(new Discord.RichEmbed()
-		.addField(`Agora tocando`, `**[${song.title}](song.url)**`)
-		.addField("Adicionado", song.author)
+		.addField("Agora tocando", `**[${song.title}](${song.url})**`)
+		.addField("Adicionado por", `[<@${song.author}>]`, true)
+		.addField("Musica", song.media_song, true)
+		.addField("Artista", song.media_artist, true)
+		.addField("Álbum", song.media_album, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00"));
 
