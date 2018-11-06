@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 
 const queue = new Map();
-
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
@@ -122,7 +121,6 @@ module.exports.run = async (bot, message, args) => {
 function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url));
-
 	if (!song) {
 		queue.delete(guild.id);
 		serverQueue.voiceChannel.leave();
