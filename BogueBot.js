@@ -1,5 +1,5 @@
 const botconfig = require("./botconfig.json");
-const bot_token
+var bot_token;
 const Discord = require("discord.js");
 const fs = require("fs");
 
