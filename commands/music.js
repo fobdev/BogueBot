@@ -11,6 +11,41 @@ module.exports.run = async (bot, message, args) => {
 	var serverQueue = queue.get(message.guild.id);
 	const url = args.join(" ");
 
+	// if the input is not a youtube url
+	switch (url) {
+		case "play":
+			{
+
+			}
+			break;
+		case "pause":
+			{
+
+			}
+			break;
+		case "leave":
+			{
+
+			}
+			break;
+		case "skip":
+			{
+
+			}
+			break;
+		case "queue":
+			{
+
+			}
+			break;
+		case "volume":
+			{
+
+			}
+		default:
+			break;
+	}
+
 	if (!voiceChannel) {
 		return message.channel.send(voice_embed
 			.setTitle("Você não está em um canal de voz.")
@@ -83,8 +118,8 @@ function play(bot, message, guild, song) {
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
-		console.log("Current musics in queue:");
-		console.log(serverQueue.songs);
+		console.log(`Current musics in queue: ${serverQueue.songs}`);
+
 		serverQueue.songs.shift();
 		play(bot, message, guild, serverQueue.songs[0]);
 	});
