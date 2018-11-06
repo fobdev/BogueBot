@@ -135,11 +135,12 @@ module.exports.run = async (bot, message, args) => {
 
 					var fulltime = 0;
 					for (let i = 0; i < serverQueue.songs.length; i++) {
-						fulltime += serverQueue.songs[i].song_seconds;
+						fulltime += serverQueue.songs[i].length;
 					}
 
+					console.log(`FULLTIME OF THE QUEUE: ${fulltime}`);
 					queue_embed.addBlankField();
-					queue_embed.setFooter(`**${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}**`);
+					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed);
 				}
 			}
