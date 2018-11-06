@@ -41,9 +41,9 @@ module.exports.run = async (bot, message, args) => {
         .setFooter("Fobenga")
         .setColor("#00FF00")
         .addField("Musica", music_commands)
-        .addField("Usuário", user_commands)
+        .addField("Autoridade", authority_commands)
         .addField("Utilidade", utility_commands)
-        .addField("Autoridade", authority_commands);
+        .addField("Usuário", user_commands);
 
     let helpcommand = args.join(" ");
     let commands_embed = new Discord.RichEmbed()
