@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
 			length: song_info.length_seconds,
 			author: message.author.id,
 			media_artist: song_info.media.artist,
-			media_album: song_info.media.
+			media_album: song_info.media.writers
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
