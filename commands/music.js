@@ -44,11 +44,13 @@ module.exports.run = async (bot, message, args) => {
 		switch (url) {
 			case "pause":
 				{
+					dispatcher.pause();
 					return message.channel.send(arg_embed
 						.setTitle("Pause was called"));
 				}
 			case "play":
 				{
+					dispatcher.resume();
 					return message.channel.send(arg_embed
 						.setTitle("Play was called"));
 				}
@@ -62,6 +64,9 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "queue":
 				{
+
+					// will be a long job
+
 					return message.channel.send(arg_embed
 						.setTitle("Queue was called"));
 				}
@@ -69,10 +74,13 @@ module.exports.run = async (bot, message, args) => {
 				{
 					dispatcher.end();
 					return message.channel.send(arg_embed
-						.setTitle("O video foi pulado"));
+						.setTitle("A musica foi pulada."));
 				}
 			case "volume":
 				{
+
+					// not important do later lol
+
 					return message.channel.send(arg_embed
 						.setTitle("Volume was called"));
 				}
