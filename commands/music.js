@@ -35,45 +35,43 @@ module.exports.run = async (bot, message, args) => {
 			url: song_info.video_url
 		};
 	} else {
+		const arg_embed = new Discord.RichEmbed()
+			.setFooter(`Chamado por ${message.author.name}`, message.author.displayAvatarURL)
+			.setColor("#00FF00");
+
 		switch (url) {
-			case "play":
-				{
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Play was called")
-						.setColor("#00FF00"));
-				}
 			case "pause":
 				{
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Pause was called")
-						.setColor("#00FF00"));
+					return message.channel.send(arg_embed
+						.setTitle("Pause was called"));
+				}
+			case "play":
+				{
+					return message.channel.send(arg_embed
+						.setTitle("Play was called"));
 				}
 			case "leave":
 				{
 					leaving = true;
 					voiceChannel.leave();
 					queue.delete(message.guild.id);
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Leave was called")
-						.setColor("#00FF00"));
-				}
-			case "skip":
-				{
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Skip was called")
-						.setColor("#00FF00"));
+					return message.channel.send(arg_embed
+						.setTitle("Saí do canal de voz e apaguei minha fila."));
 				}
 			case "queue":
 				{
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Queue was called")
-						.setColor("#00FF00"));
+					return message.channel.send(arg_embed
+						.setTitle("Queue was called"));
+				}
+			case "skip":
+				{
+					return message.channel.send(arg_embed
+						.setTitle("O video foi pulado"));
 				}
 			case "volume":
 				{
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle("Volume was called")
-						.setColor("#00FF00"));
+					return message.channel.send(arg_embed
+						.setTitle("Volume was called"));
 				}
 			default:
 				break;
@@ -128,7 +126,7 @@ function play(bot, message, guild, song) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	else return;
 
-	if (!song) {
+	if (song === undefined) {
 		queue.delete(guild.id);
 		serverQueue.voiceChannel.leave();
 
