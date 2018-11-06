@@ -126,14 +126,6 @@ function play(bot, message, guild, song) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	else return;
 
-	// if (!song) {
-	// 	queue.delete(guild.id);
-	// 	serverQueue.voiceChannel.leave();
-	// 	return message.channel.send(voice_embed
-	// 		.setTitle("Fim da queue, saí do canal de voz.")
-	// 		.setColor("#00FF00"));
-	// }
-
 	message.channel.send(new Discord.RichEmbed()
 		.addField(`Agora tocando **${song.title}**`, song.url)
 		.setURL(song.url)
