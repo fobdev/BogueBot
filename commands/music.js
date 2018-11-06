@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
 			url: song_info.video_url,
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
-			uploader: song_info.author
+			media: song_info.media
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -162,7 +162,7 @@ function play(bot, message, guild, song) {
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00")
 		.addField("Duração", song.length, true)
-		.addField("Autor", song.author, true));
+		.addField("Media", song.media, true));
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
