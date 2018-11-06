@@ -101,7 +101,7 @@ module.exports.run = async (bot, message, args) => {
 		case "queue":
 		case "q":
 			{
-				var fulltime = 0;
+				var fulltime;
 				if (args[1]) {
 					for (let i = 0; i < args[1] - 1; i++) {
 						jumped = true;
@@ -132,7 +132,7 @@ module.exports.run = async (bot, message, args) => {
 					for (let i = 1; i < serverQueue.songs.length; i++) {
 						queue_embed.addField(`${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**`,
 							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
-						fulltime += serverQueue.songs[i].length;
+						fulltime += parseInt(serverQueue.songs[i].length);
 					}
 
 					console.log(`FULLTIME OF THE QUEUE: ${fulltime}`);
