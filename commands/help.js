@@ -12,12 +12,13 @@ module.exports.run = async (bot, message, args) => {
     const user_commands =
         "**|  avatar  |**";
 
+    const music_file = require("./music.js");
     const music_commands =
-        "**| >music [url] |** Toca uma URL do YouTube\n" +
-        "**| >music skip |** Pula para o próximo video da fila.\n" +
-        "**| >music pause |** Pausa o vídeo.\n" +
-        "**| >music play |** Continua o vídeo de onde foi pausado.\n" +
-        "**| >music leave |** Sai do canal de voz e apaga a fila.";
+        `**| ${botconfig.prefix}${music_file.help.name} [url] |**` + "Toca uma URL do YouTube\n" +
+        `**| ${botconfig.prefix}${music_file.help.name} skip |**` + " Pula para o próximo video da fila.\n" +
+        `**| ${botconfig.prefix}${music_file.help.name} pause |** ` + "Pausa o vídeo.\n" +
+        `**| ${botconfig.prefix}${music_file.help.name} play |** ` + "Continua o vídeo de onde foi pausado.\n" +
+        `**| ${botconfig.prefix}${music_file.help.name} leave |**` + " Sai do canal de voz e apaga a fila.";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
