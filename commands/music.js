@@ -100,9 +100,10 @@ module.exports.run = async (bot, message, args) => {
 			case "skip":
 				{
 					try {
+						song_info = await ytdl.getInfo(url);
 						dispatcher.end();
 						return message.channel.send(arg_embed
-							.setTitle(`**${song.title}** pulado.`));
+							.setTitle(`**${song_info.title}** pulado.`));
 					} catch (error) {
 						console.log(error);
 						return message.channel.send(arg_embed
