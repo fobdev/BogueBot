@@ -40,7 +40,9 @@ module.exports.run = async (bot, message, args) => {
 			length: song_info.length_seconds,
 			author: message.author.id,
 			media_artist: song_info.media.artist,
-			media_album: song_info.media.game
+			media_album: song_info.media.album,
+			media_writers: song_info.media.writers,
+			media_type: song_info.media.category
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -97,9 +99,16 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "skip":
 				{
-					dispatcher.end();
-					return message.channel.send(arg_embed
-						.setTitle("Reprodução pulada."));
+					try {
+						dispatcher.end();
+						return message.channel.send(arg_embed
+							.setTitle(`**${song.title}** pulado.`));
+					} catch (error) {
+						console.log(error);
+						return message.channel.send(arg_embed
+							.setTitle("Não tem nada tocando que possa ser pulado.")
+							.setColor("#FF0000"));
+					}
 				}
 			case "volume":
 				{
@@ -162,17 +171,38 @@ function play(bot, message, guild, song) {
 
 	var minutes = Math.floor(song.length / 60);
 	var seconds = song.length % 60;
-	message.channel.send(new Discord.RichEmbed()
+
+	// message filtering for rich embed of 'agora tocando'
+	var seconds_str = `${seconds}`;
+	var minutes_str = `${minutes}`;
+	var artist_str = `${song.media_artist}`;
+	var album_str = `${song.media_album}`;
+	var writers_str = `${song.media_writers}`;
+
+	if (seconds < 10) seconds_str = `0${seconds}`;
+	if (minutes < 1) minutes_str = "00";
+	if (artist_str === 'undefined') artist_str = 'Indisponível';
+	if (album_str === 'undefined') album_str = 'Indisponível';
+	if (writers_str === 'undefined') writers_str === 'Indisponível';
+
+	var music_embed = new Discord.RichEmbed()
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Duração", `${minutes}:${seconds}`, true)
-		.addField("Artista", song.media_artist, true)
-		.addField("Álbum", song.media_album, true)
+		.addField("Duração", `${minutes_str}:${seconds_str}`, true)
 		.setThumbnail(song.thumbnail)
-		.setColor("#00FF00"));
+		.setColor("#00FF00");
+
+	if (song.media_type === 'Music') {
+		music_embed
+			.addField("Artista", `*${artist_str}*`, true)
+			.addField("Álbum", `*${album_str}*`, true)
+			.addField("Escritores", `*${writers_str}*`, true)
+	}
+
+	message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
-		console.log("song ended.");
+		console.log(`${song.title} finished.`);
 		console.log("songs in queue: ");
 		console.log(serverQueue.songs);
 
