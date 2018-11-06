@@ -183,7 +183,7 @@ function play(bot, message, guild, song) {
 	if (minutes < 1) minutes_str = "00";
 	if (artist_str === 'undefined') artist_str = 'Indisponível';
 	if (album_str === 'undefined') album_str = 'Indisponível';
-	if (writers_str === 'undefined') writers_str === 'Indisponível';
+	if (writers_str === 'undefined') writers_str = 'Indisponível';
 
 	var music_embed = new Discord.RichEmbed()
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
