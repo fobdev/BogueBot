@@ -35,7 +35,9 @@ module.exports.run = async (bot, message, args) => {
 		song = {
 			title: song_info.title,
 			url: song_info.video_url,
-			thumbnail: song_info.thumbnail_url
+			thumbnail: song_info.thumbnail_url,
+			length: song_info.length_seconds,
+			uploader: song_info.author
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -72,17 +74,15 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "leave":
 				{
-					if (!bot.member.voiceChannel) {
+					try {
+						leaving = true;
+						voiceChannel.leave();
+						queue.delete(message.guild.id);
 						return message.channel.send(arg_embed
-							.setTitle("Não estou conectado a nenhum canal de voz.")
-							.setColor("#FF0000"));
+							.setTitle("Saí do canal de voz e apaguei minha fila."));
+					} catch (error) {
+						console.log(error);
 					}
-
-					leaving = true;
-					voiceChannel.leave();
-					queue.delete(message.guild.id);
-					return message.channel.send(arg_embed
-						.setTitle("Saí do canal de voz e apaguei minha fila."));
 				}
 			case "queue":
 				{
@@ -96,7 +96,7 @@ module.exports.run = async (bot, message, args) => {
 				{
 					dispatcher.end();
 					return message.channel.send(arg_embed
-						.setTitle("Trabalhando nesse comando..."));
+						.setTitle("Reprodução pulada."));
 				}
 			case "volume":
 				{
@@ -159,9 +159,10 @@ function play(bot, message, guild, song) {
 
 	message.channel.send(new Discord.RichEmbed()
 		.addField(`Agora tocando **${song.title}**`, song.url)
-		.setURL(song.url)
 		.setThumbnail(song.thumbnail)
-		.setColor("#00FF00"));
+		.setColor("#00FF00")
+		.addField("Duração", song.length, true)
+		.addField("Autor", song.author, true));
 
 	dispatcher.on('end', () => {
 		console.log("song ended.");
