@@ -19,7 +19,8 @@ module.exports.run = async (bot, message, args) => {
 		url === 'leave' ||
 		url === 'skip' ||
 		url === 'queue' ||
-		url === 'volume') {
+		url === 'volume' ||
+		args[1] === 'search') {
 		yt_url = false;
 	}
 
@@ -48,21 +49,21 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("#00FF00");
 
 		var playing = true;
-		switch (url) {
-			case "search":
-				{
-					var search_embed = new Discord.RichEmbed()
-						.setTitle("YouTube Search")
-						.setColor("#00FF00");
+		if (args[1] === 'search') {
+			var search_embed = new Discord.RichEmbed()
+				.setTitle("YouTube Search")
+				.setColor("#00FF00");
 
-					ytdl.getInfo(args[2]).then(info => {
-						for (let i = 0; i < 5; i++) {
-							search_embed.addField(`Result ${i}`, info.items[i].url);
-						}
-						message.channel.send(search_embed);
-					});
+			ytdl.getInfo(args[2]).then(info => {
+				for (let i = 0; i < 5; i++) {
+					search_embed.addField(`Result ${i}`, info.items[i].url);
 				}
+				message.channel.send(search_embed);
+			});
 
+		}
+
+		switch (url) {
 			case "pause":
 				{
 					try {
