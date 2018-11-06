@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
-			.setFooter(`Chamado por ${message.author.name}`, message.author.displayAvatarURL)
+			.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 			.setColor("#00FF00");
 
 		switch (url) {
@@ -126,10 +126,10 @@ function play(bot, message, guild, song) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	else return;
 
-	if (song === undefined) {
+	if (!song) {
 		queue.delete(guild.id);
-		serverQueue.voiceChannel.leave();
-
+		// serverQueue.
+		voiceChannel.leave();
 		return message.channel.send(voice_embed
 			.setTitle("Fim da queue, saí do canal de voz.")
 			.setColor("#00FF00"));
