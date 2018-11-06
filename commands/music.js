@@ -3,6 +3,8 @@ const ytdl = require("ytdl-core");
 
 const queue = new Map();
 var leaving = false;
+var skipping = false;
+
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
@@ -65,6 +67,7 @@ module.exports.run = async (bot, message, args) => {
 				}
 			case "skip":
 				{
+					skipping = true;
 					return message.channel.send(arg_embed
 						.setTitle("O video foi pulado"));
 				}
@@ -78,6 +81,7 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
+	skipping = false;
 	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
@@ -124,7 +128,9 @@ function play(bot, message, guild, song) {
 	var dispatcher;
 	if (!leaving)
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
-	else return;
+	if (skipping) {
+		dispatcher.end();
+	} else return;
 
 	message.channel.send(new Discord.RichEmbed()
 		.addField(`Agora tocando **${song.title}**`, song.url)
