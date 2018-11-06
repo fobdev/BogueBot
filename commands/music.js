@@ -125,8 +125,8 @@ module.exports.run = async (bot, message, args) => {
 					}
 
 					for (let i = 1; i < serverQueue.songs.length; i++) {
-						queue_embed.addField(`${i} - **${serverQueue.songs[i].title}**`,
-							`Duração: ${serverQueue.songs[i].length}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+						queue_embed.addField(`${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**`,
+							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 					}
 					return message.channel.send(queue_embed);
 				}
@@ -203,18 +203,12 @@ function play(bot, message, guild, song) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	} else return;
 
-	var minutes = Math.floor(song.length / 60);
-	var seconds = song.length % 60;
 
 	// message filtering for rich embed of 'agora tocando'
-	var seconds_str = `${seconds}`;
-	var minutes_str = `${minutes}`;
 	var artist_str = `${song.media_artist}`;
 	var album_str = `${song.media_album}`;
 	var writers_str = `${song.media_writers}`;
 
-	if (seconds < 10) seconds_str = `0${seconds}`;
-	if (minutes < 1) minutes_str = "00";
 	if (artist_str === 'undefined') artist_str = 'Indisponível';
 	if (album_str === 'undefined') album_str = 'Indisponível';
 	if (writers_str === 'undefined') writers_str = 'Indisponível';
@@ -222,7 +216,7 @@ function play(bot, message, guild, song) {
 	var music_embed = new Discord.RichEmbed()
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Duração", `${minutes_str}:${seconds_str}`, true)
+		.addField("Duração", `${timing(song.length)}`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
@@ -258,6 +252,17 @@ function play(bot, message, guild, song) {
 	});
 
 	dispatcher.on('error', error => console.log(error));
+}
+
+function timing(song_seconds) {
+	var minutes = Math.floor(song_seconds / 60);
+	var seconds = song_seconds % 60;
+	var seconds_str = `${seconds}`;
+	var minutes_str = `${minutes}`;
+
+	if (seconds < 10) seconds_str = `0${seconds}`;
+	if (minutes < 1) minutes_str = "00";
+	return `${minutes_str}:${seconds_str}`;
 }
 
 module.exports.help = {
