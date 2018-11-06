@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
 			length: song_info.length_seconds,
 			author: message.author.id,
 			media_artist: song_info.media.artist,
-			media_album: song_info.media.writers
+			media_album: song_info.media.game
 		};
 	} else {
 		const arg_embed = new Discord.RichEmbed()
@@ -160,10 +160,12 @@ function play(bot, message, guild, song) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	} else return;
 
+	var minutes = Math.floor(song.length / 60);
+	var seconds = song.length % 60;
 	message.channel.send(new Discord.RichEmbed()
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Duração", ms(song.length))
+		.addField("Duração", `${minutes}:${seconds}`)
 		.addField("Artista", song.media_artist, true)
 		.addField("Álbum", song.media_album, true)
 		.setThumbnail(song.thumbnail)
