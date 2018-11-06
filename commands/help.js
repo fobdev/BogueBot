@@ -4,21 +4,30 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async (bot, message, args) => {
 
     const utility_commands =
-        "**| help  |  clear  |  auth  |**";
+        "**|" + `${botconfig.prefix}` + "help  |" +
+        `${botconfig.prefix}` + "clear  |" +
+        `${botconfig.prefix}` + "auth  |**";
 
     const authority_commands =
-        "**|  mute  |  desmute  |  tempmute  |  kick  |  ban  |  report  |  renameserver  |**";
+        "**|" + `${botconfig.prefix}` + "mute  |" +
+        `${botconfig.prefix}` + "desmute  |" +
+        `${botconfig.prefix}` + "tempmute  |" +
+        `${botconfig.prefix}` + "kick  |" +
+        `${botconfig.prefix}` + "ban  |" +
+        `${botconfig.prefix}` + "report  |" +
+        `${botconfig.prefix}` + "renameserver  |**";
 
     const user_commands =
-        "**|  avatar  |**";
+        "**|" + `${botconfig.prefix}` + "avatar  |**";
 
     const music_file = require("./music.js");
+    const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
     const music_commands =
-        `**| ${botconfig.prefix}${music_file.help.name} [url] |**` + "Toca uma URL do YouTube\n" +
-        `**| ${botconfig.prefix}${music_file.help.name} skip |**` + " Pula para o próximo video da fila.\n" +
-        `**| ${botconfig.prefix}${music_file.help.name} pause |** ` + "Pausa o vídeo.\n" +
-        `**| ${botconfig.prefix}${music_file.help.name} play |** ` + "Continua o vídeo de onde foi pausado.\n" +
-        `**| ${botconfig.prefix}${music_file.help.name} leave |**` + " Sai do canal de voz e apaga a fila.";
+        `**| ${musicprefix} [url] |**` + "``-`` Toca uma URL do YouTube\n" +
+        `**| ${musicprefix} skip |**` + "``-`` Pula para o próximo video da fila.\n" +
+        `**| ${musicprefix} pause |** ` + "``-`` Pausa o vídeo.\n" +
+        `**| ${musicprefix} play |** ` + "``-`` Continua o vídeo de onde foi pausado.\n" +
+        `**| ${musicprefix} leave |**` + "``-`` Sai do canal de voz e apaga a fila.";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`${bot.user.username} Ajuda`)
