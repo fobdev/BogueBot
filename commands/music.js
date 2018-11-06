@@ -11,45 +11,45 @@ module.exports.run = async (bot, message, args) => {
 	var serverQueue = queue.get(message.guild.id);
 	const url = args.join(" ");
 
-	// if the input is not a youtube url
-	switch (url) {
-		case "play":
-			{
-
-			}
-			break;
-		case "pause":
-			{
-
-			}
-			break;
-		case "leave":
-			{
-
-			}
-			break;
-		case "skip":
-			{
-
-			}
-			break;
-		case "queue":
-			{
-
-			}
-			break;
-		case "volume":
-			{
-
-			}
-		default:
-			break;
-	}
-
 	if (!voiceChannel) {
 		return message.channel.send(voice_embed
 			.setTitle("Você não está em um canal de voz.")
 			.setColor("FF0000"));
+	} else {
+		// if the input is not a youtube url
+		switch (url) {
+			case "play":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Play was called")));
+				}
+				break;
+			case "pause":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Pause was called")));
+				}
+				break;
+			case "leave":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Leave was called")));
+				}
+				break;
+			case "skip":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Skip was called")));
+				}
+				break;
+			case "queue":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Queue was called")));
+				}
+				break;
+			case "volume":
+				{
+					return message.channel.send(new Discord.RichEmbed(setTitle("Volume was called")));
+				}
+			default:
+				break;
+		}
 	}
 
 	var song_info = await ytdl.getInfo(url);
