@@ -101,7 +101,7 @@ module.exports.run = async (bot, message, args) => {
 		case "queue":
 		case "q":
 			{
-				var fulltime;
+				var fulltime = 0;
 				if (args[1]) {
 					for (let i = 0; i < args[1] - 1; i++) {
 						jumped = true;
@@ -199,7 +199,7 @@ module.exports.run = async (bot, message, args) => {
 		}
 	} else {
 		serverQueue.songs.push(song);
-		console.log(serverQueue.songs);
+		// console.log(serverQueue.songs);
 		await message.delete();
 		return message.channel.send(voice_embed
 			.setTitle(`Foi adicionado à fila: **${song.title}** `)
@@ -242,9 +242,9 @@ function play(bot, message, guild, song) {
 		message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
-		console.log(`${song.title} finished.`);
-		console.log("songs in queue: ");
-		console.log(serverQueue.songs);
+		// console.log(`${song.title} finished.`);
+		// console.log("songs in queue: ");
+		// console.log(serverQueue.songs);
 
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
