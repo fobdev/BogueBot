@@ -51,7 +51,6 @@ module.exports.run = async (bot, message, args) => {
 							.setTitle("Reprodução pausada."));
 					} catch (error) {
 						console.log(error);
-					} finally {
 						return message.channel.send(arg_embed
 							.setTitle("Não tem nada tocando para ser pausado.")
 							.setColor("#FF0000"));
@@ -65,7 +64,6 @@ module.exports.run = async (bot, message, args) => {
 							.setTitle("Reprodução continuada."));
 					} catch (error) {
 						console.log(error);
-					} finally {
 						return message.channel.send(arg_embed
 							.setTitle("Você primeiro precisa pausar algo para depois continuar.")
 							.setColor("#FF0000"));
