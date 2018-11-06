@@ -99,12 +99,12 @@ module.exports.run = async (bot, message, args) => {
 		case "queue":
 			{
 				if (args[1]) {
-					for (let i = 0; i <= args[1]; i++) {
+					for (let i = 0; i <= args[1]; i++)
 						await dispatcher.end();
-						return message.channel.send(new Discord.RichEmbed()
-							.setTitle(`Queue pulada para a posição ${args[1]}`)
-							.setColor("#00FF00"));
-					}
+
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle(`Queue pulada para a posição ${args[1]}`)
+						.setColor("#00FF00"));
 				} else {
 					var queue_embed = new Discord.RichEmbed()
 						.addField("Agora tocando: ", serverQueue.songs[0].title)
