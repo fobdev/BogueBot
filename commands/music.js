@@ -268,15 +268,15 @@ function play(bot, message, guild, song) {
 	dispatcher.on('error', error => console.log(error));
 }
 
-function timing(song_seconds) {
-	var minutes = Math.floor(song_seconds / 60);
-	var seconds = song_seconds % 60;
-	var seconds_str = `${seconds}`;
-	var minutes_str = `${minutes}`;
-
-	if (seconds < 10) seconds_str = `0${seconds}`;
-	if (minutes < 1) minutes_str = "00";
-	return `${minutes_str}:${seconds_str}`;
+function timing(secs) {
+	var sec_num = parseInt(secs, 10);
+	var hours = Math.floor(sec_num / 3600) % 24;
+	var minutes = Math.floor(sec_num / 60) % 60;
+	var seconds = sec_num % 60;
+	return [hours, minutes, seconds]
+		.map(v => v < 10 ? "0" + v : v)
+		.filter((v, i) => v !== "00" || i > 0)
+		.join(":");
 }
 
 module.exports.help = {
