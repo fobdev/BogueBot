@@ -246,7 +246,7 @@ function play(bot, message, guild, song) {
 			serverQueue.voiceChannel.leave();
 
 			if (!leaving)
-				await message.channel.send(new Discord.RichEmbed()
+				message.channel.send(new Discord.RichEmbed()
 					.setTitle("Fim da queue, saí do canal de voz.")
 					.setColor("#00FF00"));
 
