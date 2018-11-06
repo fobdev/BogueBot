@@ -100,15 +100,18 @@ module.exports.run = async (bot, message, args) => {
 		case "queue":
 			{
 				if (args[1]) {
-					for (let i = 0; i <= args[1]; i++) {
+					for (let i = 0; i < args[1] - 1; i++) {
 						jumped = true;
 						await dispatcher.end();
 					}
 
 					jumped = false;
-					return message.channel.send(new Discord.RichEmbed()
+					await dispatcher.end();
+					await message.channel.send(new Discord.RichEmbed()
 						.setTitle(`Queue pulada para a posição ${args[1]}`)
-						.setColor("#00FF00"));
+						.setColor("#00FF00"))
+
+					return;
 				} else {
 					var queue_embed = new Discord.RichEmbed()
 						.addField("Agora tocando: ", serverQueue.songs[0].title)
@@ -243,9 +246,9 @@ function play(bot, message, guild, song) {
 			serverQueue.voiceChannel.leave();
 
 			if (!leaving)
-				message.channel.send(new Discord.RichEmbed()
+				await message.channel.send(new Discord.RichEmbed()
 					.setTitle("Fim da queue, saí do canal de voz.")
-					.setColor("#00FF00"))
+					.setColor("#00FF00"));
 
 			return;
 		}
