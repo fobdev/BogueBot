@@ -20,32 +20,44 @@ module.exports.run = async (bot, message, args) => {
 		switch (url) {
 			case "play":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Play was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Play was called")
+						.setColor("#00FF00"));
 				}
 				break;
 			case "pause":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Pause was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Pause was called")
+						.setColor("#00FF00"));
 				}
 				break;
 			case "leave":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Leave was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Leave was called")
+						.setColor("#00FF00"));
 				}
 				break;
 			case "skip":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Skip was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Skip was called")
+						.setColor("#00FF00"));
 				}
 				break;
 			case "queue":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Queue was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Queue was called")
+						.setColor("#00FF00"));
 				}
 				break;
 			case "volume":
 				{
-					return message.channel.send(new Discord.RichEmbed(setTitle("Volume was called")));
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Volume was called")
+						.setColor("#00FF00"));
 				}
 			default:
 				break;
