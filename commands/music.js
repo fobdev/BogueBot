@@ -134,12 +134,11 @@ function play(bot, message, guild, song) {
 		.setURL(song.url)
 		.setColor("#00FF00"));
 
-	if (skipping) {
-		dispatcher.end();
-	}
-
-	dispatcher.on('start', () => {
-		skipping = false;
+	dispatcher.on('speaking', () => {
+		if (skipping) {
+			dispatcher.end();
+			skipping = false;
+		}
 	});
 
 	dispatcher.on('end', () => {
