@@ -143,7 +143,8 @@ module.exports.run = async (bot, message, args) => {
 				} else {
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
-							`\nDuração: ${timing(serverQueue.songs[0].length)}`)
+							`\nDuração: ${timing(serverQueue.songs[0].length)}\n` +
+							`Tempo Atual: ${timing(dispatcher.timing)}`)
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
