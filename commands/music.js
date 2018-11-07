@@ -19,7 +19,7 @@ var dispatcher;
 var isPlaylist = false;
 var paused = false;
 
-var subcommands = ['pause', 'p', 'play', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var videos;
 var video;
 
@@ -113,9 +113,9 @@ module.exports.run = async (bot, message, args) => {
 		.setColor("#00FF00");
 
 	switch (url) {
-		case "pause":
 		case "p":
 			{
+				// the same command for play and pause
 				try {
 					if (!paused) {
 						dispatcher.pause();
@@ -124,44 +124,18 @@ module.exports.run = async (bot, message, args) => {
 							.setTitle(":pause_button: Reprodução pausada.")
 							.setColor("#FFFF00"));
 					} else {
-						// the same command for play and pause
 						dispatcher.resume();
 						paused = false;
 						return message.channel.send(arg_embed
 							.setTitle(":arrow_forward: Reprodução continuada."));
-						// return message.channel.send(arg_embed
-						// 	.setTitle("Não tem nada tocando para ser pausado.")
-						// 	.setColor("#FF0000"));
 					}
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
-						.setTitle("Não tem nada tocando para ser pausado.")
+						.setTitle("O comando não funcionou como o esperado.")
 						.setColor("#FF0000"));
 				}
 			}
-
-		case "play":
-			{
-				try {
-					if (paused) {
-						dispatcher.resume();
-						paused = false;
-						return message.channel.send(arg_embed
-							.setTitle(":arrow_forward: Reprodução continuada."));
-					} else {
-						return message.channel.send(arg_embed
-							.setTitle("Não tem nada pausado.")
-							.setColor("#FF0000"));
-					}
-				} catch (error) {
-					console.log(error);
-					return message.channel.send(arg_embed
-						.setTitle("Não tem nada pausado.")
-						.setColor("#FF0000"));
-				}
-			}
-
 		case "leave":
 		case "l":
 			{
