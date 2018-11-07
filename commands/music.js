@@ -24,6 +24,7 @@ module.exports.run = async (bot, message, args) => {
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	var url = args[0];
+	var search = args.join(" ");
 	let yt_url = true;
 
 	if (!url.includes('youtube.com/watch?v=')) {
@@ -36,14 +37,29 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("FF0000"));
 	}
 
+	try {
+		var video = await youtube.getVideo(url);
+	} catch (error) {
+		try {
+			var videos = await youtube.searchVideos(search, 1);
+			var video = await youtube.getVideoByID(videos[0].id);
+		} catch (err) {
+			console.log(err);
+			return message.channel.send(new Discord.RichEmbed()
+				.setTitle("Não foram encontrados vídeos.")
+				.setColor("#FF0000"));
+		}
+	}
+
 	var song_info;
 	var song;
 
 	if (yt_url) {
-		song_info = await ytdl.getInfo(url);
+		song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 		song = {
-			title: song_info.title,
-			url: song_info.video_url,
+			id: video.id,
+			title: video.title,
+			url: `https://www.youtube.com/watch?v=${video.id}`,
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
 			author: message.author.id,
