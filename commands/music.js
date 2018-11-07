@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTube = require("simple-youtube-api");
-const botconfig = require.main.require("../botconfig.json");
-const helper = require.main.require('../core/helper.js');
+const botconfig = require.main.require("./botconfig.json");
+const helper = require.main.require('./core/helper.js');
 
 var ytkey = helper.loadKeys("youtube_key");
 

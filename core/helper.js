@@ -1,5 +1,5 @@
 const fs = require("fs");
-const token_file_name = "../bottoken.json";
+const token_file_name = "./bottoken.json";
 
 module.exports.loadKeys = (key) => {
 
