@@ -100,13 +100,13 @@ module.exports.run = async (bot, message, args) => {
 							.setTitle(":arrow_forward: Reprodução continuada."));
 					} else {
 						return message.channel.send(arg_embed
-							.setTitle("Você primeiro precisa pausar algo para depois continuar.")
+							.setTitle("Não tem nada pausado.")
 							.setColor("#FF0000"));
 					}
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
-						.setTitle("Você primeiro precisa pausar algo para depois continuar.")
+						.setTitle("Não tem nada pausado.")
 						.setColor("#FF0000"));
 				}
 			}
@@ -199,7 +199,8 @@ module.exports.run = async (bot, message, args) => {
 			}
 		default:
 			message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Buscando '${search}' no YouTube...`));
+				.setTitle(`Buscando '${search}' no YouTube...`)
+				.setColor("#0000FF"));
 			break;
 	}
 
@@ -265,8 +266,8 @@ function play(bot, message, guild, song) {
 	var writers_str = `${song.media_writers}`;
 
 	var music_embed = new Discord.RichEmbed()
-		.setAuthor(`${bot.user.username} Música`, bot.user.displayAvatarURL)
-		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
+		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${timing(song.length)}`, true)
 		.setThumbnail(song.thumbnail)
