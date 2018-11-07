@@ -55,8 +55,11 @@ module.exports.run = async (bot, message, args) => {
             .addField("Comandos de música", music_commands)
             .setColor("#00FF00"));
     }
+    if (helpcommand === 'here') {
+        return message.channel.send(help_embed);
+    }
 
-    return message.channel.send(`**<@${message.author.id}>, vou enviar todos os meus comandos no seu DM.**`).then(() => {
+    return message.channel.send(`**<@${message.author.id}>, enviei todos os meus comandos pra você.**`).then(() => {
         message.member.send(help_embed);
     });
 }
