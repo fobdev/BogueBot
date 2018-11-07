@@ -13,7 +13,6 @@ module.exports.run = async (bot, message, args) => {
 
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
-	console.log(`|ARG 0: ${args[0]} | ARG 1: ${args[1]}|`);
 	var url = args[0];
 	let yt_url = true;
 	if (url === 'play' ||
@@ -22,10 +21,6 @@ module.exports.run = async (bot, message, args) => {
 		url === 'skip' || url === 's' ||
 		url === 'queue' || url === 'q' ||
 		url === 'volume') {
-
-		console.log("accepted");
-		// console.log(`arg2:${args[2]}`);
-		// console.log(url);
 
 		yt_url = false;
 	}
@@ -118,7 +113,8 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				} else {
 					var queue_embed = new Discord.RichEmbed()
-						.addField("Agora tocando: ", serverQueue.songs[0].title)
+						.addField(`Agora tocando: `, `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
+							`Duração: ${timing(serverQueue.songs[0].length)}`)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
@@ -128,15 +124,12 @@ module.exports.run = async (bot, message, args) => {
 							.setColor("#FF0000"));
 					}
 
-					queue_embed.addBlankField();
 					for (let i = 1; i < serverQueue.songs.length; i++) {
-						queue_embed.addField('\u200B', `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
+						queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
 							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 						fulltime += parseInt(serverQueue.songs[i].length);
 					}
 
-					console.log(`FULLTIME OF THE QUEUE: ${fulltime}`);
-					queue_embed.addBlankField();
 					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed);
 				}
@@ -236,9 +229,6 @@ function play(bot, message, guild, song) {
 		message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
-		// console.log(`${song.title} finished.`);
-		// console.log("songs in queue: ");
-		// console.log(serverQueue.songs);
 
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
