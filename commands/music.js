@@ -157,7 +157,8 @@ module.exports.run = async (bot, message, args) => {
 					console.log(`DISPATCHER TIMING: ${dispatchertime_seconds}`)
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, "**A seguir:**")
+						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
+						.addField(`**A Seguir:`, '\u200B')
 						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
@@ -199,8 +200,7 @@ module.exports.run = async (bot, message, args) => {
 			}
 		default:
 			message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Buscando '${search}' no YouTube...`)
-				.setColor("#0000FF"));
+				.setTitle(`Buscando '${search}' no YouTube...`));
 			break;
 	}
 
@@ -245,7 +245,9 @@ module.exports.run = async (bot, message, args) => {
 		serverQueue.songs.push(song);
 		await message.delete();
 		return message.channel.send(voice_embed
-			.setTitle(`Foi adicionado à fila: **${song.title}** `)
+			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+			.addField("Foi adicionado À fila", `[${song.title}](${song.url})`)
+			.addField(`Posição: ${serverQueue.songs.length}`, '\u200B', true)
 			.setThumbnail(song.thumbnail)
 			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
 			.setColor("#00FF00")
