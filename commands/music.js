@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
-const botconfig = require("botconfig.json");
+const botconfig = require("./botconfig.json");
 
 const queue = new Map();
 var leaving = false;
