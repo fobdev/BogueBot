@@ -1,15 +1,10 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTube = require("simple-youtube-api");
-const botconfig = require("../botconfig.json");
+const botconfig = require.main.require("./botconfig.json");
+const helper = require.main.require('./core/helper.js');
 
-var ytkey;
-var local = false;
-if (local) {
-	const youtube_apikey = require("../bottoken.json");
-	ytkey = youtube_apikey.youtube_key;
-} else
-	ytkey = process.env.YOUTUBE_API_KEY;
+var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
 const youtube = new YouTube(ytkey)
