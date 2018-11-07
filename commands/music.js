@@ -37,6 +37,9 @@ module.exports.run = async (bot, message, args) => {
 		var video = await youtube.getVideo(url);
 	} catch (error) {
 		try {
+			message.channel.send(new Discord.RichEmbed()
+				.setTitle(`Buscando '${search}' no YouTube...`));
+
 			var videos = await youtube.searchVideos(search, 1);
 			var video = await youtube.getVideoByID(videos[0].id);
 		} catch (err) {
@@ -145,8 +148,7 @@ module.exports.run = async (bot, message, args) => {
 					console.log(`DISPATCHER TIMING: ${dispatchertime_seconds}`)
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
-							`\nDuração: ${timing(serverQueue.songs[0].length)}\n` +
-							`Tempo Atual: ${timing(dispatchertime_seconds)}`)
+							`\n${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}\n`)
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
@@ -165,7 +167,7 @@ module.exports.run = async (bot, message, args) => {
 
 					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
-						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + "queue [numero]`` " +
+						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + " queue [numero]`` " +
 							"para pular para qualquer posição da fila.**"));
 				}
 			}
