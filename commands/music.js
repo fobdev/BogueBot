@@ -293,10 +293,10 @@ module.exports.run = async (bot, message, args) => {
 	}
 }
 
-function play(bot, message, guild, song) {
+async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
+		dispatcher = await serverQueue.connection.playStream(ytdl(song.url));
 	} else return;
 
 	// message filtering for rich embed of 'agora tocando'
@@ -317,7 +317,7 @@ function play(bot, message, guild, song) {
 	if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
 
 	if (!jumped)
-		message.channel.send(music_embed);
+		await message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
 
