@@ -195,7 +195,7 @@ module.exports.run = async (bot, message, args) => {
 						fulltime += parseInt(serverQueue.songs[i].length);
 					}
 
-					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime - (currentsong_seconds - dispatchertime_seconds))}`, bot.user.displayAvatarURL);
+					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime - currentsong_seconds)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
 						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + " queue [numero]`` " +
 							"para pular para qualquer posição da fila.**"));
