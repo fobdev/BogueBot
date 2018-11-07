@@ -124,10 +124,14 @@ module.exports.run = async (bot, message, args) => {
 							.setTitle(":pause_button: Reprodução pausada.")
 							.setColor("#FFFF00"));
 					} else {
-						console.log(error);
+						// the same command for play and pause
+						dispatcher.resume();
+						paused = false;
 						return message.channel.send(arg_embed
-							.setTitle("Não tem nada tocando para ser pausado.")
-							.setColor("#FF0000"));
+							.setTitle(":arrow_forward: Reprodução continuada."));
+						// return message.channel.send(arg_embed
+						// 	.setTitle("Não tem nada tocando para ser pausado.")
+						// 	.setColor("#FF0000"));
 					}
 				} catch (error) {
 					console.log(error);
