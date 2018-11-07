@@ -15,9 +15,8 @@ const queue = new Map();
 const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
-var dispatcher;
-var isPlaylist = false;
 var paused = false;
+var dispatcher;
 
 var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var videos;
@@ -90,7 +89,7 @@ module.exports.run = async (bot, message, args) => {
 					.setColor("#FF0000"));
 			}
 		} else {
-			console.log('search passed.');
+			console.log('music subcommand activated.');
 		}
 	}
 
@@ -146,7 +145,9 @@ module.exports.run = async (bot, message, args) => {
 					return message.channel.send(arg_embed
 						.setTitle("Saí do canal de voz e apaguei minha fila."));
 				} catch (error) {
-					return console.log(error);
+					console.log(error);
+					return message.channel.send(arg_embed
+						.setTitle("Ocorreu um erro ao sair da sala."));
 				}
 			}
 		case "np":
@@ -232,15 +233,6 @@ module.exports.run = async (bot, message, args) => {
 
 		queue.set(message.guild.id, queueConstruct);
 		queueConstruct.songs.push(song);
-
-		if (isPlaylist) {
-			const playlist = await youtube.getPlaylist(url);
-			const videos = await playlist.getVideos();
-
-			for (let i = 0; i < videos.length; i++) {
-				queueConstruct.songs.push(videos[i]);
-			}
-		}
 
 		try {
 			var connection = await voiceChannel.join();
