@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
 					}
 
 					return message.channel.send(search_embed.addField('\u200B',
-						"Use ``**" + `${botconfig.prefix}${this.help.name} [numero]` + "**`` para selecionar uma música da busca."));
+						"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca."));
 				}
 			} catch (err) {
 				console.log(err);
