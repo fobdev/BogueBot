@@ -158,7 +158,6 @@ module.exports.run = async (bot, message, args) => {
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
-						.addField(`**A Seguir:`, '\u200B')
 						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
