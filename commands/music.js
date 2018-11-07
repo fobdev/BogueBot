@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
-const ms = require("ms");
+const botconfig = require("botconfig.json");
 
 const queue = new Map();
 var leaving = false;
@@ -199,10 +199,11 @@ module.exports.run = async (bot, message, args) => {
 		}
 	} else {
 		serverQueue.songs.push(song);
-		// console.log(serverQueue.songs);
 		await message.delete();
 		return message.channel.send(voice_embed
-			.setTitle(`Foi adicionado à fila: **${song.title}** `)
+			.addField(`Foi adicionado à fila: **${song.title}** `,
+				`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
+			.setThumbnail(song.url)
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
@@ -213,7 +214,6 @@ function play(bot, message, guild, song) {
 	if (!leaving) {
 		dispatcher = serverQueue.connection.playStream(ytdl(song.url));
 	} else return;
-
 
 	// message filtering for rich embed of 'agora tocando'
 	var artist_str = `${song.media_artist}`;
