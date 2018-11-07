@@ -56,7 +56,9 @@ module.exports.run = async (bot, message, args) => {
             .setColor("#00FF00"));
     }
 
-    return message.channel.send(help_embed);
+    return message.channel.send(`**<@${message.author.id}>, vou enviar todos os meus comandos no seu DM.**`).then(() => {
+        message.member.send(help_embed);
+    });
 }
 
 module.exports.help = {

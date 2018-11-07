@@ -107,9 +107,7 @@ var everyonecount = 0;
 bot.on('message', async message => {
 
     if (message.author.bot) return;
-    if (message.channel.type === "dm") {
-        return message.channel.send("Don't talk to me or to my son ever again.");
-    }
+    if (message.channel.type === "dm") return;
 
     let prefix = botconfig.prefix;
     let messageArray = message.content.split(" ");
