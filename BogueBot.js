@@ -56,18 +56,26 @@ bot.on('ready', async () => {
 bot.on('guildCreate', guild => {
     const welcome_embed = new Discord.RichEmbed()
         .setAuthor(`${bot.user.username}`, bot.user.displayAvatarURL)
-        .setFooter("Fobenga")
+        .setColor("#00FF00")
+        .setFooter("Fobenga, criado em ")
         .setTimestamp(bot.user.createdAt)
-        .addBlankField(false)
-        .addField();
+        .addBlankField()
+        .setDescription("**>help** para todas os comandos disponíveis.")
+        .addField("Use o prefixo '>' para se comunicar comigo.", "**>music** ou **>m** para usar os comandos de música\n" +
+            "Ou **>help music** para ajuda sobre os comandos de música.")
+        .addBlankField();
 
-    const channel = guild.channels.find(ch => ch.name === 'general');
-    if (!channel) return console.log("No channel named 'general' found in this server.");
+    const general_channel = guild.channels.find(ch => ch.name === 'general');
+    const bots_channel = guild.channels.find(ch => ch.name === 'bots');
+    if (!general_channel) return console.log("No channel named 'general' found in this server.");
+    else general_channel.send(welcome_embed);
+    if (!bots_channel) return console.log("No channel named 'bots' found in this server.");
+    else bots_channel.send(welcome_embed);
 
-    console.log(`${bot.user.username} joined server [${guild.name}].`)
+    console.log("---------------------------------");
+    console.log(`${bot.user.username} joined server [${guild.name}].`);
+    console.log("---------------------------------");
     servers_show();
-
-    channel.send("**Conheçam Hades.**");
 });
 
 bot.on('guildDelete', guild => {
@@ -138,7 +146,6 @@ bot.on('message', async message => {
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
-
         console.log(`\nUser '${message.author.username}'` +
             ` sent [${message}]\nserver '${message.guild.name}'\nchannel '#${message.channel.name}'`);
 

@@ -23,11 +23,13 @@ module.exports.run = async (bot, message, args) => {
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
     const music_commands =
-        "|``" + `${musicprefix}` + " [url]   ``|" + "`` - `` **Toca uma URL do YouTube\n              **" +
-        "|``" + `${musicprefix}` + " skip    ``|" + "`` - `` **Pula para o próximo video da fila.\n   **" +
-        "|``" + `${musicprefix}` + " pause   ``|" + "`` - `` **Pausa o vídeo.\n                       **" +
-        "|``" + `${musicprefix}` + " play    ``|" + "`` - `` **Continua o vídeo de onde foi pausado.\n**" +
-        "|``" + `${musicprefix}` + " leave   ``|" + "`` - `` **Sai do canal de voz e apaga a fila.    **";
+        "[``" + `${musicprefix}` + " [url]          ``] " + "`` - `` **Toca uma URL do YouTube\n              **" +
+        "[``" + `${musicprefix}` + " queue          ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
+        "[``" + `${musicprefix}` + " queue [numero] ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
+        "[``" + `${musicprefix}` + " skip           ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
+        "[``" + `${musicprefix}` + " leave          ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
+        "[``" + `${musicprefix}` + " pause          ``] " + "`` - `` **Pausa o vídeo.\n                       **" +
+        "[``" + `${musicprefix}` + " play           ``] " + "`` - `` **Continua o vídeo de onde foi pausado.\n**";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`**${bot.user.username} Ajuda**`)
@@ -38,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL)
         .setTimestamp(bot.user.createdAt)
         .setURL("https://github.com/pedroxvi")
-        .setFooter("Fobenga")
+        .setFooter("Fobenga, criado em ")
         .setColor("#00FF00")
         .addField("Musica", music_commands)
         .addField("Autoridade", authority_commands)
@@ -46,9 +48,12 @@ module.exports.run = async (bot, message, args) => {
         .addField("Usuário", user_commands);
 
     let helpcommand = args.join(" ");
-    let commands_embed = new Discord.RichEmbed()
-        .setTitle(`Lista de comandos do ${bot.user.username}`)
-        .setColor("#00FF00");
+
+    if (helpcommand === 'music') {
+        return message.channel.send(new Discord.RichEmbed()
+            .addField("Comandos de música", music_commands)
+            .setColor("#00FF00"));
+    }
 
     return message.channel.send(help_embed);
 }
