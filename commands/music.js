@@ -1,8 +1,18 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
+const YouTube = require("simple-youtube-api");
 const botconfig = require("../botconfig.json");
 
+var ytkey;
+var local = false;
+if (local) {
+	const youtube_apikey = require("./bottoken.json");
+	ytkey = youtube_apikey.youtube_key;
+} else
+	ytkey = process.env.YOUTUBE_API_KEY;
+
 const queue = new Map();
+const youtube = new YouTube(ytkey)
 var leaving = false;
 var dispatcher;
 var jumped = false;
@@ -15,13 +25,8 @@ module.exports.run = async (bot, message, args) => {
 	var serverQueue = queue.get(message.guild.id);
 	var url = args[0];
 	let yt_url = true;
-	if (url === 'play' ||
-		url === 'pause' ||
-		url === 'leave' || url === 'l' ||
-		url === 'skip' || url === 's' ||
-		url === 'queue' || url === 'q' ||
-		url === 'volume') {
 
+	if (!url.includes('youtube.com/watch?v=')) {
 		yt_url = false;
 	}
 
