@@ -25,11 +25,6 @@ module.exports.run = async (bot, message, args) => {
 	var serverQueue = queue.get(message.guild.id);
 	var url = args[0];
 	var search = args.join(" ");
-	let yt_url = true;
-
-	if (!url.includes('youtube.com/watch?v=')) {
-		yt_url = false;
-	}
 
 	if (!voiceChannel) {
 		return message.channel.send(voice_embed
@@ -64,22 +59,6 @@ module.exports.run = async (bot, message, args) => {
 		media_writers: song_info.media.writers,
 		media_type: song_info.media.category
 	};
-
-	// if (yt_url) {
-	// 	song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
-	// 	song = {
-	// 		id: video.id,
-	// 		title: song_info.title,
-	// 		url: `https://www.youtube.com/watch?v=${video.id}`,
-	// 		thumbnail: song_info.thumbnail_url,
-	// 		length: song_info.length_seconds,
-	// 		author: message.author.id,
-	// 		media_artist: song_info.media.artist,
-	// 		media_album: song_info.media.album,
-	// 		media_writers: song_info.media.writers,
-	// 		media_type: song_info.media.category
-	// 	};
-	// }
 
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
