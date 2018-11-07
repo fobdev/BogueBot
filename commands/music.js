@@ -115,6 +115,7 @@ module.exports.run = async (bot, message, args) => {
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
 							`\nDuração: ${timing(serverQueue.songs[0].length)}`)
+						.setAuthor(`${bot.user.username} Música`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
@@ -132,7 +133,8 @@ module.exports.run = async (bot, message, args) => {
 
 					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
-						.addField(`Use ${botconfig.prefix}${this.help.name} queue [numero] para pular para qualquer posição da fila.`, '\u200B'));
+						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + "queue [numero]`` " +
+							"para pular para qualquer posição da fila.**"));
 				}
 			}
 		case "skip":
