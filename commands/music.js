@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args) => {
 		song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 		song = {
 			id: video.id,
-			title: video.title,
+			title: song_info.title,
 			url: `https://www.youtube.com/watch?v=${video.id}`,
 			thumbnail: song_info.thumbnail_url,
 			length: song_info.length_seconds,
@@ -235,7 +235,7 @@ module.exports.run = async (bot, message, args) => {
 		serverQueue.songs.push(song);
 		await message.delete();
 		return message.channel.send(voice_embed
-			.setTitle(`Foi adicionado à fila: **${song.title}** `)
+			.setTitle(`Foi adicionado à fila: **${video.title}** `)
 			.setThumbnail(song.thumbnail)
 			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
 			.setColor("#00FF00")
