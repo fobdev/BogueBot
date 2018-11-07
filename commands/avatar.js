@@ -7,16 +7,17 @@ module.exports.run = async (bot, message, args) => {
 		.setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL);
 
 	if (!user_avatar) {
+		if (sv_icon === 'server') {
+			return message.channel.send(avatar_embed.setTitle(`Ícone do servidor ${message.guild.name}`)
+				.setImage(message.guild.iconURL)
+				.setColor("#00FF00"));
+		}
+
 		return message.channel.send(avatar_embed.setTitle(`Você deve especificar um membro de ` +
 				`**${message.guild.name}**`)
 			.setColor("#FF0000"));
 	}
 
-	if (sv_icon === 'server') {
-		return message.channel.send(avatar_embed.setTitle(`Ícone do servidor ${message.guild.name}`)
-			.setImage(message.guild.iconURL)
-			.setColor("#00FF00"));
-	}
 
 
 	return message.channel.send(avatar_embed.setTitle(`Avatar de **${user_avatar.user.username}**`)
