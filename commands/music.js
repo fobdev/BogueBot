@@ -17,6 +17,7 @@ var leaving = false;
 var jumped = false;
 var dispatcher;
 var isPlaylist = false;
+var paused = false;
 
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
@@ -65,7 +66,6 @@ module.exports.run = async (bot, message, args) => {
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
 
-	var paused = false;
 	switch (url) {
 		case "pause":
 		case "p":
@@ -146,7 +146,7 @@ module.exports.run = async (bot, message, args) => {
 					var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 					console.log(`DISPATCHER TIMING: ${dispatchertime_seconds}`)
 					var queue_embed = new Discord.RichEmbed()
-						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
+						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
 							`\n${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}\n`)
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
