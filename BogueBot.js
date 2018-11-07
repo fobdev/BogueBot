@@ -1,15 +1,10 @@
 const botconfig = require("./botconfig.json");
-var bot_token;
 const Discord = require("discord.js");
+const helper = require("./core/helper");
 const fs = require("fs");
+const i18n = require("i18n");
 
-var local = false;
-if (local) {
-    const tokenfile = require("./bottoken.json");
-    bot_token = tokenfile.token;
-} else {
-    bot_token = process.env.BOT_TOKEN;
-}
+var bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
     disableEveryone: true
@@ -18,11 +13,12 @@ const bot = new Discord.Client({
 bot.commands = new Discord.Collection();
 
 fs.readdir('./commands/', (err, files) => {
-    if (err) console.log(err);
+    if (err) console.error(err);
 
     let jsfile = files.filter(f => f.split(".").pop() === "js");
+
     if (jsfile.length < 1) {
-        console.log("Could not find commands.");
+        throw new Error("Could not find commands.")
     }
 
     jsfile.forEach((f, i) => {
@@ -152,5 +148,5 @@ bot.on('message', async message => {
 
     }
 });
-
+console.log(bot_token)
 bot.login(bot_token);
