@@ -37,9 +37,6 @@ module.exports.run = async (bot, message, args) => {
 		var video = await youtube.getVideo(url);
 	} catch (error) {
 		try {
-			message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Buscando '${search}' no YouTube...`));
-
 			var videos = await youtube.searchVideos(search, 1);
 			var video = await youtube.getVideoByID(videos[0].id);
 		} catch (err) {
@@ -190,6 +187,8 @@ module.exports.run = async (bot, message, args) => {
 					.setTitle("Trabalhando nesse comando..."));
 			}
 		default:
+			message.channel.send(new Discord.RichEmbed()
+				.setTitle(`Buscando '${search}' no YouTube...`));
 			break;
 	}
 
