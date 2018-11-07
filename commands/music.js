@@ -19,13 +19,18 @@ var dispatcher;
 var isPlaylist = false;
 var paused = false;
 
+var subcommands = ['pause', 'p', 'play', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var videos;
+var video;
+
+var url;
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
-	var url = args[0];
+	url = args[0];
 	var search = args.join(" ");
 
 	if (!voiceChannel) {
@@ -35,16 +40,56 @@ module.exports.run = async (bot, message, args) => {
 	}
 
 	try {
-		var video = await youtube.getVideo(url);
+		video = await youtube.getVideo(url);
 	} catch (error) {
-		try {
-			var videos = await youtube.searchVideos(search, 1);
-			var video = await youtube.getVideoByID(videos[0].id);
-		} catch (err) {
-			console.log(err);
-			return message.channel.send(new Discord.RichEmbed()
-				.setTitle("Não foram encontrados vídeos.")
-				.setColor("#FF0000"));
+		if (subcommands.indexOf(args[0]) < 0) {
+			try {
+				const search_limit = 5;
+				var argument = parseInt(args[0]);
+				if (argument > 0 && argument <= search_limit) {
+					// get a video by number
+					try {
+						video = await youtube.getVideoByID(videos[argument - 1].id);
+					} catch (e) {
+						console.log(e);
+						return message.channel.send(new Discord.RichEmbed()
+							.setTitle("Ocorreu um erro ao selecionar o vídeo.")
+							.setColor("#FF0000"));
+					}
+				} else {
+					// search the video
+					try {
+						videos = await youtube.searchVideos(search, search_limit);
+					} catch (e) {
+						console.log(e);
+
+						return message.channel.send(new Discord.RichEmbed()
+							.setTitle("Ocorreu um erro ao selecionar o vídeo.")
+							.setColor("#FF0000"));
+					}
+
+					var search_embed = new Discord.RichEmbed()
+						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
+						.setTitle(`Resultados para a busca de '${search}'`)
+						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+						.setColor("#00FF00");
+
+					for (let i = 0; i < videos.length; i++) {
+						var current_video = await youtube.getVideo(videos[i].url);
+						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
+							`Duração: ${timing(current_video.durationSeconds)}`);
+					}
+
+					return message.channel.send(search_embed);
+				}
+			} catch (err) {
+				console.log(err);
+				return message.channel.send(new Discord.RichEmbed()
+					.setTitle("Não foram encontrados vídeos.")
+					.setColor("#FF0000"));
+			}
+		} else {
+			console.log('search passed.');
 		}
 	}
 
@@ -90,6 +135,7 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#FF0000"));
 				}
 			}
+
 		case "play":
 			{
 				try {
@@ -110,6 +156,7 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#FF0000"));
 				}
 			}
+
 		case "leave":
 		case "l":
 			{
@@ -154,7 +201,6 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				} else {
 					var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
-					console.log(`DISPATCHER TIMING: ${dispatchertime_seconds}`)
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
@@ -189,17 +235,9 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#FF0000"));
 				}
 			}
-		case "volume":
-			{
-
-				// not important do later lol
-
-				return message.channel.send(arg_embed
-					.setTitle("Trabalhando nesse comando..."));
-			}
 		default:
-			message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Buscando '${search}' no YouTube...`));
+			//			message.channel.send(new Discord.RichEmbed()
+			//				.setTitle(`Buscando '${search}' no YouTube...`));
 			break;
 	}
 
@@ -252,7 +290,6 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
-
 }
 
 function play(bot, message, guild, song) {
