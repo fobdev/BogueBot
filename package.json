@@ -4,7 +4,8 @@
   "description": "General Porpuse discord bot",
   "main": "BogueBot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node BogueBot.js"
   },
   "author": "me",
   "license": "ISC",
