@@ -43,10 +43,10 @@ module.exports.run = async (bot, message, args) => {
         .setURL("https://github.com/pedroxvi")
         .setFooter("Fobenga, criado em ")
         .setColor("#00FF00")
-        .addField("Musica", music_commands)
-        .addField("Autoridade", authority_commands)
-        .addField("Utilidade", utility_commands)
-        .addField("Usuário", user_commands);
+        .addField('\u200B', "**__MÚSICA__**\n" + music_commands)
+        .addField('\u200B', "**__AUTORIDADE__**\n" + authority_commands)
+        .addField('\u200B', "**__UTILIDADE__**\n" + utility_commands)
+        .addField('\u200B', "**__USUÁRIO__**\n" + user_commands);
 
     let helpcommand = args.join(" ");
 
