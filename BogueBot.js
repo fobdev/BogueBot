@@ -60,7 +60,8 @@ bot.on('guildCreate', guild => {
         .setFooter("Fobenga, criado em ")
         .setTimestamp(bot.user.createdAt)
         .addBlankField()
-        .setDescription("**>help** para todas os comandos disponíveis.")
+        .setDescription("**>help** para todas os comandos disponíveis.\n" +
+            "**>help here** para receber os coamndos de ajuda no canal.")
         .addField("Use o prefixo '>' para se comunicar comigo.", "**>music** ou **>m** para usar os comandos de música\n" +
             "Ou **>help music** para ajuda sobre os comandos de música.")
         .addBlankField();

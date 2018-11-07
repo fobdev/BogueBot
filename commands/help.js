@@ -4,8 +4,10 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async (bot, message, args) => {
 
     const utility_commands =
-        "|``" + `${botconfig.prefix}` + "help             ``|" + "\n" +
-        "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o BogueBot para qualquer servidor.\n**" +
+        "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Recebe todos os comandos por PM.**\n" +
+        "|``" + `${botconfig.prefix}` + "help here        ``|" + "`` - `` **Recebe todos os comandos no canal enviado.**\n" +
+        "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
         "|``" + `${botconfig.prefix}` + "clear [numero]   ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.                        **";
 
     const authority_commands =
