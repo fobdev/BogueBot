@@ -189,12 +189,15 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#00FF00");
 
 					for (let i = 0; i < serverQueue.songs.length; i++) {
-						queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+						if (i !== 0) {
+							queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
+								`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+						}
+
 						fulltime += parseInt(serverQueue.songs[i].length);
 					}
 
-					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
+					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo total: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
 						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + " queue [numero]`` " +
 							"para pular para qualquer posição da fila.**"));
