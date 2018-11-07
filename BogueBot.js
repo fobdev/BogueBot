@@ -148,5 +148,4 @@ bot.on('message', async message => {
 
     }
 });
-console.log(bot_token)
 bot.login(bot_token);
