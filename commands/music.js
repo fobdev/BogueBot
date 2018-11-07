@@ -123,9 +123,18 @@ module.exports.run = async (bot, message, args) => {
 					return console.log(error);
 				}
 			}
+		case "np":
+			{
+				return message.channel.send(new Discord.RichEmbed()
+					.addField('\u200B', `**♪ Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
+						`\n\n${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}\n`)
+					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+					.setThumbnail(serverQueue.songs[0].thumbnail)
+					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+					.setColor("#00FF00"));
+			}
 		case "queue":
 		case "q":
-		case "np":
 			{
 				var fulltime = 0;
 				if (args[1]) {
@@ -147,7 +156,7 @@ module.exports.run = async (bot, message, args) => {
 					console.log(`DISPATCHER TIMING: ${dispatchertime_seconds}`)
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
-							`\n${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}\n`)
+							`\n\n**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`)
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
