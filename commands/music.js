@@ -125,9 +125,10 @@ module.exports.run = async (bot, message, args) => {
 			}
 		case "np":
 			{
+				var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 				return message.channel.send(new Discord.RichEmbed()
-					.addField('\u200B', `**♪ Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
-						`\n\n${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}\n`)
+					.setDescription(`**♪ Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+					.addField('\u200B', `${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}`)
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.setThumbnail(serverQueue.songs[0].thumbnail)
 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
