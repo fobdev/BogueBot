@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTube = require("simple-youtube-api");
 const botconfig = require.main.require("./botconfig.json");
-const helper = requere.main.require('./core/helper');
+const helper = requere.main.riquire('./core/helper');
 
 var ytkey = helper.loadkeys("youtube_key");
 
