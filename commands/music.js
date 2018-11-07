@@ -189,7 +189,7 @@ module.exports.run = async (bot, message, args) => {
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
-					for (let i = 1; i < serverQueue.songs.length; i++) {
+					for (let i = 0; i < serverQueue.songs.length; i++) {
 						queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
 							`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 						fulltime += parseInt(serverQueue.songs[i].length);
