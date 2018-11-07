@@ -53,13 +53,23 @@ module.exports.run = async (bot, message, args) => {
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
 
+	var paused = false;
 	switch (url) {
 		case "pause":
 			{
 				try {
-					dispatcher.pause();
-					return message.channel.send(arg_embed
-						.setTitle("Reprodução pausada."));
+					if (!paused) {
+						dispatcher.pause();
+						paused = true;
+						return message.channel.send(arg_embed
+							.setTitle("Reprodução pausada.")
+							.setColor("#FFFF00"));
+					} else {
+						console.log(error);
+						return message.channel.send(arg_embed
+							.setTitle("Não tem nada tocando para ser pausado.")
+							.setColor("#FF0000"));
+					}
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
@@ -70,9 +80,16 @@ module.exports.run = async (bot, message, args) => {
 		case "play":
 			{
 				try {
-					dispatcher.resume();
-					return message.channel.send(arg_embed
-						.setTitle("Reprodução continuada."));
+					if (paused) {
+						dispatcher.resume();
+						paused = false;
+						return message.channel.send(arg_embed
+							.setTitle("Reprodução continuada."));
+					} else {
+						return message.channel.send(arg_embed
+							.setTitle("Você primeiro precisa pausar algo para depois continuar.")
+							.setColor("#FF0000"));
+					}
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
@@ -115,7 +132,7 @@ module.exports.run = async (bot, message, args) => {
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
 							`\nDuração: ${timing(serverQueue.songs[0].length)}`)
-						.setAuthor(`${bot.user.username} Música`, bot.user.displayAvatarURL)
+						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
