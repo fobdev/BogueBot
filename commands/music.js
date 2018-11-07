@@ -141,11 +141,11 @@ module.exports.run = async (bot, message, args) => {
 
 					return;
 				} else {
-					console.log(`DISPATCHER TIMING: ${dispatcher.timing}`)
+					console.log(`DISPATCHER TIMING: ${dispatcher.time}`)
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `**Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**` +
 							`\nDuração: ${timing(serverQueue.songs[0].length)}\n` +
-							`Tempo Atual: ${dispatcher.timing}`)
+							`Tempo Atual: ${dispatcher.time}`)
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
