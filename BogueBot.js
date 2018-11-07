@@ -68,10 +68,10 @@ bot.on('guildCreate', guild => {
 
     const general_channel = guild.channels.find(ch => ch.name === 'general');
     const bots_channel = guild.channels.find(ch => ch.name === 'bots');
-    if (!general_channel) return console.log("No channel named 'general' found in this server.");
-    else general_channel.send(welcome_embed);
-    if (!bots_channel) return console.log("No channel named 'bots' found in this server.");
-    else bots_channel.send(welcome_embed);
+    if (!general_channel) console.log("No channel named 'general' found in this server.");
+    else return general_channel.send(welcome_embed);
+    if (!bots_channel) console.log("No channel named 'bots' found in this server.");
+    else return bots_channel.send(welcome_embed);
 
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
