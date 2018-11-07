@@ -68,13 +68,14 @@ module.exports.run = async (bot, message, args) => {
 	var paused = false;
 	switch (url) {
 		case "pause":
+		case "p":
 			{
 				try {
 					if (!paused) {
 						dispatcher.pause();
 						paused = true;
 						return message.channel.send(arg_embed
-							.setTitle("Reprodução pausada.")
+							.setTitle(":pause_button: Reprodução pausada.")
 							.setColor("#FFFF00"));
 					} else {
 						console.log(error);
@@ -96,7 +97,7 @@ module.exports.run = async (bot, message, args) => {
 						dispatcher.resume();
 						paused = false;
 						return message.channel.send(arg_embed
-							.setTitle("Reprodução continuada."));
+							.setTitle(":arrow_forward: Reprodução continuada."));
 					} else {
 						return message.channel.send(arg_embed
 							.setTitle("Você primeiro precisa pausar algo para depois continuar.")

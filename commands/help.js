@@ -23,14 +23,14 @@ module.exports.run = async (bot, message, args) => {
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
     const music_commands =
-        "[``" + `${musicprefix}` + " [search]          ``] " + "`` - `` **Toca um vídeo do YouTube\n              **" +
-        "[``" + `${musicprefix}` + " np          ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
-        "[``" + `${musicprefix}` + " queue          ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
-        "[``" + `${musicprefix}` + " queue [numero] ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
-        "[``" + `${musicprefix}` + " skip           ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
-        "[``" + `${musicprefix}` + " leave          ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
-        "[``" + `${musicprefix}` + " pause          ``] " + "`` - `` **Pausa o vídeo.\n                       **" +
-        "[``" + `${musicprefix}` + " play           ``] " + "`` - `` **Continua o vídeo de onde foi pausado.\n**";
+        "[``" + `${musicprefix}` + " [search]           ``] " + "`` - `` **Toca um vídeo do YouTube\n              **" +
+        "[``" + `${musicprefix}` + " queue              ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
+        "[``" + `${musicprefix}` + " queue [numero]     ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
+        "[``" + `${musicprefix}` + " np                 ``] " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
+        "[``" + `${musicprefix}` + " skip               ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
+        "[``" + `${musicprefix}` + " leave              ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
+        "[``" + `${musicprefix}` + " pause              ``] " + "``" + ` ou [${musicprefix}` + " p    ``]" + "`` - `` **Pausa o vídeo.\n                       **" +
+        "[``" + `${musicprefix}` + " play               ``] " + "`` - `` **Continua o vídeo de onde foi pausado.\n**";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`**${bot.user.username} Ajuda**`)
