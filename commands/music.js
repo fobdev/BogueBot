@@ -6,7 +6,7 @@ const botconfig = require("../botconfig.json");
 var ytkey;
 var local = false;
 if (local) {
-	const youtube_apikey = require("./bottoken.json");
+	const youtube_apikey = require("../bottoken.json");
 	ytkey = youtube_apikey.youtube_key;
 } else
 	ytkey = process.env.YOUTUBE_API_KEY;
@@ -14,8 +14,9 @@ if (local) {
 const queue = new Map();
 const youtube = new YouTube(ytkey)
 var leaving = false;
-var dispatcher;
 var jumped = false;
+var dispatcher;
+var isPlaylist = false;
 
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
@@ -32,16 +33,17 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("FF0000"));
 	}
 
+	var video;
 	if (url.includes("&list=")) {
-		const playlist = await youtube.getPlaylist(url);
-		const videos = await playlist.getVideos();
-		for (const video of Object.values(videos)) {
-			const video2 = await youtube.getVideoByID(video.id);
-			serverQueue.songs.push(video2);
-		}
+		isPlaylist = true;
+		video = await youtube.getVideo(url);
+		// for (const video of Object.values(videos)) {
+		// 	const video2 = await youtube.getVideoByID(video.id);
+		// 	serverQueue.songs.push(video2);
+		// }
 	} else {
 		try {
-			var video = await youtube.getVideo(url);
+			video = await youtube.getVideo(url);
 		} catch (error) {
 			try {
 				var videos = await youtube.searchVideos(search, 1);
@@ -54,8 +56,6 @@ module.exports.run = async (bot, message, args) => {
 			}
 		}
 	}
-
-
 
 	var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 	var song = {
@@ -215,8 +215,16 @@ module.exports.run = async (bot, message, args) => {
 		};
 
 		queue.set(message.guild.id, queueConstruct);
-
 		queueConstruct.songs.push(song);
+
+		if (isPlaylist) {
+			const playlist = await youtube.getPlaylist(url);
+			const videos = await playlist.getVideos();
+
+			for (let i = 0; i < videos.length; i++) {
+				queueConstruct.songs.push(videos[i]);
+			}
+		}
 
 		try {
 			var connection = await voiceChannel.join();
@@ -242,6 +250,7 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
+
 }
 
 function play(bot, message, guild, song) {
