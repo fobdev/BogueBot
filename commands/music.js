@@ -181,7 +181,6 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				} else {
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
-					var currentsong_seconds = parseInt(serverQueue.songs[0].length);
 					var queue_embed = new Discord.RichEmbed()
 						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
@@ -195,7 +194,7 @@ module.exports.run = async (bot, message, args) => {
 						fulltime += parseInt(serverQueue.songs[i].length);
 					}
 
-					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime - currentsong_seconds)}`, bot.user.displayAvatarURL);
+					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Total de ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
 						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name}` + " queue [numero]`` " +
 							"para pular para qualquer posição da fila.**"));
