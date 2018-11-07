@@ -201,9 +201,9 @@ module.exports.run = async (bot, message, args) => {
 		serverQueue.songs.push(song);
 		await message.delete();
 		return message.channel.send(voice_embed
-			.addField(`Foi adicionado à fila: **${song.title}** `,
-				`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
-			.setThumbnail(song.url)
+			.setTitle(`Foi adicionado à fila: **${song.title}** `)
+			.setThumbnail(song.thumbnail)
+			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
@@ -220,23 +220,17 @@ function play(bot, message, guild, song) {
 	var album_str = `${song.media_album}`;
 	var writers_str = `${song.media_writers}`;
 
-	if (artist_str === 'undefined') artist_str = 'Indisponível';
-	if (album_str === 'undefined') album_str = 'Indisponível';
-	if (writers_str === 'undefined') writers_str = 'Indisponível';
-
 	var music_embed = new Discord.RichEmbed()
+		.setAuthor(`${bot.user.username} Música`, bot.user.displayAvatarURL)
 		.addField("Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${timing(song.length)}`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
-	if (song.media_type === 'Music') {
-		music_embed
-			.addField("Artista", `*${artist_str}*`, true)
-			.addField("Álbum", `*${album_str}*`, true)
-			.addField("Escritores", `*${writers_str}*`, true)
-	}
+	if (artist_str !== 'undefined') music_embed.addField("Artista", `*${artist_str}*`, true);
+	if (album_str !== 'undefined') music_embed.addField("Álbum", `*${album_str}*`, true);
+	if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
 
 	if (!jumped)
 		message.channel.send(music_embed);
