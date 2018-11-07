@@ -1,13 +1,13 @@
 const fs = require("fs");
-const token_file_name ="./bottoken.json";
+const token_file_name = "../bottoken.json";
 
 module.exports.loadKeys = (key) => {
 
     // Priority for runtime setting
-    if( process.env.hasOwnProperty(key)) 
+    if (process.env.hasOwnProperty(key))
         return process.env[key];
 
-    if( fs.existsSync(token_file_name) ){
+    if (fs.existsSync(token_file_name)) {
         var token_file = require.main.require(token_file_name);
         return token_file[key];
     }
