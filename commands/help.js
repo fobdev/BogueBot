@@ -24,6 +24,7 @@ module.exports.run = async (bot, message, args) => {
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
     const music_commands =
         "[``" + `${musicprefix}` + " [search]          ``] " + "`` - `` **Toca um vídeo do YouTube\n              **" +
+        "[``" + `${musicprefix}` + " np          ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "[``" + `${musicprefix}` + " queue          ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
         "[``" + `${musicprefix}` + " queue [numero] ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
         "[``" + `${musicprefix}` + " skip           ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +

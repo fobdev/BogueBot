@@ -127,6 +127,7 @@ module.exports.run = async (bot, message, args) => {
 			}
 		case "queue":
 		case "q":
+		case "np":
 			{
 				var fulltime = 0;
 				if (args[1]) {
@@ -152,12 +153,6 @@ module.exports.run = async (bot, message, args) => {
 						.setAuthor(`${bot.user.username} Fila de Músicas`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
-
-					if (serverQueue.songs.length === 1) {
-						return message.channel.send(queue_embed
-							.setTitle("Não tem músicas na fila")
-							.setColor("#FF0000"));
-					}
 
 					for (let i = 1; i < serverQueue.songs.length; i++) {
 						queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
