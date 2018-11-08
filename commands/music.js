@@ -179,7 +179,7 @@ module.exports.run = async (bot, message, args) => {
 			{
 				var fulltime = 0;
 				if (args[1] === 'purge') {
-					await serverQueue.songs.slice(1);
+					await serverQueue.songs.splice(1);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
 						.setColor("#00FF00"));
