@@ -156,14 +156,26 @@ module.exports.run = async (bot, message, args) => {
 		case "np":
 			{
 				var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
-				return message.channel.send(new Discord.RichEmbed()
-					.setDescription(`**♪ Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-					.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`, '\u200B')
-					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-					.setThumbnail(serverQueue.songs[0].thumbnail)
-					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-					.setColor("#00FF00"));
+				var current_music = serverQueue.songs[0];
 
+				var artist_str = `${current_music.media_artist}`;
+				var album_str = `${current_music.media_album}`;
+				var writers_str = `${current_music.media_writers}`;
+
+				var now_playing_embed = new Discord.RichEmbed()
+					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`, true)
+					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
+					.addField("Tempo", `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`, true)
+					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
+					.setThumbnail(current_music.thumbnail)
+					.setColor("#00FF00");
+
+				if (artist_str !== 'undefined') now_playing_embed.addField("Artista", `*${artist_str}*`, true);
+				if (album_str !== 'undefined') now_playing_embed.addField("Álbum", `*${album_str}*`, true);
+				if (writers_str !== 'undefined') now_playing_embed.addField("Escritores", `*${writers_str}*`, true);
+
+				return message.channel.send(now_playing_embed);
 			}
 		case "queue":
 		case "q":
@@ -186,7 +198,7 @@ module.exports.run = async (bot, message, args) => {
 				} else {
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 					var queue_embed = new Discord.RichEmbed()
-						.addField('\u200B', `:musical_note:** Agora Tocando [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+						.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
 						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
