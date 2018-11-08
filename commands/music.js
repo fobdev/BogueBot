@@ -164,7 +164,7 @@ module.exports.run = async (bot, message, args) => {
 				var writers_str = `${current_music.media_writers}`;
 
 				var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`;
-				if (timing(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
+				if (serverQueue.songs[0].length === 0) isLivestream = '**🔴 Livestream**';
 
 				var now_playing_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
@@ -208,7 +208,7 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				} else {
 					var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
-					if (timing(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
+					if (serverQueue.songs[0].length === 0) isLivestream = '**🔴 Livestream**';
 
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 					var queue_embed = new Discord.RichEmbed()
@@ -218,11 +218,12 @@ module.exports.run = async (bot, message, args) => {
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
-					var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
-					if (timing(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
 
 					for (let i = 0; i < serverQueue.songs.length; i++) {
 						if (i !== 0) {
+							var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
+							if (serverQueue.songs[i].length === 0) inQueueIsLivestream = '**🔴 Livestream**';
+
 							queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
 								`Duração: ${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 						}
@@ -312,7 +313,7 @@ async function play(bot, message, guild, song) {
 	var writers_str = `${song.media_writers}`;
 
 	var isLivestream = `${timing(song.length)}`;
-	if (timing(song.length) === 0) isLivestream = '**🔴 Livestream**';
+	if (song.length === 0) isLivestream = '**🔴 Livestream**';
 
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
