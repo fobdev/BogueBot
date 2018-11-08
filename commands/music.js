@@ -12,7 +12,11 @@ var leaving = false;
 var jumped = false;
 var dispatcher;
 
-var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var stream_options = {
+	volume: 1
+};
+
+var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var videos;
 var video;
 var url;
@@ -118,6 +122,18 @@ module.exports.run = async (bot, message, args) => {
 		.setColor("#00FF00");
 
 	switch (url) {
+		case "earrape":
+			{
+				if (stream_options.volume === 1) {
+					stream_options.volume = 2;
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`<@${message.author.id}> explodiu as caixas de som`));
+				} else {
+					stream_options.volume = 1;
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`O volume voltou ao normal`));
+				}
+			}
 		case "p":
 			{
 				// the same command for play and pause
@@ -209,10 +225,11 @@ module.exports.run = async (bot, message, args) => {
 
 					return;
 				} else {
+					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
+
 					var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
 					if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
-					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 					var queue_embed = new Discord.RichEmbed()
 						.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 						.addField(`${isLivestream}\n`, '\u200B')
@@ -310,7 +327,7 @@ module.exports.run = async (bot, message, args) => {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		dispatcher = await serverQueue.connection.playStream(ytdl(song.url));
+		dispatcher = await serverQueue.connection.playStream(ytdl(song.url), stream_options);
 	} else return;
 
 	// message filtering for rich embed of 'agora tocando'
