@@ -101,6 +101,8 @@ module.exports.run = async (bot, message, args) => {
 		thumbnail: song_info.thumbnail_url,
 		length: song_info.length_seconds,
 		author: message.author.id,
+		channel: song_info.author.name,
+		channel_url: song_info.author.channel_url,
 		media_artist: song_info.media.artist,
 		media_album: song_info.media.album,
 		media_writers: song_info.media.writers,
@@ -280,6 +282,7 @@ async function play(bot, message, guild, song) {
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${timing(song.length)}`, true)
+		.addField("Canal", `[${song.channel}](${song.channel_url})`)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
