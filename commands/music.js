@@ -298,7 +298,7 @@ module.exports.run = async (bot, message, args) => {
 		return message.channel.send(voice_embed
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
-			.addField(`Duração: ${timing(song.length)}`, '\u200B', true)
+			.addField(`${isLivestream}`, '\u200B', true)
 			.addField(`Posição: ${serverQueue.songs.length}`, '\u200B', true)
 			.setThumbnail(song.thumbnail)
 			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
