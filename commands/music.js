@@ -292,7 +292,7 @@ module.exports.run = async (bot, message, args) => {
 	} else {
 		serverQueue.songs.push(song);
 
-		isLivestream = `Duração: ${timing(song.length)}`;
+		var isLivestream = `Duração: ${timing(song.length)}`;
 		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 		return message.channel.send(voice_embed
