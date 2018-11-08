@@ -22,6 +22,8 @@ module.exports.run = async (bot, message, args) => {
     const user_commands =
         "|``" + `${botconfig.prefix}` + "avatar [membro]  ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
 
+    const newMusic_commands = '';
+
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
     const music_commands =
