@@ -311,11 +311,14 @@ async function play(bot, message, guild, song) {
 	var album_str = `${song.media_album}`;
 	var writers_str = `${song.media_writers}`;
 
+	var isLivestream = `${timing(song.length)}`;
+	if (timing(song.length) === 0) isLivestream = '**🔴 Livestream**';
+
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
-		.addField("Duração", `${timing(song.length)}`, true)
+		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
