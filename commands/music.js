@@ -12,7 +12,7 @@ var leaving = false;
 var jumped = false;
 var dispatcher;
 
-var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['restart', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var videos;
 var video;
 var url;
@@ -114,6 +114,12 @@ module.exports.run = async (bot, message, args) => {
 		.setColor("#00FF00");
 
 	switch (url) {
+		case 'restart':
+			{
+				await voiceChannel.leave();
+				await voiceChannel.join();
+				return message.channel.send('restarted');
+			}
 		case "p":
 			{
 				// the same command for play and pause

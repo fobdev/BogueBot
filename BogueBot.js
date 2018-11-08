@@ -64,10 +64,17 @@ bot.on('guildCreate', guild => {
 
     const general_channel = guild.channels.find(ch => ch.name === 'general');
     const bots_channel = guild.channels.find(ch => ch.name === 'bots');
+    const music_channel = guild.channels.find(ch => ch.name === 'music');
+    const musica_channel = guild.channels.find(ch => ch.name === 'musica');
     if (!general_channel) console.log("No channel named 'general' found in this server.");
     else general_channel.send(welcome_embed);
     if (!bots_channel) console.log("No channel named 'bots' found in this server.");
     else bots_channel.send(welcome_embed);
+    if (!music_channel) console.log("No channel named 'music' found in this server.");
+    else bots_channel.send(welcome_embed);
+    if (!musica_channel) console.log("No channel named 'musica' found in this server.");
+    else bots_channel.send(welcome_embed);
+
 
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
