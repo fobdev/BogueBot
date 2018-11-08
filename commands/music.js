@@ -215,7 +215,7 @@ module.exports.run = async (bot, message, args) => {
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 					var queue_embed = new Discord.RichEmbed()
 						.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-						.addField(`**${isLivestream}**\n`, '\u200B')
+						.addField(`${isLivestream}\n`, '\u200B')
 						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
@@ -291,6 +291,10 @@ module.exports.run = async (bot, message, args) => {
 		}
 	} else {
 		serverQueue.songs.push(song);
+
+		isLivestream = `Duração: ${timing(song.length)}`;
+		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
+
 		return message.channel.send(voice_embed
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
