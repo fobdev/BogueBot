@@ -35,6 +35,7 @@ module.exports.run = async (bot, message, args) => {
 
 	try {
 		video = await youtube.getVideo(url);
+		message.delete();
 	} catch (error) {
 		if (subcommands.indexOf(args[0]) < 0) {
 			try {
@@ -85,7 +86,7 @@ module.exports.run = async (bot, message, args) => {
 			} catch (err) {
 				console.log(err);
 				return message.channel.send(new Discord.RichEmbed()
-					.setTitle("Não foram encontrados vídeos.")
+					.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 					.setColor("#FF0000"));
 			}
 		} else {
@@ -223,9 +224,10 @@ module.exports.run = async (bot, message, args) => {
 		case "s":
 			{
 				try {
-					await dispatcher.end();
-					return message.channel.send(arg_embed
-						.setTitle(`**${message.author.username}** pulou a reprodução atual.`));;
+					await dispatcher.end().then(() => {
+						return message.channel.send(arg_embed
+							.setTitle(`**${message.author.username}** pulou a reprodução atual.`));;
+					});
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
