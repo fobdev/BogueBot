@@ -22,14 +22,14 @@ module.exports.run = async (bot, message, args) => {
     const user_commands =
         "|``" + `${botconfig.prefix}` + "avatar [membro]  ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
 
-    const newMusic_commands = '';
-
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
+
     const music_commands =
-        "[``" + `${musicprefix}` + " [search]           ``] " + "`` - `` **Toca um vídeo do YouTube\n              **" +
+        "[``" + `${musicprefix}` + " [search]           ``] " + "`` - `` **Toca um vídeo do YouTube / adiciona à fila.\n              **" +
         "[``" + `${musicprefix}` + " queue              ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
         "[``" + `${musicprefix}` + " queue [numero]     ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
+        "[``" + `${musicprefix}` + " queue purge        ``] " + "`` - `` **Remove todos os itens da fila.\n   **" +
         "[``" + `${musicprefix}` + " np                 ``] " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "[``" + `${musicprefix}` + " skip               ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
         "[``" + `${musicprefix}` + " leave              ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
@@ -55,7 +55,8 @@ module.exports.run = async (bot, message, args) => {
 
     if (helpcommand === 'music') {
         return message.channel.send(new Discord.RichEmbed()
-            .addField("Comandos de música", music_commands)
+            .setTitle(`${bot.user.username} Music Player Comandos`)
+            .setDescription(music_commands)
             .setColor("#00FF00"));
     }
 
