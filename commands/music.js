@@ -69,8 +69,6 @@ module.exports.run = async (bot, message, args) => {
 						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 						.setColor("#00FF00");
 
-
-
 					for (let i = 0; i < videos.length; i++) {
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '🔴 Livestream';
