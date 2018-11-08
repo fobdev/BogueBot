@@ -228,7 +228,7 @@ module.exports.run = async (bot, message, args) => {
 				try {
 					if (dispatcher.speaking) {
 						message.channel.send(arg_embed
-							.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
+							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[i].url})**`));
 						await dispatcher.end();
 						return;
 					} else {
