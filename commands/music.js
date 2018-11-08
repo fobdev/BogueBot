@@ -178,6 +178,13 @@ module.exports.run = async (bot, message, args) => {
 		case "q":
 			{
 				var fulltime = 0;
+				if (args[1] === 'purge') {
+					await queue.delete(message.guild.id);
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
+						.setColor("#00FF00"));
+				}
+
 				if (args[1]) {
 					for (let i = 0; i < args[1] - 1; i++) {
 						jumped = true;
