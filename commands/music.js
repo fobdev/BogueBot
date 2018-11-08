@@ -75,7 +75,7 @@ module.exports.run = async (bot, message, args) => {
 							`Duração: ${timing(current_video.durationSeconds)}**|** Canal: ${current_video.channel}`);
 					}
 
-					if (video.length > 0) {
+					if (videos.length > 0) {
 						return message.channel.send(search_embed.addField('\u200B',
 							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca."));
 					} else return message.channel.send(new Discord.RichEmbed()
