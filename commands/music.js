@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
 	} catch (error) {
 		if (subcommands.indexOf(args[0]) < 0) {
 			try {
-				const search_limit = 5;
+				const search_limit = 10;
 				var argument = parseInt(args[0]);
 				if (argument > 0 && argument <= search_limit) {
 					// get a video by number
