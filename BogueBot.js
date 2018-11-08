@@ -101,8 +101,6 @@ bot.on('guildMemberRemove', member => {
     channel.send(`**${member} kito tnc**`);
 });
 
-var everyonecount = 0;
-
 bot.on('message', async message => {
 
     if (message.author.bot) return;
@@ -112,34 +110,6 @@ bot.on('message', async message => {
     let messageArray = message.content.split(" ");
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
-
-    if (message.mentions.everyone) {
-        everyonecount++;
-
-        switch (everyonecount) {
-            case 1:
-                message.channel.send("oi");
-                break;
-            case 2:
-                message.channel.send("que eh vei");
-                break;
-            case 3:
-                message.channel.send("para d marca everyone vei tnc");
-                break;
-            case 4:
-                message.channel.send("enfia o everyone no cu");
-                break;
-            case 5:
-                message.channel.send("tnc com esse everyone");
-                break;
-            case 6:
-                message.channel.send("AAAAAAAAA PARA VEI PQP");
-                everyonecount = 0;
-                break;
-            default:
-                break;
-        }
-    }
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {

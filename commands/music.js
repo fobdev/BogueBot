@@ -16,8 +16,8 @@ var dispatcher;
 var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var videos;
 var video;
-
 var url;
+
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
@@ -44,6 +44,7 @@ module.exports.run = async (bot, message, args) => {
 					// get a video by number
 					try {
 						video = await youtube.getVideoByID(videos[argument - 1].id);
+						await message.channel.bulkDelete(2);
 					} catch (e) {
 						console.log(e);
 						return message.channel.send(new Discord.RichEmbed()
@@ -64,18 +65,22 @@ module.exports.run = async (bot, message, args) => {
 
 					var search_embed = new Discord.RichEmbed()
 						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
-						.setTitle(`Resultados para a busca de '${search}'`)
+						.setTitle(`Resultados para a busca de '**${search}**'`)
 						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 						.setColor("#00FF00");
 
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`Duração: ${timing(current_video.durationSeconds)}`);
+							`Duração: ${timing(current_video.durationSeconds)}**|** Canal: ${current_video.channel}`);
 					}
 
-					return message.channel.send(search_embed.addField('\u200B',
-						"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca."));
+					if (video.length > 0) {
+						return message.channel.send(search_embed.addField('\u200B',
+							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca."));
+					} else return message.channel.send(new Discord.RichEmbed()
+						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
+						.setColor("#FF0000"));
 				}
 			} catch (err) {
 				console.log(err);
@@ -213,8 +218,8 @@ module.exports.run = async (bot, message, args) => {
 				}
 			}
 		default:
-			//			message.channel.send(new Discord.RichEmbed()
-			//				.setTitle(`Buscando '${search}' no YouTube...`));
+			message.channel.send(new Discord.RichEmbed()
+				.setTitle(`Buscando '${search}' no YouTube...`));
 			break;
 	}
 

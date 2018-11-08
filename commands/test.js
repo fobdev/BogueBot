@@ -1,12 +1,41 @@
 const Discord = require("discord.js");
 
-var apple = 1;
 module.exports.run = async (bot, message, args) => {
-	const argument = args.join(" ");
-	message.channel.send(`arg1: ${args[0]} | arg2: ${args[1]} | arg3: ${args[2]}`);
-	message.channel.send(`${apple} apples`);
-	apple++;
-	return message.channel.send(`argument: ${argument}`);
+
+
+
+	// message.channel.send(embed_msg)
+	// 	.then(msg => msg.react(':arrow_backward:'))
+	// 	.then(m_react => m_react.react(':arrow_forward:'))
+	// 	.then(m_react => {
+	// 
+	// 	})
+	// 	.catch(console.error);
+
+	var n = 0;
+	const embed_msg = new Discord.RichEmbed()
+		.setTitle("Rich Embed edit test")
+		.setDescription(n)
+		.setColor("#00FF00");
+
+	const r_filter = (reaction, user) => reaction.emoji.name === '◀' || reaction.emoji.name === '▶';
+
+	message.channel.send(embed_msg).then(left_arrow => left_arrow.react('◀')).then(right_arrow => right_arrow.message.react('▶'))
+		.then(change => {
+			const collector = change.message.createReactionCollector(r_filter);
+			collector.on('collect', r => {
+				n++;
+				old_descr = embed_msg.description;
+
+				const new_embed = new Discord.RichEmbed()
+					.setTitle(embed_msg.title)
+					.setColor(embed_msg.color)
+					.setDescription(parseInt(n));
+
+				r.message.edit(new_embed);
+			})
+		})
+
 }
 
 module.exports.help = {
