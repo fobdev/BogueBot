@@ -224,10 +224,10 @@ module.exports.run = async (bot, message, args) => {
 		case "s":
 			{
 				try {
-					await dispatcher.end().then(() => {
-						return message.channel.send(arg_embed
-							.setTitle(`**${message.author.username}** pulou a reprodução atual.`));;
-					});
+					await dispatcher.end();
+					message.channel.send(arg_embed
+						.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
+					return;
 				} catch (error) {
 					console.log(error);
 					return message.channel.send(arg_embed
