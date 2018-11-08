@@ -120,7 +120,7 @@ bot.on('message', async message => {
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
-        console.log(`User [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: ${message.channel.name}\n`)
+        console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: ${message.channel.name}`)
         if (command_file) command_file.run(bot, message, args);
     }
 });
