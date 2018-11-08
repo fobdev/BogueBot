@@ -10,7 +10,6 @@ const queue = new Map();
 const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
-var paused = false;
 var dispatcher;
 
 var subcommands = ['p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -119,16 +118,13 @@ module.exports.run = async (bot, message, args) => {
 			{
 				// the same command for play and pause
 				try {
-					if (!paused) {
-
+					if (!dispatcher.paused) {
 						dispatcher.pause();
-						paused = true;
 						return message.channel.send(arg_embed
 							.setTitle(":pause_button: Reprodução pausada.")
 							.setColor("#FFFF00"));
 					} else {
 						dispatcher.resume();
-						paused = false;
 						return message.channel.send(arg_embed
 							.setTitle(":arrow_forward: Reprodução continuada."));
 					}
@@ -224,15 +220,18 @@ module.exports.run = async (bot, message, args) => {
 		case "s":
 			{
 				try {
-					await dispatcher.end();
-					message.channel.send(arg_embed
-						.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
-					return;
+					if (dispatcher.speaking) {
+						message.channel.send(arg_embed
+							.setTitle(`**${message.author.username}** pulou a reprodução atual.`));
+						await dispatcher.end();
+						return;
+					} else {
+						return message.channel.send(arg_embed
+							.setTitle("Não tem nada tocando que possa ser pulado.")
+							.setColor("#FF0000"));
+					}
 				} catch (error) {
-					console.log(error);
-					return message.channel.send(arg_embed
-						.setTitle("Não tem nada tocando que possa ser pulado.")
-						.setColor("#FF0000"));
+					return console.log(error);
 				}
 			}
 		default:
