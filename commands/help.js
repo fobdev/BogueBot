@@ -40,24 +40,51 @@ module.exports.run = async (bot, message, args) => {
         .setDescription(`Estes são todos os comandos disponíveis do ${bot.user.username} até o momento.\n` +
             "Note que o Bot está em constante manutenção para testes e implementações de novas funções.\n" +
             "Bot desenvolvido por [Fobenga](https://github.com/pedroxvi), de código aberto disponível em seu [GitHub](https://github.com/pedroxvi/BogueBot).\n" +
-            "Use o prefixo ``" + `${botconfig.prefix}` + "`` para executar os comandos abaixo.")
+            "Use o prefixo ``" + `${botconfig.prefix}` + "`` para executar os comandos abaixo.\n" +
+            "Você também pode usar ``" + `${botconfig.prefix}${this.help.name}` + " [categoria]`` para a ajuda de uma categoria específica da lista.")
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL)
         .setTimestamp(bot.user.createdAt)
         .setURL("https://github.com/pedroxvi")
         .setFooter("Fobenga, criado em ")
         .setColor("#00FF00")
-        .addField('\u200B', "**__MÚSICA__**\n" + music_commands)
-        .addField('\u200B', "**__AUTORIDADE__**\n" + authority_commands)
-        .addField('\u200B', "**__UTILIDADE__**\n" + utility_commands)
-        .addField('\u200B', "**__USUÁRIO__**\n" + user_commands);
+        .addField('\u200B', "**__MUSIC__**\n" + music_commands)
+        .addField('\u200B', "**__ADMIN__**\n" + authority_commands)
+        .addField('\u200B', "**__UTIL__**\n" + utility_commands)
+        .addField('\u200B', "**__USER__**\n" + user_commands);
 
     let helpcommand = args.join(" ");
+    let subhelp_embed = new Discord.RichEmbed()
+        .setColor("#00FF00")
+        .setFooter('Fobenga, criado em ')
+        .setTimestamp(bot.user.createdAt);
 
-    if (helpcommand === 'music') {
-        return message.channel.send(new Discord.RichEmbed()
-            .setTitle(`${bot.user.username} Music Player Comandos`)
-            .setDescription(music_commands)
-            .setColor("#00FF00"));
+    switch (helpcommand) {
+        case 'music':
+            {
+                return message.channel.send(subhelp_embed
+                    .setTitle(`${bot.user.username} Comandos do Music Player`)
+                    .setDescription(music_commands));
+            }
+        case 'admin':
+            {
+                return message.channel.send(subhelp_embed
+                    .setTitle(`${bot.user.username} Comandos administrativos`)
+                    .setDescription(authority_commands));
+            }
+        case 'util':
+            {
+                return message.channel.send(subhelp_embed
+                    .setTitle(`${bot.user.username} Comandos Úteis`)
+                    .setDescription(utility_commands));
+            }
+        case 'user':
+            {
+                return message.channel.send(subhelp_embed
+                    .setTitle(`${bot.user.username} Comandos de usuário`)
+                    .setDescription(user_commands));
+            }
+        default:
+            break;
     }
 
     return message.channel.send(help_embed);
