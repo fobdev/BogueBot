@@ -218,8 +218,6 @@ module.exports.run = async (bot, message, args) => {
 				}
 			}
 		default:
-			message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Buscando '${search}' no YouTube...`));
 			break;
 	}
 
