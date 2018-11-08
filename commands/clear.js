@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();
 
-                message.channel.bulkDelete(del_arg);
+                message.channel.bulkDelete(del_arg, true);
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
                     .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
