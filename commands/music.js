@@ -43,8 +43,8 @@ module.exports.run = async (bot, message, args) => {
 				if (argument > 0 && argument <= search_limit) {
 					// get a video by number
 					try {
-						video = await youtube.getVideoByID(videos[argument - 1].id);
 						await message.channel.bulkDelete(2);
+						video = await youtube.getVideoByID(videos[argument - 1].id);
 					} catch (e) {
 						console.log(e);
 						return message.channel.send(new Discord.RichEmbed()
@@ -119,6 +119,7 @@ module.exports.run = async (bot, message, args) => {
 				// the same command for play and pause
 				try {
 					if (!paused) {
+
 						dispatcher.pause();
 						paused = true;
 						return message.channel.send(arg_embed
@@ -162,6 +163,7 @@ module.exports.run = async (bot, message, args) => {
 					.setThumbnail(serverQueue.songs[0].thumbnail)
 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 					.setColor("#00FF00"));
+
 			}
 		case "queue":
 		case "q":
