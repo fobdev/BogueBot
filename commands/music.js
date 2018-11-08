@@ -255,7 +255,6 @@ module.exports.run = async (bot, message, args) => {
 		}
 	} else {
 		serverQueue.songs.push(song);
-		await message.delete();
 		return message.channel.send(voice_embed
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
@@ -284,7 +283,7 @@ async function play(bot, message, guild, song) {
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${timing(song.length)}`, true)
-		.addField("Canal", `[${song.channel}](${song.channel_url})`)
+		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
