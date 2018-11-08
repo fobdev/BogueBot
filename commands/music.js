@@ -72,7 +72,7 @@ module.exports.run = async (bot, message, args) => {
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`Duração: ${timing(current_video.durationSeconds)}**|** Canal: ${current_video.channel}`);
+							`Duração: ${timing(current_video.durationSeconds)} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 					}
 
 					if (videos.length > 0) {
