@@ -73,7 +73,7 @@ module.exports.run = async (bot, message, args) => {
 						var current_video = await youtube.getVideo(videos[i].url);
 
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
-						if (current_video.durationSeconds === 0) isLivestream = '🔴 Livestream';
+						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
 							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
@@ -163,11 +163,14 @@ module.exports.run = async (bot, message, args) => {
 				var album_str = `${current_music.media_album}`;
 				var writers_str = `${current_music.media_writers}`;
 
+				var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`;
+				if (timing(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
+
 				var now_playing_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`, true)
 					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
-					.addField("Tempo", `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`, true)
+					.addField("Tempo", `${isLivestream}`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
 					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
@@ -204,18 +207,24 @@ module.exports.run = async (bot, message, args) => {
 
 					return;
 				} else {
+					var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
+					if (timing(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
+
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 					var queue_embed = new Discord.RichEmbed()
 						.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-						.addField(`**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`, '\u200B')
+						.addField(`**${isLivestream}**\n`, '\u200B')
 						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 						.setThumbnail(serverQueue.songs[0].thumbnail)
 						.setColor("#00FF00");
 
+					var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
+					if (timing(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
+
 					for (let i = 0; i < serverQueue.songs.length; i++) {
 						if (i !== 0) {
 							queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-								`Duração: ${timing(serverQueue.songs[i].length)}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+								`Duração: ${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 						}
 
 						fulltime += parseInt(serverQueue.songs[i].length);
@@ -233,7 +242,7 @@ module.exports.run = async (bot, message, args) => {
 				try {
 					if (dispatcher.speaking) {
 						message.channel.send(arg_embed
-							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[i].url})**`));
+							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
 						await dispatcher.end();
 						return;
 					} else {
