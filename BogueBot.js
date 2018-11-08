@@ -50,22 +50,25 @@ bot.on('ready', async () => {
 });
 
 bot.on('guildCreate', guild => {
+
+    const help_file = require('./commands/help.js');
+    const music_file = require('./commands/music.js');
     const welcome_embed = new Discord.RichEmbed()
-        .setAuthor(`${bot.user.username}`, bot.user.displayAvatarURL)
         .setColor("#00FF00")
-        .setFooter("Fobenga, criado em ")
-        .setTimestamp(bot.user.createdAt)
+        .setAuthor(`Obrigado por adicionar o ${bot.user.username} ao seu servidor!`, bot.user.displayAvatarURL)
         .addBlankField()
-        .setDescription("**>help** para todas os comandos disponíveis.\n" +
-            "**>help here** para receber os coamndos de ajuda no canal.")
-        .addField("Use o prefixo '>' para se comunicar comigo.", "**>music** ou **>m** para usar os comandos de música\n" +
-            "Ou **>help music** para ajuda sobre os comandos de música.")
-        .addBlankField();
+        .setDescription(`**${botconfig.prefix}${help_file.help.name}** para todas os comandos disponíveis.\n`)
+        .addField(`Use o prefixo '${botconfig.prefix}' para se comunicar comigo.`, `**${botconfig.prefix}${music_file.help.name}** para usar os comandos de música\n` +
+            `Ou **${botconfig.prefix}${help_file.help.name} ${music_file.help.name}** para ajuda sobre os comandos de música.`)
+        .addBlankField()
+        .setFooter("Fobenga, criado em ")
+        .setTimestamp(bot.user.createdAt);
 
     const general_channel = guild.channels.find(ch => ch.name === 'general');
     const bots_channel = guild.channels.find(ch => ch.name === 'bots');
     const music_channel = guild.channels.find(ch => ch.name === 'music');
     const musica_channel = guild.channels.find(ch => ch.name === 'musica');
+
     if (!general_channel) console.log("No channel named 'general' found in this server.");
     else general_channel.send(welcome_embed);
     if (!bots_channel) console.log("No channel named 'bots' found in this server.");
@@ -74,7 +77,6 @@ bot.on('guildCreate', guild => {
     else bots_channel.send(welcome_embed);
     if (!musica_channel) console.log("No channel named 'musica' found in this server.");
     else bots_channel.send(welcome_embed);
-
 
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
@@ -85,27 +87,25 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} left server [${guild.name}]`)
+    console.log(`${bot.user.username} left server [${guild.name}].`);
     servers_show();
 });
 
 bot.on('guildMemberAdd', member => {
-    console.log(`MEMBER:[${member.displayName}] joined server -> [${member.guild.name}].`);
+    console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
     const channel = member.guild.channels.find(ch => ch.name === 'general');
-    if (!channel) {
-        console.log(`No channel named 'general' found in ${guild.name}.`);
-        return;
-    }
+
+    if (!channel) return console.log(`No channel named 'general' found in [${guild.name}].`);
 
     channel.send(`${member} oiiiiiiiiiiiiiiiiiii`);
-    console.log(`Welcome message to [${member.displayName}] in [${member.guild.name}] sent sucessfully.`);
+    return console.log(`Welcome message sent to [${member.displayName}] in [${member.guild.name}].`);
 });
 
 bot.on('guildMemberRemove', member => {
     const channel = member.guild.channels.find(ch => ch.name === 'general');
     if (!channel) return;
-    console.log(`User [${member.displayName}] left server [${member.guild.name}]`)
-    channel.send(`**${member} kito tnc**`);
+    console.log(`User[${member.displayName}] left server[${member.guild.name}]`)
+    channel.send(`**${member}** kitou tnc`);
 });
 
 bot.on('message', async message => {
@@ -120,11 +120,8 @@ bot.on('message', async message => {
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
-        console.log(`\nUser '${message.author.username}'` +
-            ` sent [${message}]\nserver '${message.guild.name}'\nchannel '#${message.channel.name}'`);
-
+        console.log(`User [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: ${message.channel.name}\n`)
         if (command_file) command_file.run(bot, message, args);
-
     }
 });
 bot.login(bot_token);
