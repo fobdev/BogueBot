@@ -69,10 +69,15 @@ module.exports.run = async (bot, message, args) => {
 						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 						.setColor("#00FF00");
 
+					var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
+					if (current_video.durationSeconds === 0) {
+						isLivestream = '🔴 Livestream';
+					}
+
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`Duração: ${timing(current_video.durationSeconds)} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 					}
 
 					if (videos.length > 0) {
@@ -315,7 +320,6 @@ async function play(bot, message, guild, song) {
 		await message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
-
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
