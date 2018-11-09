@@ -380,7 +380,7 @@ async function play(bot, message, guild, song) {
 
 			if (!leaving)
 				message.channel.send(new Discord.RichEmbed()
-					.setTitle("Fim da queue, saí do canal de voz.")
+					.setTitle("A fila de músicas acabou.")
 					.setColor("#00FF00"));
 
 			return;
