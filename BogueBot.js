@@ -41,9 +41,7 @@ function servers_show() {
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
 
     for (var i = 0; i < current_servers.length; i++) {
-        if(current_servers[i].presences.status !== 'offline'){
-            online_members++;
-        }
+        online_members += current_servers[i].presences.status.equals('offline');
         
         members_reached += current_servers[i].memberCount;
         console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
