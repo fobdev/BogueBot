@@ -42,8 +42,16 @@ module.exports.run = async (bot, message, args) => {
 			try {
 				const search_limit = 6;
 				var argument = parseInt(args[0]);
-				if (argument > 0 && argument <= search_limit) {
+				if ((argument > 0 && argument <= search_limit) || argument === 'c') {
 					// get a video by number
+
+					if (argument === 'c') {
+						message.delete();
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription('Busca cancelada.')
+							.setColor("#00FF00"));
+					}
+
 					try {
 						await message.channel.bulkDelete(2);
 						video = await youtube.getVideoByID(videos[argument - 1].id);
@@ -83,7 +91,8 @@ module.exports.run = async (bot, message, args) => {
 
 					if (videos.length > 0) {
 						return message.channel.send(search_embed.addField('\u200B',
-							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca."));
+							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca ou ``" +
+							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca."));
 					} else return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 						.setColor("#FF0000"));
