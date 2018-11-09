@@ -143,7 +143,7 @@ bot.on('guildMemberRemove', member => {
     channel.send(`**${member}** kitou tnc`);
 });
 
-// var copycat_switch = false;
+var copycat_switch = false;
 bot.on('message', async message => {
 
     if (message.author.bot) return;
@@ -161,28 +161,28 @@ bot.on('message', async message => {
     messages with the prefix as seen below the copycat command block.
     */
 
-    // // start of copycat command
-    // if (message.content === `${prefix}copycat`) {
-    //     if (!copycat_switch) {
-    //         copycat_switch = true;
-    //         return message.channel.send(new Discord.RichEmbed()
-    //             .setDescription('Copycat **ativado**.')
-    //             .setColor('#00FF00'));
-    //     } else {
-    //         copycat_switch = false;
-    //         return message.channel.send(new Discord.RichEmbed()
-    //             .setDescription('Copycat **desativado**.')
-    //             .setColor('#FF0000'));
-    //     }
-    // }
-    // 
-    // if (copycat_switch) message.channel.send(message.content);
-    // // end of copycat command
+    // start of copycat command
+    if (message.content === `${prefix}copycat`) {
+        if (!copycat_switch) {
+            copycat_switch = true;
+            return message.channel.send(new Discord.RichEmbed()
+                .setDescription('Copycat **ativado**.')
+                .setColor('#00FF00'));
+        } else {
+            copycat_switch = false;
+            return message.channel.send(new Discord.RichEmbed()
+                .setDescription('Copycat **desativado**.')
+                .setColor('#FF0000'));
+        }
+    }
+
+    if (copycat_switch) message.channel.send(message.content);
+    // end of copycat command
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
         console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
-        // console.log(`${bot.user.username} is copycating: ${copycat_switch}`)
+        console.log(`${bot.user.username} is copycating: ${copycat_switch}`)
         if (command_file) command_file.run(bot, message, args);
     }
 });
