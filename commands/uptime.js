@@ -12,9 +12,9 @@ function ms_convert(ms){
     var hour_string = 'hora';
     var minute_string = 'minuto';
     
-    if(days > 1 || days === 0) day_string = 'dias';
-    if(hours > 1 || hours === 0) hour_string = 'horas';
-    if(minutes > 1 || minutes === 0) minute_string = 'minutos';
+    if(days !== 1) day_string = 'dias';
+    if(hours !== 1) hour_string = 'horas';
+    if(minutes !== 1) minute_string = 'minutos';
     
     return `**${days} ${day_string}, ${hours} ${hour_string} e ${minutes} ${minute_string}.**`;
 }
