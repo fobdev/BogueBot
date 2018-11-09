@@ -4,11 +4,9 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async (bot, message, args) => {
 
     const utility_commands =
-        "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Recebe todos os comandos por PM.**\n" +
-        "|``" + `${botconfig.prefix}` + "help here        ``|" + "`` - `` **Recebe todos os comandos no canal enviado.**\n" +
-        "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n" +
         "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
-        "|``" + `${botconfig.prefix}` + "clear [numero]   ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.                        **";
+        "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n";
 
     const authority_commands =
         "|``" + `${botconfig.prefix}` + "mute [membro]             ``|" + "`` - `` **Muta um membro do servidor.\n                **" +
@@ -17,10 +15,17 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "kick [membro] [motivo]    ``|" + "`` - `` **Expulsa um membro do servidor.\n             **" +
         "|``" + `${botconfig.prefix}` + "ban [membro] [motivo]     ``|" + "`` - `` **Bane um membro do servidor.\n                **" +
         "|``" + `${botconfig.prefix}` + "report [membro] [motivo]  ``|" + "`` - `` **Denuncia um membro do servidor.\n            **" +
-        "|``" + `${botconfig.prefix}` + "renameserver [novo nome]  ``|" + "`` - `` **Renomeia o servidor.                         **";
+        "|``" + `${botconfig.prefix}` + "renameserver [novo nome]  ``|" + "`` - `` **Renomeia o servidor.                         **" +
+        "|``" + `${botconfig.prefix}` + "clear [numero]            ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.     **";
+
+
 
     const user_commands =
-        "|``" + `${botconfig.prefix}` + "avatar [membro]  ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
+        "|``" + `${botconfig.prefix}` + "avatar [membro]    ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
+
+    const fun_commands =
+        "|``" + `${botconfig.prefix}` + "lenny              ``|";
+
 
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
@@ -33,8 +38,8 @@ module.exports.run = async (bot, message, args) => {
         "[``" + `${musicprefix}` + " np                 ``] " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "[``" + `${musicprefix}` + " skip               ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
         "[``" + `${musicprefix}` + " leave              ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
-        "[``" + `${musicprefix}` + " p               ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
-        "[``" + `${musicprefix}` + " p               ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**";
+        "[``" + `${musicprefix}` + " p                  ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
+        "[``" + `${musicprefix}` + " earrape            ``] " + "`` - `` **Aumenta extremamente o volume fazendo a reprodução ficar inaudível.\n**";
 
 
     let help_embed = new Discord.RichEmbed()
@@ -49,10 +54,12 @@ module.exports.run = async (bot, message, args) => {
         .setURL("https://github.com/pedroxvi")
         .setFooter("Fobenga, criado em ")
         .setColor("#00FF00")
+        .addField('\u200B', "**__UTIL__**\n" + utility_commands)
         .addField('\u200B', "**__MUSIC__**\n" + music_commands)
         .addField('\u200B', "**__ADMIN__**\n" + authority_commands)
-        .addField('\u200B', "**__UTIL__**\n" + utility_commands)
-        .addField('\u200B', "**__USER__**\n" + user_commands);
+        .addField('\u200B', "**__USER__**\n" + user_commands)
+        .addField('\u200B', "**__FUN__**\n" + fun_commands);
+
 
     let helpcommand = args.join(" ");
     let subhelp_embed = new Discord.RichEmbed()
