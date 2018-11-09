@@ -111,9 +111,9 @@ module.exports.run = async (bot, message, args) => {
 	try {
 		var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 	} catch (e) {
-		console.log(e);
+		console.error(`[${message.author.username}] Tried to call song info with no song`);
 		return message.channel.send(new Discord.RichEmbed()
-			.setDescription('Não tem músicas sendo tocadas no momento.')
+			.setTitle('🚫 Não tem músicas sendo tocadas no momento.')
 			.setColor("#FF0000"));
 	}
 
