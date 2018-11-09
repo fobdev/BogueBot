@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
 				if ((argument > 0 && argument <= search_limit) || args[0] === 'c') {
 					// get a video by number
 					if (args[0] === 'c') {
-						message.channel.bulkDelete(2);
+						await message.channel.bulkDelete(2);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
 							.setColor("#FF0000"));
@@ -107,7 +107,16 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
-	var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+
+	try {
+		var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+	} catch (e) {
+		console.log(e);
+		return message.channel.send(new Discord.RichEmbed()
+			.setDescription('Não tem músicas sendo tocadas no momento.')
+			.setColor("#FF0000"));
+	}
+
 	var song = {
 		id: video.id,
 		title: song_info.title,
