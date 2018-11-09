@@ -10,7 +10,6 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "serverinfo       ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
         "|``" + `${botconfig.prefix}` + "uptime           ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
 
-
     const authority_commands =
         "|``" + `${botconfig.prefix}` + "mute [membro]             ``|" + "`` - `` **Muta um membro do servidor.\n                **" +
         "|``" + `${botconfig.prefix}` + "desmute [membro]          ``|" + "`` - `` **Desmuta um membro já mutado no servidor.\n   **" +
@@ -25,7 +24,8 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "avatar [membro]    ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
 
     const fun_commands =
-        "|``" + `${botconfig.prefix}` + "lenny              ``|";
+        "|``" + `${botconfig.prefix}` + "lenny              ``|" +
+        "|``" + `${botconfig.prefix}` + "copycat            ``|";
 
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
