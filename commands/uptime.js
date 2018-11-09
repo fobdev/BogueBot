@@ -8,11 +8,11 @@ function ms_convert(ms){
     minutes = Math.floor((hoursms)/(60*1000));
     minutesms=ms % (60*1000);
     sec = Math.floor((minutesms)/(1000));
-    return days + " dias, " + hours + ", horas e " + minutes + " miutos.";
+    return days + "** dias, " + hours + " horas e " + minutes + " minutos **";
 }
 
 module.exports.run = async (bot,message,args) => {
-  return message.channel.send(new Discord.RichEmbed().addField(`Tempo online do ${bot.user.username} desde a ultima atualização`,
+  return message.channel.send(new Discord.RichEmbed().addField(`Tempo online do ${bot.user.username} desde a ultima atualização.`,
   ms_convert(bot.uptime))
   .setColor("#00FF00"));
 }
