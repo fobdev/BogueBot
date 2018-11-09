@@ -41,8 +41,8 @@ module.exports.run = async (bot, message, args) => {
 		if (subcommands.indexOf(args[0]) < 0) {
 			try {
 				const search_limit = 6;
-				var argument = parseInt(message.content);
-				if ((argument > 0 && argument <= search_limit) || message.content === 'c') {
+				var argument = parseInt(args[0]);
+				if ((argument > 0 && argument <= search_limit) || args[0] === 'c') {
 					// get a video by number
 					if (args[0] === 'c') {
 						await message.channel.bulkDelete(2);
@@ -90,7 +90,8 @@ module.exports.run = async (bot, message, args) => {
 
 					if (videos.length > 0) {
 						return message.channel.send(search_embed.addField('\u200B',
-							"Selecione um resultado respondendo com o número correspondente, responda '**c**' para cancelar a busca."));
+							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca ou ``" +
+							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca."));
 					} else return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 						.setColor("#FF0000"));
