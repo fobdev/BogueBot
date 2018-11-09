@@ -182,8 +182,7 @@ bot.on('message', async message => {
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
         console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
-        console.log(`${bot.user.username} is copycating: ${copycat_switch}`)
-
+        // console.log(`${bot.user.username} is copycating: ${copycat_switch}`)
         if (command_file) command_file.run(bot, message, args);
     }
 });
