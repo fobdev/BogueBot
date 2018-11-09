@@ -8,15 +8,15 @@ function ms_convert(ms){
     minutes = Math.floor((hoursms)/(60*1000));
     minutesms=ms % (60*1000);
     
-    var day_string = 'day';
-    var hour_string = 'hour';
-    var minute_string = 'minute';
+    var day_string = 'dia';
+    var hour_string = 'hora';
+    var minute_string = 'minuto';
     
-    if(days > 1 || days === 0) day_string = 'days';
-    if(hours > 1 || hours === 0) hour_string = 'hours';
-    if(minutes > 1 || minutes === 0) minute_string = 'minutes';
+    if(days > 1 || days === 0) day_string = 'dias';
+    if(hours > 1 || hours === 0) hour_string = 'horas';
+    if(minutes > 1 || minutes === 0) minute_string = 'minutos';
     
-    return `**${days} ${day_string}, ${hours} ${hour_string}, ${minutes} ${minute_string}.**`;
+    return `**${days} ${day_string}, ${hours} ${hour_string} e ${minutes} ${minute_string}.**`;
 }
 
 module.exports.run = async (bot,message,args) => {
