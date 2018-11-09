@@ -20,12 +20,16 @@ fs.readdir('./commands/', (err, files) => {
     if (jsfile.length < 1) {
         throw new Error("Could not find commands.")
     }
-
+    console.log("---------------------------------");
+    console.log("Loading Command Files");
+    console.log("---------------------------------");
     jsfile.forEach((f, i) => {
         let props = require(`./commands/${f}`);
-        console.log(`${f} loaded sucessfully.`);
+        console.log(`${f} loaded.`);
         bot.commands.set(props.help.name, props);
     });
+    console.log("---------------------------------");
+    console.log("All files loaded sucessfully");
 });
 
 function servers_show() {
