@@ -161,23 +161,23 @@ bot.on('message', async message => {
     messages with the prefix as seen below the copycat command block.
     */
 
-    // start of copycat command
-    if (message.content === `${prefix}copycat`) {
-        if (!copycat_switch) {
-            copycat_switch = true;
-            return message.channel.send(new Discord.RichEmbed()
-                .setDescription('Copycat **ativado**.')
-                .setColor('#00FF00'));
-        } else {
-            copycat_switch = false;
-            return message.channel.send(new Discord.RichEmbed()
-                .setDescription('Copycat **desativado**.')
-                .setColor('#FF0000'));
-        }
-    }
-
-    if (copycat_switch) message.channel.send(message.content);
-    // end of copycat command
+    // // start of copycat command
+    // if (message.content === `${prefix}copycat`) {
+    //     if (!copycat_switch) {
+    //         copycat_switch = true;
+    //         return message.channel.send(new Discord.RichEmbed()
+    //             .setDescription('Copycat **ativado**.')
+    //             .setColor('#00FF00'));
+    //     } else {
+    //         copycat_switch = false;
+    //         return message.channel.send(new Discord.RichEmbed()
+    //             .setDescription('Copycat **desativado**.')
+    //             .setColor('#FF0000'));
+    //     }
+    // }
+    // 
+    // if (copycat_switch) message.channel.send(message.content);
+    // // end of copycat command
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
