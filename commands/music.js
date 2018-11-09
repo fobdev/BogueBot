@@ -123,7 +123,7 @@ module.exports.run = async (bot, message, args) => {
 		case "earrape":
 			{
 				if (!earrape) {
-					serverQueue.connection.dispatcher.setVolumeLogarithmic(20);
+					serverQueue.connection.dispatcher.setVolumeLogarithmic(100);
 					earrape = true;
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`**<@${message.author.id}> explodiu as caixas de som.**`)
