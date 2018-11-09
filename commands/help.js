@@ -7,8 +7,9 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
         "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
         "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "serverinfo       ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
         "|``" + `${botconfig.prefix}` + "uptime           ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
-        
+
 
     const authority_commands =
         "|``" + `${botconfig.prefix}` + "mute [membro]             ``|" + "`` - `` **Muta um membro do servidor.\n                **" +
@@ -20,14 +21,11 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "renameserver [novo nome]  ``|" + "`` - `` **Renomeia o servidor.\n                       **" +
         "|``" + `${botconfig.prefix}` + "clear [numero]            ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.     **";
 
-
-
     const user_commands =
         "|``" + `${botconfig.prefix}` + "avatar [membro]    ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
 
     const fun_commands =
         "|``" + `${botconfig.prefix}` + "lenny              ``|";
-
 
     const music_file = require("./music.js");
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
@@ -43,12 +41,11 @@ module.exports.run = async (bot, message, args) => {
         "[``" + `${musicprefix}` + " p                  ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
         "[``" + `${musicprefix}` + " earrape            ``] " + "`` - `` **Aumenta extremamente o volume fazendo a reprodução ficar inaudível.\n**";
 
-
     let help_embed = new Discord.RichEmbed()
         .setTitle(`**${bot.user.username} Ajuda**`)
         .setDescription(`Estes são todos os comandos disponíveis do ${bot.user.username} até o momento.\n` +
             "Note que o Bot está em constante manutenção para testes e implementações de novas funções.\n" +
-            "Bot desenvolvido por [Fobenga](https://github.com/pedroxvi), de código aberto disponível em seu [GitHub](https://github.com/pedroxvi/BogueBot).\n" +
+            "Bot desenvolvido por <@244270921286811648>, de código aberto disponível em seu [GitHub](https://github.com/pedroxvi/BogueBot).\n" +
             "Use o prefixo ``" + `${botconfig.prefix}` + "`` para executar os comandos abaixo.\n" +
             "Você também pode usar ``" + `${botconfig.prefix}${this.help.name}` + " [categoria]`` para a ajuda de uma categoria específica da lista.")
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL)
@@ -61,7 +58,6 @@ module.exports.run = async (bot, message, args) => {
         .addField('\u200B', "**__ADMIN__**\n" + authority_commands)
         .addField('\u200B', "**__USER__**\n" + user_commands)
         .addField('\u200B', "**__FUN__**\n" + fun_commands);
-
 
     let helpcommand = args.join(" ");
     let subhelp_embed = new Discord.RichEmbed()
