@@ -44,8 +44,6 @@ function servers_show() {
         if(current_servers[i].members.presence !== 'offline'){
         online_members++;
         }
-        
-        online_members += current_servers[i].members.presence.equals    
         console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
         members_reached += current_servers[i].memberCount;
     
