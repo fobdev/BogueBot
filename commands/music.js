@@ -122,7 +122,7 @@ module.exports.run = async (bot, message, args) => {
 		case "earrape":
 			{
 				if (!earrape) {
-					serverQueue.connection.dispatcher.setVolumeLogarithmic(4);
+					serverQueue.connection.dispatcher.setVolumeLogarithmic(8);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`<@${message.author.id}> explodiu as caixas de som.`)
 						.setColor("#00FF00"));
