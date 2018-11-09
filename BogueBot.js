@@ -41,7 +41,7 @@ function servers_show() {
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
 
     for (var i = 0; i < current_servers.length; i++) {
-        if(!current_servers[i].members.presence.equals('offline')){
+        if(current_servers[i].members.presence !== 'offline'){
         online_members++;
         }
         
