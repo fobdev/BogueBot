@@ -8,7 +8,7 @@ function ms_convert(ms){
     minutes = Math.floor((hoursms)/(60*1000));
     minutesms=ms % (60*1000);
     sec = Math.floor((minutesms)/(1000));
-    return days + "** dias, " + hours + " horas e " + minutes + " minutos **";
+    return "**" + days + " dias, " + hours + " horas e " + minutes + " minutos **";
 }
 
 module.exports.run = async (bot,message,args) => {
