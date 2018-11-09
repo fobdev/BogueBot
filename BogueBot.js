@@ -143,7 +143,7 @@ bot.on('guildMemberRemove', member => {
     channel.send(`**${member}** kitou tnc`);
 });
 
-var copycat_switch = false;
+// var copycat_switch = false;
 bot.on('message', async message => {
 
     if (message.author.bot) return;
