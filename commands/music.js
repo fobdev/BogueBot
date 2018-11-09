@@ -10,6 +10,8 @@ const queue = new Map();
 const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
+var earrape = false;
+
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -120,8 +122,8 @@ module.exports.run = async (bot, message, args) => {
 	switch (url) {
 		case "earrape":
 			{
-				var earrape = false;
 				if (!earrape) {
+					earrape = true;
 					serverQueue.connection.dispatcher.setVolumeLogarithmic(20);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`**<@${message.author.id}> explodiu as caixas de som.**`)
