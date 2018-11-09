@@ -41,12 +41,12 @@ function servers_show() {
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
 
     for (var i = 0; i < current_servers.length; i++) {
-        if(current_servers[i].members.presence !== 'offline'){
-        online_members++;
+        if(current_servers[i].members.presence.status !== 'offline'){
+            online_members++;
         }
-        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
+        
         members_reached += current_servers[i].memberCount;
-    
+        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
         online_members = 0;
     }
     
