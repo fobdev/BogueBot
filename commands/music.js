@@ -16,7 +16,6 @@ var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'
 var videos;
 var video;
 var url;
-var earrape = false;
 
 module.exports.run = async (bot, message, args) => {
 	const voice_embed = new Discord.RichEmbed()
@@ -121,6 +120,7 @@ module.exports.run = async (bot, message, args) => {
 	switch (url) {
 		case "earrape":
 			{
+				var earrape = false;
 				if (!earrape) {
 					serverQueue.connection.dispatcher.setVolumeLogarithmic(20);
 					return message.channel.send(new Discord.RichEmbed()
