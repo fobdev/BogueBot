@@ -263,7 +263,7 @@ module.exports.run = async (bot, message, args) => {
 			{
 				try {
 					if (dispatcher.speaking) {
-						message.channel.send(arg_embed
+						await message.channel.send(arg_embed
 							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
 						await dispatcher.end();
 						return;
