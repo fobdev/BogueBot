@@ -33,21 +33,38 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 function servers_show() {
-    var current_servers = bot.guilds.array();
-    var members_reached = 0;
-    var online_members = 0;
+    console.log("---------------------------------");
     
+    // All the servers that the bot are in.
+    var current_servers = bot.guilds.array();
+
+    // All the users that can see the bot.
+    var members_reached = 0;
+
     console.log("---------------------------------");
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
-
-    for (var i = 0; i < current_servers.length; i++) {
-        online_members += current_servers[i].presences.status.equals('offline');
-        
-        members_reached += current_servers[i].memberCount;
-        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
-        online_members = 0;
-    }
     
+    // Get the name of all the servers
+    for (var i = 0; i < current_servers.length; i++) {
+        var user_inserver = current_servers[i].members.array();
+        var online_inserver = 0;
+
+        // Get all the users in the current server loop
+        for (let j = 0; j < user_inserver.length; j++) {
+            var is_online = user_inserver[j].presence.status;
+
+            // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
+            if (is_online !== 'offline') online_inserver++;
+
+            // Finishes the current loop and restart the variable to count again in the next server
+            if (j === user_inserver - 1) online_inserver = 0;
+        }
+
+        console.log(`${i + 1} - [${current_servers[i]}] - ` +
+            `${online_inserver} online from ${current_servers[i].memberCount} members.`);
+        members_reached += current_servers[i].memberCount;
+    }
+
     console.log("---------------------------------");
     console.log(`  - [${members_reached}] members reached.`);
     console.log("---------------------------------");
