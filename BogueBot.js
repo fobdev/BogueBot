@@ -176,7 +176,7 @@ bot.on('message', async message => {
         }
     }
 
-    if (copycat_switch) return message.channel.send(message.content);
+    if (copycat_switch) message.channel.send(message.content);
     // end of copycat command
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
