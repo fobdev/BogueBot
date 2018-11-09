@@ -346,7 +346,10 @@ module.exports.run = async (bot, message, args) => {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		dispatcher = await serverQueue.connection.playStream(ytdl(song.url));
+		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+			highWaterMark: 1024 * 1024 * 2,
+			quality: 'highestaudio'
+		}));
 	} else return;
 
 	// message filtering for rich embed of 'agora tocando'
