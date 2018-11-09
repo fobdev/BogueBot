@@ -122,14 +122,14 @@ module.exports.run = async (bot, message, args) => {
 		case "earrape":
 			{
 				if (!earrape) {
-					serverQueue.connection.dispatcher.setVolumeLogarithmic(8);
+					serverQueue.connection.dispatcher.setVolumeLogarithmic(20);
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`<@${message.author.id}> explodiu as caixas de som.`)
+						.setDescription(`**<@${message.author.id}> explodiu as caixas de som.**`)
 						.setColor("#00FF00"));
 				} else {
-					serverQueue.connection.dispatcher.setVolumeLogarithmic(0.5);
+					serverQueue.connection.dispatcher.setVolumeLogarithmic(1);
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`O volume voltou ao normal.`)
+						.setDescription(`**O volume voltou ao normal.**`)
 						.setColor("#00FF00"));
 				}
 			}
