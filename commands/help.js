@@ -6,7 +6,9 @@ module.exports.run = async (bot, message, args) => {
     const utility_commands =
         "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
         "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
-        "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n";
+        "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "uptime           ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
+        
 
     const authority_commands =
         "|``" + `${botconfig.prefix}` + "mute [membro]             ``|" + "`` - `` **Muta um membro do servidor.\n                **" +
