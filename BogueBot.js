@@ -35,14 +35,23 @@ fs.readdir('./commands/', (err, files) => {
 function servers_show() {
     var current_servers = bot.guilds.array();
     var members_reached = 0;
-
+    var online_members = 0;
+    
     console.log("---------------------------------");
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
 
     for (var i = 0; i < current_servers.length; i++) {
-        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members`);
+        if(!current_servers[i].members.presence.equals('offline')){
+        online_members++;
+        }
+        
+        online_members += current_servers[i].members.presence.equals    
+        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members - ${online_members} online.`);
         members_reached += current_servers[i].memberCount;
+    
+        online_members = 0;
     }
+    
     console.log("---------------------------------");
     console.log(`  - [${members_reached}] members reached.`);
     console.log("---------------------------------");
