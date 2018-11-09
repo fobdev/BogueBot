@@ -33,7 +33,9 @@ module.exports.run = async (bot, message, args) => {
         "[``" + `${musicprefix}` + " np                 ``] " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "[``" + `${musicprefix}` + " skip               ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
         "[``" + `${musicprefix}` + " leave              ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
+        "[``" + `${musicprefix}` + " p               ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
         "[``" + `${musicprefix}` + " p               ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**";
+
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`**${bot.user.username} Ajuda**`)
