@@ -42,14 +42,13 @@ module.exports.run = async (bot, message, args) => {
 			try {
 				const search_limit = 6;
 				var argument = parseInt(args[0]);
-				if ((argument > 0 && argument <= search_limit) || argument === 'c') {
+				if ((argument > 0 && argument <= search_limit) || args[0] === 'c') {
 					// get a video by number
-
-					if (argument === 'c') {
+					if (args[0] === 'c') {
 						message.delete();
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
-							.setColor("#00FF00"));
+							.setColor("#FF0000"));
 					}
 
 					try {
