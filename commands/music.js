@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
 				if ((argument > 0 && argument <= search_limit) || args[0] === 'c') {
 					// get a video by number
 					if (args[0] === 'c') {
-						message.delete();
+						message.channel.bulkDelete(2);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
 							.setColor("#FF0000"));
