@@ -143,6 +143,7 @@ bot.on('guildMemberRemove', member => {
     channel.send(`**${member}** kitou tnc`);
 });
 
+var copycat_switch = false;
 bot.on('message', async message => {
 
     if (message.author.bot) return;
@@ -152,6 +153,32 @@ bot.on('message', async message => {
     let messageArray = message.content.split(" ");
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
+
+
+    /*
+    The reason why put the 'copycat' command here is because it
+    get a message without the prefix and the bot only recognisizes
+    messages with the prefix as seen below the copycat command block.
+    */
+
+    // start of copycat command
+    if (message.content === `${prefix}copycat`) {
+        if (!copycat_switch) {
+            copycat_switch = true;
+            return message.channel.send(new Discord.RichEmbed()
+                .setDescription('Copycat **ativado**.')
+                .setColor('#00FF00'));
+        } else {
+            copycat_switch = false;
+            return message.channel.send(new Discord.RichEmbed()
+                .setDescription('Copycat **desativado**.')
+                .setColor('#FF0000'));
+        }
+    }
+
+    if (copycat_switch) return message.channel.send(message.content);
+    console.log(copycat_switch)
+    // end of copycat command
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
