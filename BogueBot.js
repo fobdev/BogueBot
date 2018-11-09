@@ -32,9 +32,10 @@ function servers_show() {
     var current_servers = bot.guilds.array();
     console.log("---------------------------------");
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
-    for (var i = 0; i < current_servers.length; i++) {
-        console.log(`${i + 1} - [${current_servers[i]}]`);
-    }
+
+    for (var i = 0; i < current_servers.length; i++)
+        console.log(`${i + 1} - [${current_servers[i]}] - ${current_servers[i].memberCount} members`);
+
     console.log("---------------------------------");
 }
 
