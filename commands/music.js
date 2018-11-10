@@ -38,13 +38,13 @@ module.exports.run = async (bot, message, args) => {
 		video = await youtube.getVideo(url);
 		message.delete();
 	} catch (error) {
-		if (subcommands.indexOf(args[0]) < 0) {
+		if (subcommands.indexOf(args[1]) < 0) {
 			try {
 				const search_limit = 6;
-				var argument = parseInt(args[0]);
-				if ((argument > 0 && argument <= search_limit) || args[0] === 'c') {
+				var argument = args[1];
+				if ((parseInt(argument) > 0 && parseInt(argument) <= search_limit) || args[1] === 'c') {
 					// get a video by number
-					if (args[0] === 'c') {
+					if (args[1] === 'c') {
 						await message.channel.bulkDelete(3);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
 
 					try {
 						await message.channel.bulkDelete(2);
-						video = await youtube.getVideoByID(videos[argument - 1].id);
+						video = await youtube.getVideoByID(videos[parseInt(argument) - 1].id);
 					} catch (e) {
 						console.log(e);
 						return message.channel.send(new Discord.RichEmbed()
