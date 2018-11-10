@@ -11,6 +11,7 @@ module.exports.run = async (bot, message, args) => {
 
 	message.channel.send("Do you like me?");
 	user_collector.on('collect', async message => {
+
 		if (message.content === "yes") {
 			await user_collector.collected.deleteAll();
 			return message.channel.send("Awww, thanks.");
