@@ -81,8 +81,8 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#00FF00");
 
 					for (let i = 0; i < videos.length; i++) {
+						var v_info = await ytdl.getInfo(videos[i].url) // just for the views info
 						var current_video = await youtube.getVideo(videos[i].url);
-						var v_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videos[i].id}`) // just for the views info
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
