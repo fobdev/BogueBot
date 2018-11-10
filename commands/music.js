@@ -92,7 +92,12 @@ module.exports.run = async (bot, message, args) => {
 					if (videos.length > 0) {
 						return message.channel.send(search_embed.addField('\u200B',
 							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca ou ``" +
-							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca."));
+							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca.").then(msg => {
+							msg.delete(1000 * 30);
+							return msg.channel.send(new Discord.RichEmbed()
+								.setDescription('O tempo de seleção expirou.')
+								.setColor('#FF0000'));
+						}));
 					} else return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 						.setColor("#FF0000"));
@@ -339,7 +344,7 @@ module.exports.run = async (bot, message, args) => {
 			.addField(`Duração`, `${isLivestream}`, true)
 			.addField(`Posição`, `${serverQueue.songs.length}`, true)
 			.setThumbnail(song.thumbnail)
-			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
+			.setDescription("``" + `[${botconfig.prefix}${this.help.name} queue]` + "``" + ` para ver a fila completa.`)
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
@@ -368,6 +373,7 @@ async function play(bot, message, guild, song) {
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
+		.addField("Restantes na fila", `**${serverQueue.songs.length}**`)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
