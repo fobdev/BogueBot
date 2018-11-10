@@ -81,14 +81,12 @@ module.exports.run = async (bot, message, args) => {
 						.setColor("#00FF00");
 
 					for (let i = 0; i < videos.length; i++) {
-						var v_info = await ytdl.getInfo(videos[i].url) // just for the views info
 						var current_video = await youtube.getVideo(videos[i].url);
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url}) **|** ` +
-							`${v_info.view_count} visualizações`);
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 					}
 
 					if (videos.length > 0) {
