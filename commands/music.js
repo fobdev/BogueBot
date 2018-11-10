@@ -94,22 +94,34 @@ module.exports.run = async (bot, message, args) => {
 			// Gets the user input and gets a video from search.
 			if (videos.length > 0) {
 
-				if ((parseInt(user_answer) > 0 && parseInt(user_answer) <= search_limit) || user_answer === 'c') {
-					if (user_answer === 'c') {
-						await bot_msgcollector.collected.deleteAll();
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('Busca cancelada.')
-							.setColor("#FF0000")).then(msg => {
-							msg.delete(1000 * 3);
-						});
-					}
-					console.log(parseInt(user_answer))
-				} // else message.channel.send(new Discord.RichEmbed()
-				//	.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
+				//if ((parseInt(message.content) > 0 && parseInt(user_answer) <= search_limit) || user_answer === 'c') {
+				//	if (user_answer === 'c') {
+				//		await bot_msgcollector.collected.deleteAll();
+				//		return message.channel.send(new Discord.RichEmbed()
+				//			.setDescription('Busca cancelada.')
+				//			.setColor("#FF0000")).then(msg => {
+				//			msg.delete(1000 * 3);
+				//		});
+				//	}
+				//	console.log(parseInt(user_answer))
+				//} // else message.channel.send(new Discord.RichEmbed()
+				////	.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 				//	.setColor("#FF0000"));
 
 				// User input after search (expects a number or char 'c')
 				user_msgcollector.on('collect', async msg => {
+					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+						if (msg.content === 'c') {
+							await bot_msgcollector.collected.deleteAll();
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription('Busca cancelada.')
+								.setColor("#FF0000")).then(msg => {
+								msg.delete(1000 * 3);
+							});
+						}
+						console.log(parseInt(msg.content))
+					}
+
 					// Try to get the selected video ID and set it in the 'video' var
 					try {
 						await message.channel.bulkDelete(2);
