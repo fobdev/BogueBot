@@ -93,11 +93,6 @@ module.exports.run = async (bot, message, args) => {
 						return message.channel.send(search_embed.addField('\u200B',
 							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca ou ``" +
 							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca."));
-							
-						return msg.channel.send(new Discord.RichEmbed()
-								.setDescription('O tempo de seleção expirou.')
-								.setColor('#FF0000'));
-						}
 					} else return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 						.setColor("#FF0000"));
