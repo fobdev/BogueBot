@@ -97,7 +97,7 @@ module.exports.run = async (bot, message, args) => {
 						return msg.channel.send(new Discord.RichEmbed()
 								.setDescription('O tempo de seleção expirou.')
 								.setColor('#FF0000'));
-						}));
+						}
 					} else return message.channel.send(new Discord.RichEmbed()
 						.setTitle(`🚫 Não foi encontrado nada para '**${search}**'`)
 						.setColor("#FF0000"));
