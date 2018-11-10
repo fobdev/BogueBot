@@ -85,8 +85,7 @@ module.exports.run = async (bot, message, args) => {
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url}) **|**` +
-							`Visualizações: ${current_video.views}`);
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 					}
 
 					if (videos.length > 0) {
