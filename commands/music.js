@@ -114,8 +114,6 @@ module.exports.run = async (bot, message, args) => {
 							console.log(`selected in array: ${parseInt(msg.content) - 1}`);
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							song_selected = true;
-							user_msgcollector.stop();
-							bot_msgcollector.stop();
 						} catch (e) {
 							console.log(e);
 							return message.channel.send(new Discord.RichEmbed()
