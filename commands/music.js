@@ -80,12 +80,13 @@ module.exports.run = async (bot, message, args) => {
 
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
-
+						var v_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videos[i].id}`) // just for the views info
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url}) **|** ` +
+							`${v_info.view_count} visualizações`);
 					}
 
 					if (videos.length > 0) {
@@ -129,8 +130,7 @@ module.exports.run = async (bot, message, args) => {
 		media_artist: song_info.media.artist,
 		media_album: song_info.media.album,
 		media_writers: song_info.media.writers,
-		media_type: song_info.media.category,
-		views: song_info.view_count
+		media_type: song_info.media.category
 	};
 
 	const arg_embed = new Discord.RichEmbed()
