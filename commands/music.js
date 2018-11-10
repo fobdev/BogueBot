@@ -211,7 +211,7 @@ module.exports.run = async (bot, message, args) => {
 					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
 					.addField("Tempo", `${isLivestream}`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
-					.addField("Restantes na fila", `${ serverQueue.songs.length }`)
+					.addField("Restantes na fila", `**${serverQueue.songs.length}**`)
 					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
 
