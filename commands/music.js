@@ -60,7 +60,7 @@ module.exports.run = async (bot, message, args) => {
 				time: 1000 * 30
 			})
 
-			user_msgcollector.on('end', async () => {
+			bot_msgcollector.on('end', async () => {
 				if (!song_selected) {
 					await bot_msgcollector.collected.deleteAll();
 					return message.channel.send(new Discord.RichEmbed()
@@ -95,8 +95,8 @@ module.exports.run = async (bot, message, args) => {
 				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 					time: 1000 * 30
 				})
-				user_msgcollector.on('collect', async msg => {
 
+				user_msgcollector.on('collect', async msg => {
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
