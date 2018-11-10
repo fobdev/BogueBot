@@ -109,8 +109,8 @@ module.exports.run = async (bot, message, args) => {
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							await message.channel.bulkDelete(2);
-							console.log('selected in array:' + parseInt(msg.content) - 1);
-							video = await youtube.getVideoByID(videos[parseInt(msg.content) - 1].id);
+							console.log(`selected in array: ${parseInt(msg.content) - 1}`);
+							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							song_selected = true;
 							user_msgcollector.stop();
 							bot_msgcollector.stop();
