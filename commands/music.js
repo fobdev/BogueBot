@@ -331,14 +331,14 @@ module.exports.run = async (bot, message, args) => {
 	} else {
 		serverQueue.songs.push(song);
 
-		var isLivestream = `Duração: ${timing(song.length)}`;
+		var isLivestream = `${timing(song.length)}`;
 		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 		return message.channel.send(voice_embed
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
-			.addField(`${isLivestream}`, '\u200B', true)
-			.addField(`Posição: ${serverQueue.songs.length}`, '\u200B', true)
+			.addField(`Duração`, `${isLivestream}`, true)
+			.addField(`Posição`, `${serverQueue.songs.length}`, true)
 			.setThumbnail(song.thumbnail)
 			.setDescription(`[${botconfig.prefix}${this.help.name} queue] para ver a fila completa.`)
 			.setColor("#00FF00")
