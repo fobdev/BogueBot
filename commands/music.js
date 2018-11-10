@@ -85,7 +85,8 @@ module.exports.run = async (bot, message, args) => {
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url}) **|**` +
+							`Visualizações: ${current_video.views}`);
 					}
 
 					if (videos.length > 0) {
@@ -129,7 +130,8 @@ module.exports.run = async (bot, message, args) => {
 		media_artist: song_info.media.artist,
 		media_album: song_info.media.album,
 		media_writers: song_info.media.writers,
-		media_type: song_info.media.category
+		media_type: song_info.media.category,
+		views: song_info.view_count
 	};
 
 	const arg_embed = new Discord.RichEmbed()
