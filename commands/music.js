@@ -92,9 +92,9 @@ module.exports.run = async (bot, message, args) => {
 					if (videos.length > 0) {
 						return message.channel.send(search_embed.addField('\u200B',
 							"Use ``" + `${botconfig.prefix}${this.help.name} [numero]` + "`` para selecionar uma música na busca ou ``" +
-							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca.").then(msg => {
-							msg.delete(1000 * 30);
-							return msg.channel.send(new Discord.RichEmbed()
+							`${botconfig.prefix}${this.help.name} c` + "`` para cancelar a busca."));
+							
+						return msg.channel.send(new Discord.RichEmbed()
 								.setDescription('O tempo de seleção expirou.')
 								.setColor('#FF0000'));
 						}));
