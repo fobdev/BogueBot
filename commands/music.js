@@ -59,9 +59,6 @@ module.exports.run = async (bot, message, args) => {
 			var bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
 				time: 1000 * 30
 			})
-			var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-				time: 1000 * 30
-			})
 
 			user_msgcollector.on('end', async () => {
 				if (!song_selected) {
@@ -91,10 +88,15 @@ module.exports.run = async (bot, message, args) => {
 			message.channel.send(search_embed
 				.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**"));
 
+
 			// Gets the user input and gets a video from search.
 			if (videos.length > 0) {
 				// User input after search (expects a number or char 'c')
+				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+					time: 1000 * 30
+				})
 				user_msgcollector.on('collect', async msg => {
+
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
