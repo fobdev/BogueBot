@@ -11,6 +11,7 @@ const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
 var earrape = false;
+var song_selecting = false;
 
 var dispatcher;
 
@@ -56,15 +57,17 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				await bot_msgcollector.collected.deleteAll();
-				try {
-					user_msgcollector.stop();
-				} catch (e) {
-					console.log('No user to stop right now.');
+				if (!song_selecting) {
+					await bot_msgcollector.collected.deleteAll();
+					try {
+						user_msgcollector.stop();
+					} catch (e) {
+						console.log('No user to stop right now.');
+					}
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('A busca expirou')
+						.setColor('#FF0000'));
 				}
-				return message.channel.send(new Discord.RichEmbed()
-					.setDescription('A busca expirou')
-					.setColor('#FF0000'));
 			})
 
 			// Prints all the videos found in the search (controlled by search_limit).
@@ -95,6 +98,7 @@ module.exports.run = async (bot, message, args) => {
 
 				user_msgcollector.on('collect', async msg => {
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+						song_selecting = true;
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
@@ -105,7 +109,6 @@ module.exports.run = async (bot, message, args) => {
 								user_msgcollector.stop();
 							});
 						}
-
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							await message.channel.bulkDelete(2);
@@ -392,6 +395,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
+		song_selecting = false;
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2,
 			quality: 'highestaudio'
