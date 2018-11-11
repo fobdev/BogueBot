@@ -11,11 +11,12 @@ const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
 var earrape = false;
-
+var isPlaylist = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
+var videos;
 var url;
 
 module.exports.run = async (bot, message, args) => {
@@ -29,6 +30,16 @@ module.exports.run = async (bot, message, args) => {
 			.setTitle("Você não está em um canal de voz.")
 			.setColor("FF0000"));
 	}
+
+	//if (url.includes('list=')) {
+	//	// Playlist ID
+	//	var playlist = await youtube.getPlaylist(url);
+	//	var videosarray = await playlist.getVideos;
+	//
+	//	return message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.videos[1]}`)
+	//	//video_player(bot, message, args, video, serverQueue, voiceChannel);
+	//}
+
 
 	try {
 		video = await youtube.getVideo(url);
@@ -60,18 +71,19 @@ module.exports.run = async (bot, message, args) => {
 				time: 1000 * 30
 			})
 
-			bot_msgcollector.on('end', async () => {
-				try {
-					if (bot_msgcollector.collected.array().length > 0) {
+			bot_msgcollector.on('end', (messages, reason) => {
+				if (reason === 'cancelled' || reason === 'incorrect_answer' || reason === 'sucess') {
+					try {
+						user_msgcollector.stop();
 						await bot_msgcollector.collected.deleteAll();
+					} catch (e) {
+						console.error('Error deleting all bot message after ending.');
+						return;
 					}
-				} catch (e) {
-					console.error('Error deleting all bot message after ending.');
-				}
-				try {
-					user_msgcollector.stop();
-				} catch (e) {
-					console.error('No user to stop right now.');
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`A busca por **${search}** expirou.`)
+						.setColor("#FF0000"));
 				}
 			})
 
@@ -108,7 +120,6 @@ module.exports.run = async (bot, message, args) => {
 					// Verify if the message is a number between all listed videos or is a cancel command
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
 						if (msg.content === 'c') {
-							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`Busca por **${search}** foi cancelada.`)
 								.setColor("#FF0000")).then(async msg => {
@@ -118,8 +129,8 @@ module.exports.run = async (bot, message, args) => {
 								// 	console.error("Error deleting 'search cancelled' message.")
 								// }
 								try {
-									await bot_msgcollector.stop();
-									await user_msgcollector.stop();
+									await bot_msgcollector.stop('cancelled');
+									await user_msgcollector.stop('cancelled');
 								} catch (e) {
 									console.error('Error stopping message collectors.');
 								}
@@ -130,9 +141,8 @@ module.exports.run = async (bot, message, args) => {
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							try {
 
-								await user_msgcollector.collected.deleteAll();
-								await user_msgcollector.stop();
-								await bot_msgcollector.stop();
+								await user_msgcollector.stop('sucess');
+								await bot_msgcollector.stop('sucess');
 							} catch (e) {
 								console.error('Error handling the stop off all collectors.');
 							}
@@ -146,28 +156,15 @@ module.exports.run = async (bot, message, args) => {
 						}
 					} else {
 						// If didn't verified, restart the search with new collectors
-						try {
-							await bot_msgcollector.collected.deleteAll();
-						} catch (e) {
-							console.error('Error deleting all the bog_msgcollector messages');
-						}
-
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('**Busca cancelada**')
-							.setColor("#FF0000")).then(async msg => {
-							// try {
-							// 	await msg.delete(1000 * 3);
-							// } catch (e) {
-							// 	console.error("Error deleting 'search cancel' message.");
-							// }
-
+							.setColor("#FF0000")).then(async () => {
 							try {
-								await bot_msgcollector.stop();
-								await user_msgcollector.stop();
+								await bot_msgcollector.stop('incorrect_answer');
+								await user_msgcollector.stop('incorrect_answer');
 							} catch (e) {
 								console.error('Error deleting all the bog_msgcollector messages');
 							}
-
 						});
 					}
 				})
