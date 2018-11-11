@@ -56,18 +56,19 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				if (bot_msgcollector.collected.array().length === 1) {
+				if (bot_msgcollector.collected.array().length < 2) {
 					await bot_msgcollector.collected.deleteAll();
 					try {
-						user_msgcollector.stop();
+						user_msgcollector.stop().then(() => {
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`A busca por '**${search}**' expirou.`)
+								.setColor('#FF0000')).then(msg => {
+								msg.delete(1000 * 5);
+							});
+						});
 					} catch (e) {
 						console.log('No user to stop right now.');
 					}
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`A busca por '**${search}**' expirou.`)
-						.setColor('#FF0000')).then(msg => {
-						msg.delete(1000 * 15);
-					});
 				}
 			})
 
