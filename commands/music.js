@@ -72,13 +72,15 @@ module.exports.run = async (bot, message, args) => {
 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 					.setColor("#00FF00");
 
-				var nullstr = '\u200B';
+				var nullstr;
 				for (let i = 0; i < videos.length; i++) {
 					var current_video = await youtube.getVideo(videos[i].url);
 					var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 					if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 					if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
+					else nullstr = '\u200B';
+
 					search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
 						`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 				}
