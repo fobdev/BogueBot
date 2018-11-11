@@ -113,6 +113,7 @@ module.exports.run = async (bot, message, args) => {
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							await bot_msgcollector.collected.deleteAll();
+							await user_msgcollector.collected.deleteAll();
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							user_msgcollector.stop();
 							bot_msgcollector.stop();
