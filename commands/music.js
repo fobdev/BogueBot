@@ -20,8 +20,6 @@ var video;
 var url;
 
 module.exports.run = async (bot, message, args) => {
-	const voice_embed = new Discord.RichEmbed()
-		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
@@ -29,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
 	var search = args.join(" ");
 
 	if (!voiceChannel) {
-		return message.channel.send(voice_embed
+		return message.channel.send(new Discord.RichEmbed()
 			.setTitle("Você não está em um canal de voz.")
 			.setColor("FF0000"));
 	}
@@ -63,9 +61,11 @@ module.exports.run = async (bot, message, args) => {
 			bot_msgcollector.on('end', async () => {
 				if (!song_selected) {
 					await bot_msgcollector.collected.deleteAll();
+					user_msgcollector.stop();
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('A busca expirou')
 						.setColor('#FF0000'));
+
 				}
 			})
 
@@ -366,7 +366,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 
 			queue.delete(message.guild.id);
 
-			return message.channel.send(voice_embed
+			return message.channel.send(new Discord.RichEmbed()
 				.setTitle("Não foi possível conectar ao canal de voz.")
 				.setColor("#FF0000"));
 		}
@@ -376,7 +376,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 		var isLivestream = `${timing(song.length)}`;
 		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
-		return message.channel.send(voice_embed
+		return message.channel.send(new Discord.RichEmbed()
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
 			.addField(`Duração`, `${isLivestream}`, true)
