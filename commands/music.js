@@ -109,11 +109,11 @@ module.exports.run = async (bot, message, args) => {
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`Busca por **${search}** foi cancelada.`)
 								.setColor("#FF0000")).then(async msg => {
-								try {
-									await msg.delete(1000 * 3);
-								} catch (e) {
-									console.error("Error deleting 'search cancelled' message.")
-								}
+								// try {
+								// 	// await msg.delete(1000 * 3);
+								// } catch (e) {
+								// 	console.error("Error deleting 'search cancelled' message.")
+								// }
 								try {
 									await bot_msgcollector.stop();
 									await user_msgcollector.stop();
@@ -125,8 +125,8 @@ module.exports.run = async (bot, message, args) => {
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							try {
-								await bot_msgcollector.collected.deleteAll();
 								await user_msgcollector.collected.deleteAll();
+								await bot_msgcollector.collected.deleteAll();
 							} catch (e) {
 								console.error('Error deleting all messages from user and bot.');
 							}
@@ -155,11 +155,11 @@ module.exports.run = async (bot, message, args) => {
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('**Busca cancelada**')
 							.setColor("#FF0000")).then(async msg => {
-							try {
-								await msg.delete(1000 * 3);
-							} catch (e) {
-								console.error("Error deleting 'search cancel' message.");
-							}
+							// try {
+							// 	await msg.delete(1000 * 3);
+							// } catch (e) {
+							// 	console.error("Error deleting 'search cancel' message.");
+							// }
 
 							try {
 								await bot_msgcollector.stop();
