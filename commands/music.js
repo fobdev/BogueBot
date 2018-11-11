@@ -64,8 +64,10 @@ module.exports.run = async (bot, message, args) => {
 						console.log('No user to stop right now.');
 					}
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('A busca expirou')
-						.setColor('#FF0000'));
+						.setDescription(`A busca por '**${search}**' expirou.`)
+						.setColor('#FF0000').then(async msg => {
+							await msg.delete(1000 * 5);
+						}));
 				}
 			})
 
@@ -126,7 +128,7 @@ module.exports.run = async (bot, message, args) => {
 						// If didn't verified, restart the search with new collectors
 						await bot_msgcollector.collected.deleteAll();
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('Busca cancelada.')
+							.setDescription('**Busca cancelada**')
 							.setColor("#FF0000")).then(async msg => {
 							await msg.delete(1000 * 3);
 							await message.delete();
