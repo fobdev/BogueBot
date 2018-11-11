@@ -21,6 +21,16 @@ module.exports.run = async (bot, message, args) => {
         if (channels_array[i].type === 'voice') voice_channels++;
     }
 
+    var membersarray = server.members.array();
+
+    for (let i = 0; i < membersarray.length; i++) {
+        var isadmin = false;
+        if (membersarray[i].hasPermission('ADMINISTRATOR')) {
+            isadmin = true;
+        }
+        console.log(`[${membersarray[i].displayName}] - [id: ${membersarray[i].id}] - [admin: ${isadmin}]`);
+    }
+
     return message.channel.send(new Discord.RichEmbed()
         .setAuthor(`${server.name}`, server.iconURL)
         .setColor("#FF8800")
