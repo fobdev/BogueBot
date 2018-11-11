@@ -56,11 +56,11 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				await bot_msgcollector.collected.deleteAll();
 				try {
+					await bot_msgcollector.collected.deleteAll();
 					user_msgcollector.stop();
 				} catch (e) {
-					console.log('No user to stop right now.');
+					console.log('No user to stop right now / message already deleted.');
 				}
 			})
 
@@ -127,7 +127,6 @@ module.exports.run = async (bot, message, args) => {
 							.setDescription('**Busca cancelada**')
 							.setColor("#FF0000")).then(async msg => {
 							await msg.delete(1000 * 3);
-							await message.delete();
 							bot_msgcollector.stop();
 							user_msgcollector.stop();
 						});
@@ -381,8 +380,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 	} else {
 		serverQueue.songs.push(song);
 
-		await message.delete();
-
 		var isLivestream = `${timing(song.length)}`;
 		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
@@ -403,12 +400,12 @@ async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-			highWaterMark: 1024 * 1024 * 2,
+			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
 			quality: 'highestaudio'
 		}));
 	} else return;
 
-	// message filtering for rich embed of 'agora tocando'
+	// message filtering for rich embed of 'now playing'
 	var artist_str = `${song.media_artist}`;
 	var album_str = `${song.media_album}`;
 	var writers_str = `${song.media_writers}`;
