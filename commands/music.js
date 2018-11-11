@@ -126,19 +126,16 @@ module.exports.run = async (bot, message, args) => {
 						}
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
-							try {
-								await user_msgcollector.collected.deleteAll();
-								await bot_msgcollector.collected.deleteAll();
-							} catch (e) {
-								console.error('Error deleting all messages from user and bot.');
-							}
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							try {
+
+								await user_msgcollector.collected.deleteAll();
 								await user_msgcollector.stop();
 								await bot_msgcollector.stop();
 							} catch (e) {
-								console.error('Error stopping all message collectors.');
+								console.error('Error handling the stop off all collectors.');
 							}
+
 							video_player(bot, message, video, serverQueue, voiceChannel);
 						} catch (e) {
 							console.error('Error selecting video');
