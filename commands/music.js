@@ -56,19 +56,11 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				if (bot_msgcollector.collected.array().length < 2) {
-					await bot_msgcollector.collected.deleteAll();
-					try {
-						user_msgcollector.stop().then(() => {
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`A busca por '**${search}**' expirou.`)
-								.setColor('#FF0000')).then(msg => {
-								msg.delete(1000 * 5);
-							});
-						});
-					} catch (e) {
-						console.log('No user to stop right now.');
-					}
+				await bot_msgcollector.collected.deleteAll();
+				try {
+					user_msgcollector.stop();
+				} catch (e) {
+					console.log('No user to stop right now.');
 				}
 			})
 
@@ -77,16 +69,17 @@ module.exports.run = async (bot, message, args) => {
 				// Prints all the videos found in the search (controlled by search_limit).
 				var search_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
-					.setTitle(`Resultados para a busca de '**${search}**'`)
 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 					.setColor("#00FF00");
 
+				var nullstr = '\u200B';
 				for (let i = 0; i < videos.length; i++) {
 					var current_video = await youtube.getVideo(videos[i].url);
 					var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 					if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
-					search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
+					if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
+					search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
 						`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 				}
 
@@ -104,7 +97,7 @@ module.exports.run = async (bot, message, args) => {
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription('Busca cancelada.')
+								.setDescription(`Busca por **${search}** foi cancelada.`)
 								.setColor("#FF0000")).then(async msg => {
 								await msg.delete(1000 * 3);
 								bot_msgcollector.stop();
@@ -393,6 +386,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 
 		return message.channel.send(new Discord.RichEmbed()
 			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+			.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
 			.addField(`Duração`, `${isLivestream}`, true)
 			.addField(`Posição`, `${serverQueue.songs.length}`, true)
