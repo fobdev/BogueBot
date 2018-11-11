@@ -61,7 +61,9 @@ module.exports.run = async (bot, message, args) => {
 
 			bot_msgcollector.on('end', async () => {
 				try {
-					await bot_msgcollector.collected.deleteAll();
+					if (bot_msgcollector.collected.array().length > 0) {
+						await bot_msgcollector.collected.deleteAll();
+					}
 				} catch (e) {
 					console.error('Error deleting all bot message after ending.');
 				}
