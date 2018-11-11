@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
     //     var allguilds = bot.guilds.array();
     //     for (let i = 0; i < allguilds.length; i++) {
     //         console.log(`guild ${i}: ${allguilds[i].name}`)
-    //         const system_channel = allguilds[4].channels.find(ch => ch.id === allguilds[4].systemChannelID);
+    //         const system_channel = allguilds[i].channels.find(ch => ch.id === allguilds[i].systemChannelID);
     // 
     //         if (system_channel) {
     //             system_channel.send(new Discord.RichEmbed()
