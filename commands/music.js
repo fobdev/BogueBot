@@ -20,7 +20,6 @@ var video;
 var url;
 
 module.exports.run = async (bot, message, args) => {
-
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	url = args[0];
@@ -68,6 +67,17 @@ module.exports.run = async (bot, message, args) => {
 
 				}
 			})
+
+			if (song_selected) {
+				bot_msgcollector.collected.deleteAll();
+				bot_msgcollector.cleanup();
+				user_msgcollector.cleanup();
+
+				message.channel.send(new Discord.RichEmbed()
+					.setDescription('Busca cancelada.')
+					.setColor('#FF0000'));
+			}
+
 
 			// Prints all the videos found in the search (controlled by search_limit).
 			var search_embed = new Discord.RichEmbed()
