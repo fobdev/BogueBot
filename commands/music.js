@@ -91,15 +91,16 @@ module.exports.run = async (bot, message, args) => {
 					'Esta mensagem expirará em 30 segundos.'));
 
 			// Gets the user input and gets a video from search.
+			song_selecting = false;
 			if (videos.length > 0) {
-				// User input after search (expects a number or char 'c')
+				song_selecting = true;
 				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 					time: 1000 * 30
 				})
 
 				user_msgcollector.on('collect', async msg => {
+					// Verify if the message is a number between all listed videos or is a cancel command
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-						song_selecting = true;
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
@@ -125,18 +126,22 @@ module.exports.run = async (bot, message, args) => {
 								.setColor("#FF0000"));
 						}
 					} else {
-						song_selecting = true;
+						// If didn't verified, restart the search with new collectors
 						await bot_msgcollector.collected.deleteAll();
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
 							.setColor("#FF0000")).then(async msg => {
 							await msg.delete(1000 * 3);
-							await message.delete(1000 * 3);
+							await message.delete();
 							bot_msgcollector.stop();
 							user_msgcollector.stop();
 						});
 					}
 				})
+			} else {
+				return message.channel.send(new Discord.RichEmbed()
+					.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
+					.setColor('#FF0000'));
 			}
 		} else {
 			console.log('music subcommand activated.');
@@ -380,6 +385,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 		}
 	} else {
 		serverQueue.songs.push(song);
+
+		await message.delete();
 
 		var isLivestream = `${timing(song.length)}`;
 		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
