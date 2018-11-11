@@ -73,20 +73,22 @@ module.exports.run = async (bot, message, args) => {
 				}
 			})
 
-			if (song_selecting) {
-				bot_msgcollector.collected.deleteAll();
-				bot_msgcollector.cleanup();
-				try {
-					user_msgcollector.cleanup();
-					user_msgcollector.stop();
-				} catch (e) {
-					console.log('No user to cleanup right now.');
+			bot_msgcollector.on('collect', async () => {
+				if (song_selecting) {
+					console.log(`collected array: ${bot_msgcollector.collected.array()}`);
+					bot_msgcollector.collected.deleteAll();
+					bot_msgcollector.cleanup();
+					try {
+						user_msgcollector.cleanup();
+						user_msgcollector.stop();
+					} catch (e) {
+						console.log('No user to cleanup right now.');
+					}
+					message.channel.send(new Discord.RichEmbed()
+						.setDescription('Busca cancelada.')
+						.setColor('#FF0000'));
 				}
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription('Busca cancelada.')
-					.setColor('#FF0000'));
-			}
-
+			})
 
 			// Prints all the videos found in the search (controlled by search_limit).
 			var search_embed = new Discord.RichEmbed()
