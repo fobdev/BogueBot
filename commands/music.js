@@ -131,6 +131,10 @@ module.exports.run = async (bot, message, args) => {
 }
 
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
+	const arg_embed = new Discord.RichEmbed()
+		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+		.setColor("#00FF00");
+
 	// Subcommands switch
 	switch (url) {
 		case "earrape":
@@ -330,10 +334,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 		media_writers: song_info.media.writers,
 		media_type: song_info.media.category
 	};
-
-	const arg_embed = new Discord.RichEmbed()
-		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-		.setColor("#00FF00");
 
 	leaving = false;
 	if (!serverQueue) {
