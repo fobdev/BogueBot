@@ -98,19 +98,20 @@ module.exports.run = async (bot, message, args) => {
 
 				user_msgcollector.on('collect', async msg => {
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+						song_selected = true;
+
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription('Busca cancelada.')
-								.setColor("#FF0000")).then(msg => {
-								msg.delete(1000 * 3);
+								.setColor("#FF0000")).then(async msg => {
+								await msg.delete(1000 * 3);
 								bot_msgcollector.stop();
 								user_msgcollector.stop();
 							});
 						}
 						console.log(parseInt('message content_num:' + msg.content))
 
-						song_selected = true;
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							await message.channel.bulkDelete(2);
