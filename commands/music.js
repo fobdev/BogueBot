@@ -60,6 +60,16 @@ module.exports.run = async (bot, message, args) => {
 				time: 1000 * 30
 			})
 
+			if (song_selected) {
+				bot_msgcollector.collected.deleteAll();
+				return message.channel.send(new Discord.RichEmbed()
+					.setDescription('Busca cancelada.')
+					.setColor("#FF0000")).then(msg => {
+					msg.delete(1000 * 3)
+				});
+			}
+
+
 			bot_msgcollector.on('end', async () => {
 				if (!song_selected) {
 					await bot_msgcollector.collected.deleteAll();
@@ -104,9 +114,11 @@ module.exports.run = async (bot, message, args) => {
 								.setDescription('Busca cancelada.')
 								.setColor("#FF0000")).then(msg => {
 								msg.delete(1000 * 3);
+								bot_msgcollector.stop();
 							});
 						}
 						console.log(parseInt(msg.content))
+
 						song_selected = true;
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
@@ -385,7 +397,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		console.log('tocando')
+		song_selected = false;
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2,
 			quality: 'highestaudio'
