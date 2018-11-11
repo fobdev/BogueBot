@@ -105,9 +105,10 @@ module.exports.run = async (bot, message, args) => {
 								.setColor("#FF0000")).then(msg => {
 								msg.delete(1000 * 3);
 								bot_msgcollector.stop();
+								user_msgcollector.stop();
 							});
 						}
-						console.log(parseInt(msg.content))
+						console.log(parseInt('message content_num:' + msg.content))
 
 						song_selected = true;
 						// Try to get the selected video ID and set it in the 'video' var
@@ -115,6 +116,8 @@ module.exports.run = async (bot, message, args) => {
 							await message.channel.bulkDelete(2);
 							console.log(`selected in array: ${parseInt(msg.content) - 1}`);
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
+							user_msgcollector.stop();
+							bot_msgcollector.stop();
 							video_player(bot, message, video, serverQueue, voiceChannel);
 						} catch (e) {
 							console.log(e);
@@ -387,6 +390,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
+		song_selected = false;
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2,
 			quality: 'highestaudio'
