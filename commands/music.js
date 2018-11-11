@@ -71,7 +71,7 @@ module.exports.run = async (bot, message, args) => {
 				time: 1000 * 30
 			})
 
-			bot_msgcollector.on('end', (messages, reason) => {
+			bot_msgcollector.on('end', async (messages, reason) => {
 				if (reason === 'cancelled' || reason === 'incorrect_answer' || reason === 'sucess') {
 					try {
 						user_msgcollector.stop();
