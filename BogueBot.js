@@ -27,6 +27,12 @@ fs.readdir('./commands/', (err, files) => {
         let props = require(`./commands/${f}`);
         console.log(`${f} loaded.`);
         bot.commands.set(props.help.name, props);
+        try {
+            bot.commands.set(props.help.name_2, props);
+            bot.commands.set(props.help.name_3, props);
+        } catch (e) {
+            console.error('No secondary or terciary commands to this file.');
+        }
     });
     console.log("---------------------------------");
     console.log("All files loaded sucessfully");

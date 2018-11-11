@@ -38,5 +38,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "renameserver"
+    name: "renameserver",
+    name_2: "rs"
 }

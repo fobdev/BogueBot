@@ -285,26 +285,37 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				var fulltime = 0;
 				if (args[1] === 'purge') {
-					await serverQueue.songs.splice(1);
-					return message.channel.send(arg_embed
-						.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
-						.setColor("#00FF00"));
+					if (serverQueue.songs.length > 1) {
+						await serverQueue.songs.splice(1);
+						return message.channel.send(arg_embed
+							.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
+							.setColor("#00FF00"));
+					} else {
+						return message.channel.send(arg_embed
+							.setDescription(`A fila já está vazia.`)
+							.setColor("#FF0000"));
+					}
 				}
 
 				if (args[1]) {
-					for (let i = 0; i < args[1] - 1; i++) {
-						jumped = true;
+					if (parseInt(args[1]) > 1 && parseInt(args[1]) <= serverQueue.songs.length) {
+						for (let i = 0; i < args[1] - 1; i++) {
+							jumped = true;
+							await dispatcher.end();
+						}
+
+						jumped = false;
 						await dispatcher.end();
+
+						return message.channel.send(arg_embed
+							.setTitle(`Fila pulada para a posição **${args[1]}**`)
+							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+							.setColor("#00FF00"));
+					} else {
+						await message.channel.send(arg_embed
+							.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length}**`)
+							.setColor("#FF0000"));
 					}
-
-					jumped = false;
-					await dispatcher.end();
-					await message.channel.send(arg_embed
-						.setTitle(`Fila pulada para a posição **${args[1]}**`)
-						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-						.setColor("#00FF00"));
-
-					return;
 				} else {
 					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 
@@ -502,5 +513,7 @@ function timing(secs) {
 }
 
 module.exports.help = {
-	name: "m"
+	name: "music",
+	name_2: "m",
+	name_3: "p"
 }

@@ -6,6 +6,7 @@ module.exports.run = async (bot, message, args) => {
     const utility_commands =
         "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
         "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "h                ``|\n" +
         "|``" + `${botconfig.prefix}` + "help music       ``|" + "`` - `` **Todos os comandos de música disponíveis.**\n" +
         "|``" + `${botconfig.prefix}` + "serverinfo       ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
         "|``" + `${botconfig.prefix}` + "uptime           ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
@@ -18,6 +19,7 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}` + "ban [membro] [motivo]     ``|" + "`` - `` **Bane um membro do servidor.\n                **" +
         "|``" + `${botconfig.prefix}` + "report [membro] [motivo]  ``|" + "`` - `` **Denuncia um membro do servidor.\n            **" +
         "|``" + `${botconfig.prefix}` + "renameserver [novo nome]  ``|" + "`` - `` **Renomeia o servidor.\n                       **" +
+        "|``" + `${botconfig.prefix}` + "rs [novo nome]            ``|                                                             \n" +
         "|``" + `${botconfig.prefix}` + "clear [numero]            ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.     **";
 
     const user_commands =
@@ -31,15 +33,17 @@ module.exports.run = async (bot, message, args) => {
     const musicprefix = `${botconfig.prefix}${music_file.help.name}`;
 
     const music_commands =
-        "[``" + `${musicprefix}` + " [search]           ``] " + "`` - `` **Toca um vídeo do YouTube / adiciona à fila.\n              **" +
-        "[``" + `${musicprefix}` + " queue              ``] " + "``" + ` ou [${musicprefix}` + " q    ``]" + "`` - `` **Para visualizar toda a fila.\n   **" +
-        "[``" + `${musicprefix}` + " queue [numero]     ``] " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
-        "[``" + `${musicprefix}` + " queue purge        ``] " + "`` - `` **Remove todos os itens da fila.\n   **" +
-        "[``" + `${musicprefix}` + " np                 ``] " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
-        "[``" + `${musicprefix}` + " skip               ``] " + "``" + ` ou [${musicprefix}` + " s    ``]" + "`` - `` **Pula para o próximo video da fila.\n   **" +
-        "[``" + `${musicprefix}` + " leave              ``] " + "``" + ` ou [${musicprefix}` + " l    ``]" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
-        "[``" + `${musicprefix}` + " p                  ``] " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
-        "[``" + `${musicprefix}` + " earrape            ``] " + "`` - `` **Aumenta extremamente o volume fazendo a reprodução ficar inaudível.\n**";
+        "|``" + `${musicprefix}` + " [search]                      ``| " + "`` - `` **Toca um vídeo do YouTube / adiciona à fila.\n              **" +
+        "|``" + `${botconfig.prefix}${music_file.help.name_2} [search]|` + "``\n" +
+        "|``" + `${botconfig.prefix}${music_file.help.name_3} [search]|` + "``\n" +
+        "|``" + `${musicprefix}` + " queue                         ``| " + "``" + ` ou |${musicprefix}` + " q    ``|" + "`` - `` **Para visualizar toda a fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue [numero]                ``| " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue purge                   ``| " + "`` - `` **Remove todos os itens da fila.\n   **" +
+        "|``" + `${musicprefix}` + " np                            ``| " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
+        "|``" + `${musicprefix}` + " skip                          ``| " + "``" + ` ou |${musicprefix}` + " s    ``|" + "`` - `` **Pula para o próximo video da fila.\n   **" +
+        "|``" + `${musicprefix}` + " leave                         ``| " + "``" + ` ou |${musicprefix}` + " l    ``|" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
+        "|``" + `${musicprefix}` + " p                             ``| " + "`` - `` **Pausa/despausa a reprodução atual\n**" +
+        "|``" + `${musicprefix}` + " earrape                       ``| " + "`` - `` **Aumenta extremamente o volume fazendo a reprodução ficar inaudível.\n**";
 
     let help_embed = new Discord.RichEmbed()
         .setTitle(`**${bot.user.username} Ajuda**`)
@@ -98,5 +102,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "help"
+    name: "help",
+    name_2: 'h'
 }
