@@ -70,7 +70,7 @@ function servers_show() {
             if (j === user_inserver - 1) online_inserver = 0;
         }
 
-        console.log(`${i} - [${current_servers[i]}] - ` +
+        console.log(`${i + 1} - [${current_servers[i]}] - ` +
             `${online_inserver} online from ${current_servers[i].memberCount} members.`);
         members_reached += current_servers[i].memberCount;
     }
