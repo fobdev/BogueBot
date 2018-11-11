@@ -32,7 +32,11 @@ module.exports.run = async (bot, message, args) => {
 
 	try {
 		video = await youtube.getVideo(url);
-		message.delete();
+		try {
+			message.delete();
+		} catch (e) {
+			console.log('Error deleting URL message.');
+		}
 	} catch (error) {
 
 		// If the inputted message is not a subcommand, searchs a video.
@@ -56,11 +60,16 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
+
 				try {
 					await bot_msgcollector.collected.deleteAll();
+				} catch (e) {
+					console.log('Error deleting all bot message after ending.');
+				}
+				try {
 					user_msgcollector.stop();
 				} catch (e) {
-					console.log('No user to stop right now / message already deleted.');
+					console.log('No user to stop right now.');
 				}
 			})
 
@@ -101,15 +110,19 @@ module.exports.run = async (bot, message, args) => {
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`Busca por **${search}** foi cancelada.`)
 								.setColor("#FF0000")).then(async msg => {
-								await msg.delete(1000 * 3);
+								// await msg.delete(1000 * 3);
 								bot_msgcollector.stop();
 								user_msgcollector.stop();
 							});
 						}
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
-							await bot_msgcollector.collected.deleteAll();
-							await user_msgcollector.collected.deleteAll();
+							try {
+								await bot_msgcollector.collected.deleteAll();
+								await user_msgcollector.collected.deleteAll();
+							} catch (e) {
+								console.log('Error deleting all messages from user and bot.');
+							}
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							user_msgcollector.stop();
 							bot_msgcollector.stop();
@@ -122,11 +135,20 @@ module.exports.run = async (bot, message, args) => {
 						}
 					} else {
 						// If didn't verified, restart the search with new collectors
-						await bot_msgcollector.collected.deleteAll();
+						try {
+							await bot_msgcollector.collected.deleteAll();
+						} catch (e) {
+							console.log('Error deleting all the bog_msgcollector messages');
+						}
+
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('**Busca cancelada**')
 							.setColor("#FF0000")).then(async msg => {
-							await msg.delete(1000 * 3);
+							try {
+								await msg.delete(1000 * 3);
+							} catch (e) {
+								console.log("Error deleting 'search cancel' message.");
+							}
 							bot_msgcollector.stop();
 							user_msgcollector.stop();
 						});
