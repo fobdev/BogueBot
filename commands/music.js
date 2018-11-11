@@ -70,29 +70,30 @@ module.exports.run = async (bot, message, args) => {
 				}
 			})
 
-			// Prints all the videos found in the search (controlled by search_limit).
-			var search_embed = new Discord.RichEmbed()
-				.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
-				.setTitle(`Resultados para a busca de '**${search}**'`)
-				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-				.setColor("#00FF00");
-
-			for (let i = 0; i < videos.length; i++) {
-				var current_video = await youtube.getVideo(videos[i].url);
-				var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
-				if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
-
-				search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-					`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
-			}
-
-			message.channel.send(search_embed
-				.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
-					'Esta mensagem expirará em 30 segundos.'));
-
 			// Gets the user input and gets a video from search.
 			song_selecting = false;
 			if (videos.length > 0) {
+
+				// Prints all the videos found in the search (controlled by search_limit).
+				var search_embed = new Discord.RichEmbed()
+					.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
+					.setTitle(`Resultados para a busca de '**${search}**'`)
+					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+					.setColor("#00FF00");
+
+				for (let i = 0; i < videos.length; i++) {
+					var current_video = await youtube.getVideo(videos[i].url);
+					var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
+					if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
+
+					search_embed.addField('\u200B', `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
+						`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+				}
+
+				message.channel.send(search_embed
+					.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
+						'Esta mensagem expirará em 30 segundos.'));
+
 				song_selecting = true;
 				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 					time: 1000 * 30
