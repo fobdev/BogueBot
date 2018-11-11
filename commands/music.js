@@ -87,7 +87,8 @@ module.exports.run = async (bot, message, args) => {
 			}
 
 			message.channel.send(search_embed
-				.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**"));
+				.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
+					'Esta mensagem expirará em 30 segundos.'));
 
 			// Gets the user input and gets a video from search.
 			if (videos.length > 0) {
@@ -111,7 +112,7 @@ module.exports.run = async (bot, message, args) => {
 						}
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
-							await message.channel.bulkDelete(2);
+							await bot_msgcollector.collected.deleteAll();
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							user_msgcollector.stop();
 							bot_msgcollector.stop();
