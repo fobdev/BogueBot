@@ -51,6 +51,13 @@ module.exports.run = async (bot, message, args) => {
 					.setColor("#FF0000"));
 			}
 
+			try {
+				bot_msgcollector.stop();
+				user_msgcollector.stop();
+			} catch (e) {
+				console.log('Nothing to stop right now.');
+			}
+
 			// Message Collectors for getting all the bot/user messages and delete them later if needed.
 			// Current Time Out: 30s
 			var bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
@@ -73,22 +80,20 @@ module.exports.run = async (bot, message, args) => {
 				}
 			})
 
-			bot_msgcollector.on('collect', async () => {
-				if (song_selecting) {
-					console.log(`collected array: ${bot_msgcollector.collected.array()}`);
-					bot_msgcollector.collected.deleteAll();
-					bot_msgcollector.cleanup();
-					try {
-						user_msgcollector.cleanup();
-						user_msgcollector.stop();
-					} catch (e) {
-						console.log('No user to cleanup right now.');
-					}
-					message.channel.send(new Discord.RichEmbed()
-						.setDescription('Busca cancelada.')
-						.setColor('#FF0000'));
+			if (song_selecting) {
+				console.log(`collected array: ${bot_msgcollector.collected.array()}`);
+				bot_msgcollector.collected.deleteAll();
+				bot_msgcollector.cleanup();
+				try {
+					user_msgcollector.cleanup();
+					user_msgcollector.stop();
+				} catch (e) {
+					console.log('No user to cleanup right now.');
 				}
-			})
+				message.channel.send(new Discord.RichEmbed()
+					.setDescription('Busca cancelada.')
+					.setColor('#FF0000'));
+			}
 
 			// Prints all the videos found in the search (controlled by search_limit).
 			var search_embed = new Discord.RichEmbed()
