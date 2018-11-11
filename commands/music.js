@@ -32,6 +32,7 @@ module.exports.run = async (bot, message, args) => {
 
 	try {
 		video = await youtube.getVideo(url);
+		video_player(bot, message, args, video, serverQueue, voiceChannel);
 		try {
 			message.delete();
 		} catch (e) {
