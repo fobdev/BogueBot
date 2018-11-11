@@ -11,7 +11,6 @@ const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
 var earrape = false;
-var song_selecting = false;
 
 var dispatcher;
 
@@ -57,7 +56,7 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				if (!song_selecting) {
+				if (bot_msgcollector.collected.array().length === 0) {
 					await bot_msgcollector.collected.deleteAll();
 					try {
 						user_msgcollector.stop();
@@ -71,9 +70,7 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			// Gets the user input and gets a video from search.
-			song_selecting = false;
 			if (videos.length > 0) {
-
 				// Prints all the videos found in the search (controlled by search_limit).
 				var search_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
@@ -94,7 +91,6 @@ module.exports.run = async (bot, message, args) => {
 					.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
 						'Esta mensagem expirará em 30 segundos.'));
 
-				song_selecting = true;
 				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 					time: 1000 * 30
 				})
@@ -140,7 +136,6 @@ module.exports.run = async (bot, message, args) => {
 					}
 				})
 			} else {
-				song_selecting = true; // didn't show the 'expired' message
 				return message.channel.send(new Discord.RichEmbed()
 					.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
 					.setColor('#FF0000'));
@@ -408,7 +403,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		song_selecting = false;
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2,
 			quality: 'highestaudio'
