@@ -72,10 +72,14 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async (messages, reason) => {
-				if (reason === 'cancelled' || reason === 'incorrect_answer' || reason === 'sucess') {
+				if (reason === 'sucess') return;
+				if (reason === 'cancelled' || reason === 'incorrect_answer') {
 					try {
 						user_msgcollector.stop();
 						await bot_msgcollector.collected.deleteAll();
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription('**Busca cancelada**')
+							.setColor("#FF0000"))
 					} catch (e) {
 						console.error('Error deleting all bot message after ending.');
 						return;
@@ -121,33 +125,23 @@ module.exports.run = async (bot, message, args) => {
 					// Verify if the message is a number between all listed videos or is a cancel command
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
 						if (msg.content === 'c') {
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`Busca por **${search}** foi cancelada.`)
-								.setColor("#FF0000")).then(async msg => {
-								// try {
-								// 	// await msg.delete(1000 * 3);
-								// } catch (e) {
-								// 	console.error("Error deleting 'search cancelled' message.")
-								// }
-								try {
-									await bot_msgcollector.stop('cancelled');
-									await user_msgcollector.stop('cancelled');
-								} catch (e) {
-									console.error('Error stopping message collectors.');
-								}
-							});
+							try {
+								await bot_msgcollector.stop('cancelled');
+								await user_msgcollector.stop('cancelled');
+								return;
+							} catch (e) {
+								console.error('Error stopping message collectors.');
+							}
 						}
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							try {
-
 								await user_msgcollector.stop('sucess');
 								await bot_msgcollector.stop('sucess');
 							} catch (e) {
 								console.error('Error handling the stop off all collectors.');
 							}
-
 							video_player(bot, message, video, serverQueue, voiceChannel);
 						} catch (e) {
 							console.error('Error selecting video');
@@ -157,16 +151,9 @@ module.exports.run = async (bot, message, args) => {
 						}
 					} else {
 						// If didn't verified, restart the search with new collectors
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('**Busca cancelada**')
-							.setColor("#FF0000")).then(async () => {
-							try {
-								await bot_msgcollector.stop('incorrect_answer');
-								await user_msgcollector.stop('incorrect_answer');
-							} catch (e) {
-								console.error('Error deleting all the bog_msgcollector messages');
-							}
-						});
+						await bot_msgcollector.stop('incorrect_answer');
+						await user_msgcollector.stop('incorrect_answer');
+						return;
 					}
 				})
 			} else {
