@@ -140,6 +140,7 @@ module.exports.run = async (bot, message, args) => {
 					}
 				})
 			} else {
+				song_selecting = true; // didn't show the 'expired' message
 				return message.channel.send(new Discord.RichEmbed()
 					.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
 					.setColor('#FF0000'));
