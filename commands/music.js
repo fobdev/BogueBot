@@ -277,7 +277,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
 					return message.channel.send(queue_embed
-						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${help.name}` + " queue [numero]`` " +
+						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
 							"para pular para qualquer posição da fila.**"));
 				}
 			}
@@ -376,7 +376,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 			.addField(`Duração`, `${isLivestream}`, true)
 			.addField(`Posição`, `${serverQueue.songs.length}`, true)
 			.setThumbnail(song.thumbnail)
-			.setDescription("``" + `[${botconfig.prefix}${this.help.name} queue]` + "``" + ` para ver a fila completa.`)
+			.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
 			.setColor("#00FF00")
 			.setURL(song.url));
 	}
