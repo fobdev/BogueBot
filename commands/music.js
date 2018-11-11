@@ -44,18 +44,10 @@ module.exports.run = async (bot, message, args) => {
 			try {
 				videos = await youtube.searchVideos(search, search_limit);
 			} catch (e) {
-				console.log(e);
 
 				return message.channel.send(new Discord.RichEmbed()
 					.setTitle("Ocorreu um erro na busca.")
 					.setColor("#FF0000"));
-			}
-
-			try {
-				bot_msgcollector.stop();
-				user_msgcollector.stop();
-			} catch (e) {
-				console.log('Nothing to stop right now.');
 			}
 
 			// Message Collectors for getting all the bot/user messages and delete them later if needed.
@@ -67,7 +59,6 @@ module.exports.run = async (bot, message, args) => {
 			bot_msgcollector.on('end', async () => {
 				if (!song_selecting) {
 					await bot_msgcollector.collected.deleteAll();
-
 					try {
 						user_msgcollector.stop();
 					} catch (e) {
@@ -76,24 +67,8 @@ module.exports.run = async (bot, message, args) => {
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('A busca expirou')
 						.setColor('#FF0000'));
-
 				}
 			})
-
-			if (song_selecting) {
-				console.log(`collected array: ${bot_msgcollector.collected.array()}`);
-				bot_msgcollector.collected.deleteAll();
-				bot_msgcollector.cleanup();
-				try {
-					user_msgcollector.cleanup();
-					user_msgcollector.stop();
-				} catch (e) {
-					console.log('No user to cleanup right now.');
-				}
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription('Busca cancelada.')
-					.setColor('#FF0000'));
-			}
 
 			// Prints all the videos found in the search (controlled by search_limit).
 			var search_embed = new Discord.RichEmbed()
@@ -124,7 +99,6 @@ module.exports.run = async (bot, message, args) => {
 
 				user_msgcollector.on('collect', async msg => {
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
 							return message.channel.send(new Discord.RichEmbed()
@@ -135,12 +109,10 @@ module.exports.run = async (bot, message, args) => {
 								user_msgcollector.stop();
 							});
 						}
-						console.log(parseInt('message content_num:' + msg.content))
 
 						// Try to get the selected video ID and set it in the 'video' var
 						try {
 							await message.channel.bulkDelete(2);
-							console.log(`selected in array: ${parseInt(msg.content) - 1}`);
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 							user_msgcollector.stop();
 							bot_msgcollector.stop();
@@ -151,6 +123,15 @@ module.exports.run = async (bot, message, args) => {
 								.setTitle("Ocorreu um erro ao selecionar o vídeo.")
 								.setColor("#FF0000"));
 						}
+					} else {
+						await bot_msgcollector.collected.deleteAll();
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription('Busca cancelada.')
+							.setColor("#FF0000")).then(async msg => {
+							await msg.delete(1000 * 3);
+							bot_msgcollector.stop();
+							user_msgcollector.stop();
+						});
 					}
 				})
 			}
@@ -340,7 +321,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 }
 
 async function video_player(bot, message, video, serverQueue, voiceChannel) {
-	console.log('musica entrou')
 	// Collect all the information from the 'video' variable
 	try {
 		var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
