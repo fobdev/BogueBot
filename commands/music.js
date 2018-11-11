@@ -65,9 +65,9 @@ module.exports.run = async (bot, message, args) => {
 					}
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`A busca por '**${search}**' expirou.`)
-						.setColor('#FF0000').then(async msg => {
-							await msg.delete(1000 * 5);
-						}));
+						.setColor('#FF0000')).then(async msg => {
+						await msg.delete(1000 * 5);
+					});
 				}
 			})
 
