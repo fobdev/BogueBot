@@ -72,7 +72,10 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async (messages, reason) => {
-				if (reason === 'sucess') return;
+				if (reason === 'sucess') {
+					await bot_msgcollector.collected.deleteAll();
+					return;
+				}
 				if (reason === 'cancelled' || reason === 'incorrect_answer') {
 					try {
 						user_msgcollector.stop();
