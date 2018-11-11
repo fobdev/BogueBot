@@ -11,7 +11,7 @@ const youtube = new YouTube(ytkey)
 var leaving = false;
 var jumped = false;
 var earrape = false;
-var song_selected = false;
+var song_selecting = false;
 
 var dispatcher;
 
@@ -58,9 +58,14 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				if (!song_selected) {
+				if (!song_selecting) {
 					await bot_msgcollector.collected.deleteAll();
-					user_msgcollector.stop();
+
+					try {
+						user_msgcollector.stop();
+					} catch (e) {
+						console.log('No user to stop right now.');
+					}
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('A busca expirou')
 						.setColor('#FF0000'));
@@ -68,11 +73,15 @@ module.exports.run = async (bot, message, args) => {
 				}
 			})
 
-			if (song_selected) {
+			if (song_selecting) {
 				bot_msgcollector.collected.deleteAll();
 				bot_msgcollector.cleanup();
-				user_msgcollector.cleanup();
-
+				try {
+					user_msgcollector.cleanup();
+					user_msgcollector.stop();
+				} catch (e) {
+					console.log('No user to cleanup right now.');
+				}
 				message.channel.send(new Discord.RichEmbed()
 					.setDescription('Busca cancelada.')
 					.setColor('#FF0000'));
@@ -98,7 +107,7 @@ module.exports.run = async (bot, message, args) => {
 			message.channel.send(search_embed
 				.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**"));
 
-
+			song_selecting = true;
 			// Gets the user input and gets a video from search.
 			if (videos.length > 0) {
 				// User input after search (expects a number or char 'c')
@@ -108,7 +117,6 @@ module.exports.run = async (bot, message, args) => {
 
 				user_msgcollector.on('collect', async msg => {
 					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-						song_selected = true;
 
 						if (msg.content === 'c') {
 							await bot_msgcollector.collected.deleteAll();
@@ -401,7 +409,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
 	if (!leaving) {
-		song_selected = false;
+		song_selecting = false;
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2,
 			quality: 'highestaudio'
