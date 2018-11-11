@@ -56,7 +56,7 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-				if (bot_msgcollector.collected.array().length === 0) {
+				if (bot_msgcollector.collected.array().length === 1) {
 					await bot_msgcollector.collected.deleteAll();
 					try {
 						user_msgcollector.stop();
