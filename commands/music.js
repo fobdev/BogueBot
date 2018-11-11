@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
 						user_msgcollector.stop();
 						await bot_msgcollector.collected.deleteAll();
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('**Busca cancelada**')
+							.setDescription(`**A busca por **${search}** foi cancelada**`)
 							.setColor("#FF0000"))
 					} catch (e) {
 						console.error('Error deleting all bot message after ending.');
