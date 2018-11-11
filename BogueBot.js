@@ -70,13 +70,13 @@ function servers_show() {
             if (j === user_inserver - 1) online_inserver = 0;
         }
 
-        console.log(`${i + 1} - [${current_servers[i]}] - ` +
+        console.log(`${i} - [${current_servers[i]}] - ` +
             `${online_inserver} online from ${current_servers[i].memberCount} members.`);
         members_reached += current_servers[i].memberCount;
     }
 
     console.log("---------------------------------");
-    console.log(`  - [${members_reached}] members reached | [${online_total}] online.`);
+    console.log(`  - [${members_reached}] users reached | [${online_total}] online.`);
     console.log("---------------------------------");
 
 }
@@ -158,14 +158,13 @@ bot.on('guildMemberRemove', member => {
 var copycat_switch = false;
 bot.on('message', async message => {
 
-    if (message.author.bot) return;
+    if (message.author.bot) return; // comment this if you uncomment the '>was' command.
     if (message.channel.type === "dm") return;
 
     let prefix = botconfig.prefix;
     let messageArray = message.content.split(" ");
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
-
 
     /*
     The reason why put the 'copycat' command here is because it
@@ -190,6 +189,33 @@ bot.on('message', async message => {
 
     if (copycat_switch) message.channel.send(message.content);
     // end of copycat command
+
+    /*
+    
+    This command is used for collecting the chat in every guild and send a personal message
+    to it with '>was [server number] [message]'.
+
+    Server number can be found in the servers array, starting with 0.
+    
+    */
+
+    // var svnumber = args[0];
+    // var guilds_array = bot.guilds.array();
+    // 
+    // var system_channel;
+    // var themsg = args.join(' ').slice(2);
+    // var msgarr;
+    // 
+    // if (cmd === '>was') {
+    //     system_channel = guilds_array[svnumber].channels.find(ch => ch.id === guilds_array[svnumber].systemChannelID);
+    //     system_channel.send(themsg)
+    // 
+    //     if (system_channel) {
+    //         msgarr = `[${message.guild.name}][#${message.channel.name}][${message.author.username}]: ${message.content}`;
+    //         if (message.author.bot) console.log(`bot: ${msgarr}`);;
+    //     }
+    // }
+    // console.log(`[${message.guild.name}][#${message.channel.name}][${message.author.username}]: ${message.content}`);
 
     let command_file = bot.commands.get(cmd.slice(prefix.length));
     if (cmd[0] === prefix) {
