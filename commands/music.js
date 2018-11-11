@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
 		try {
 			message.delete();
 		} catch (e) {
-			console.log('Error deleting URL message.');
+			console.error('Error deleting URL message.');
 		}
 	} catch (error) {
 
@@ -60,16 +60,15 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async () => {
-
 				try {
 					await bot_msgcollector.collected.deleteAll();
 				} catch (e) {
-					console.log('Error deleting all bot message after ending.');
+					console.error('Error deleting all bot message after ending.');
 				}
 				try {
 					user_msgcollector.stop();
 				} catch (e) {
-					console.log('No user to stop right now.');
+					console.error('No user to stop right now.');
 				}
 			})
 
@@ -110,9 +109,17 @@ module.exports.run = async (bot, message, args) => {
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`Busca por **${search}** foi cancelada.`)
 								.setColor("#FF0000")).then(async msg => {
-								// await msg.delete(1000 * 3);
-								bot_msgcollector.stop();
-								user_msgcollector.stop();
+								try {
+									await msg.delete(1000 * 3);
+								} catch (e) {
+									console.error("Error deleting 'search cancelled' message.")
+								}
+								try {
+									await bot_msgcollector.stop();
+									await user_msgcollector.stop();
+								} catch (e) {
+									console.error('Error stopping message collectors.');
+								}
 							});
 						}
 						// Try to get the selected video ID and set it in the 'video' var
@@ -121,14 +128,18 @@ module.exports.run = async (bot, message, args) => {
 								await bot_msgcollector.collected.deleteAll();
 								await user_msgcollector.collected.deleteAll();
 							} catch (e) {
-								console.log('Error deleting all messages from user and bot.');
+								console.error('Error deleting all messages from user and bot.');
 							}
 							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
-							user_msgcollector.stop();
-							bot_msgcollector.stop();
+							try {
+								await user_msgcollector.stop();
+								await bot_msgcollector.stop();
+							} catch (e) {
+								console.error('Error stopping all message collectors.');
+							}
 							video_player(bot, message, video, serverQueue, voiceChannel);
 						} catch (e) {
-							console.log(e);
+							console.error('Error selecting video');
 							return message.channel.send(new Discord.RichEmbed()
 								.setTitle("Ocorreu um erro ao selecionar o vídeo.")
 								.setColor("#FF0000"));
@@ -138,7 +149,7 @@ module.exports.run = async (bot, message, args) => {
 						try {
 							await bot_msgcollector.collected.deleteAll();
 						} catch (e) {
-							console.log('Error deleting all the bog_msgcollector messages');
+							console.error('Error deleting all the bog_msgcollector messages');
 						}
 
 						return message.channel.send(new Discord.RichEmbed()
@@ -147,10 +158,16 @@ module.exports.run = async (bot, message, args) => {
 							try {
 								await msg.delete(1000 * 3);
 							} catch (e) {
-								console.log("Error deleting 'search cancel' message.");
+								console.error("Error deleting 'search cancel' message.");
 							}
-							bot_msgcollector.stop();
-							user_msgcollector.stop();
+
+							try {
+								await bot_msgcollector.stop();
+								await user_msgcollector.stop();
+							} catch (e) {
+								console.error('Error deleting all the bog_msgcollector messages');
+							}
+
 						});
 					}
 				})
@@ -204,7 +221,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							.setTitle(":arrow_forward: Reprodução continuada."));
 					}
 				} catch (error) {
-					console.log(error);
+					console.error("Command didn't executed as expected");
 					return message.channel.send(arg_embed
 						.setTitle("O comando não funcionou como o esperado.")
 						.setColor("#FF0000"));
@@ -220,7 +237,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					return message.channel.send(arg_embed
 						.setTitle("Saí do canal de voz e apaguei minha fila."));
 				} catch (error) {
-					console.log(error);
+					console.error("Error ocurred when leaving the voice channel");
 					return message.channel.send(arg_embed
 						.setTitle("Ocorreu um erro ao sair da sala."));
 				}
@@ -230,7 +247,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				try {
 					var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 				} catch (e) {
-					console.log('Tried to see a now playing of nothing playing.');
+					console.error('Tried to see a now playing of nothing playing.');
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('**Não tem nada tocando no momento**')
 						.setColor('#FF0000'));
@@ -336,7 +353,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							.setColor("#FF0000"));
 					}
 				} catch (error) {
-					return console.log(error);
+					return console.error('Tried to skip nothing');
 				}
 			}
 		default:
@@ -391,7 +408,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 			play(bot, message, message.guild, queueConstruct.songs[0]);
 
 		} catch (e) {
-			console.log(`Bot could not join a voice channel: + ${e}`);
+			console.error(`Bot could not join a voice channel: + ${e}`);
 
 			queue.delete(message.guild.id);
 
@@ -471,7 +488,7 @@ async function play(bot, message, guild, song) {
 		play(bot, message, guild, serverQueue.songs[0]);
 	});
 
-	dispatcher.on('error', error => console.log(error));
+	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
 
 function timing(secs) {
