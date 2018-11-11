@@ -81,6 +81,7 @@ module.exports.run = async (bot, message, args) => {
 						return;
 					}
 				} else {
+					await bot_msgcollector.collected.deleteAll();
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`A busca por **${search}** expirou.`)
 						.setColor("#FF0000"));
