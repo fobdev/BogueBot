@@ -123,11 +123,13 @@ module.exports.run = async (bot, message, args) => {
 								.setColor("#FF0000"));
 						}
 					} else {
+						song_selecting = true;
 						await bot_msgcollector.collected.deleteAll();
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Busca cancelada.')
 							.setColor("#FF0000")).then(async msg => {
 							await msg.delete(1000 * 3);
+							await message.delete(1000 * 3);
 							bot_msgcollector.stop();
 							user_msgcollector.stop();
 						});
