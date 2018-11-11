@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
 		if (subcommands.indexOf(args[0]) < 0) {
 
 			// Tro to get the args[0] string and puts the string in the search engine.
-			const search_limit = 6;
+			const search_limit = 8;
 			try {
 				videos = await youtube.searchVideos(search, search_limit);
 			} catch (e) {
