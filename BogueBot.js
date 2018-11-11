@@ -40,6 +40,7 @@ function servers_show() {
 
     // All the users that can see the bot.
     var members_reached = 0;
+    var online_total = 0;
 
     console.log("---------------------------------");
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
@@ -54,7 +55,10 @@ function servers_show() {
             var is_online = user_inserver[j].presence.status;
 
             // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
-            if (is_online !== 'offline') online_inserver++;
+            if (is_online !== 'offline') {
+                online_inserver++;
+                online_total++;
+            }
 
             // Finishes the current loop and restart the variable to count again in the next server
             if (j === user_inserver - 1) online_inserver = 0;
@@ -66,7 +70,7 @@ function servers_show() {
     }
 
     console.log("---------------------------------");
-    console.log(`  - [${members_reached}] members reached.`);
+    console.log(`  - [${members_reached}] members reached | [${online_total}] online.`);
     console.log("---------------------------------");
 
 }
