@@ -88,8 +88,8 @@ bot.on('ready', async () => {
 
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
-    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}`, {
-        type: 'LISTENING'
+    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} / ${botconfig.prefix}${invitefile.help.name}`, {
+        type: 'PLAYING'
     });
 });
 
