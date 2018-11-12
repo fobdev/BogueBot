@@ -291,12 +291,19 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 
-						await serverQueue.songs.splice(entry, 1);
+						if (entry > 0 && entry <= serverQueue.songs.length) {
 
-						var offset = entry - 1;
-						return message.channel.send(arg_embed
-							.setDescription(`**[${serverQueue.songs[offset].title}](${serverQueue.songs[offset].url})**` +
-								` foi removido da fila.`));
+							message.channel.send(arg_embed
+								.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
+									` foi removido da fila.`));
+							await serverQueue.songs.splice(entry, 1);
+
+							return;
+						} else {
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription('**Não foram encontrados vídeos na fila com este número**')
+								.setColor('#FF000'));
+						}
 					}
 
 					if (args[1] === 'purge') {
