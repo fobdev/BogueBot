@@ -74,6 +74,7 @@ module.exports.run = async (bot, message, args) => {
 			bot_msgcollector.on('end', async (messages, reason) => {
 				if (reason === 'sucess') {
 					await bot_msgcollector.collected.deleteAll();
+					await user_msgcollector.collected.deleteAll();
 					return;
 				}
 				if (reason === 'cancelled' || reason === 'incorrect_answer') {
@@ -274,6 +275,24 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				var fulltime = 0;
 				try {
+					if (args[1] === 'delete' || args[1] === 'del') {
+						var entry = parseInt(args[2]);
+						if (!entry) {
+							return message.channel.send(new Discord.RichEmbed()
+									.setDescription('**Você não especificou o video que quer excluir da fila.**'))
+								.setColor("#FF0000");
+						} else if (entry < 1) {
+							await dispatcher.end();
+							return;
+						}
+
+						await serverQueue.songs.splice((entry - 1), 1);
+
+						return message.channel.send(arg_embed
+							.setDescription(`**[${serverQueue.songs[(entry - 1)].title}](${serverQueue.songs[(entry - 1)].url})**` +
+								` foi removido da fila.`));
+					}
+
 					if (args[1] === 'purge') {
 						if (serverQueue.songs.length > 1) {
 							await serverQueue.songs.splice(1);
@@ -282,7 +301,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#00FF00"));
 						} else {
 							return message.channel.send(arg_embed
-								.setDescription(`A fila já está vazia.`)
+								.setTitle(`A fila já está vazia.`)
 								.setColor("#FF0000"));
 						}
 					}
@@ -354,7 +373,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						}
 					}
 				} catch (e) {
-					console.error('Tried to call queue without a queue');
+					console.error(`${e} / Tried to call queue without a queue`);
 					return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
 						.setColor("#FF0000"));
 				}
