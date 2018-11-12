@@ -293,8 +293,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						await serverQueue.songs.splice(entry, 1);
 
+						var offset = entry + 1;
 						return message.channel.send(arg_embed
-							.setDescription(`**[${serverQueue.songs[entry + 1].title}](${serverQueue.songs[entry + 1].url})**` +
+							.setDescription(`**[${serverQueue.songs[offset].title}](${serverQueue.songs[offset].url})**` +
 								` foi removido da fila.`));
 					}
 
