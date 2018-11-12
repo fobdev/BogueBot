@@ -31,14 +31,14 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("FF0000"));
 	}
 
-	//if (url.includes('list=')) {
-	//	// Playlist ID
-	//	var playlist = await youtube.getPlaylist(url);
-	//	var videosarray = await playlist.getVideos;
-	//
-	//	return message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.videos[1]}`)
-	//	//video_player(bot, message, args, video, serverQueue, voiceChannel);
-	//}
+	if (url.includes('list=')) {
+		// Playlist ID
+		var playlist = await youtube.getPlaylist(url);
+		var videosarray = await playlist.getVideos;
+
+		return message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.videos[1]}`)
+		//video_player(bot, message, args, video, serverQueue, voiceChannel);
+	}
 
 
 	try {
@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
 						user_msgcollector.stop();
 						await bot_msgcollector.collected.deleteAll();
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**A busca por **${search}** foi cancelada**`)
+							.setDescription(`A busca por **${search}** foi cancelada`)
 							.setColor("#FF0000"))
 					} catch (e) {
 						console.error('Error deleting all bot message after ending.');
@@ -273,68 +273,90 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "q":
 			{
 				var fulltime = 0;
-				if (args[1] === 'purge') {
-					if (serverQueue.songs.length > 1) {
-						await serverQueue.songs.splice(1);
-						return message.channel.send(arg_embed
-							.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
-							.setColor("#00FF00"));
-					} else {
-						return message.channel.send(arg_embed
-							.setDescription(`A fila já está vazia.`)
-							.setColor("#FF0000"));
+				try {
+					if (args[1] === 'purge') {
+						if (serverQueue.songs.length > 1) {
+							await serverQueue.songs.splice(1);
+							return message.channel.send(arg_embed
+								.setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
+								.setColor("#00FF00"));
+						} else {
+							return message.channel.send(arg_embed
+								.setDescription(`A fila já está vazia.`)
+								.setColor("#FF0000"));
+						}
 					}
-				}
 
-				if (args[1]) {
-					if (parseInt(args[1]) > 1 && parseInt(args[1]) <= serverQueue.songs.length) {
-						for (let i = 0; i < args[1] - 1; i++) {
-							jumped = true;
+					if (args[1]) {
+						if (parseInt(args[1]) > 1 && parseInt(args[1]) <= serverQueue.songs.length) {
+							for (let i = 0; i < args[1] - 1; i++) {
+								jumped = true;
+								await dispatcher.end();
+							}
+
+							jumped = false;
 							await dispatcher.end();
+
+							return message.channel.send(arg_embed
+								.setTitle(`Fila pulada para a posição **${args[1]}**`)
+								.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+								.setColor("#00FF00"));
+						} else {
+							await message.channel.send(arg_embed
+								.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length}**`)
+								.setColor("#FF0000"));
 						}
-
-						jumped = false;
-						await dispatcher.end();
-
-						return message.channel.send(arg_embed
-							.setTitle(`Fila pulada para a posição **${args[1]}**`)
-							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-							.setColor("#00FF00"));
 					} else {
-						await message.channel.send(arg_embed
-							.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length}**`)
-							.setColor("#FF0000"));
-					}
-				} else {
-					var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
+						if (serverQueue.songs.length < 6) {
+							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
+							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
+							if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
-					var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
-					if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
+							var queue_embed = new Discord.RichEmbed()
+								.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+								.addField(`${isLivestream}\n`, '\u200B')
+								.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+								.setThumbnail(serverQueue.songs[0].thumbnail)
+								.setColor("#00FF00");
 
-					var queue_embed = new Discord.RichEmbed()
-						.addField('♪ Agora Tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-						.addField(`${isLivestream}\n`, '\u200B')
-						.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-						.setThumbnail(serverQueue.songs[0].thumbnail)
-						.setColor("#00FF00");
+							for (let i = 0; i < serverQueue.songs.length; i++) {
+								if (i !== 0) {
+									var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
+									if (parseInt(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
 
+									queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
+										`Duração: ${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+								}
 
-					for (let i = 0; i < serverQueue.songs.length; i++) {
-						if (i !== 0) {
-							var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
-							if (parseInt(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
+								fulltime += parseInt(serverQueue.songs[i].length);
+							}
 
-							queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-								`Duração: ${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+							queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
+							return message.channel.send(queue_embed
+								.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
+									"para pular para qualquer posição da fila.**"));
+						} else {
+							var queue_element = '';
+							var largequeue_embed = new Discord.RichEmbed()
+								.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
+								.setTitle('\u200B')
+								.setColor('#00FF00');
+
+							for (let i = 0; i < serverQueue.songs.length; i++) {
+								queue_element += `${i + 1} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url}) ` +
+									` - ${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
+
+								fulltime += parseInt(serverQueue.songs[i].length);
+								if (i === serverQueue.songs.length - 1) largequeue_embed.setDescription(`\n${queue_element}`);
+							}
+
+							return message.channel.send(largequeue_embed.setFooter(`Tempo total da playlist: ${timing(fulltime)}`));
 						}
-
-						fulltime += parseInt(serverQueue.songs[i].length);
 					}
-
-					queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
-					return message.channel.send(queue_embed
-						.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
-							"para pular para qualquer posição da fila.**"));
+				} catch (e) {
+					console.error('Tried to call queue without a queue');
+					return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
+						.setColor("#FF0000"));
 				}
 			}
 		case "skip":
