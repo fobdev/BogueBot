@@ -31,7 +31,7 @@ fs.readdir('./commands/', (err, files) => {
             bot.commands.set(props.help.name_2, props);
             bot.commands.set(props.help.name_3, props);
         } catch (e) {
-            console.error('No secondary or terciary commands to this file.');
+            console.error(`${e}: Secondary / terciary command name not loaded properly.`);
         }
     });
     console.log("---------------------------------");
@@ -87,13 +87,13 @@ bot.on('ready', async () => {
     servers_show();
 
     const helpfile = require("./commands/help.js");
-    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} para a redpill.`, {
-        type: 'PLAYING'
+    const invitefile = require("./commands/invite.js");
+    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}`, {
+        type: 'LISTENING'
     });
 });
 
 bot.on('guildCreate', guild => {
-
     const help_file = require('./commands/help.js');
     const music_file = require('./commands/music.js');
     const welcome_embed = new Discord.RichEmbed()
