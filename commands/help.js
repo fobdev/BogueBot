@@ -38,7 +38,6 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${botconfig.prefix}${music_file.help.name_3} [search]|` + "``\n" +
         "|``" + `${musicprefix}` + " queue                         ``| " + "``" + ` ou |${musicprefix}` + " q    ``|" + "`` - `` **Visualiza toda a fila.\n   **" +
         "|``" + `${musicprefix}` + " queue [numero]                ``| " + "`` - `` **Pula para uma certa posição da fila.\n   **" +
-        "|``" + `${musicprefix}` + " queue del [numero]            ``| " + "`` - `` **Exclui um item da fila.\n   **" +
         "|``" + `${musicprefix}` + " queue purge                   ``| " + "`` - `` **Exclui todos os itens da fila.\n   **" +
         "|``" + `${musicprefix}` + " np                            ``| " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "|``" + `${musicprefix}` + " skip                          ``| " + "``" + ` ou |${musicprefix}` + " s    ``|" + "`` - `` **Pula para o próximo video da fila.\n   **" +
