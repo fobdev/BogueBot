@@ -373,18 +373,25 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							var queue_element = '';
 							var largequeue_embed = new Discord.RichEmbed()
 								.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
-								.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+								.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})** - ` +
+									`${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}`)
 								.setColor('#00FF00');
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
-								queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url}) ` +
-									` - ${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
+								if (i === 1) {
+									queue_element += `${i} \u200B- **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
+										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
+								} else {
+									queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
+										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
+								}
+
 
 								fulltime += parseInt(serverQueue.songs[i].length);
 								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
 							}
 
-							return message.channel.send(largequeue_embed.setFooter(`Tempo total da playlist: ${timing(fulltime)}`));
+							return message.channel.send(largequeue_embed.setFooter(`Tempo total da playlist: ${timing(fulltime)}`, bot.user.displayAvatarURL));
 						}
 					}
 				} catch (e) {
