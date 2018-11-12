@@ -357,7 +357,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									if (parseInt(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
 
 									queue_embed.addField('\u200B', `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-										`Duração: ${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+										`${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
 								}
 
 								fulltime += parseInt(serverQueue.songs[i].length);
@@ -385,7 +385,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
 										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
 								}
-
 
 								fulltime += parseInt(serverQueue.songs[i].length);
 								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
