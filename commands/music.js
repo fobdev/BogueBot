@@ -279,16 +279,17 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						var entry = parseInt(args[2]);
 
 						if (entry < 1) {
+							await message.channel.send(arg_embed
+								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
 							await dispatcher.end();
 							return;
 						}
 
 						if (!entry) {
 							return message.channel.send(new Discord.RichEmbed()
-									.setDescription('**Você não especificou o video que quer excluir da fila.**'))
-								.setColor("#FF0000");
+								.setDescription('**Você não especificou o video que quer excluir da fila.**')
+								.setColor("#FF0000"));
 						}
-
 
 						await serverQueue.songs.splice(entry, 1);
 
