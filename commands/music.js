@@ -367,8 +367,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setTitle('\u200B')
 								.setColor('#00FF00');
 
-							for (let i = 0; i < serverQueue.songs.length; i++) {
-								queue_element += `${i + 1} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url}) ` +
+							for (let i = 1; i < serverQueue.songs.length; i++) {
+								queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url}) ` +
 									` - ${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
 
 								fulltime += parseInt(serverQueue.songs[i].length);
