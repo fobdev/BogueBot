@@ -255,8 +255,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				var now_playing_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`, true)
-					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
 					.addField("Tempo", `${isLivestream}`, true)
+					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
 					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
