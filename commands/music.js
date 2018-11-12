@@ -277,19 +277,23 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				try {
 					if (args[1] === 'delete' || args[1] === 'del') {
 						var entry = parseInt(args[2]);
-						if (!entry) {
-							return message.channel.send(new Discord.RichEmbed()
-									.setDescription('**Você não especificou o video que quer excluir da fila.**'))
-								.setColor("#FF0000");
-						} else if (entry < 1) {
+
+						if (entry < 1) {
 							await dispatcher.end();
 							return;
 						}
 
+						if (!entry) {
+							return message.channel.send(new Discord.RichEmbed()
+									.setDescription('**Você não especificou o video que quer excluir da fila.**'))
+								.setColor("#FF0000");
+						}
+
+
 						await serverQueue.songs.splice(entry, 1);
 
 						return message.channel.send(arg_embed
-							.setDescription(`**[${serverQueue.songs[(entry - 1)].title}](${serverQueue.songs[(entry - 1)].url})**` +
+							.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
 								` foi removido da fila.`));
 					}
 
