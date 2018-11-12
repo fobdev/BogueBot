@@ -255,7 +255,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 				var now_playing_embed = new Discord.RichEmbed()
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`, true)
+					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`)
 					.addField("Tempo", `${isLivestream}`, true)
 					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
@@ -368,9 +368,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
 									"para pular para qualquer posição.**\n" +
 									"**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]`` " +
-									"para excluir um item da fila."));
+									"para excluir um item da fila.**"));
 						} else {
 							var queue_element = '';
+							var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 							var largequeue_embed = new Discord.RichEmbed()
 								.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
 								.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})** - ` +
@@ -378,13 +379,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor('#00FF00');
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
-								if (i === 1) {
-									queue_element += `${i} \u200B- **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
-										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
-								} else {
-									queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
-										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
-								}
+								queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
+									` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
 
 								fulltime += parseInt(serverQueue.songs[i].length);
 								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
