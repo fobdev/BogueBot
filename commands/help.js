@@ -36,9 +36,10 @@ module.exports.run = async (bot, message, args) => {
         "|``" + `${musicprefix}` + " [search]                      ``| " + "`` - `` **Toca um vídeo do YouTube / adiciona à fila.\n              **" +
         "|``" + `${botconfig.prefix}${music_file.help.name_2} [search]|` + "``\n" +
         "|``" + `${botconfig.prefix}${music_file.help.name_3} [search]|` + "``\n" +
-        "|``" + `${musicprefix}` + " queue                         ``| " + "``" + ` ou |${musicprefix}` + " q    ``|" + "`` - `` **Para visualizar toda a fila.\n   **" +
-        "|``" + `${musicprefix}` + " queue [numero]                ``| " + "`` - `` **Para pular para uma certa posição da fila.\n   **" +
-        "|``" + `${musicprefix}` + " queue purge                   ``| " + "`` - `` **Remove todos os itens da fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue                         ``| " + "``" + ` ou |${musicprefix}` + " q    ``|" + "`` - `` **Visualiza toda a fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue [numero]                ``| " + "`` - `` **Pula para uma certa posição da fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue del [numero]            ``| " + "`` - `` **Exclui um item da fila.\n   **" +
+        "|``" + `${musicprefix}` + " queue purge                   ``| " + "`` - `` **Exclui todos os itens da fila.\n   **" +
         "|``" + `${musicprefix}` + " np                            ``| " + "`` - `` **Exibe o que está sendo tocado no momento.\n   **" +
         "|``" + `${musicprefix}` + " skip                          ``| " + "``" + ` ou |${musicprefix}` + " s    ``|" + "`` - `` **Pula para o próximo video da fila.\n   **" +
         "|``" + `${musicprefix}` + " leave                         ``| " + "``" + ` ou |${musicprefix}` + " l    ``|" + "`` - `` **Sai do canal de voz e apaga a fila.    **\n" +
