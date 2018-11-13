@@ -41,9 +41,7 @@ module.exports.run = async (bot, message, args) => {
 			if (videosarray) {
 				message.channel.send(new Discord.RichEmbed()
 					.setTitle('Carregando playlist...')
-					.setColor('#00FF00')).then(msg => {
-					msg.delete(1000 * 10);
-				});
+					.setColor('#00FF00'));
 			}
 
 			await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray);
