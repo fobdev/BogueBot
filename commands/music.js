@@ -93,8 +93,8 @@ module.exports.run = async (bot, message, args) => {
 					return message.channel.send("```css\n" +
 						`[Comandos de música do ${bot.user.username}]
 
->music [música]...Toca um vídeo do YouTube / adiciona à fila.
->music (q)ueue....Exibe toda a fila do servidor.
+>music [música]....................Toca um vídeo do YouTube / adiciona à fila.
+>music (q)ueue.....................Exibe toda a fila do servidor.
        (q)ueue [numero]............Pula para uma certa posição da fila.
        (q)ueue (del)ete [numero]...Exclui um certo item da fila.
        (q)ueue purge...............Limpa todos os itens da fila.
@@ -533,6 +533,7 @@ async function play(bot, message, guild, song) {
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
+		.addField("Canal de voz", `🔊 ${message.member.voiceChannel.name}`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
