@@ -400,7 +400,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
-							return message.channel.send("```HTML\n" +
+							return message.channel.send("```AsciiDoc\n" +
 								`[Fila de ${message.guild.name}]
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
