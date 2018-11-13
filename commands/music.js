@@ -89,6 +89,7 @@ module.exports.run = async (bot, message, args) => {
 					}
 				} else if (reason === 'incorrect_answer') {
 					await bot_msgcollector.collected.deleteAll();
+					await user_msgcollector.collected.deleteAll();
 					return message.channel.send("```css\n" +
 						`[Comandos de música do ${bot.user.username}]
 
