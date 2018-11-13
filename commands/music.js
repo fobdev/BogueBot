@@ -34,22 +34,10 @@ module.exports.run = async (bot, message, args) => {
 
 	// Playlist support
 	if (isPlaylist) {
-		// Playlist ID
 		const playlist = await youtube.getPlaylist(url);
 		const videosarray = await playlist.getVideos();
 
-		// var vd_str = '';
-		// for (let i = 0; i < videosarray.length; i++) {
-		// 	vd_str += `${i} - ${videosarray[i].title}\n`
-		// }
-		// message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.length}\nVideos: \n${vd_str}`)
-
-		// video = await youtube.getVideo(videosarray[i].url);
-
-		await video_player(bot, message, videosarray[0], serverQueue, voiceChannel, videosarray);
-		// for (let i = 1; i < videosarray.length; i++) {
-		// 	await video_player(bot, message, videosarray[i], serverQueue, voiceChannel);
-		// }
+		await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray);
 	}
 
 
@@ -400,7 +388,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
-							return message.channel.send("```AsciiDoc\n" +
+							return message.channel.send("```Markdown\n" +
 								`[Fila de ${message.guild.name}]
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
@@ -571,7 +559,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			}
 
 			message.channel.send(new Discord.RichEmbed()
-				.addField(`**${queueConstruct.songs.length}** videos foram adicionados à fila.`, "Use ``" +
+				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
 				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
@@ -594,22 +582,34 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor("#FF0000"));
 		}
 	} else {
-		console.log('NOT entered playlist type');
-		serverQueue.songs.push(song);
+		if (videosarray) {
+			for (let i = 0; i < videosarray.length; i++) {
+				await serverQueue.songs.push(song_playlist[i]);
+			}
 
-		var isLivestream = `${timing(song.length)}`;
-		if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
+			message.channel.send(new Discord.RichEmbed()
+				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
+					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+				.setColor('#00FF00')
+				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
+		} else {
+			console.log('NOT entered playlist type');
 
-		return message.channel.send(new Discord.RichEmbed()
-			.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-			.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
-			.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
-			.addField(`Duração`, `${isLivestream}`, true)
-			.addField(`Posição`, `${serverQueue.songs.length}`, true)
-			.setThumbnail(song.thumbnail)
-			.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
-			.setColor("#00FF00")
-			.setURL(song.url));
+			serverQueue.songs.push(song);
+			var isLivestream = `${timing(song.length)}`;
+			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
+
+			return message.channel.send(new Discord.RichEmbed()
+				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
+				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
+				.addField(`Duração`, `${isLivestream}`, true)
+				.addField(`Posição`, `${serverQueue.songs.length}`, true)
+				.setThumbnail(song.thumbnail)
+				.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
+				.setColor("#00FF00")
+				.setURL(song.url));
+		}
 	}
 }
 
