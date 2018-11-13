@@ -87,7 +87,7 @@ module.exports.run = async (bot, message, args) => {
 						console.error('Error deleting all bot message after ending.');
 						return;
 					}
-				} else if (reason === 'incorrect_answer') {
+				} else if (reason === 'incorrect_answer' && !user_msgcollector.collected.array()[0].toString().startsWith('>')) {
 					await bot_msgcollector.collected.deleteAll();
 					await user_msgcollector.collected.deleteAll();
 					return message.channel.send("```css\n" +
