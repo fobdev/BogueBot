@@ -296,8 +296,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						var entry = parseInt(args[2]);
 
 						if (entry < 1) {
-							await message.channel.send(arg_embed
-								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
+							await message.channel.send(new Discord.RichEmbed()
+								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+								.setFooter(`Adicionado por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
 							await dispatcher.end();
 							return;
 						}
