@@ -34,179 +34,194 @@ module.exports.run = async (bot, message, args) => {
 
 	// Playlist support
 	if (isPlaylist) {
-		const playlist = await youtube.getPlaylist(url);
-		const videosarray = await playlist.getVideos();
-
-		await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray);
-	}
-
-
-	try {
-		video = await youtube.getVideo(url);
-		await video_player(bot, message, video, serverQueue, voiceChannel);
 		try {
-			message.delete();
-		} catch (e) {
-			console.error('Error deleting URL message.');
-		}
-	} catch (error) {
+			const playlist = await youtube.getPlaylist(url);
+			const videosarray = await playlist.getVideos();
 
-		// If the inputted message is not a subcommand, searchs a video.
-		if (subcommands.indexOf(args[0]) < 0) {
-
-			// Tro to get the args[0] string and puts the string in the search engine.
-			const search_limit = 8;
-			try {
-				videos = await youtube.searchVideos(search, search_limit);
-			} catch (e) {
-
-				return message.channel.send(new Discord.RichEmbed()
-					.setTitle("Ocorreu um erro na busca.")
-					.setColor("#FF0000"));
+			if (videosarray) {
+				message.channel.send(new Discord.RichEmbed()
+					.setTitle('Carregando playlist...')
+					.setColor('#00FF00')).then(msg => {
+					msg.delete(1000 * 10);
+				});
 			}
 
-			// Message Collectors for getting all the bot/user messages and delete them later if needed.
-			// Current Time Out: 30s
-			var bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
-				time: 1000 * 30
-			})
+			await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray);
+		} catch (e) {
+			console.error(`${e}: Erro ao carregar playlist.`);
+			return message.channel.send(new Discord.RichEmbed()
+				.setTitle('Erro ao carregar playlist.')
+				.setColor('#FF0000'));
+		}
+	} else {
+		try {
+			video = await youtube.getVideo(url);
+			await video_player(bot, message, video, serverQueue, voiceChannel);
+			try {
+				message.delete();
+			} catch (e) {
+				console.error('Error deleting URL message.');
+			}
+		} catch (error) {
 
-			bot_msgcollector.on('end', async (messages, reason) => {
-				switch (reason) {
-					case 'sucess':
-						{
-							await bot_msgcollector.collected.deleteAll();
-							await user_msgcollector.collected.deleteAll();
-							return;
-						}
-					case 'cancelled':
-						{
-							try {
-								user_msgcollector.stop();
-								await bot_msgcollector.collected.deleteAll();
-								return message.channel.send(new Discord.RichEmbed()
-									.setDescription(`A busca por **${search}** foi cancelada`)
-									.setColor("#FF0000"))
-							} catch (e) {
-								console.error('Error deleting all bot message after ending.');
-								return;
-							}
-						}
-					case 'incorrect_answer':
-						{
-							await bot_msgcollector.collected.deleteAll();
-							await user_msgcollector.collected.deleteAll();
-							return message.channel.send("```css\n" +
-								`[Comandos de música do ${bot.user.username}]
+			// If the inputted message is not a subcommand, searchs a video.
+			if (subcommands.indexOf(args[0]) < 0) {
 
->music [música]....................Toca um vídeo do YouTube / adiciona à fila.
->music (q)ueue.....................Exibe toda a fila do servidor.
-       (q)ueue [numero]............Pula para uma certa posição da fila.
-       (q)ueue (del)ete [numero]...Exclui um certo item da fila.
-       (q)ueue purge...............Limpa todos os itens da fila.
-       
->music np.........Mostra informações sobre o que está sendo tocado.
->music skip.......Pula a reprodução atual.
->music p..........Pausa ou despausa a reprodução atual.
->music earrape....Aumenta extremamente o volume da reprodução atual.
->music (l)eave....Sai do canal de voz e exclui a fila atual.` +
-								"```");
-						}
-					case 'no_video':
-						{
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
-								.setColor('#FF0000'));
-						}
-					case 'playlist':
-						return;
-					default:
-						{
-							await bot_msgcollector.collected.deleteAll();
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`A busca por **${search}** expirou.`)
-								.setColor("#FF0000"));
-						}
-				}
-			})
+				// Tro to get the args[0] string and puts the string in the search engine.
+				const search_limit = 8;
+				try {
+					videos = await youtube.searchVideos(search, search_limit);
+				} catch (e) {
 
-			// Gets the user input and gets a video from search.
-			if (videos.length > 0) {
-				// Prints all the videos found in the search (controlled by search_limit).
-				var search_embed = new Discord.RichEmbed()
-					.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
-					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-					.setColor("#00FF00");
-
-				var nullstr;
-				for (let i = 0; i < videos.length; i++) {
-					var current_video = await youtube.getVideo(videos[i].url);
-					var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
-					if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
-
-					if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
-					else nullstr = '\u200B';
-
-					search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-						`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+					return message.channel.send(new Discord.RichEmbed()
+						.setTitle("Ocorreu um erro na busca.")
+						.setColor("#FF0000"));
 				}
 
-				message.channel.send(search_embed
-					.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
-						'Esta mensagem expirará em 30 segundos.'));
-
-				var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+				// Message Collectors for getting all the bot/user messages and delete them later if needed.
+				// Current Time Out: 30s
+				var bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
 					time: 1000 * 30
 				})
 
-				user_msgcollector.on('collect', async msg => {
-					// Verify if the message is a number between all listed videos or is a cancel command
-					if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-						if (msg.content === 'c') {
-							try {
-								await bot_msgcollector.stop('cancelled');
-								await user_msgcollector.stop('cancelled');
+				bot_msgcollector.on('end', async (messages, reason) => {
+					switch (reason) {
+						case 'sucess':
+							{
+								await bot_msgcollector.collected.deleteAll();
+								await user_msgcollector.collected.deleteAll();
 								return;
-							} catch (e) {
-								console.error('Error stopping message collectors.');
 							}
-						}
-						// Try to get the selected video ID and set it in the 'video' var
-						try {
-							video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
-							try {
-								await user_msgcollector.stop('sucess');
-								await bot_msgcollector.stop('sucess');
-							} catch (e) {
-								console.error('Error handling the stop off all collectors.');
+						case 'cancelled':
+							{
+								try {
+									user_msgcollector.stop();
+									await bot_msgcollector.collected.deleteAll();
+									return message.channel.send(new Discord.RichEmbed()
+										.setDescription(`A busca por **${search}** foi cancelada`)
+										.setColor("#FF0000"))
+								} catch (e) {
+									console.error('Error deleting all bot message after ending.');
+									return;
+								}
 							}
-							video_player(bot, message, video, serverQueue, voiceChannel);
-						} catch (e) {
-							console.error('Error selecting video');
-							return message.channel.send(new Discord.RichEmbed()
-								.setTitle("Ocorreu um erro ao selecionar o vídeo.")
-								.setColor("#FF0000"));
-						}
-					} else {
-						// If didn't verified, restart the search with new collectors
-						await bot_msgcollector.stop('incorrect_answer');
-						await user_msgcollector.stop('incorrect_answer');
-						return;
+						case 'incorrect_answer':
+							{
+								await bot_msgcollector.collected.deleteAll();
+								await user_msgcollector.collected.deleteAll();
+								return message.channel.send("```css\n" +
+									`[Comandos de música do ${bot.user.username}]
+	
+	>music [música]....................Toca um vídeo do YouTube / adiciona à fila.
+	>music (q)ueue.....................Exibe toda a fila do servidor.
+		   (q)ueue [numero]............Pula para uma certa posição da fila.
+		   (q)ueue (del)ete [numero]...Exclui um certo item da fila.
+		   (q)ueue purge...............Limpa todos os itens da fila.
+		   
+	>music np.........Mostra informações sobre o que está sendo tocado.
+	>music skip.......Pula a reprodução atual.
+	>music p..........Pausa ou despausa a reprodução atual.
+	>music earrape....Aumenta extremamente o volume da reprodução atual.
+	>music (l)eave....Sai do canal de voz e exclui a fila atual.` +
+									"```");
+							}
+						case 'no_video':
+							{
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
+									.setColor('#FF0000'));
+							}
+						case 'playlist':
+							return;
+						default:
+							{
+								await bot_msgcollector.collected.deleteAll();
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription(`A busca por **${search}** expirou.`)
+									.setColor("#FF0000"));
+							}
 					}
 				})
-			} else {
-				if (isPlaylist)
-					await bot_msgcollector.stop('playlist');
-				else
-					await bot_msgcollector.stop('no_video');
 
-				return;
+				// Gets the user input and gets a video from search.
+				if (videos.length > 0) {
+					// Prints all the videos found in the search (controlled by search_limit).
+					var search_embed = new Discord.RichEmbed()
+						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
+						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+						.setColor("#00FF00");
+
+					var nullstr;
+					for (let i = 0; i < videos.length; i++) {
+						var current_video = await youtube.getVideo(videos[i].url);
+						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
+						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
+
+						if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
+						else nullstr = '\u200B';
+
+						search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
+							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+					}
+
+					message.channel.send(search_embed
+						.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
+							'Esta mensagem expirará em 30 segundos.'));
+
+					var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+						time: 1000 * 30
+					})
+
+					user_msgcollector.on('collect', async msg => {
+						// Verify if the message is a number between all listed videos or is a cancel command
+						if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+							if (msg.content === 'c') {
+								try {
+									await bot_msgcollector.stop('cancelled');
+									await user_msgcollector.stop('cancelled');
+									return;
+								} catch (e) {
+									console.error('Error stopping message collectors.');
+								}
+							}
+							// Try to get the selected video ID and set it in the 'video' var
+							try {
+								video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
+								try {
+									await user_msgcollector.stop('sucess');
+									await bot_msgcollector.stop('sucess');
+								} catch (e) {
+									console.error('Error handling the stop off all collectors.');
+								}
+								video_player(bot, message, video, serverQueue, voiceChannel);
+							} catch (e) {
+								console.error('Error selecting video');
+								return message.channel.send(new Discord.RichEmbed()
+									.setTitle("Ocorreu um erro ao selecionar o vídeo.")
+									.setColor("#FF0000"));
+							}
+						} else {
+							// If didn't verified, restart the search with new collectors
+							await bot_msgcollector.stop('incorrect_answer');
+							await user_msgcollector.stop('incorrect_answer');
+							return;
+						}
+					})
+				} else {
+					if (isPlaylist)
+						await bot_msgcollector.stop('playlist');
+					else
+						await bot_msgcollector.stop('no_video');
+
+					return;
+				}
+			} else {
+				console.log('music subcommand activated.');
+				subcmd(bot, message, args, serverQueue, voiceChannel);
 			}
-		} else {
-			console.log('music subcommand activated.');
-			subcmd(bot, message, args, serverQueue, voiceChannel);
 		}
 	}
+
 }
 
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
@@ -587,7 +602,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				await serverQueue.songs.push(song_playlist[i]);
 			}
 
-			message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.RichEmbed()
 				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
