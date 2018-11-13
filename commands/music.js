@@ -604,7 +604,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
+				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL));
 		} else {
 			console.log('NOT entered playlist type');
 
