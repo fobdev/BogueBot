@@ -561,6 +561,5 @@ function timing(secs) {
 
 module.exports.help = {
 	name: "music",
-	name_2: "m",
-	name_3: "p"
+	name_2: "m"
 }
