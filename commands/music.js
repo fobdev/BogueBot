@@ -193,7 +193,7 @@ module.exports.run = async (bot, message, args) => {
 									console.error('Error handling the stop off all collectors.');
 								}
 
-								await video_player(bot, message, video, serverQueue, voiceChannel);
+								video_player(bot, message, video, serverQueue, voiceChannel);
 							} catch (e) {
 								console.error('Error selecting video');
 								return message.channel.send(new Discord.RichEmbed()
@@ -216,7 +216,6 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				console.log('music subcommand activated.');
 				subcmd(bot, message, args, serverQueue, voiceChannel);
 			}
 		}
@@ -302,7 +301,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 				var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**`;
 
-				console.log(`Current song LEN: ${serverQueue.songs[0].length}`);
 				if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
 				var now_playing_embed = new Discord.RichEmbed()
@@ -395,7 +393,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						}
 					} else {
 						var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
-						if (serverQueue.songs.length > 10) {
+						if (serverQueue.songs.length > 9) {
 							var ultralarge_queue = '';
 							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 
@@ -503,7 +501,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	var unavaliable_videos = 0;
 	var song_info;
 	var song_playlist = new Array();
-	if (videosarray) {
+	if (videosarray.length !== 0) {
 		for (let v = 0; v < videosarray.length; v++) {
 			video = videosarray[v];
 
@@ -574,7 +572,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 		queue.set(message.guild.id, queueConstruct);
 
-		if (videosarray) {
+		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
 				await queueConstruct.songs.push(song_playlist[i]);
 			}
@@ -596,6 +594,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		try {
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
+
 			play(bot, message, message.guild, queueConstruct.songs[0]);
 
 		} catch (e) {
@@ -608,7 +607,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor("#FF0000"));
 		}
 	} else {
-		if (videosarray) {
+		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
 				await serverQueue.songs.push(song_playlist[i]);
 			}
@@ -619,8 +618,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor('#00FF00')
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL));
 		} else {
-			console.log('NOT entered playlist type');
-
 			serverQueue.songs.push(song);
 			var isLivestream = `${timing(song.length)}`;
 			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
