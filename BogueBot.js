@@ -84,11 +84,18 @@ bot.on('ready', async () => {
     console.log(`${bot.user.username} is online!`);
     servers_show();
 
+
+    var current_servers = bot.guilds.array();
+    var members_reached = 0;
+
+    for (var i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
+
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
-    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} / ${botconfig.prefix}${invitefile.help.name}`, {
-        type: 'PLAYING'
-    });
+    bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
+        ` | ${members_reached} usuários`, {
+            type: 'PLAYING'
+        });
 });
 
 bot.on('guildCreate', guild => {
