@@ -391,22 +391,25 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 					} else {
+						var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 						if (serverQueue.songs.length > 10) {
 							var ultralarge_queue = '';
+							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 
-							for (let i = 0; i < serverQueue.songs.length; i++) {
-								ultralarge_queue += `${i + 1} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
+							for (let i = 1; i < serverQueue.songs.length; i++) {
+								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
-							return message.channel.send("```css\n" +
+							return message.channel.send("```HTML\n" +
 								`[Fila de ${message.guild.name}]
+Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[i].length)}
+
 ${ultralarge_queue}
 ` +
 								"```")
 						}
 
 						if (serverQueue.songs.length < 6) {
-							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
 							if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
@@ -446,7 +449,6 @@ ${ultralarge_queue}
 							}
 						} else {
 							var queue_element = '';
-							var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 							var largequeue_embed = new Discord.RichEmbed()
 								.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
 								.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})** - ` +
