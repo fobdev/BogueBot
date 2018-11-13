@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../botconfig.json")
+const botconfig = require("../botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     let del_arg = args.join(" ");
@@ -20,7 +20,8 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send(delfail_embed);
     } else {
         try {
-            const perm_embed = new Discord.RichEmbed();
+            const perm_embed = new Discord.RichEmbed()
+                .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();
@@ -28,14 +29,10 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.bulkDelete(del_arg, true);
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
-                    .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
-                    .setColor("#00FF00")).then(message => {
-                    message.delete(1000 * 3);
-                });
+                    .setColor("#00FF00"));
             } else {
                 return message.channel.send(perm_embed
                     .setTitle("Usuário não tem permissão para excluir mensagens.")
-                    .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL)
                     .setColor("#FF0000"));
             }
         } catch (e) {
@@ -46,5 +43,5 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "clear"
+    name: "clear",
 }
