@@ -402,7 +402,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							return message.channel.send("```HTML\n" +
 								`[Fila de ${message.guild.name}]
-Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[i].length)}
+Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
 ${ultralarge_queue}
 ` +
