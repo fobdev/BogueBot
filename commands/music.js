@@ -381,11 +381,16 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							}
 
 							queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
-							return message.channel.send(queue_embed
+
+							if (serverQueue.songs.length > 1) return message.channel.send(queue_embed
 								.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
 									"para pular para qualquer posição.**\n" +
 									"**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]`` " +
 									"para excluir um item da fila.**"));
+							else {
+								return message.channel.send(queue_embed
+									.addField('\u200B', "**Não há itens adicionais na fila.**"));
+							}
 						} else {
 							var queue_element = '';
 							var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
