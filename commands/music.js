@@ -8,21 +8,21 @@ var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
 const youtube = new YouTube(ytkey)
-var leaving = false;
 var jumped = false;
 var earrape = false;
-var isPlaylist = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
+var isPlaylist;
 
 module.exports.run = async (bot, message, args) => {
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	url = args[0];
+	isPlaylist = url.includes('list=');
 	var search = args.join(" ");
 
 	if (!voiceChannel) {
@@ -31,19 +31,30 @@ module.exports.run = async (bot, message, args) => {
 			.setColor("FF0000"));
 	}
 
-	if (url.includes('list=')) {
+	// Playlist support
+	if (isPlaylist) {
 		// Playlist ID
-		var playlist = await youtube.getPlaylist(url);
-		var videosarray = await playlist.getVideos;
+		const playlist = await youtube.getPlaylist(url);
+		const videosarray = await playlist.getVideos();
 
-		return message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.videos[1]}`)
-		//video_player(bot, message, args, video, serverQueue, voiceChannel);
+		// var vd_str = '';
+		// for (let i = 0; i < videosarray.length; i++) {
+		// 	vd_str += `${i} - ${videosarray[i].title}\n`
+		// }
+		// message.channel.send(`Playlist title: ${playlist.title}\nPlaylist size: ${videosarray.length}\nVideos: \n${vd_str}`)
+
+		// video = await youtube.getVideo(videosarray[i].url);
+
+		await video_player(bot, message, videosarray[0], serverQueue, voiceChannel, videosarray);
+		// for (let i = 1; i < videosarray.length; i++) {
+		// 	await video_player(bot, message, videosarray[i], serverQueue, voiceChannel);
+		// }
 	}
 
 
 	try {
 		video = await youtube.getVideo(url);
-		video_player(bot, message, video, serverQueue, voiceChannel);
+		await video_player(bot, message, video, serverQueue, voiceChannel);
 		try {
 			message.delete();
 		} catch (e) {
@@ -72,26 +83,32 @@ module.exports.run = async (bot, message, args) => {
 			})
 
 			bot_msgcollector.on('end', async (messages, reason) => {
-				if (reason === 'sucess') {
-					await bot_msgcollector.collected.deleteAll();
-					await user_msgcollector.collected.deleteAll();
-					return;
-				} else if (reason === 'cancelled') {
-					try {
-						user_msgcollector.stop();
-						await bot_msgcollector.collected.deleteAll();
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`A busca por **${search}** foi cancelada`)
-							.setColor("#FF0000"))
-					} catch (e) {
-						console.error('Error deleting all bot message after ending.');
-						return;
-					}
-				} else if (reason === 'incorrect_answer') {
-					await bot_msgcollector.collected.deleteAll();
-					await user_msgcollector.collected.deleteAll();
-					return message.channel.send("```css\n" +
-						`[Comandos de música do ${bot.user.username}]
+				switch (reason) {
+					case 'sucess':
+						{
+							await bot_msgcollector.collected.deleteAll();
+							await user_msgcollector.collected.deleteAll();
+							return;
+						}
+					case 'cancelled':
+						{
+							try {
+								user_msgcollector.stop();
+								await bot_msgcollector.collected.deleteAll();
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription(`A busca por **${search}** foi cancelada`)
+									.setColor("#FF0000"))
+							} catch (e) {
+								console.error('Error deleting all bot message after ending.');
+								return;
+							}
+						}
+					case 'incorrect_answer':
+						{
+							await bot_msgcollector.collected.deleteAll();
+							await user_msgcollector.collected.deleteAll();
+							return message.channel.send("```css\n" +
+								`[Comandos de música do ${bot.user.username}]
 
 >music [música]....................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue.....................Exibe toda a fila do servidor.
@@ -104,12 +121,23 @@ module.exports.run = async (bot, message, args) => {
 >music p..........Pausa ou despausa a reprodução atual.
 >music earrape....Aumenta extremamente o volume da reprodução atual.
 >music (l)eave....Sai do canal de voz e exclui a fila atual.` +
-						"```");
-				} else {
-					await bot_msgcollector.collected.deleteAll();
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`A busca por **${search}** expirou.`)
-						.setColor("#FF0000"));
+								"```");
+						}
+					case 'no_video':
+						{
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
+								.setColor('#FF0000'));
+						}
+					case 'playlist':
+						return;
+					default:
+						{
+							await bot_msgcollector.collected.deleteAll();
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`A busca por **${search}** expirou.`)
+								.setColor("#FF0000"));
+						}
 				}
 			})
 
@@ -178,9 +206,12 @@ module.exports.run = async (bot, message, args) => {
 					}
 				})
 			} else {
-				return message.channel.send(new Discord.RichEmbed()
-					.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
-					.setColor('#FF0000'));
+				if (isPlaylist)
+					await bot_msgcollector.stop('playlist');
+				else
+					await bot_msgcollector.stop('no_video');
+
+				return;
 			}
 		} else {
 			console.log('music subcommand activated.');
@@ -237,7 +268,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "l":
 			{
 				try {
-					leaving = true;
 					voiceChannel.leave();
 					queue.delete(message.guild.id);
 					return message.channel.send(arg_embed
@@ -357,6 +387,20 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 					} else {
+						if (serverQueue.songs.length > 35) {
+							var ultralarge_queue = '';
+
+							for (let i = 0; i < serverQueue.songs.length; i++) {
+								ultralarge_queue += `${i + 1} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
+							}
+
+							return message.channel.send("```css\n" +
+								`[Fila de ${message.guild.name}]
+${ultralarge_queue}
+` +
+								"```")
+						}
+
 						if (serverQueue.songs.length < 6) {
 							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
@@ -445,18 +489,51 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	}
 }
 
-async function video_player(bot, message, video, serverQueue, voiceChannel) {
+async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = []) {
 	// Collect all the information from the 'video' variable
+	var song_info;
+	var song;
+	var song_playlist = new Array();
+	if (videosarray) {
+		for (let v = 0; v < videosarray.length; v++) {
+			video = videosarray[v];
+
+			try {
+				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+			} catch (e) {
+				console.error(`${e}: [${message.author.username}] Tried to call song info with no song`);
+				return message.channel.send(new Discord.RichEmbed()
+					.setTitle('🚫 Não tem músicas sendo tocadas no momento.')
+					.setColor("#FF0000"));
+			}
+
+			song_playlist[v] = {
+				id: video.id,
+				title: song_info.title,
+				url: `https://www.youtube.com/watch?v=${video.id}`,
+				thumbnail: song_info.thumbnail_url,
+				length: song_info.length_seconds,
+				author: message.author.id,
+				channel: song_info.author.name,
+				channel_url: song_info.author.channel_url,
+				media_artist: song_info.media.artist,
+				media_album: song_info.media.album,
+				media_writers: song_info.media.writers,
+				media_type: song_info.media.category
+			};
+		}
+	}
+
 	try {
-		var song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+		song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 	} catch (e) {
-		console.error(`[${message.author.username}] Tried to call song info with no song`);
+		console.error(`${e}: [${message.author.username}] Tried to call song info with no song`);
 		return message.channel.send(new Discord.RichEmbed()
 			.setTitle('🚫 Não tem músicas sendo tocadas no momento.')
 			.setColor("#FF0000"));
 	}
 
-	var song = {
+	song = {
 		id: video.id,
 		title: song_info.title,
 		url: `https://www.youtube.com/watch?v=${video.id}`,
@@ -471,20 +548,29 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 		media_type: song_info.media.category
 	};
 
-	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
 			textChannel: message.channel,
 			voiceChannel: voiceChannel,
 			connection: null,
-			songs: [],
-			volume: 5,
-			playing: true
+			songs: []
 		};
 
 		queue.set(message.guild.id, queueConstruct);
 
-		queueConstruct.songs.push(song);
+		if (videosarray) {
+			for (let i = 0; i < videosarray.length; i++) {
+				await queueConstruct.songs.push(song_playlist[i]);
+			}
+
+			message.channel.send(new Discord.RichEmbed()
+				.addField(`**${queueConstruct.songs.length}** videos foram adicionados à fila.`, "Use ``" +
+					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+				.setColor('#00FF00')
+				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
+		} else {
+			queueConstruct.songs.push(song);
+		}
 
 		try {
 			var connection = await voiceChannel.join();
@@ -501,6 +587,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 				.setColor("#FF0000"));
 		}
 	} else {
+		console.log('NOT entered playlist type');
 		serverQueue.songs.push(song);
 
 		var isLivestream = `${timing(song.length)}`;
@@ -521,12 +608,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel) {
 
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	if (!leaving) {
-		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-			quality: 'highestaudio'
-		}));
-	} else return;
+	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
+		quality: 'highestaudio'
+	}));
 
 	// message filtering for rich embed of 'now playing'
 	var artist_str = `${song.media_artist}`;
@@ -561,10 +646,9 @@ async function play(bot, message, guild, song) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
 
-			if (!leaving)
-				message.channel.send(new Discord.RichEmbed()
-					.setTitle("A fila de músicas acabou.")
-					.setColor("#00FF00"));
+			message.channel.send(new Discord.RichEmbed()
+				.setTitle("A fila de músicas acabou.")
+				.setColor("#00FF00"));
 
 			return;
 		}
