@@ -10,6 +10,7 @@ const queue = new Map();
 const youtube = new YouTube(ytkey)
 var jumped = false;
 var earrape = false;
+var leaving = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -268,6 +269,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "l":
 			{
 				try {
+					leaving = true;
 					voiceChannel.leave();
 					queue.delete(message.guild.id);
 					return message.channel.send(arg_embed
@@ -375,19 +377,21 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							}
 
 							jumped = false;
-							await dispatcher.end();
-
-							return message.channel.send(arg_embed
+							message.channel.send(arg_embed
 								.setTitle(`Fila pulada para a posição **${args[1]}**`)
 								.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 								.setColor("#00FF00"));
+
+							await dispatcher.end();
+
+							return;
 						} else {
 							await message.channel.send(arg_embed
 								.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length}**`)
 								.setColor("#FF0000"));
 						}
 					} else {
-						if (serverQueue.songs.length > 35) {
+						if (serverQueue.songs.length > 10) {
 							var ultralarge_queue = '';
 
 							for (let i = 0; i < serverQueue.songs.length; i++) {
@@ -548,6 +552,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		media_type: song_info.media.category
 	};
 
+	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
 			textChannel: message.channel,
@@ -608,10 +613,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-		quality: 'highestaudio'
-	}));
+	if (!leaving) {
+		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
+			quality: 'highestaudio'
+		}));
+	} else return;
 
 	// message filtering for rich embed of 'now playing'
 	var artist_str = `${song.media_artist}`;
@@ -646,10 +653,11 @@ async function play(bot, message, guild, song) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
 
-			message.channel.send(new Discord.RichEmbed()
-				.setTitle("A fila de músicas acabou.")
-				.setColor("#00FF00"));
-
+			if (!leaving) {
+				message.channel.send(new Discord.RichEmbed()
+					.setTitle("A fila de músicas acabou.")
+					.setColor("#00FF00"));
+			}
 			return;
 		}
 
