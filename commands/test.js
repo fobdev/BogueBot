@@ -1,35 +1,38 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-	const user_collector = new Discord.MessageCollector(message.channel, msg => msg.author.id === message.author.id, {
-		time: 1000 * 10
-	});
 
-	const bot_collector = new Discord.MessageCollector(message.channel, msg => msg.author.id === bot.user.id, {
-		time: 1000 * 10
-	});
-
-	message.channel.send("Do you like me?");
-	user_collector.on('collect', async message => {
-
-		if (message.content === "yes") {
-			await user_collector.collected.deleteAll();
-			return message.channel.send("Awww, thanks.");
-		} else if (message.content === "no") {
-			await user_collector.collected.deleteAll();
-			return message.channel.send("Oh...");
-		}
-	})
-
-	user_collector.on('end', () => {
-		var collected_array = user_collector.collected.array()[0];
-		if (collected_array == 'yes' || collected_array == 'no') {
-			return message.channel.send("Finished sucessfully");
-		} else {
-			bot_collector.collected.deleteAll();
-			return message.channel.send('Message timed out');
-		}
-	})
+	//var pages_embed = new Discord.RichEmbed()
+	//	.setTitle('This is a embed.')
+	//	.setColor("#00FF00");
+	//
+	//const react_controls = {
+	//	NEXT: '▶',
+	//	PREV: '◀'
+	//}
+	//
+	//const react_collector = new Discord.ReactionCollector(message, (reaction, user) => Object.values(react_controls).includes(reaction.emoji.name))
+	//
+	//
+	//react_collector.on('collect', (reaction, user) => {
+	//	var page_number = 0;
+	//	switch (reaction.emoji.name) {
+	//		case emojis.NEXT:
+	//			{
+	//				page_number++;
+	//				pages_embed.title = `Page ${page_number}`
+	//			}
+	//			break;
+	//		case emojis.PREV:
+	//			{
+	//				page_number--;
+	//				pages_embed.title = `Page ${page_number}`
+	//			}
+	//			break;
+	//	}
+	//})
+	//
+	//message.channel.send(pages_embed);
 }
 
 module.exports.help = {
