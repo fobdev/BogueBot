@@ -185,13 +185,15 @@ module.exports.run = async (bot, message, args) => {
 							// Try to get the selected video ID and set it in the 'video' var
 							try {
 								video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
+
 								try {
 									await user_msgcollector.stop('sucess');
 									await bot_msgcollector.stop('sucess');
 								} catch (e) {
 									console.error('Error handling the stop off all collectors.');
 								}
-								video_player(bot, message, video, serverQueue, voiceChannel);
+
+								await video_player(bot, message, video, serverQueue, voiceChannel);
 							} catch (e) {
 								console.error('Error selecting video');
 								return message.channel.send(new Discord.RichEmbed()
@@ -500,7 +502,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	// Collect all the information from the 'video' variable
 	var unavaliable_videos = 0;
 	var song_info;
-	var song;
 	var song_playlist = new Array();
 	if (videosarray) {
 		for (let v = 0; v < videosarray.length; v++) {
@@ -546,7 +547,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
-	song = {
+	var song = {
 		id: video.id,
 		title: song_info.title,
 		url: `https://www.youtube.com/watch?v=${video.id}`,
@@ -567,7 +568,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			textChannel: message.channel,
 			voiceChannel: voiceChannel,
 			connection: null,
-			songs: []
+			songs: [],
+			playing: true
 		};
 
 		queue.set(message.guild.id, queueConstruct);
@@ -588,7 +590,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor('#00FF00')
 				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
 		} else {
-			queueConstruct.songs.push(song);
+			await queueConstruct.songs.push(song);
 		}
 
 		try {
