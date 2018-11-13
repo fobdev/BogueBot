@@ -375,8 +375,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
 									if (parseInt(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
 
-									if (i === 1) first_entry === 'A seguir:'
-									else '\u200B'
+									if (i === 1) first_entry = 'A seguir:';
+									else first_entry = '\u200B';
 
 									queue_embed.addField(first_entry, `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
 										`${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
