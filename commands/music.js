@@ -401,7 +401,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
-							return message.channel.send("```Markdown\n" +
+							return message.channel.send("```markdown\n" +
 								`[Fila de ${message.guild.name}]
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
@@ -498,6 +498,7 @@ ${ultralarge_queue}
 
 async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = []) {
 	// Collect all the information from the 'video' variable
+	var unavaliable_videos = 0;
 	var song_info;
 	var song;
 	var song_playlist = new Array();
@@ -508,10 +509,15 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			try {
 				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
 			} catch (e) {
-				console.error(`${e}: [${message.author.username}] Tried to call song info with no song`);
-				return message.channel.send(new Discord.RichEmbed()
-					.setTitle('🚫 Não tem músicas sendo tocadas no momento.')
-					.setColor("#FF0000"));
+				unavaliable_videos++;
+				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
+				// message.channel.send(new Discord.RichEmbed()
+				// 	.setTitle('🚫 Ocorreu um erro ao visualizar músicas.')
+				// 	.setColor("#FF0000"));
+			}
+
+			if (!song_info) {
+				return;
 			}
 
 			song_playlist[v] = {
@@ -571,8 +577,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				await queueConstruct.songs.push(song_playlist[i]);
 			}
 
+			var pl_string = `**${videosarray.length}** videos foram adicionados à fila`;
+			if (unavaliable_videos > 0) {
+				pl_string += `, **${unavaliable_videos}** videos indisponíveis.`
+			} else pl_string += '.';
+
 			message.channel.send(new Discord.RichEmbed()
-				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
+				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
 				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
