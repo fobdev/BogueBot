@@ -533,7 +533,7 @@ async function play(bot, message, guild, song) {
 		.addField("Adicionado por", `[<@${song.author}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
-		.addField("Canal de voz", `🔊 ${message.member.voiceChannel.name}`, true)
+		.addField("Canal de voz", `🔊 **${message.member.voiceChannel.name}**`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
