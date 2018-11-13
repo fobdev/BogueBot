@@ -11,7 +11,6 @@ const bot = new Discord.Client({
 });
 
 bot.commands = new Discord.Collection();
-
 fs.readdir('./commands/', (err, files) => {
     if (err) console.error(err);
 
@@ -29,7 +28,6 @@ fs.readdir('./commands/', (err, files) => {
         bot.commands.set(props.help.name, props);
         try {
             bot.commands.set(props.help.name_2, props);
-            bot.commands.set(props.help.name_3, props);
         } catch (e) {
             console.error(`${e}: Secondary / terciary command name not loaded properly.`);
         }
