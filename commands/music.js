@@ -76,8 +76,7 @@ module.exports.run = async (bot, message, args) => {
 					await bot_msgcollector.collected.deleteAll();
 					await user_msgcollector.collected.deleteAll();
 					return;
-				}
-				if (reason === 'cancelled' || reason === 'incorrect_answer') {
+				} else if (reason === 'cancelled') {
 					try {
 						user_msgcollector.stop();
 						await bot_msgcollector.collected.deleteAll();
@@ -88,6 +87,23 @@ module.exports.run = async (bot, message, args) => {
 						console.error('Error deleting all bot message after ending.');
 						return;
 					}
+				} else if (reason === 'incorrect_answer') {
+					await bot_msgcollector.collected.deleteAll();
+					return message.channel.send("```css\n" +
+						`[Comandos de música do ${bot.user.username}]
+
+>music [música]...Toca um vídeo do YouTube / adiciona à fila.
+>music (q)ueue....Exibe toda a fila do servidor.
+       (q)ueue [numero]............Pula para uma certa posição da fila.
+       (q)ueue (del)ete [numero]...Exclui um certo item da fila.
+       (q)ueue purge...............Limpa todos os itens da fila.
+       
+>music np.........Mostra informações sobre o que está sendo tocado.
+>music skip.......Pula a reprodução atual.
+>music p..........Pausa ou despausa a reprodução atual.
+>music earrape....Aumenta extremamente o volume da reprodução atual.
+>music (l)eave....Sai do canal de voz e exclui a fila atual.` +
+						"```");
 				} else {
 					await bot_msgcollector.collected.deleteAll();
 					return message.channel.send(new Discord.RichEmbed()
