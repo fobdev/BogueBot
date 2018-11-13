@@ -2,25 +2,7 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 const fs = require("fs");
 
-//file_array = new Discord.Collection();
-//fs.readdir('.', (err, files) => {
-//    if (err) console.error(err);
-//    let jsfile = files.filter(f => f.split(".").pop() === "js");
-//    if (jsfile.length < 1) throw new Error("Could not find commands.");
-//
-//    jsfile.forEach((f, i) => {
-//        let props = require(`commands/${f}`);
-//        file_array.set(props.help.descr, props);
-//    });
-//});
-
-
 module.exports.run = async (bot, message, args) => {
-    //  let command_file = file_array.get(message.content.slice(prefix.length + this.help.name));
-    //
-    //  console.log(command_file);
-
-
     const music_commands_small =
         "[``(m)usic                    ``]";
 
