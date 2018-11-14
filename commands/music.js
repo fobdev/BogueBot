@@ -331,7 +331,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						if (entry < 1) {
 							await message.channel.send(new Discord.RichEmbed()
 								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-								.setFooter(`Adicionado por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
+								.setFooter(`Música adicionada por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
 							await dispatcher.end();
 							return;
 						}
@@ -478,12 +478,13 @@ ${ultralarge_queue}
 			{
 				try {
 					if (dispatcher.speaking) {
-						await message.channel.send(arg_embed
-							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
+						await message.channel.send(new Discord.RichEmbed()
+							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+							.setFooter(`Música adicionada por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
 						await dispatcher.end();
 						return;
 					} else {
-						return message.channel.send(arg_embed
+						return message.channel.send(new Discord.RichEmbed()
 							.setTitle("Não tem nada tocando que possa ser pulado.")
 							.setColor("#FF0000"));
 					}
