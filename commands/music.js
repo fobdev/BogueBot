@@ -588,7 +588,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${song_playlist[0].author} - Total de ${timing(playlist_length)}`, song_playlist[0].author.displayAvatarURL));
+				.setFooter(`Adicionado por ${message.author.username} - Total de ${timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			await queueConstruct.songs.push(song);
 		}
