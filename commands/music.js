@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
 
 			if (videosarray) {
 				message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Carregando playlist **${playlist.title}** de [${playlist.channelTitle}](${playlist.channel.url})...`)
+					.setDescription(`Carregando playlist **${playlist.title}** de **[${playlist.channelTitle}](${playlist.channel.url})**...`)
 					.setColor('#00FF00'));
 			}
 
