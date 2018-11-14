@@ -573,7 +573,9 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		queue.set(message.guild.id, queueConstruct);
 
 		if (videosarray.length !== 0) {
+			var playlist_length = 0;
 			for (let i = 0; i < videosarray.length; i++) {
+				playlist_length += parseInt(song_playlist[i].length);
 				await queueConstruct.songs.push(song_playlist[i]);
 			}
 
@@ -586,7 +588,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.displayName}`, message.author.displayAvatarURL));
+				.setFooter(`Adicionado por ${song_playlist[0].author} - Total de ${timing(playlist_length)}`, song_playlist[0].author.displayAvatarURL));
 		} else {
 			await queueConstruct.songs.push(song);
 		}
