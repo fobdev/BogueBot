@@ -137,27 +137,16 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} left server [${guild.name}].`);
+    console.log(`${bot.user.username} was kicke/banned from server [${guild.name}].`);
     servers_show();
 });
 
 bot.on('guildMemberAdd', member => {
-    console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
-    const channel = member.guild.channels.find(ch => ch.name === 'general');
-
-    if (!channel) return console.log(`No channel named 'general' found in [${guild.name}].`);
-
-    channel.send(`${member} oiiiiiiiiiiiiiiiiiii`);
-    return console.log(`Welcome message sent to [${member.displayName}] in [${member.guild.name}].`);
+    return console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
 });
 
 bot.on('guildMemberRemove', member => {
-    const channel = member.guild.channels.find(ch => ch.name === 'general');
-    if (!channel) return;
-    console.log(`User[${member.displayName}] left server[${member.guild.name}]`)
-    channel.send(new Discord.RichEmbed()
-        .setDescription(`**${member}** saiu do servidor.`)
-        .setColor("#FF0000"));
+    return console.log(`MEMBER: [${member.displayName}] left server -> [${member.guild.name}].`)
 });
 
 var copycat_switch = false;
