@@ -67,7 +67,9 @@ module.exports.run = async (bot, message, args) => {
 
     const fun_commands =
         "|``" + `${botconfig.prefix}` + "lenny              ``| " + "`` - `` **Lenny face.\n**" +
-        "``" + `${botconfig.prefix}` + "copycat            ``|" + "`` - `` **O comando mais irritante de todos.**";
+        "|``" + `${botconfig.prefix}` + "flipcoin           ``| " + "`` - `` **Jogue uma moeda para cima.\n**" +
+        "|``" + `${botconfig.prefix}` + "dice [dados]       ``| " + "`` - `` **Role 1 ou mais dados para cima e veja o resultado.\n**" +
+        "|``" + `${botconfig.prefix}` + "copycat            ``| " + "`` - `` **O comando mais irritante de todos.**";
 
     let help_embed = new Discord.RichEmbed()
         .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
