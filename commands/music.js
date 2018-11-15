@@ -330,8 +330,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						if (entry < 1) {
 							await message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-								.setFooter(`Música adicionada por ${serverQueue.songs[0].author.username}`, serverQueue.songs[0].author.displayAvatarURL));
+								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
 							await dispatcher.end();
 							return;
 						}
@@ -430,8 +429,8 @@ ${ultralarge_queue}
 									if (i === 1) first_entry = 'A seguir:';
 									else first_entry = '\u200B';
 
-									queue_embed.addField(first_entry, `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-										`${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].authorID}>]`);
+									queue_embed.addField(first_entry, `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** [<@${serverQueue.songs[i].authorID}>]\n` +
+										`${inQueueIsLivestream}`);
 								}
 
 								fulltime += parseInt(serverQueue.songs[i].length);
@@ -481,7 +480,6 @@ ${ultralarge_queue}
 						var current_music = serverQueue.songs[0];
 						await message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** pulou **[${current_music.title}](${current_music.url})**`)
-							.setFooter(`Música adicionada por ${current_music.author.username}`, current_music.author.displayAvatarURL)
 							.setColor("#00FF00"));
 						await dispatcher.end();
 						return;
@@ -528,7 +526,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				url: `https://www.youtube.com/watch?v=${video.id}`,
 				thumbnail: song_info.thumbnail_url,
 				length: song_info.length_seconds,
-				author: message.author.id,
+				authorID: message.author.id,
+				author: message.author,
 				channel: song_info.author.name,
 				channel_url: song_info.author.channel_url,
 				media_artist: song_info.media.artist,
@@ -663,7 +662,7 @@ async function play(bot, message, guild, song) {
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
-		.addField("Adicionado por", `[<@${song.author}>]`, true)
+		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
 		.addField("Canal de voz", `🔊 **${message.member.voiceChannel.name}**`, true)
