@@ -331,7 +331,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						if (entry < 1) {
 							await message.channel.send(new Discord.RichEmbed()
 								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-								.setFooter(`Música adicionada por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
+								.setFooter(`Música adicionada por ${serverQueue.songs[0].author.username}`, serverQueue.songs[0].author.displayAvatarURL));
 							await dispatcher.end();
 							return;
 						}
@@ -431,7 +431,7 @@ ${ultralarge_queue}
 									else first_entry = '\u200B';
 
 									queue_embed.addField(first_entry, `**${i} - [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})**\n` +
-										`${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].author}>]`);
+										`${inQueueIsLivestream}\nAdicionado por: [<@${serverQueue.songs[i].authorID}>]`);
 								}
 
 								fulltime += parseInt(serverQueue.songs[i].length);
@@ -458,7 +458,7 @@ ${ultralarge_queue}
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
 								queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
-									` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].author}>]\n`
+									` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].authorID}>]\n`
 
 								fulltime += parseInt(serverQueue.songs[i].length);
 								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
@@ -481,7 +481,7 @@ ${ultralarge_queue}
 						var current_music = serverQueue.songs[0];
 						await message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** pulou **[${current_music.title}](${current_music.url})**`)
-							.setFooter(`Música adicionada por ${current_music.author}`, current_music.author.displayAvatarURL)
+							.setFooter(`Música adicionada por ${current_music.author.username}`, current_music.author.displayAvatarURL)
 							.setColor("#00FF00"));
 						await dispatcher.end();
 						return;
@@ -554,7 +554,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		url: `https://www.youtube.com/watch?v=${video.id}`,
 		thumbnail: song_info.thumbnail_url,
 		length: song_info.length_seconds,
-		author: message.author.id,
+		authorID: message.author.id,
+		author: message.author,
 		channel: song_info.author.name,
 		channel_url: song_info.author.channel_url,
 		media_artist: song_info.media.artist,
