@@ -478,9 +478,11 @@ ${ultralarge_queue}
 			{
 				try {
 					if (dispatcher.speaking) {
+						var current_music = serverQueue.songs[0];
 						await message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-							.setFooter(`Música adicionada por ${serverQueue.songs[0].author}`, serverQueue.songs[0].author.displayAvatarURL));
+							.setDescription(`**${message.author.username}** pulou **[${current_music.title}](${current_music.url})**`)
+							.setFooter(`Música adicionada por ${current_music.author}`, current_music.author.displayAvatarURL)
+							.setColor("#00FF00"));
 						await dispatcher.end();
 						return;
 					} else {
