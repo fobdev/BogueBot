@@ -137,7 +137,7 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} was kicke/banned from server [${guild.name}].`);
+    console.log(`${bot.user.username} was kicked/banned from server [${guild.name}].`);
     servers_show();
 });
 
