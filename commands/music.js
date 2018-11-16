@@ -14,7 +14,7 @@ var leaving = false;
 var repeating = false;
 var dispatcher;
 
-var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['r', 'repeat', 'earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
