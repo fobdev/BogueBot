@@ -11,6 +11,7 @@ const youtube = new YouTube(ytkey)
 var jumped = false;
 var earrape = false;
 var leaving = false;
+var repeating = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -230,6 +231,31 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 	// Subcommands switch
 	switch (url) {
+		case "r":
+		case "repeat":
+			{
+				var current_music = serverQueue.songs[0];
+
+				if (current_music) {
+					if (!repeating) {
+						repeating = true;
+						message.channel.send(new Discord.RichEmbed()
+							.setDescription(`Repetindo **${current_music}**`)
+							.setFooter(`Solicitado por ${message.author.username}`, message.author.displayAvatarURL)
+							.setColor("#00FF00"));
+					} else {
+						repeating = false;
+						message.channel.send(new Discord.RichEmbed()
+							.setDescription(`O player não está mais repetindo.`)
+							.setFooter(`Solicitado por ${message.author.username}`, message.author.displayAvatarURL)
+							.setColor("#00FF00"));
+					}
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription("Não tem nada sendo tocado no momento")
+						.setColor("FF0000"));
+				}
+			}
 		case "earrape":
 			{
 				if (!earrape) {
@@ -658,9 +684,12 @@ async function play(bot, message, guild, song) {
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
+	var author_string;
+	if (repeating) author_string = `${bot.user.username} Music Player 🔁`;
+	else author_string = `${bot.user.username} Music Player`;
 
 	var music_embed = new Discord.RichEmbed()
-		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+		.setAuthor(`${author_string}`, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
@@ -678,22 +707,29 @@ async function play(bot, message, guild, song) {
 	if (!jumped)
 		await message.channel.send(music_embed);
 
-	dispatcher.on('end', () => {
-		if (serverQueue.songs.length === 1) {
-			queue.delete(guild.id);
-			serverQueue.voiceChannel.leave();
+	if (repeating) {
+		dispatcher.on('end', () => {
+			play(bot, message, guild, serverQueue.songs[0]);
+		});
+	} else {
+		dispatcher.on('end', () => {
+			if (serverQueue.songs.length === 1) {
+				queue.delete(guild.id);
+				serverQueue.voiceChannel.leave();
 
-			if (!leaving) {
-				message.channel.send(new Discord.RichEmbed()
-					.setTitle("A fila de músicas acabou.")
-					.setColor("#00FF00"));
+				if (!leaving) {
+					message.channel.send(new Discord.RichEmbed()
+						.setTitle("A fila de músicas acabou.")
+						.setColor("#00FF00"));
+				}
+				return;
 			}
-			return;
-		}
 
-		serverQueue.songs.shift();
-		play(bot, message, guild, serverQueue.songs[0]);
-	});
+			serverQueue.songs.shift();
+			play(bot, message, guild, serverQueue.songs[0]);
+		});
+	}
+
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
