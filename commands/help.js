@@ -17,7 +17,8 @@ module.exports.run = async (bot, message, args) => {
        
 >music np.........Mostra informações sobre o que está sendo tocado.
 >music skip.......Pula a reprodução atual.
->music p..........Pausa ou despausa a reprodução atual.
+>music repeat.....Repete a reprodução atual.
+>music (p)ause....Pausa ou despausa a reprodução atual.
 >music earrape....Aumenta extremamente o volume da reprodução atual.
 >music (l)eave....Sai do canal de voz e exclui a fila atual.` +
         "```";
