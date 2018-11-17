@@ -14,7 +14,7 @@ var leaving = false;
 var repeating = false;
 var dispatcher;
 
-var subcommands = ['repeat', 'earrape', 'p', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['repeat', 'earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
@@ -256,8 +256,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				if (!earrape) {
 					serverQueue.connection.dispatcher.setVolume(200);
 					earrape = true;
-					return message.channel.send(arg_embed
-						.setDescription(`**<@${message.author.id}> explodiu as caixas de som.**`)
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`**<@${message.author.id}> ativou earrape.**`)
 						.setColor("#00FF00"));
 				} else {
 					serverQueue.connection.dispatcher.setVolume(1);
@@ -268,6 +268,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				}
 			}
 		case "p":
+		case "pause":
 			{
 				// the same command for play and pause
 				try {
