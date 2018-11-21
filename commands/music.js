@@ -278,7 +278,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			break;
 		case "earrape":
 			{
-				sv_earrape.forEach((key, earrape_value) => {
+				sv_earrape.forEach((earrape_value) => {
 					if (dispatcher.speaking) {
 						if (!earrape_value) {
 							earrape_value = true;
@@ -287,8 +287,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setDescription(`**<@${message.author.id}> ativou earrape.**`)
 								.setColor("#00FF00"));
 						} else {
-							serverQueue.connection.dispatcher.setVolume(1);
 							earrape_value = false;
+							serverQueue.connection.dispatcher.setVolume(1);
 							return message.channel.send(arg_embed
 								.setDescription(`**O volume voltou ao normal.**`)
 								.setColor("#00FF00"));
