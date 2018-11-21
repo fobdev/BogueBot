@@ -565,7 +565,11 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		for (let v = 0; v < videosarray.length; v++) {
 			try {
 				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
+			} catch (e) {
+				console.log(`${e}: Video not available.`);
+			}
 
+			if (song_info) {
 				song_playlist[v] = {
 					id: videosarray[v].id,
 					title: song_info.title,
@@ -579,15 +583,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					media_artist: song_info.media.artist,
 					media_album: song_info.media.album,
 					media_writers: song_info.media.writers
-
 				};
 
 				video = videosarray[v];
-			} catch (e) {
-				unavaliable_videos++;
-				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
+			} else {
+				console.log(`${e}: Error ocurred getting video information.`)
 			}
-
 		}
 	}
 
@@ -630,8 +631,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		if (videosarray.length !== 0) {
 			var playlist_length = 0;
 			for (let i = 0; i < videosarray.length; i++) {
-				playlist_length += parseInt(song_playlist[i].length);
-				await queueConstruct.songs.push(song_playlist[i]);
+				if (song_playlist[i]) {
+					playlist_length += parseInt(song_playlist[i].length);
+					await queueConstruct.songs.push(song_playlist[i]);
+				}
 			}
 
 			var pl_string = `**${videosarray.length}** videos foram adicionados à fila`;
