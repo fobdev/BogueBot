@@ -278,47 +278,47 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			break;
 		case "earrape":
 			{
-				sv_earrape.forEach((earrape_value) => {
-					if (dispatcher.speaking) {
-						if (!earrape_value) {
-							earrape_value = true;
-							serverQueue.connection.dispatcher.setVolume(200);
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-								.setColor("#00FF00"));
-						} else {
-							earrape_value = false;
-							serverQueue.connection.dispatcher.setVolume(1);
-							return message.channel.send(arg_embed
-								.setDescription(`**O volume voltou ao normal.**`)
-								.setColor("#00FF00"));
-						}
-					} else {
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('Não tem nada sendo tocado no momento.')
-							.setColor("#FF0000"));
-					}
-				})
-				break;
-				// if (dispatcher.speaking) {
-				// 	if (!earrape) {
-				// 		serverQueue.connection.dispatcher.setVolume(200);
-				// 		earrape = true;
-				// 		return message.channel.send(new Discord.RichEmbed()
-				// 			.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-				// 			.setColor("#00FF00"));
+				// sv_earrape.forEach((earrape_value) => {
+				// 	if (dispatcher.speaking) {
+				// 		if (!earrape_value) {
+				// 			earrape_value = true;
+				// 			serverQueue.connection.dispatcher.setVolume(200);
+				// 			return message.channel.send(new Discord.RichEmbed()
+				// 				.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+				// 				.setColor("#00FF00"));
+				// 		} else {
+				// 			earrape_value = false;
+				// 			serverQueue.connection.dispatcher.setVolume(1);
+				// 			return message.channel.send(arg_embed
+				// 				.setDescription(`**O volume voltou ao normal.**`)
+				// 				.setColor("#00FF00"));
+				// 		}
 				// 	} else {
-				// 		serverQueue.connection.dispatcher.setVolume(1);
-				// 		earrape = false;
-				// 		return message.channel.send(arg_embed
-				// 			.setDescription(`**O volume voltou ao normal.**`)
-				// 			.setColor("#00FF00"));
+				// 		return message.channel.send(new Discord.RichEmbed()
+				// 			.setDescription('Não tem nada sendo tocado no momento.')
+				// 			.setColor("#FF0000"));
 				// 	}
-				// } else {
-				// 	return message.channel.send(new Discord.RichEmbed()
-				// 		.setDescription('Não tem nada sendo tocado no momento.')
-				// 		.setColor("#FF0000"));
-				// }
+				// })
+				// break;
+				if (dispatcher.speaking) {
+					if (!earrape) {
+						serverQueue.connection.dispatcher.setVolume(200);
+						earrape = true;
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+							.setColor("#00FF00"));
+					} else {
+						serverQueue.connection.dispatcher.setVolume(1);
+						earrape = false;
+						return message.channel.send(arg_embed
+							.setDescription(`**O volume voltou ao normal.**`)
+							.setColor("#00FF00"));
+					}
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Não tem nada sendo tocado no momento.')
+						.setColor("#FF0000"));
+				}
 			}
 		case "p":
 		case "pause":
