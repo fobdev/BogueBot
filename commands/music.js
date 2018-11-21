@@ -233,6 +233,17 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "jump":
 			{
 				if (dispatcher.speaking) {
+					if (args[0]) {
+
+						/* 
+							Needs to create a argument that gets a mm:ss (minutes, double dots, seconds)
+							transforms this argument in a seconds based number and jumps to the position.
+							~ basically a inverse timing() function
+						*/
+
+					} else {
+						return message.channel.send(`Uso incorreto do commando, tente usar ${botconfig.prefx}${module.exports.help.name} jump [mm:ss]`)
+					}
 
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
@@ -241,10 +252,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				}
 			}
 			break;
-			/* 
-				TODO:
 
-				'repeat' and 'earrape' commands are not guild-based.
+			/* 
+				TODO: 'repeat' and 'earrape' commands are not guild-based.
 				this commands will set in-bot variables and changed in all guilds.
 				Commands with true/false switches need to be set in a guild-based code.
 			*/
@@ -452,10 +462,12 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					} else {
 						var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 						if (serverQueue.songs.length > 9) {
+							var queue_len = 0;
 							var ultralarge_queue = '';
 							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
+								queue_len += parseInt(serverQueue.songs[i].length);
 								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
@@ -464,6 +476,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
 ${ultralarge_queue}
+
+Tempo total da fila: ${timing(queue_len)}
 ` +
 								"```")
 						}
@@ -566,7 +580,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			try {
 				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 			} catch (e) {
-				console.log(`${e}: Video not available.`);
+				unavaliable_videos++;
+				console.error(`${e}: Video not available.`);
 			}
 
 			if (song_info) {
@@ -587,7 +602,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				video = videosarray[v];
 			} else {
-				console.log("Error ocurred getting video information.")
+				console.error("Error ocurred getting video information.")
 			}
 		}
 	}
@@ -719,7 +734,7 @@ async function play(bot, message, guild, song) {
 
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
+		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
@@ -727,8 +742,7 @@ async function play(bot, message, guild, song) {
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
-	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`);
-
+	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
 	if (artist_str !== 'undefined') music_embed.addField("Artista", `*${artist_str}*`, true);
 	if (album_str !== 'undefined') music_embed.addField("Álbum", `*${album_str}*`, true);
 	if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
