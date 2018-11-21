@@ -7,9 +7,11 @@ const helper = require.main.require('./core/helper.js');
 var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
+const server_settings = new Map();
 const youtube = new YouTube(ytkey);
 var jumped = false;
 var earrape = false;
+var repeater = false;
 var leaving = false;
 var dispatcher;
 
@@ -224,6 +226,8 @@ module.exports.run = async (bot, message, args) => {
 }
 
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
+	var sv_earrape = server_settings.set(message.guild.id, earrape);
+	var sv_repeat = server_settings.set(message.guild.id, repeater);
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
@@ -252,54 +256,68 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				}
 			}
 			break;
-
-			/* 
-				TODO: 'repeat' and 'earrape' commands are not guild-based.
-				this commands will set in-bot variables and changed in all guilds.
-				Commands with true/false switches need to be set in a guild-based code.
-			*/
-
-			// case "repeat":
-			// 	{
-			// 		// Changes gonna happen in the 'play' function, this is just a switch.
-			// 		if (dispatcher.speaking) {
-			// 			if (!repeating) {
-			// 				repeating = true;
-			// 				message.channel.send(new Discord.RichEmbed().setDescription(`Repetindo **${serverQueue.songs[0].title}**`)
-			// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-			// 					.setColor("#00FF00"));
-			// 			} else {
-			// 				repeating = false;
-			// 				message.channel.send(new Discord.RichEmbed().setDescription(`Parou de repetir **${serverQueue.songs[0].title}**`)
-			// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-			// 					.setColor("#00FF00"));
-			// 			}
-			// 		} else return message.channel.send(new Discord.RichEmbed()
-			// 			.setDescription('Não tem nada tocando no momento')
-			// 			.setColor("#FF0000"));
-			// 	}
-			// 	break;
-		case "earrape":
+		case "repeat":
 			{
+				// Changes gonna happen in the 'play' function, this is just a switch.
 				if (dispatcher.speaking) {
-					if (!earrape) {
-						serverQueue.connection.dispatcher.setVolume(200);
-						earrape = true;
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+					if (!repeating) {
+						repeating = true;
+						message.channel.send(new Discord.RichEmbed().setDescription(`Repetindo **${serverQueue.songs[0].title}**`)
+							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 							.setColor("#00FF00"));
 					} else {
-						serverQueue.connection.dispatcher.setVolume(1);
-						earrape = false;
-						return message.channel.send(arg_embed
-							.setDescription(`**O volume voltou ao normal.**`)
+						repeating = false;
+						message.channel.send(new Discord.RichEmbed().setDescription(`Parou de repetir **${serverQueue.songs[0].title}**`)
+							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 							.setColor("#00FF00"));
 					}
-				} else {
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Não tem nada sendo tocado no momento.')
-						.setColor("#FF0000"));
-				}
+				} else return message.channel.send(new Discord.RichEmbed()
+					.setDescription('Não tem nada tocando no momento')
+					.setColor("#FF0000"));
+			}
+			break;
+		case "earrape":
+			{
+				sv_earrape.forEach((key, earrape_value) => {
+					if (dispatcher.speaking) {
+						if (!earrape_value) {
+							earrape_value = true;
+							serverQueue.connection.dispatcher.setVolume(200);
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+								.setColor("#00FF00"));
+						} else {
+							serverQueue.connection.dispatcher.setVolume(1);
+							earrape_value = false;
+							return message.channel.send(arg_embed
+								.setDescription(`**O volume voltou ao normal.**`)
+								.setColor("#00FF00"));
+						}
+					} else {
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription('Não tem nada sendo tocado no momento.')
+							.setColor("#FF0000"));
+					}
+				})
+				// if (dispatcher.speaking) {
+				// 	if (!earrape) {
+				// 		serverQueue.connection.dispatcher.setVolume(200);
+				// 		earrape = true;
+				// 		return message.channel.send(new Discord.RichEmbed()
+				// 			.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+				// 			.setColor("#00FF00"));
+				// 	} else {
+				// 		serverQueue.connection.dispatcher.setVolume(1);
+				// 		earrape = false;
+				// 		return message.channel.send(arg_embed
+				// 			.setDescription(`**O volume voltou ao normal.**`)
+				// 			.setColor("#00FF00"));
+				// 	}
+				// } else {
+				// 	return message.channel.send(new Discord.RichEmbed()
+				// 		.setDescription('Não tem nada sendo tocado no momento.')
+				// 		.setColor("#FF0000"));
+				// }
 			}
 		case "p":
 		case "pause":
@@ -455,8 +473,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							return;
 						} else {
-							await message.channel.send(arg_embed
-								.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length}**`)
+							return message.channel.send(arg_embed
+								.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length - 1}**`)
 								.setColor("#FF0000"));
 						}
 					} else {
