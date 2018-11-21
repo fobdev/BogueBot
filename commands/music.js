@@ -581,12 +581,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					media_writers: song_info.media.writers
 
 				};
+
+				video = videosarray[v];
 			} catch (e) {
 				unavaliable_videos++;
 				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
 			}
 
-			video = videosarray[v];
 		}
 	}
 
