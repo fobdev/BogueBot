@@ -715,7 +715,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
 				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
-				.addField(`Posição`, `${serverQueue.songs.length}`, true)
+				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
@@ -750,8 +750,8 @@ async function play(bot, message, guild, song) {
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
-		.addField("Canal", `[${song.channel}](${song.channel_url})`, true)
-		.addField("Canal de voz", `🔊 **${message.member.voiceChannel.name}**`, true)
+		// .addField("Canal", `[${song.channel}](${song.channel_url})`, true)
+		// .addField("Canal de voz", `🔊 **${message.member.voiceChannel.name}**`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
@@ -764,9 +764,6 @@ async function play(bot, message, guild, song) {
 		await message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
-		//if (repeating) {
-		//	play(bot, message, guild, serverQueue.songs[0]);
-		//} else {
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
@@ -779,9 +776,9 @@ async function play(bot, message, guild, song) {
 			return;
 		}
 
+		earrape = false;
 		serverQueue.songs.shift();
 		play(bot, message, guild, serverQueue.songs[0]);
-		//}
 	});
 
 
