@@ -652,7 +652,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
 					playlist_length += parseInt(song_playlist[i].length);
-					queueConstruct.songs.push(song_playlist[i]);
+					await queueConstruct.songs.push(song_playlist[i]);
 				}
 			}
 
@@ -688,7 +688,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
-				serverQueue.songs.push(song_playlist[i]);
+				await serverQueue.songs.push(song_playlist[i]);
 			}
 
 			var pl_string = `**${videosarray.length - unavaliable_videos}** videos foram adicionados à fila`;
