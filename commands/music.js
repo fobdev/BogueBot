@@ -563,15 +563,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	var song_playlist = new Array();
 	if (videosarray.length !== 0) {
 		for (let v = 0; v < videosarray.length; v++) {
-			video = videosarray[v];
-
 			try {
-				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 
 				song_playlist[v] = {
-					id: video.id,
+					id: videosarray[v].id,
 					title: song_info.title,
-					url: `https://www.youtube.com/watch?v=${video.id}`,
+					url: `https://www.youtube.com/watch?v=${videosarray[v].id}`,
 					thumbnail: song_info.thumbnail_url,
 					length: song_info.length_seconds,
 					authorID: message.author.id,
@@ -581,11 +579,14 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					media_artist: song_info.media.artist,
 					media_album: song_info.media.album,
 					media_writers: song_info.media.writers
+
 				};
 			} catch (e) {
 				unavaliable_videos++;
-				return console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
+				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
 			}
+
+			video = videosarray[v];
 		}
 	}
 
