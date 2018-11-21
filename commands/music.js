@@ -299,6 +299,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							.setColor("#FF0000"));
 					}
 				})
+				break;
 				// if (dispatcher.speaking) {
 				// 	if (!earrape) {
 				// 		serverQueue.connection.dispatcher.setVolume(200);
