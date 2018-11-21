@@ -716,6 +716,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
+				.addField('\u200B', "Você pode usar ``" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}` +
+					"`` para pular diretamente para esse video.")
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
