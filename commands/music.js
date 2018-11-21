@@ -119,10 +119,12 @@ module.exports.run = async (bot, message, args) => {
 		   (q)ueue purge...............Limpa todos os itens da fila.
 		   
 	>music np.........Mostra informações sobre o que está sendo tocado.
-	>music skip.......Pula a reprodução atual.
+	>music (s)kip.....Pula a reprodução atual.
 	>music p..........Pausa ou despausa a reprodução atual.
 	>music earrape....Aumenta extremamente o volume da reprodução atual.
-	>music (l)eave....Sai do canal de voz e exclui a fila atual.` +
+	>music (l)eave....Sai do canal de voz e exclui a fila atual.
+	
+	Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 									"```");
 							}
 						case 'no_video':
@@ -816,5 +818,7 @@ function timing(secs) {
 
 module.exports.help = {
 	name: "music",
-	name_2: "m"
+	name_2: "m",
+	name_3: "play",
+	name_4: "p"
 }

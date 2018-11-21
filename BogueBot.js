@@ -28,6 +28,10 @@ fs.readdir('./commands/', (err, files) => {
         bot.commands.set(props.help.name, props);
         try {
             bot.commands.set(props.help.name_2, props);
+
+            // names 3 and 4 are exclusively used for music command.
+            bot.commands.set(props.help.name_3, props);
+            bot.commands.set(props.help.name_4, props);
         } catch (e) {
             console.error(`${e}: Secondary / terciary command name not loaded properly.`);
         }
