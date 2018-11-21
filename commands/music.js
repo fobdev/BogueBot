@@ -587,7 +587,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				video = videosarray[v];
 			} else {
-				console.log(`${e}: Error ocurred getting video information.`)
+				console.log("Error ocurred getting video information.")
 			}
 		}
 	}
