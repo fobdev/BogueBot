@@ -584,12 +584,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				};
 			} catch (e) {
 				unavaliable_videos++;
-				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
+				return console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
 			}
-
-			// if (!song_info) {
-			// 	return;
-			// }
 		}
 	}
 
