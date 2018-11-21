@@ -7,11 +7,10 @@ const helper = require.main.require('./core/helper.js');
 var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
-const youtube = new YouTube(ytkey)
+const youtube = new YouTube(ytkey);
 var jumped = false;
 var earrape = false;
 var leaving = false;
-//var repeating = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -217,20 +216,28 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd(bot, message, args, serverQueue, voiceChannel);
+				subcmd(bot, message, args, serverQueue, voiceChannel, this_server);
 			}
 		}
 	}
 
 }
 
-async function subcmd(bot, message, args, serverQueue, voiceChannel) {
+async function subcmd(bot, message, args, serverQueue, voiceChannel, server) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
 
 	// Subcommands switch
 	switch (url) {
+		/* 
+			TODO:
+
+			'repeat' and 'earrape' commands are not guild-based.
+			this commands will set in-bot variables and changed in all guilds.
+			Commands with true/false switches need to be set in a guild-based code.
+		*/
+
 		// case "repeat":
 		// 	{
 		// 		// Changes gonna happen in the 'play' function, this is just a switch.
@@ -253,56 +260,75 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		// 	break;
 		case "earrape":
 			{
-				if (!earrape) {
-					serverQueue.connection.dispatcher.setVolume(200);
-					earrape = true;
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-						.setColor("#00FF00"));
+				if (dispatcher.speaking) {
+					if (!earrape) {
+						serverQueue.connection.dispatcher.setVolume(200);
+						earrape = true;
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+							.setColor("#00FF00"));
+					} else {
+						serverQueue.connection.dispatcher.setVolume(1);
+						earrape = false;
+						return message.channel.send(arg_embed
+							.setDescription(`**O volume voltou ao normal.**`)
+							.setColor("#00FF00"));
+					}
 				} else {
-					serverQueue.connection.dispatcher.setVolume(1);
-					earrape = false;
-					return message.channel.send(arg_embed
-						.setDescription(`**O volume voltou ao normal.**`)
-						.setColor("#00FF00"));
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Não tem nada sendo tocado no momento.')
+						.setColor("#FF0000"));
 				}
 			}
 		case "p":
 		case "pause":
 			{
 				// the same command for play and pause
-				try {
-					if (!dispatcher.paused) {
-						dispatcher.pause();
+				if (dispatcher.speaking) {
+					try {
+						if (!dispatcher.paused) {
+							dispatcher.pause();
+							return message.channel.send(arg_embed
+								.setTitle(":pause_button: Reprodução pausada.")
+								.setColor("#FFFF00"));
+						} else {
+							dispatcher.resume();
+							return message.channel.send(arg_embed
+								.setTitle(":arrow_forward: Reprodução continuada."));
+						}
+					} catch (error) {
+						console.error("Command didn't executed as expected");
 						return message.channel.send(arg_embed
-							.setTitle(":pause_button: Reprodução pausada.")
-							.setColor("#FFFF00"));
-					} else {
-						dispatcher.resume();
-						return message.channel.send(arg_embed
-							.setTitle(":arrow_forward: Reprodução continuada."));
+							.setTitle("O comando não funcionou como o esperado.")
+							.setColor("#FF0000"));
 					}
-				} catch (error) {
-					console.error("Command didn't executed as expected");
-					return message.channel.send(arg_embed
-						.setTitle("O comando não funcionou como o esperado.")
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Não tem nada sendo tocado no momento.')
 						.setColor("#FF0000"));
 				}
 			}
 		case "leave":
 		case "l":
 			{
-				try {
-					leaving = true;
-					voiceChannel.leave();
-					queue.delete(message.guild.id);
-					return message.channel.send(arg_embed
-						.setTitle("Saí do canal de voz e apaguei minha fila."));
-				} catch (error) {
-					console.error("Error ocurred when leaving the voice channel");
-					return message.channel.send(arg_embed
-						.setTitle("Ocorreu um erro ao sair da sala."));
+				if (voiceChannel) {
+					try {
+						leaving = true;
+						voiceChannel.leave();
+						queue.delete(message.guild.id);
+						return message.channel.send(arg_embed
+							.setTitle("Saí do canal de voz e apaguei minha fila."));
+					} catch (error) {
+						console.error("Error ocurred when leaving the voice channel");
+						return message.channel.send(arg_embed
+							.setTitle("Ocorreu um erro ao sair da sala."));
+					}
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Ocorreu um erro ao tentar sair da sala.')
+						.setColor("#FF0000"));
 				}
+
 			}
 		case "np":
 			{
@@ -530,33 +556,29 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			try {
 				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+
+				song_playlist[v] = {
+					id: video.id,
+					title: song_info.title,
+					url: `https://www.youtube.com/watch?v=${video.id}`,
+					thumbnail: song_info.thumbnail_url,
+					length: song_info.length_seconds,
+					authorID: message.author.id,
+					author: message.author,
+					channel: song_info.author.name,
+					channel_url: song_info.author.channel_url,
+					media_artist: song_info.media.artist,
+					media_album: song_info.media.album,
+					media_writers: song_info.media.writers
+				};
 			} catch (e) {
 				unavaliable_videos++;
 				console.error(`${e}: [${message.author.username}] Unavaliable video not added to queue.`);
-				// message.channel.send(new Discord.RichEmbed()
-				// 	.setTitle('🚫 Ocorreu um erro ao visualizar músicas.')
-				// 	.setColor("#FF0000"));
 			}
 
-			if (!song_info) {
-				return;
-			}
-
-			song_playlist[v] = {
-				id: video.id,
-				title: song_info.title,
-				url: `https://www.youtube.com/watch?v=${video.id}`,
-				thumbnail: song_info.thumbnail_url,
-				length: song_info.length_seconds,
-				authorID: message.author.id,
-				author: message.author,
-				channel: song_info.author.name,
-				channel_url: song_info.author.channel_url,
-				media_artist: song_info.media.artist,
-				media_album: song_info.media.album,
-				media_writers: song_info.media.writers,
-				media_type: song_info.media.category
-			};
+			// if (!song_info) {
+			// 	return;
+			// }
 		}
 	}
 
@@ -581,8 +603,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		channel_url: song_info.author.channel_url,
 		media_artist: song_info.media.artist,
 		media_album: song_info.media.album,
-		media_writers: song_info.media.writers,
-		media_type: song_info.media.category
+		media_writers: song_info.media.writers
 	};
 
 	leaving = false;
@@ -651,12 +672,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
-				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`, true)
+				.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
+				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length}`, true)
 				.setThumbnail(song.thumbnail)
-				.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
+				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
 				.setURL(song.url));
 		}
