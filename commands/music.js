@@ -478,6 +478,9 @@ Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)}
 ${ultralarge_queue}
 
 Tempo total da fila: ${timing(queue_len)}
+
+${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
+${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir um item da fila.
 ` +
 								"```")
 						}
@@ -512,10 +515,10 @@ Tempo total da fila: ${timing(queue_len)}
 							queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
 
 							if (serverQueue.songs.length > 1) return message.channel.send(queue_embed
-								.addField('\u200B', "**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]`` " +
-									"para pular para qualquer posição.**\n" +
-									"**Use ``" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]`` " +
-									"para excluir um item da fila.**"));
+								.addField('\u200B', "``[" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]``" +
+									"] para pular para qualquer posição.\n" +
+									"``[" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]``" +
+									"] para excluir um item da fila."));
 							else {
 								return message.channel.send(queue_embed
 									.addField('\u200B', "**Não há itens adicionais na fila.**"));
@@ -715,9 +718,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
-				.addField('\u200B', "Você pode usar ``[" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}]` +
-					"`` para pular para esse video.\n ``" +
-					`[${botconfig.prefix}${module.exports.help.name} queue]` + "`` para ver a fila completa.")
+				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "`` para ver a fila completa.\n" +
+					"``[" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}]` + "`` para pular para esse video.")
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
