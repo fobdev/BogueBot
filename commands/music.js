@@ -216,48 +216,59 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd(bot, message, args, serverQueue, voiceChannel, this_server);
+				subcmd(bot, message, args, serverQueue, voiceChannel);
 			}
 		}
 	}
 
 }
 
-async function subcmd(bot, message, args, serverQueue, voiceChannel, server) {
+async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
 
 	// Subcommands switch
 	switch (url) {
-		/* 
-			TODO:
+		case "jump":
+			{
+				if (dispatcher.speaking) {
 
-			'repeat' and 'earrape' commands are not guild-based.
-			this commands will set in-bot variables and changed in all guilds.
-			Commands with true/false switches need to be set in a guild-based code.
-		*/
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Não tem nada sendo tocado no momento.')
+						.setColor('#FF0000'));
+				}
+			}
+			break;
+			/* 
+				TODO:
 
-		// case "repeat":
-		// 	{
-		// 		// Changes gonna happen in the 'play' function, this is just a switch.
-		// 		if (dispatcher.speaking) {
-		// 			if (!repeating) {
-		// 				repeating = true;
-		// 				message.channel.send(new Discord.RichEmbed().setDescription(`Repetindo **${serverQueue.songs[0].title}**`)
-		// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-		// 					.setColor("#00FF00"));
-		// 			} else {
-		// 				repeating = false;
-		// 				message.channel.send(new Discord.RichEmbed().setDescription(`Parou de repetir **${serverQueue.songs[0].title}**`)
-		// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-		// 					.setColor("#00FF00"));
-		// 			}
-		// 		} else return message.channel.send(new Discord.RichEmbed()
-		// 			.setDescription('Não tem nada tocando no momento')
-		// 			.setColor("#FF0000"));
-		// 	}
-		// 	break;
+				'repeat' and 'earrape' commands are not guild-based.
+				this commands will set in-bot variables and changed in all guilds.
+				Commands with true/false switches need to be set in a guild-based code.
+			*/
+
+			// case "repeat":
+			// 	{
+			// 		// Changes gonna happen in the 'play' function, this is just a switch.
+			// 		if (dispatcher.speaking) {
+			// 			if (!repeating) {
+			// 				repeating = true;
+			// 				message.channel.send(new Discord.RichEmbed().setDescription(`Repetindo **${serverQueue.songs[0].title}**`)
+			// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+			// 					.setColor("#00FF00"));
+			// 			} else {
+			// 				repeating = false;
+			// 				message.channel.send(new Discord.RichEmbed().setDescription(`Parou de repetir **${serverQueue.songs[0].title}**`)
+			// 					.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+			// 					.setColor("#00FF00"));
+			// 			}
+			// 		} else return message.channel.send(new Discord.RichEmbed()
+			// 			.setDescription('Não tem nada tocando no momento')
+			// 			.setColor("#FF0000"));
+			// 	}
+			// 	break;
 		case "earrape":
 			{
 				if (dispatcher.speaking) {
@@ -355,7 +366,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel, server) {
 					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`)
 					.addField("Tempo", `${isLivestream}`, true)
-					.addField("Adicionado por", `[<@${current_music.author}>]`, true)
+					.addField("Adicionado por", `[${current_music.author}]`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
 					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
