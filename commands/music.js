@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
 
 			if (videosarray) {
 				message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Carregando playlist **${playlist.title}** de **[${playlist.channelTitle}](${playlist.channel.url})**...`)
+					.setDescription(`Carregando **${playlist.length}** videos da playlist **[${playlist.title}](${playlist.url})** de **[${playlist.channelTitle}](${playlist.channel.url})**...`)
 					.setColor('#00FF00'));
 			}
 
@@ -581,7 +581,11 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 			} catch (e) {
 				unavaliable_videos++;
-				console.error(`${e}: Video not available.`);
+				message.channel.send(new Discord.RichEmbed()
+					.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
+					.setColor("#FF0000"));
+
+				console.error(`${e}: ${videosarray[v].title}.`);
 			}
 
 			if (song_info) {
