@@ -482,7 +482,7 @@ ${ultralarge_queue}
 							var first_entry;
 							for (let i = 0; i < serverQueue.songs.length; i++) {
 								if (i !== 0) {
-									var inQueueIsLivrestream = `Duração: ${timing(serverQueue.songs[i].length)}`
+									var inQueueIsLivestream = `Duração: ${timing(serverQueue.songs[i].length)}`
 									if (parseInt(serverQueue.songs[i].length) === 0) inQueueIsLivestream = '**🔴 Livestream**';
 
 									if (i === 1) first_entry = 'A seguir:';
