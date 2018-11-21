@@ -652,11 +652,11 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
 					playlist_length += parseInt(song_playlist[i].length);
-					await queueConstruct.songs.push(song_playlist[i]);
+					queueConstruct.songs.push(song_playlist[i]);
 				}
 			}
 
-			var pl_string = `**${videosarray.length}** videos foram adicionados à fila`;
+			var pl_string = `**${videosarray.length - unavaliable_videos}** videos foram adicionados à fila`;
 			if (unavaliable_videos > 0) {
 				pl_string += `, **${unavaliable_videos}** videos indisponíveis.`
 			} else pl_string += '.';
@@ -688,14 +688,19 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
-				await serverQueue.songs.push(song_playlist[i]);
+				serverQueue.songs.push(song_playlist[i]);
 			}
 
+			var pl_string = `**${videosarray.length - unavaliable_videos}** videos foram adicionados à fila`;
+			if (unavaliable_videos > 0) {
+				pl_string += `, **${unavaliable_videos}** videos indisponíveis.`
+			} else pl_string += '.';
+
 			return message.channel.send(new Discord.RichEmbed()
-				.addField(`**${videosarray.length}** videos foram adicionados à fila.`, "Use ``" +
+				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL));
+				.setFooter(`Adicionado por ${message.author.username} - Total de ${timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			serverQueue.songs.push(song);
 			var isLivestream = `${timing(song.length)}`;
