@@ -468,7 +468,15 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
 								queue_len += parseInt(serverQueue.songs[i].length);
-								ultralarge_queue += `${i} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
+
+								var leftzero = '0';
+								if (i < 10) {
+									leftzero += i;
+								} else {
+									leftzero = i;
+								}
+
+								ultralarge_queue += `${leftzero} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
 							}
 
 							return message.channel.send("```markdown\n" +
@@ -476,7 +484,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
 ${ultralarge_queue}
-
 Tempo total da fila: ${timing(queue_len)}
 
 ${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
@@ -738,9 +745,9 @@ async function play(bot, message, guild, song) {
 	} else return;
 
 	// message filtering for rich embed of 'now playing'
-	var artist_str = `${song.media_artist}`;
-	var album_str = `${song.media_album}`;
-	var writers_str = `${song.media_writers}`;
+	// var artist_str = `${song.media_artist}`;
+	// var album_str = `${song.media_album}`;
+	// var writers_str = `${song.media_writers}`;
 
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
@@ -760,9 +767,9 @@ async function play(bot, message, guild, song) {
 		.setColor("#00FF00");
 
 	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
-	if (artist_str !== 'undefined') music_embed.addField("Artista", `*${artist_str}*`, true);
-	if (album_str !== 'undefined') music_embed.addField("Álbum", `*${album_str}*`, true);
-	if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
+	// if (artist_str !== 'undefined') music_embed.addField("Artista", `*${artist_str}*`, true);
+	// if (album_str !== 'undefined') music_embed.addField("Álbum", `*${album_str}*`, true);
+	// if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
 
 	if (!jumped)
 		await message.channel.send(music_embed);
