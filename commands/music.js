@@ -712,12 +712,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-				.setDescription("``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "``" + ` para ver a fila completa.`)
 				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
-				.addField('\u200B', "Você pode usar ``" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}` +
-					"`` para pular diretamente para esse video.")
+				.addField('\u200B', "Você pode usar ``[" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}]` +
+					"`` para pular para esse video.\n ``" +
+					`[${botconfig.prefix}${module.exports.help.name} queue]` + "`` para ver a fila completa.")
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
