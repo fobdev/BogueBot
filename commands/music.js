@@ -744,32 +744,21 @@ async function play(bot, message, guild, song) {
 		}));
 	} else return;
 
-	// message filtering for rich embed of 'now playing'
-	// var artist_str = `${song.media_artist}`;
-	// var album_str = `${song.media_album}`;
-	// var writers_str = `${song.media_writers}`;
-
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
-	// var repeat_string = ''
-	// if (repeating) repeat_string = `${bot.user.username} Music Player Repetindo 🔁`;
-	// else repeat_string = `${bot.user.username} Music Player`;
-
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
-		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
-		.addField("Duração", `${isLivestream}`, true)
-		// .addField("Canal", `[${song.channel}](${song.channel_url})`, true)
-		// .addField("Canal de voz", `🔊 **${message.member.voiceChannel.name}**`, true)
+		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
 	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
-	// if (artist_str !== 'undefined') music_embed.addField("Artista", `*${artist_str}*`, true);
-	// if (album_str !== 'undefined') music_embed.addField("Álbum", `*${album_str}*`, true);
-	// if (writers_str !== 'undefined') music_embed.addField("Escritores", `*${writers_str}*`, true);
+
+	music_embed
+		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
+		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
+		.addField("Duração", `${isLivestream}`, true);
 
 	if (!jumped)
 		await message.channel.send(music_embed);
