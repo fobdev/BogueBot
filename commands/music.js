@@ -756,7 +756,6 @@ async function play(bot, message, guild, song) {
 	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
 
 	music_embed
-		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true);
 
