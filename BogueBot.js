@@ -83,12 +83,7 @@ function servers_show() {
 
 }
 
-bot.on('ready', async () => {
-    console.log("---------------------------------");
-    console.log(`${bot.user.username} is online!`);
-    servers_show();
-
-
+function status_updater() {
     var current_servers = bot.guilds.array();
     var members_reached = 0;
 
@@ -100,9 +95,19 @@ bot.on('ready', async () => {
         ` | ${members_reached} usuários`, {
             type: 'PLAYING'
         });
+
+    console.log('Bot status updated.');
+}
+
+bot.on('ready', async () => {
+    console.log("---------------------------------");
+    console.log(`${bot.user.username} is online!`);
+    servers_show();
+    status_updater();
 });
 
 bot.on('guildCreate', guild => {
+    status_updater();
     const help_file = require('./commands/help.js');
     const music_file = require('./commands/music.js');
     const welcome_embed = new Discord.RichEmbed()
@@ -141,15 +146,18 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
+    status_updater();
     console.log(`${bot.user.username} was kicked/banned from server [${guild.name}].`);
     servers_show();
 });
 
 bot.on('guildMemberAdd', member => {
+    status_updater();
     return console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
 });
 
 bot.on('guildMemberRemove', member => {
+    status_updater();
     return console.log(`MEMBER: [${member.displayName}] left server -> [${member.guild.name}].`)
 });
 
