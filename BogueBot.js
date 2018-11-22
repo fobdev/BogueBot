@@ -125,10 +125,15 @@ bot.on('guildCreate', guild => {
     const music_channel = guild.channels.find(ch => ch.name === 'music');
 
     if (!bots_channel) console.log("No channel named 'bots' found in this server.");
-    else bots_channel.send(welcome_embed);
+    else {
+        bots_channel.send(welcome_embed);
+        console.log("Welcome message sent at 'bots' channel.");
+    }
     if (!music_channel) console.log("No channel named 'music' found in this server.");
-    else bots_channel.send(welcome_embed);
-
+    else {
+        bots_channel.send(welcome_embed);
+        console.log("Welcome message sent at 'music' channel.")
+    }
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
     console.log("---------------------------------");
@@ -138,7 +143,11 @@ bot.on('guildCreate', guild => {
     try {
         system_channel.send(welcome_embed);
     } catch (e) {
-        console.log('No System Channel Avaliable');
+        console.log('No System Channel Available');
+    }
+
+    if (system_channel) {
+        console.log("Welcome message sent to system channel.");
     }
 
     console.log(`Welcome being sent to [${guild.owner.displayName}]\nOwner ID: [${guild.ownerID}]`);
