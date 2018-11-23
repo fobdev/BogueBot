@@ -234,56 +234,29 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "repeat":
 			{
 				if (dispatcher.speaking) {
-					switch (args[1]) {
+					switch (args[0]) {
 						case 'on':
 							{
 								message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
+								if (Math.floor(dispatcher.time / 1000) === serverQueue.songs[0].length) {
+									play(bot, message, guild, serverQueue.songs[0]);
+								}
 							}
 							break;
 						case 'off':
 							{
-								message.channel.send(new Discord.RichEmbed()
+								return message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
 							}
-							break;
 						default:
 							return message.channel.send(new Discord.RichEmbed()
 								.setTitle('Uso incorreto do comando')
 								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [on/off]`)
 								.setColor('#FF0000'));
 					}
-
-					dispatcher.on('end', () => {
-						switch (args[1]) {
-							case 'on':
-								{
-									console.log('REPEATER ON');
-									return play(bot, message, guild, serverQueue.songs[0]);
-								}
-							case 'off':
-								{
-									console.log('REPEATER FINISHED');
-									if (serverQueue.songs.length === 1) {
-										queue.delete(guild.id);
-										serverQueue.voiceChannel.leave();
-
-										if (!leaving) {
-											message.channel.send(new Discord.RichEmbed()
-												.setTitle("A fila de músicas acabou.")
-												.setColor("#00FF00"));
-										}
-										return;
-									}
-
-									serverQueue.songs.shift();
-									play(bot, message, guild, serverQueue.songs[0]);
-								}
-								break;
-						}
-					});
 				}
 			}
 			break;
