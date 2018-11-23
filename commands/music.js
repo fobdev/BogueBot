@@ -234,7 +234,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "repeat":
 			{
 				if (dispatcher.speaking) {
-					switch (args[0]) {
+					switch (args[1]) {
 						case 'on':
 							{
 								message.channel.send(new Discord.RichEmbed()
