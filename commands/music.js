@@ -778,23 +778,23 @@ async function play(bot, message, guild, song) {
 
 
 
-	dispatcher.on('end', () => {
-		console.log('NOT REPEATER');
-		if (serverQueue.songs.length === 1) {
-			queue.delete(guild.id);
-			serverQueue.voiceChannel.leave();
-
-			if (!leaving) {
-				message.channel.send(new Discord.RichEmbed()
-					.setTitle("A fila de músicas acabou.")
-					.setColor("#00FF00"));
-			}
-			return;
-		}
-
-		serverQueue.songs.shift();
-		play(bot, message, guild, serverQueue.songs[0]);
-	});
+	//dispatcher.on('end', () => {
+	//	console.log('NOT REPEATER');
+	//	if (serverQueue.songs.length === 1) {
+	//		queue.delete(guild.id);
+	//		serverQueue.voiceChannel.leave();
+	//
+	//		if (!leaving) {
+	//			message.channel.send(new Discord.RichEmbed()
+	//				.setTitle("A fila de músicas acabou.")
+	//				.setColor("#00FF00"));
+	//		}
+	//		return;
+	//	}
+	//
+	//	serverQueue.songs.shift();
+	//	play(bot, message, guild, serverQueue.songs[0]);
+	//});
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
