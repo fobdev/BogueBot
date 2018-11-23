@@ -272,7 +272,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							}
 							break;
 						default:
-							break;
+							return message.channel.send(new Discord.RichEmbed()
+									.setTitle('Uso incorreto do comando.')
+									.setDescription("Para ativar o repetidor use: ``" + `${botconfig.prefix}${module.exports.help.name} repeat [true/false]` + "``"))
+								.setColor('#FF0000');
 					}
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
