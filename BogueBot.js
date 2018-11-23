@@ -104,10 +104,10 @@ bot.on('ready', async () => {
     console.log(`${bot.user.username} is online!`);
     servers_show();
     status_updater();
+    return;
 });
 
 bot.on('guildCreate', guild => {
-    status_updater();
     const help_file = require('./commands/help.js');
     const music_file = require('./commands/music.js');
     const welcome_embed = new Discord.RichEmbed()
@@ -151,23 +151,29 @@ bot.on('guildCreate', guild => {
     }
 
     console.log(`Welcome being sent to [${guild.owner.displayName}]\nOwner ID: [${guild.ownerID}]`);
-    return guild.owner.send(welcome_embed);
+
+    guild.owner.send(welcome_embed);
+    status_updater();
+    return;
 });
 
 bot.on('guildDelete', guild => {
-    status_updater();
     console.log(`${bot.user.username} was kicked/banned from server [${guild.name}].`);
     servers_show();
+    status_updater();
+    return;
 });
 
 bot.on('guildMemberAdd', member => {
+    console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
     status_updater();
-    return console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
+    return;
 });
 
 bot.on('guildMemberRemove', member => {
+    console.log(`MEMBER: [${member.displayName}] left server -> [${member.guild.name}].`)
     status_updater();
-    return console.log(`MEMBER: [${member.displayName}] left server -> [${member.guild.name}].`)
+    return;
 });
 
 var copycat_switch = false;
