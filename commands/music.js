@@ -291,7 +291,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "pause":
 			{
 				// the same command for play and pause
-				if (!serverQueue) {
+				if (serverQueue) {
 					try {
 						if (!dispatcher.paused) {
 							dispatcher.pause();
@@ -546,6 +546,7 @@ ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir 
 							return message.channel.send(largequeue_embed.setFooter(`Tempo total da playlist: ${timing(fulltime)}`, bot.user.displayAvatarURL));
 						}
 					}
+
 				} catch (e) {
 					console.error(`${e} / Tried to call queue without a queue`);
 					return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
