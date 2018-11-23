@@ -233,41 +233,46 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	switch (url) {
 		case "repeat":
 			{
-
-
 				if (dispatcher.speaking) {
-					if (args[0] === 'true') {
-						message.cahnnel.send(new Discord.RichEmbed()
-							.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-							.setColor('#00FF00'));
+					switch (args[1]) {
+						case 'true':
+							{
+								message.cahnnel.send(new Discord.RichEmbed()
+									.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+									.setColor('#00FF00'));
 
-						dispatcher.on('end', () => {
-							play(bot, message, guild, serverQueue.songs[0]);
-						});
-					}
-
-					if (args[0] === 'false') {
-						message.cahnnel.send(new Discord.RichEmbed()
-							.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-							.setColor('#00FF00'));
-
-						dispatcher.on('end', () => {
-							if (serverQueue.songs.length === 1) {
-								queue.delete(guild.id);
-								serverQueue.voiceChannel.leave();
-
-								if (!leaving) {
-									message.channel.send(new Discord.RichEmbed()
-										.setTitle("A fila de músicas acabou.")
-										.setColor("#00FF00"));
-								}
-								return;
+								dispatcher.on('end', () => {
+									play(bot, message, guild, serverQueue.songs[0]);
+								});
 							}
+							break;
+						case 'false':
+							{
+								message.cahnnel.send(new Discord.RichEmbed()
+									.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+									.setColor('#00FF00'));
 
-							earrape = false;
-							serverQueue.songs.shift();
-							play(bot, message, guild, serverQueue.songs[0]);
-						});
+								dispatcher.on('end', () => {
+									if (serverQueue.songs.length === 1) {
+										queue.delete(guild.id);
+										serverQueue.voiceChannel.leave();
+
+										if (!leaving) {
+											message.channel.send(new Discord.RichEmbed()
+												.setTitle("A fila de músicas acabou.")
+												.setColor("#00FF00"));
+										}
+										return;
+									}
+
+									earrape = false;
+									serverQueue.songs.shift();
+									play(bot, message, guild, serverQueue.songs[0]);
+								});
+							}
+							break;
+						default:
+							break;
 					}
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
