@@ -259,29 +259,25 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			break;
 		case "earrape":
 			{
-				if (dispatcher.speaking && message.channel.id) {
-					switch (rape_volume) {
-						case undefined:
-							rape_volume = 1;
-						case 1:
-							rape_volume = 200;
-							message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-								.setColor("#00FF00"));
-							break;
-						case 200:
-							rape_volume = 1;
-							message.channel.send(arg_embed
-								.setDescription(`**O volume voltou ao normal.**`)
-								.setColor("#00FF00"));
-							break;
-						default:
-							message.channel.send(new Discord.RichEmbed()
-								.setDescription(`Ocorreu um erro ao usar este comando.`)
-								.setColor("#FF0000"));
-							break;
+				if (dispatcher.speaking) {
+					var sv_volume = serverQueue.connection.dispatcher.volume;
+					if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
+
+					if (sv_volume === 1) {
+						serverQueue.connection.dispatcher.setVolume(200);
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+							.setColor("#00FF00"));
+					} else if (sv_volume === 200) {
+						serverQueue.connection.dispatcher.setVolume(1);
+						return message.channel.send(arg_embed
+							.setDescription(`**O volume voltou ao normal.**`)
+							.setColor("#00FF00"));
+					} else {
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`Ocorreu um erro ao usar este comando.`)
+							.setColor("#FF0000"));
 					}
-					return serverQueue.connection.dispatcher.setVolume(rape_volume);
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('Não tem nada sendo tocado no momento.')
