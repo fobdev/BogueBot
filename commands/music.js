@@ -240,12 +240,12 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						if (repeater === false) {
 							repeater = true;
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+								.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 								.setColor('#00FF00'));
 						} else {
 							repeater = false;
 							message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+								.setDescription(`**${message.author.username}** parou de repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 								.setColor('#00FF00'));
 						}
 					}
@@ -745,12 +745,14 @@ async function play(bot, message, guild, song) {
 	if (!jumped)
 		await message.channel.send(music_embed);
 
-	if (repeater) {
-		dispatcher.on('end', () => {
-			play(bot, message, guild, serverQueue.songs[0]);
-		});
-	} else {
-		dispatcher.on('end', () => {
+
+
+	dispatcher.on('end', () => {
+		if (repeater) {
+			console.log('REPEATER');
+			return play(bot, message, guild, serverQueue.songs[0]);
+		} else {
+			console.log('NOT REPEATER');
 			if (serverQueue.songs.length === 1) {
 				queue.delete(guild.id);
 				serverQueue.voiceChannel.leave();
@@ -765,8 +767,8 @@ async function play(bot, message, guild, song) {
 
 			serverQueue.songs.shift();
 			play(bot, message, guild, serverQueue.songs[0]);
-		});
-	}
+		}
+	});
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
