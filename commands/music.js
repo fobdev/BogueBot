@@ -7,11 +7,11 @@ const helper = require.main.require('./core/helper.js');
 var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
-const server_settings = new Map();
+// const server_settings = new Map();
 const youtube = new YouTube(ytkey);
 var jumped = false;
-var earrape = false;
-var repeater = false;
+// var earrape = false;
+// var repeater = false;
 var leaving = false;
 var dispatcher;
 
@@ -227,9 +227,10 @@ module.exports.run = async (bot, message, args) => {
 
 }
 
+var rape_volume;
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
-	var sv_earrape = server_settings.set(message.guild.id, earrape);
-	var sv_repeat = server_settings.set(message.guild.id, repeater);
+	// var sv_earrape = server_settings.set(message.guild.id, earrape);
+	// var sv_repeat = server_settings.set(message.guild.id, repeater);
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
@@ -258,42 +259,29 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			break;
 		case "earrape":
 			{
-				// sv_earrape.forEach((earrape_value) => {
-				// 	if (dispatcher.speaking) {
-				// 		if (!earrape_value) {
-				// 			earrape_value = true;
-				// 			serverQueue.connection.dispatcher.setVolume(200);
-				// 			return message.channel.send(new Discord.RichEmbed()
-				// 				.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-				// 				.setColor("#00FF00"));
-				// 		} else {
-				// 			earrape_value = false;
-				// 			serverQueue.connection.dispatcher.setVolume(1);
-				// 			return message.channel.send(arg_embed
-				// 				.setDescription(`**O volume voltou ao normal.**`)
-				// 				.setColor("#00FF00"));
-				// 		}
-				// 	} else {
-				// 		return message.channel.send(new Discord.RichEmbed()
-				// 			.setDescription('Não tem nada sendo tocado no momento.')
-				// 			.setColor("#FF0000"));
-				// 	}
-				// })
-				// break;
-				if (dispatcher.speaking) {
-					if (!earrape) {
-						serverQueue.connection.dispatcher.setVolume(200);
-						earrape = true;
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
-							.setColor("#00FF00"));
-					} else {
-						serverQueue.connection.dispatcher.setVolume(1);
-						earrape = false;
-						return message.channel.send(arg_embed
-							.setDescription(`**O volume voltou ao normal.**`)
-							.setColor("#00FF00"));
+				if (dispatcher.speaking && message.channel.id) {
+					switch (rape_volume) {
+						case undefined:
+							rape_volume = 1;
+						case 1:
+							rape_volume = 200;
+							message.channel.send(new Discord.RichEmbed()
+								.setDescription(`**<@${message.author.id}> ativou earrape.**`)
+								.setColor("#00FF00"));
+							break;
+						case 200:
+							rape_volume = 1;
+							message.channel.send(arg_embed
+								.setDescription(`**O volume voltou ao normal.**`)
+								.setColor("#00FF00"));
+							break;
+						default:
+							message.channel.send(new Discord.RichEmbed()
+								.setDescription(`Ocorreu um erro ao usar este comando.`)
+								.setColor("#FF0000"));
+							break;
 					}
+					return serverQueue.connection.dispatcher.setVolume(rape_volume);
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('Não tem nada sendo tocado no momento.')
