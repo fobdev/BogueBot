@@ -381,6 +381,40 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				var fulltime = 0;
 				try {
 					if (args[1] === 'pos' || args[1] === 'position') {
+						// Just for easy visualization of the algorithm
+						function swap(e1, e2, a) {
+							var t = a[e1];
+							a[e1] = a[e2];
+							a[e2] = t;
+						}
+
+						if (args[2] === 'next' && args[3]) {
+							try {
+								var swappable = parseInt(args[3]);
+							} catch (e) {
+								console.error(`${e}: invalid input in 'swap' command.`)
+								return message.channel.send(new Discord.RichEmbed()
+									.setTitle('Uso incorreto do comando')
+									.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1]` + "``" +
+										" para colocar [numero1] como próximo video a se reproduzir")
+									.setColor('#FF0000'));
+							}
+
+							if (swappable < 2 || swappable > serverQueue.songs.length) {
+								return message.channel.send(new Discord.RichEmbed()
+									.setTitle('Uso incorreto do comando')
+									.setDescription(`Use apenas valores entre **2** e **${serverQueue.songs.length - 1}**`)
+									.setColor("#FF0000"));
+							}
+
+							swap(swappable, 1, serverQueue.songs);
+
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[swappable].title}](${serverQueue.songs[swappable].url}) ` +
+									"ao próximo video a se reproduzir.")
+								.setColor("#00FF00"));
+						}
+
 						if (args[2] && args[3]) {
 							try {
 								var swappable_e1 = parseInt(args[2]);
@@ -400,23 +434,17 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								swappable_e2 > serverQueue.songs.length) {
 								return message.channel.send(new Discord.RichEmbed()
 									.setTitle('Uso incorreto do comando')
-									.setDescription(`Use apenas valores entre **1** e **${serverQueue.songs.length}**`)
+									.setDescription(`Use apenas valores entre **1** e **${serverQueue.songs.length - 1}**`)
 									.setColor("#FF0000"));
-							}
-
-
-							// Just for easy visualization of the algorithm
-							function swap(e1, e2, a) {
-								var t = a[e1];
-								a[e1] = a[e2];
-								a[e2] = t;
 							}
 
 							swap(swappable_e1, swappable_e2, serverQueue.songs);
 
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`**${message.author.username}** alternou as posições de [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url}) e ` +
-									`[${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})`))
+									`[${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})`)
+								.setColor("#00FF00"));
+
 						} else {
 							return message.channel.send(new Discord.RichEmbed()
 								.setTitle('Uso incorreto do comando')
@@ -457,7 +485,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						}
 					}
 
-					if (args[1] === 'purge') {
+					if (args[1] === 'purge' || args[1] === 'pg') {
 						if (serverQueue.songs.length > 1) {
 							await serverQueue.songs.splice(1);
 							return message.channel.send(arg_embed
