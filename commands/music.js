@@ -410,7 +410,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							swap(swappable, 1, serverQueue.songs);
 
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[swappable].title}](${serverQueue.songs[swappable].url}) ` +
+								.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
 									"ao próximo video a se reproduzir.")
 								.setColor("#00FF00"));
 						}
