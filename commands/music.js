@@ -237,7 +237,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					switch (args[1]) {
 						case 'true':
 							{
-								message.cahnnel.send(new Discord.RichEmbed()
+								message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
 
@@ -248,7 +248,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							break;
 						case 'false':
 							{
-								message.cahnnel.send(new Discord.RichEmbed()
+								message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
 
