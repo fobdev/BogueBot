@@ -291,7 +291,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "pause":
 			{
 				// the same command for play and pause
-				if (dispatcher.speaking) {
+				if (!serverQueue) {
 					try {
 						if (!dispatcher.paused) {
 							dispatcher.pause();
@@ -311,7 +311,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					}
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Não tem nada sendo tocado no momento.')
+						.setDescription('Não tem nada na fila de músicas.')
 						.setColor("#FF0000"));
 				}
 			}
@@ -380,6 +380,17 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				var fulltime = 0;
 				try {
+					if (args[1] === 'pos' || args[1] === 'position') {
+						if (args[2] && args[3]) {
+
+						} else {
+							return message.channel.send(new Discord.RichEmbed()
+								.setTitle('Uso incorreto do comando')
+								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [video_1] [video_2]` + "``" +
+									" alterna a posição de dois vídeos na fila."))
+						}
+					}
+
 					if (args[1] === 'delete' || args[1] === 'del') {
 						var entry = parseInt(args[2]);
 
