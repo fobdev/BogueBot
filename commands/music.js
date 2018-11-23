@@ -241,18 +241,17 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
 
-								dispatcher.on('end', () => {
+								return dispatcher.on('end', () => {
 									play(bot, message, guild, serverQueue.songs[0]);
 								});
 							}
-							break;
 						case 'false':
 							{
 								message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
 									.setColor('#00FF00'));
 
-								dispatcher.on('end', () => {
+								return dispatcher.on('end', () => {
 									if (serverQueue.songs.length === 1) {
 										queue.delete(guild.id);
 										serverQueue.voiceChannel.leave();
@@ -270,12 +269,11 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									play(bot, message, guild, serverQueue.songs[0]);
 								});
 							}
-							break;
 						default:
 							return message.channel.send(new Discord.RichEmbed()
-									.setTitle('Uso incorreto do comando.')
-									.setDescription("Para ativar o repetidor use: ``" + `${botconfig.prefix}${module.exports.help.name} repeat [true/false]` + "``"))
-								.setColor('#FF0000');
+								.setTitle('Uso incorreto do comando:')
+								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [true/false]` + "``")
+								.setColor('#FF0000'));
 					}
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
