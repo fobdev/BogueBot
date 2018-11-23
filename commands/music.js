@@ -7,11 +7,8 @@ const helper = require.main.require('./core/helper.js');
 var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
-// const server_settings = new Map();
 const youtube = new YouTube(ytkey);
 var jumped = false;
-// var earrape = false;
-// var repeater = false;
 var leaving = false;
 var dispatcher;
 
@@ -227,10 +224,7 @@ module.exports.run = async (bot, message, args) => {
 
 }
 
-var rape_volume;
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
-	// var sv_earrape = server_settings.set(message.guild.id, earrape);
-	// var sv_repeat = server_settings.set(message.guild.id, repeater);
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
@@ -239,22 +233,47 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	switch (url) {
 		case "repeat":
 			{
-				// Changes gonna happen in the 'play' function, this is just a switch.
+
+
 				if (dispatcher.speaking) {
-					if (!repeating) {
-						repeating = true;
-						message.channel.send(new Discord.RichEmbed().setDescription(`Repetindo **${serverQueue.songs[0].title}**`)
-							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-							.setColor("#00FF00"));
-					} else {
-						repeating = false;
-						message.channel.send(new Discord.RichEmbed().setDescription(`Parou de repetir **${serverQueue.songs[0].title}**`)
-							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
-							.setColor("#00FF00"));
+					if (args[0] === 'true') {
+						message.cahnnel.send(new Discord.RichEmbed()
+							.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+							.setColor('#00FF00'));
+
+						dispatcher.on('end', () => {
+							play(bot, message, guild, serverQueue.songs[0]);
+						});
 					}
-				} else return message.channel.send(new Discord.RichEmbed()
-					.setDescription('Não tem nada tocando no momento')
-					.setColor("#FF0000"));
+
+					if (args[0] === 'false') {
+						message.cahnnel.send(new Discord.RichEmbed()
+							.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+							.setColor('#00FF00'));
+
+						dispatcher.on('end', () => {
+							if (serverQueue.songs.length === 1) {
+								queue.delete(guild.id);
+								serverQueue.voiceChannel.leave();
+
+								if (!leaving) {
+									message.channel.send(new Discord.RichEmbed()
+										.setTitle("A fila de músicas acabou.")
+										.setColor("#00FF00"));
+								}
+								return;
+							}
+
+							earrape = false;
+							serverQueue.songs.shift();
+							play(bot, message, guild, serverQueue.songs[0]);
+						});
+					}
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Não tem nada sendo tocado no momento.')
+						.setColor("#FF0000"));
+				}
 			}
 			break;
 		case "earrape":
