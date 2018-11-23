@@ -12,7 +12,7 @@ var jumped = false;
 var leaving = false;
 var dispatcher;
 
-var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['repeat', 'earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
