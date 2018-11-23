@@ -224,7 +224,7 @@ module.exports.run = async (bot, message, args) => {
 
 }
 
-var repeater = false;
+var repeater;
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
@@ -236,6 +236,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				if (dispatcher.speaking) {
 					if (serverQueue.id === message.guild.id) {
+						if (!repeater) repeater = false;
 						if (repeater === false) {
 							repeater = true;
 							return message.channel.send(new Discord.RichEmbed()
@@ -762,7 +763,6 @@ async function play(bot, message, guild, song) {
 				return;
 			}
 
-			earrape = false;
 			serverQueue.songs.shift();
 			play(bot, message, guild, serverQueue.songs[0]);
 		});
