@@ -224,6 +224,7 @@ module.exports.run = async (bot, message, args) => {
 
 }
 
+var repeater = false;
 async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
@@ -234,46 +235,18 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "repeat":
 			{
 				if (dispatcher.speaking) {
-					switch (args[1]) {
-						case 'true':
-							{
-								message.channel.send(new Discord.RichEmbed()
-									.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-									.setColor('#00FF00'));
-
-								return dispatcher.on('end', () => {
-									play(bot, message, guild, serverQueue.songs[0]);
-								});
-							}
-						case 'false':
-							{
-								message.channel.send(new Discord.RichEmbed()
-									.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-									.setColor('#00FF00'));
-
-								return dispatcher.on('end', () => {
-									if (serverQueue.songs.length === 1) {
-										queue.delete(guild.id);
-										serverQueue.voiceChannel.leave();
-
-										if (!leaving) {
-											message.channel.send(new Discord.RichEmbed()
-												.setTitle("A fila de músicas acabou.")
-												.setColor("#00FF00"));
-										}
-										return;
-									}
-
-									earrape = false;
-									serverQueue.songs.shift();
-									play(bot, message, guild, serverQueue.songs[0]);
-								});
-							}
-						default:
+					if (serverQueue.id === message.guild.id) {
+						if (repeater === false) {
+							repeater = true;
 							return message.channel.send(new Discord.RichEmbed()
-								.setTitle('Uso incorreto do comando:')
-								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [true/false]` + "``")
-								.setColor('#FF0000'));
+								.setDescription(`**Repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+								.setColor('#00FF00'));
+						} else {
+							repeater = false;
+							message.channel.send(new Discord.RichEmbed()
+								.setDescription(`**Não está repetindo** [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+								.setColor('#00FF00'));
+						}
 					}
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
@@ -656,6 +629,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
+			id: message.guild.id,
 			textChannel: message.channel,
 			voiceChannel: voiceChannel,
 			connection: null,
@@ -770,24 +744,29 @@ async function play(bot, message, guild, song) {
 	if (!jumped)
 		await message.channel.send(music_embed);
 
-	dispatcher.on('end', () => {
-		if (serverQueue.songs.length === 1) {
-			queue.delete(guild.id);
-			serverQueue.voiceChannel.leave();
+	if (repeater) {
+		dispatcher.on('end', () => {
+			play(bot, message, guild, serverQueue.songs[0]);
+		});
+	} else {
+		dispatcher.on('end', () => {
+			if (serverQueue.songs.length === 1) {
+				queue.delete(guild.id);
+				serverQueue.voiceChannel.leave();
 
-			if (!leaving) {
-				message.channel.send(new Discord.RichEmbed()
-					.setTitle("A fila de músicas acabou.")
-					.setColor("#00FF00"));
+				if (!leaving) {
+					message.channel.send(new Discord.RichEmbed()
+						.setTitle("A fila de músicas acabou.")
+						.setColor("#00FF00"));
+				}
+				return;
 			}
-			return;
-		}
 
-		earrape = false;
-		serverQueue.songs.shift();
-		play(bot, message, guild, serverQueue.songs[0]);
-	});
-
+			earrape = false;
+			serverQueue.songs.shift();
+			play(bot, message, guild, serverQueue.songs[0]);
+		});
+	}
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
