@@ -235,7 +235,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "repeat":
 			{
 				if (dispatcher.speaking) {
-					if (serverQueue.id === message.guild.id) {
+					if (message.guild.id === serverQueue.id) {
 						if (!repeater) repeater = false;
 						if (repeater === false) {
 							repeater = true;
