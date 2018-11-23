@@ -236,28 +236,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 	// Subcommands switch
 	switch (url) {
-		case "jump":
-			{
-				if (dispatcher.speaking) {
-					if (args[0]) {
-
-						/* 
-							Needs to create a argument that gets a mm:ss (minutes, double dots, seconds)
-							transforms this argument in a seconds based number and jumps to the position.
-							~ basically a inverse timing() function
-						*/
-
-					} else {
-						return message.channel.send(`Uso incorreto do commando, tente usar ${botconfig.prefx}${module.exports.help.name} jump [mm:ss]`)
-					}
-
-				} else {
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Não tem nada sendo tocado no momento.')
-						.setColor('#FF0000'));
-				}
-			}
-			break;
 		case "repeat":
 			{
 				// Changes gonna happen in the 'play' function, this is just a switch.
