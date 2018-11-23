@@ -41,8 +41,6 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 function servers_show() {
-    console.log("---------------------------------");
-
     // All the servers that the bot are in.
     var current_servers = bot.guilds.array();
 
@@ -136,7 +134,6 @@ bot.on('guildCreate', guild => {
     }
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
-    console.log("---------------------------------");
     servers_show();
 
     const system_channel = guild.channels.find(ch => ch.id === guild.systemChannelID);
