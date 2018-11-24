@@ -411,7 +411,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
-								"ao próximo video a se reproduzir.")
+								"como próximo video a se reproduzir.")
 							.setColor("#00FF00"));
 					}
 
@@ -448,8 +448,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							swap(swappable_e1, swappable_e2, serverQueue.songs);
 
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** alternou as posições de [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url}) e ` +
-									`[${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})`)
+								.setDescription(`**${message.author.username}** alternou a posição de [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url}) com a de ` +
+									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})`)
 								.setColor("#00FF00"));
 
 						} else {
