@@ -322,7 +322,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "join":
 		case "j":
 			{
-				if (!voiceChannel) {
+				if (voiceChannel) {
 					await voiceChannel.join();
 					dispatcher.resume();
 				} else {
