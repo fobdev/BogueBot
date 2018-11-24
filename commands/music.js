@@ -234,34 +234,36 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 	// Subcommands switch
 	switch (url) {
 		case "repeat":
-			// {
-			// 	if (dispatcher.speaking) {
-			// 		switch (args[1]) {
-			// 			case 'on':
-			// 				{
-			// 					message.channel.send(new Discord.RichEmbed()
-			// 						.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-			// 						.setColor('#00FF00'));
-			// 					if (Math.floor(dispatcher.time / 1000) === serverQueue.songs[0].length) {
-			// 						play(bot, message, guild, serverQueue.songs[0]);
-			// 					}
-			// 				}
-			// 				break;
-			// 			case 'off':
-			// 				{
-			// 					return message.channel.send(new Discord.RichEmbed()
-			// 						.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-			// 						.setColor('#00FF00'));
-			// 				}
-			// 			default:
-			// 				return message.channel.send(new Discord.RichEmbed()
-			// 					.setTitle('Uso incorreto do comando')
-			// 					.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [on/off]`)
-			// 					.setColor('#FF0000'));
-			// 		}
-			// 	}
-			// }
-			// break;
+			{
+				// {
+				// 	if (dispatcher.speaking) {
+				// 		switch (args[1]) {
+				// 			case 'on':
+				// 				{
+				// 					message.channel.send(new Discord.RichEmbed()
+				// 						.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+				// 						.setColor('#00FF00'));
+				// 					if (Math.floor(dispatcher.time / 1000) === serverQueue.songs[0].length) {
+				// 						play(bot, message, guild, serverQueue.songs[0]);
+				// 					}
+				// 				}
+				// 				break;
+				// 			case 'off':
+				// 				{
+				// 					return message.channel.send(new Discord.RichEmbed()
+				// 						.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
+				// 						.setColor('#00FF00'));
+				// 				}
+				// 			default:
+				// 				return message.channel.send(new Discord.RichEmbed()
+				// 					.setTitle('Uso incorreto do comando')
+				// 					.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [on/off]`)
+				// 					.setColor('#FF0000'));
+				// 		}
+				// 	}
+				// }
+				// break;
+			}
 		case "earrape":
 			{
 				if (dispatcher.speaking) {
@@ -317,16 +319,29 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
+		case "join":
+		case "j":
+			{
+				if (!voiceChannel) {
+					await voiceChannel.join();
+					dispatcher.resume();
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription("O bot já está em um canal de voz.")
+						.setColor("#FF0000"));
+				}
+			}
+			break;
 		case "leave":
 		case "l":
 			{
 				if (voiceChannel) {
 					try {
 						leaving = true;
-						voiceChannel.leave();
-						queue.delete(message.guild.id);
-						return message.channel.send(arg_embed
-							.setTitle("Saí do canal de voz e apaguei minha fila."));
+						message.channel.send(arg_embed
+							.setDescription(`Saí do canal de voz **${voiceChannel}`));
+						return voiceChannel.leave();
+						// queue.delete(message.guild.id);
 					} catch (error) {
 						console.error("Error ocurred when leaving the voice channel");
 						return message.channel.send(arg_embed
