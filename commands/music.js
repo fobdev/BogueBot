@@ -112,11 +112,11 @@ module.exports.run = async (bot, message, args) => {
 >music [música].........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue..........................Exibe toda a fila do servidor.
        (q)ueue [numero].................Pula para uma certa posição da fila.
+       (q)ueue next [numero]........Coloca o vídeo selecionado como próximo a tocar.
+       (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
        (q)ueue (del)ete [numero]........Exclui um certo item da fila.
        (q)ueue purge(pg)................Limpa todos os itens da fila.
-       (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
-       (q)ueue pos next [numero]........Coloca o vídeo selecionado como próximo a tocar.
-
+	   
 >music np.........Mostra informações sobre o que está sendo tocado.
 >music (s)kip.....Pula a reprodução atual.
 >music p..........Pausa ou despausa a reprodução atual.
@@ -382,41 +382,40 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				var fulltime = 0;
 				try {
-					if (args[1] === 'pos' || args[1] === 'position') {
-						// Just for easy visualization of the algorithm
-						function swap(e1, e2, a) {
-							var t = a[e1];
-							a[e1] = a[e2];
-							a[e2] = t;
-						}
+					function swap(e1, e2, a) {
+						var t = a[e1];
+						a[e1] = a[e2];
+						a[e2] = t;
+					}
 
-						if (args[2] === 'next' && args[3]) {
-							try {
-								var swappable = parseInt(args[3]);
-							} catch (e) {
-								console.error(`${e}: invalid input in 'swap' command.`)
-								return message.channel.send(new Discord.RichEmbed()
-									.setTitle('Uso incorreto do comando')
-									.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1]` + "``" +
-										" para colocar [numero1] como próximo video a se reproduzir")
-									.setColor('#FF0000'));
-							}
-
-							if (swappable < 2 || swappable > serverQueue.songs.length) {
-								return message.channel.send(new Discord.RichEmbed()
-									.setTitle('Uso incorreto do comando')
-									.setDescription(`Use apenas valores entre **2** e **${serverQueue.songs.length - 1}**`)
-									.setColor("#FF0000"));
-							}
-
-							swap(swappable, 1, serverQueue.songs);
-
+					if (args[1] === 'next' && args[2]) {
+						try {
+							var swappable = parseInt(args[2]);
+						} catch (e) {
+							console.error(`${e}: invalid input in 'swap' command.`)
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
-									"ao próximo video a se reproduzir.")
-								.setColor("#00FF00"));
+								.setTitle('Uso incorreto do comando')
+								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1]` + "``" +
+									" para colocar [numero1] como próximo video a se reproduzir")
+								.setColor('#FF0000'));
 						}
 
+						if (swappable < 2 || swappable > serverQueue.songs.length) {
+							return message.channel.send(new Discord.RichEmbed()
+								.setTitle('Uso incorreto do comando')
+								.setDescription(`Use apenas valores entre **2** e **${serverQueue.songs.length - 1}**`)
+								.setColor("#FF0000"));
+						}
+
+						swap(swappable, 1, serverQueue.songs);
+
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
+								"ao próximo video a se reproduzir.")
+							.setColor("#00FF00"));
+					}
+
+					if (args[1] === 'pos' || args[1] === 'position') {
 						if (args[2] && args[3]) {
 							try {
 								var swappable_e1 = parseInt(args[2]);
@@ -437,6 +436,12 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								return message.channel.send(new Discord.RichEmbed()
 									.setTitle('Uso incorreto do comando')
 									.setDescription(`Use apenas valores entre **1** e **${serverQueue.songs.length - 1}**`)
+									.setColor("#FF0000"));
+							}
+
+							if (swappable_e1 === swappable_e2) {
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription('Você deve escolher posições diferentes.')
 									.setColor("#FF0000"));
 							}
 
@@ -825,8 +830,6 @@ async function play(bot, message, guild, song) {
 
 	if (!jumped)
 		await message.channel.send(music_embed);
-
-
 
 	dispatcher.on('end', () => {
 		if (serverQueue.songs.length === 1) {
