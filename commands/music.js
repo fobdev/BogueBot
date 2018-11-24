@@ -407,7 +407,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 
-						swap(swappable, 1, serverQueue.songs);
+						// Puts a copy of the desired video in the beginning of the array at > 0
+						serverQueue.songs.splice(1, 0, serverQueue.songs[swappable]);
+						// Deletes the original video in the array 
+						serverQueue.songs.splice(swappable + 1, 1);
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
