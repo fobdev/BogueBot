@@ -556,16 +556,19 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									whitespace = i;
 								}
 
-								ultralarge_queue += `${whitespace} - {${serverQueue.songs[i].title}} [${timing(serverQueue.songs[i].length)}] | ${serverQueue.songs[i].author.username}\n`;
+								ultralarge_queue += `${whitespace}. ${serverQueue.songs[i].title} <${timing(serverQueue.songs[i].length)}> | < ${serverQueue.songs[i].author.username} >\n`;
 							}
 
-							return message.channel.send("```css\n" +
-								`[Fila de ${message.guild.name}]
+							return message.channel.send("```md\n" +
+								`Fila de ${message.guild.name}
+====================================
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
 ${ultralarge_queue}
 Tempo total da fila: ${timing(queue_len)}
 
+Ajuda
+----------
 ${botconfig.prefix}${module.exports.help.name} queue [numero]			para pular para qualquer posição.
 ${botconfig.prefix}${module.exports.help.name} queue next [numero] 		para colocar um vídeo como próximo a tocar.
 ${botconfig.prefix}${module.exports.help.name} queue del [numero] 		para excluir um item da fila.` +
