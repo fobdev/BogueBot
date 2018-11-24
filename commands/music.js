@@ -538,6 +538,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 					} else {
+						var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 						// Tries to print the normal queue
 						try {
 							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
