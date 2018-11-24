@@ -549,14 +549,15 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							for (let i = 1; i < serverQueue.songs.length; i++) {
 								queue_len += parseInt(serverQueue.songs[i].length);
 
-								//var whitespace = ' ';
-								//if (i < 10) {
-								//	whitespace += i;
-								//} else {
-								//	whitespace = i;
-								//}
+								var whitespace = ' ';
+								// Whitespace is for padding of numbers
+								if (i < 10) {
+									whitespace = "  ";
+								} else {
+									whitespace = " ";
+								}
 
-								ultralarge_queue += `${i}. ${serverQueue.songs[i].title} <${timing(serverQueue.songs[i].length)}> | < ${serverQueue.songs[i].author.username} >\n`;
+								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
 							}
 
 							return message.channel.send("```md\n" +
@@ -565,7 +566,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
 
 ${ultralarge_queue}
-Tempo total da fila: ${timing(queue_len)}
+Tempo total da fila: [${timing(queue_len)}]
 -----------------------------------------------` +
 								"```")
 						} catch (e) {
