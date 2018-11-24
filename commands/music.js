@@ -339,7 +339,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					try {
 						leaving = true;
 						message.channel.send(arg_embed
-							.setDescription(`Saí do canal de voz **${voiceChannel}`));
+							.setDescription(`Saí do canal de voz **${voiceChannel}**`));
 						return voiceChannel.leave();
 						// queue.delete(message.guild.id);
 					} catch (error) {
