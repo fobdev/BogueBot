@@ -538,40 +538,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor("#FF0000"));
 						}
 					} else {
-						var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
-						if (serverQueue.songs.length > 9) {
-							var queue_len = 0;
-							var ultralarge_queue = '';
-							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
-
-							for (let i = 1; i < serverQueue.songs.length; i++) {
-								queue_len += parseInt(serverQueue.songs[i].length);
-
-								var leftzero = '0';
-								if (i < 10) {
-									leftzero += i;
-								} else {
-									leftzero = i;
-								}
-
-								ultralarge_queue += `${leftzero} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
-							}
-
-							return message.channel.send("```markdown\n" +
-								`[Fila de ${message.guild.name}]
-Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
-
-${ultralarge_queue}
-Tempo total da fila: ${timing(queue_len)}
-
-${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
-${botconfig.prefix}${module.exports.help.name} queue next [numero] 	para colocar um vídeo como próximo a tocar.
-${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir um item da fila.
-` +
-								"```")
-						}
-
-						if (serverQueue.songs.length < 6) {
+						// Tries to print the normal queue
+						try {
 							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
 							if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
@@ -609,26 +577,63 @@ ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir 
 								return message.channel.send(queue_embed
 									.addField('\u200B', "**Não há itens adicionais na fila.**"));
 							}
-						} else {
-							var queue_element = '';
-							var largequeue_embed = new Discord.RichEmbed()
-								.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
-								.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})** - ` +
-									`${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}`)
-								.setColor('#00FF00');
+						} catch (e) {
+							// If the normal queue fails to print, try to create the 'mid' queue
+							try {
+								var queue_element = '';
+								var largequeue_embed = new Discord.RichEmbed()
+									.setAuthor(`Fila de ${message.guild.name}`, message.guild.iconURL)
+									.addField('♪ Agora tocando', `**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})** - ` +
+										`${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}`)
+									.setColor('#00FF00');
 
-							for (let i = 1; i < serverQueue.songs.length; i++) {
-								queue_element += `0${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
-									` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].authorID}>]\n`
+								for (let i = 1; i < serverQueue.songs.length; i++) {
+									queue_element += `0${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
+										` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].authorID}>]\n`
 
-								fulltime += parseInt(serverQueue.songs[i].length);
-								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
+									fulltime += parseInt(serverQueue.songs[i].length);
+									if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
+								}
+
+								return message.channel.send(largequeue_embed.setFooter(`Tempo total da fila: ${timing(fulltime)}`, bot.user.displayAvatarURL));
+							} catch (e) {
+								// If none created, try the last option
+								try {
+									var queue_len = 0;
+									var ultralarge_queue = '';
+									var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
+
+									for (let i = 1; i < serverQueue.songs.length; i++) {
+										queue_len += parseInt(serverQueue.songs[i].length);
+
+										var leftzero = '0';
+										if (i < 10) {
+											leftzero += i;
+										} else {
+											leftzero = i;
+										}
+
+										ultralarge_queue += `${leftzero} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
+									}
+
+									return message.channel.send("```markdown\n" +
+										`[Fila de ${message.guild.name}]
+Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
+
+${ultralarge_queue}
+Tempo total da fila: ${timing(queue_len)}
+
+${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
+${botconfig.prefix}${module.exports.help.name} queue next [numero] 	para colocar um vídeo como próximo a tocar.
+${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir um item da fila.
+` +
+										"```")
+								} catch (e) {
+									return message.channel.send(`A fila é muito grande para ser exibida\nerro: ${e}`);
+								}
 							}
-
-							return message.channel.send(largequeue_embed.setFooter(`Tempo total da fila: ${timing(fulltime)}`, bot.user.displayAvatarURL));
 						}
 					}
-
 				} catch (e) {
 					console.error(`${e} / Tried to call queue without a queue`);
 					return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
