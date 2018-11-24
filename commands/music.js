@@ -563,14 +563,20 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							return message.channel.send("```md\n" +
 								`Fila de ${message.guild.name}
 ====================================
-Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}
+Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
 ${ultralarge_queue}
 Tempo total da fila: [${timing(queue_len)}]
------------------------------------------------` +
+------------------------------------` +
 								"```")
 						} catch (e) {
-							return message.channel.send(`A fila é muito grande para ser exibida\nerro: ${e}`);
+							if (e != TypeError) {
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription('Não tem filas criadas neste servidor.')
+									.setColor("#FF0000"));
+							}
+
+							return console.error(`${e}: Error printing queue list`);
 						}
 					}
 				} catch (e) {
