@@ -9,10 +9,10 @@ var ytkey = helper.loadKeys("youtube_key");
 const queue = new Map();
 const youtube = new YouTube(ytkey);
 var jumped = false;
-// var leaving = false;
+var leaving = false;
 var dispatcher;
 
-var subcommands = [ /*'repeat', */ 'earrape', 'p', 'pause', 'join', 'j', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = [ /*'repeat', */ 'earrape', 'p', 'pause' /*, 'join', 'j'*/ , 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
@@ -319,30 +319,28 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
-		case "join":
-		case "j":
-			{
-				if (voiceChannel) {
-					serverQueue.connection = await voiceChannel.join();
-					return dispatcher.resume();
-				} else {
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription("Você precisa estar em um canal de voz.")
-						.setColor("#FF0000"));
-				}
-			}
+			// case "join":
+			// case "j":
+			// 	{
+			// 		if (voiceChannel) {
+			// 			serverQueue.connection = await voiceChannel.join();
+			// 			return dispatcher.resume();
+			// 		} else {
+			// 			return message.channel.send(new Discord.RichEmbed()
+			// 				.setDescription("Você precisa estar em um canal de voz.")
+			// 				.setColor("#FF0000"));
+			// 		}
+			// 	}
 		case "leave":
 		case "l":
 			{
 				try {
-					dispatcher.pause();
-					// leaving = true;
+					leaving = true;
 					message.channel.send(arg_embed
-						.setDescription(`Saí do canal de voz **${voiceChannel}**`));
+						.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
 
-					serverQueue.connection = await voiceChannel.leave();
-					return
-					// queue.delete(message.guild.id);
+					queue.delete(message.guild.id);
+					return voiceChannel.leave();
 				} catch (error) {
 					console.error("Error ocurred when leaving the voice channel");
 					return message.channel.send(arg_embed
@@ -821,12 +819,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	// if (!leaving) {
-	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-		quality: 'highestaudio'
-	}));
-	// } else return;
+	if (!leaving) {
+		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
+			quality: 'highestaudio'
+		}));
+	} else return;
 
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
@@ -851,12 +849,12 @@ async function play(bot, message, guild, song) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
 
-			// if (!leaving) {
-			return message.channel.send(new Discord.RichEmbed()
-				.setTitle("A fila de músicas acabou.")
-				.setColor("#00FF00"));
-			// }
-			// return;
+			if (!leaving) {
+				return message.channel.send(new Discord.RichEmbed()
+					.setTitle("A fila de músicas acabou.")
+					.setColor("#00FF00"));
+			}
+			return;
 		}
 
 		serverQueue.songs.shift();
