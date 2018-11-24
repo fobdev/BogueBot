@@ -539,6 +539,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						}
 					} else {
 						var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
+
 						// Tries to print the normal queue
 						try {
 							var isLivestream = `**${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)}**\n`;
@@ -614,7 +615,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 											leftzero = i;
 										}
 
-										ultralarge_queue += `${leftzero} - ${serverQueue.songs[i].title} | ${timing(serverQueue.songs[i].length)}\n`;
+										ultralarge_queue += `${leftzero} - [${timing(serverQueue.songs[i].length)}] ${serverQueue.songs[i].title} | ${serverQueue.songs[i].author}\n`;
 									}
 
 									return message.channel.send("```markdown\n" +
@@ -624,8 +625,8 @@ Agora Tocando: ${serverQueue.songs[0].title} | ${timing(dispatchertime_seconds)}
 ${ultralarge_queue}
 Tempo total da fila: ${timing(queue_len)}
 
-${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
-${botconfig.prefix}${module.exports.help.name} queue next [numero] 	para colocar um vídeo como próximo a tocar.
+${botconfig.prefix}${module.exports.help.name} queue [numero]		para pular para qualquer posição.
+${botconfig.prefix}${module.exports.help.name} queue next [numero] para colocar um vídeo como próximo a tocar.
 ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir um item da fila.
 ` +
 										"```")
