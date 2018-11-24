@@ -109,7 +109,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
                     .setTitle(`Comandos Administrativos`)
                     .setDescription(authority_commands));
             }
-        case 'util':
+        case `${bot.user.username.toLowerCase()}`:
             {
                 return message.channel.send(subhelp_embed
                     .setTitle(`${bot.user.username}`)
