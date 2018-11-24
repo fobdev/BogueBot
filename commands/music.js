@@ -557,6 +557,7 @@ ${ultralarge_queue}
 Tempo total da fila: ${timing(queue_len)}
 
 ${botconfig.prefix}${module.exports.help.name} queue [numero] 		para pular para qualquer posição.
+${botconfig.prefix}${module.exports.help.name} queue next [numero] 	para colocar um vídeo como próximo a tocar.
 ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir um item da fila.
 ` +
 								"```")
@@ -592,10 +593,10 @@ ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir 
 							queue_embed.setFooter(`${serverQueue.songs.length} na fila atual - Tempo restante: ${timing(fulltime - dispatchertime_seconds)}`, bot.user.displayAvatarURL);
 
 							if (serverQueue.songs.length > 1) return message.channel.send(queue_embed
-								.addField('\u200B', "``[" + `${botconfig.prefix}${module.exports.help.name}` + " queue [numero]``" +
-									"] para pular para qualquer posição.\n" +
-									"``[" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]``" +
-									"] para excluir um item da fila."));
+								.addField('\u200B', "``" + `${botconfig.prefix}${module.exports.help.name}` + " queue next [numero]``" +
+									" para colocar um vídeo como o próximo.\n" +
+									"``" + `${botconfig.prefix}${module.exports.help.name}` + " queue del [numero]``" +
+									" para excluir um item da fila."));
 							else {
 								return message.channel.send(queue_embed
 									.addField('\u200B', "**Não há itens adicionais na fila.**"));
@@ -609,14 +610,14 @@ ${botconfig.prefix}${module.exports.help.name} queue del [numero] 	para excluir 
 								.setColor('#00FF00');
 
 							for (let i = 1; i < serverQueue.songs.length; i++) {
-								queue_element += `${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
+								queue_element += `0${i} - **[${serverQueue.songs[i].title}](${serverQueue.songs[i].url})** ` +
 									` - **${timing(serverQueue.songs[i].length)}** [<@${serverQueue.songs[i].authorID}>]\n`
 
 								fulltime += parseInt(serverQueue.songs[i].length);
 								if (i === serverQueue.songs.length - 1) largequeue_embed.addField('Próximos na fila', `${queue_element}`);
 							}
 
-							return message.channel.send(largequeue_embed.setFooter(`Tempo total da playlist: ${timing(fulltime)}`, bot.user.displayAvatarURL));
+							return message.channel.send(largequeue_embed.setFooter(`Tempo total da fila: ${timing(fulltime)}`, bot.user.displayAvatarURL));
 						}
 					}
 
@@ -798,7 +799,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
 				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "`` para ver a fila completa.\n" +
-					"``[" + `${botconfig.prefix}${module.exports.help.name} queue ${serverQueue.songs.length - 1}]` + "`` para pular para esse video.")
+					"``[" + `${botconfig.prefix}${module.exports.help.name} queue next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.")
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
