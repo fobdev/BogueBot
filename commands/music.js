@@ -323,7 +323,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "j":
 			{
 				if (voiceChannel) {
-					await voiceChannel.join();
+					serverQueue.connection = await voiceChannel.join();
 					return dispatcher.resume();
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
@@ -339,7 +339,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					// leaving = true;
 					message.channel.send(arg_embed
 						.setDescription(`Saí do canal de voz **${voiceChannel}**`));
-					return voiceChannel.leave();
+
+					serverQueue.connection = await voiceChannel.leave();
+					return
 					// queue.delete(message.guild.id);
 				} catch (error) {
 					console.error("Error ocurred when leaving the voice channel");
