@@ -324,35 +324,28 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				if (voiceChannel) {
 					await voiceChannel.join();
-					dispatcher.resume();
+					return dispatcher.resume();
 				} else {
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription("O bot já está em um canal de voz.")
 						.setColor("#FF0000"));
 				}
 			}
-			break;
 		case "leave":
 		case "l":
 			{
-				if (voiceChannel) {
-					try {
-						leaving = true;
-						message.channel.send(arg_embed
-							.setDescription(`Saí do canal de voz **${voiceChannel}**`));
-						return voiceChannel.leave();
-						// queue.delete(message.guild.id);
-					} catch (error) {
-						console.error("Error ocurred when leaving the voice channel");
-						return message.channel.send(arg_embed
-							.setTitle("Ocorreu um erro ao sair da sala."));
-					}
-				} else {
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Ocorreu um erro ao tentar sair da sala.')
-						.setColor("#FF0000"));
+				try {
+					leaving = true;
+					message.channel.send(arg_embed
+						.setDescription(`Saí do canal de voz **${voiceChannel}**`));
+					dispatcher.pause();
+					return voiceChannel.leave();
+					// queue.delete(message.guild.id);
+				} catch (error) {
+					console.error("Error ocurred when leaving the voice channel");
+					return message.channel.send(arg_embed
+						.setTitle("Ocorreu um erro ao sair da sala."));
 				}
-
 			}
 		case "np":
 			{
