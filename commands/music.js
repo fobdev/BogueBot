@@ -336,11 +336,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				try {
 					leaving = true;
-					message.channel.send(arg_embed
-						.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
-
+					voiceChannel.leave();
 					queue.delete(message.guild.id);
-					return voiceChannel.leave();
+					return message.channel.send(arg_embed
+						.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
 				} catch (error) {
 					console.error("Error ocurred when leaving the voice channel");
 					return message.channel.send(arg_embed
@@ -726,7 +725,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		media_writers: song_info.media.writers
 	};
 
-	// leaving = false;
+	leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
 			id: message.guild.id,
