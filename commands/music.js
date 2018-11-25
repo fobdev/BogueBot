@@ -399,17 +399,11 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					}
 
 					if (args[1] === 'shuffle') {
-						// Inside function to easy visualization of the algorithm
-						function rand_and_swap(array) {
-							for (let i = array.length; i > 0; i--) {
-								var rand_pos = Math.floor(Math.random() * i);
-								swap(i, rand_pos, array);
-							}
 
-							return array;
+						for (let i = serverQueue.songs.length; i > 0; i--) {
+							var rand_pos = Math.floor(Math.random() * i);
+							swap(i, rand_pos, serverQueue.songs);
 						}
-
-						rand_and_swap(serverQueue.songs) // randomize the queue
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setColor('#00FF00')
