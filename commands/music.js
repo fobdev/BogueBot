@@ -376,7 +376,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					.addField("Tempo", `${isLivestream}`, true)
 					.addField("Adicionado por", `[${current_music.author}]`, true)
 					.addField("Canal", `[${current_music.channel}](${current_music.channel_url})`, true)
-					.setThumbnail(current_music.thumbnail.maxRes)
+					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
 
 				if (serverQueue.songs.length > 1) now_playing_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`);
@@ -663,7 +663,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					id: videosarray[v].id,
 					title: song_info.title,
 					url: song_info.url,
-					thumbnail: song_info.thumbnails,
+					thumbnail: song_info.thumbnails.maxres.url,
 					length: song_info.durationSeconds,
 					authorID: message.author.id,
 					author: message.author,
@@ -691,7 +691,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		id: video.id,
 		title: song_info.title,
 		url: song_info.url,
-		thumbnail: song_info.thumbnails,
+		thumbnail: song_info.thumbnails.maxres.url,
 		length: song_info.durationSeconds,
 		authorID: message.author.id,
 		author: message.author,
@@ -797,7 +797,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
 				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa.\n" +
 					"``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.")
-				.setThumbnail(song.thumbnail.maxRes)
+				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
 				.setURL(song.url));
@@ -821,7 +821,7 @@ async function play(bot, message, guild, song) {
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
-		.setThumbnail(song.thumbnail.maxRes)
+		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
 	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
