@@ -670,27 +670,18 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				video = videosarray[v];
 			} catch (e) {
 				unavaliable_videos++;
-
-				var spam_detector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id)
-
-				if (spam_detector.collected.size <= 5) {
+				if (unavaliable_videos < 5) {
+					console.error(`${e}: ${videosarray[v].title}.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
 						.setColor("#FF0000"));
-				} else
-					spam_detector.stop();
-
-				spam_detector.on('end', () => {
-					console.log('SPAM DETECTOR STOPPED');
-					spam_detector.collected.deleteAll();
-
+				} else {
+					console.error(`SPAM: Stopped sending messages because of spam.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setTitle('Vários erros detectados')
 						.setDescription('Parando de emitir erros para evitar spam.')
 						.setColor('#FF0000'));
-				})
-
-				console.error(`${e}: ${videosarray[v].title}.`);
+				}
 			}
 		}
 	}
