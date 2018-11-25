@@ -550,10 +550,10 @@ Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)}
 
 							var queue_string_variable = `${ultralarge_queue}
 Tempo total da fila: [${timing(queue_len)}]
-------------------------------------` + "``";
+------------------------------------` + "```";
 
-							var queue_string_literals = `
-							Use '<' ou '>' para navegar pelas páginas da fila.`
+							var queue_string_literals = "```" + `
+Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 
 							var queue_string = queue_string_constant + queue_string_variable;
 							if (serverQueue.songs.length > 20) queue_string += queue_string_literals;
