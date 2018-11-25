@@ -455,8 +455,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
-								"como próximo video a se reproduzir. \n``" +
-								`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
+								"como próximo video a se reproduzir.")
+							.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**")
 							.setColor("#00FF00"));
 					}
 
@@ -494,8 +494,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`**${message.author.username}** alternou a posição de [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url}) com a de ` +
-									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})\n` + "``" +
-									`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
+									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})\n`)
+								.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**")
 								.setColor("#00FF00"));
 
 						} else {
@@ -527,8 +527,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							message.channel.send(arg_embed
 								.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
-									` foi removido da fila.` + "\n``" +
-									`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila."));
+									` foi removido da fila.`)
+								.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**"));
+
 							await serverQueue.songs.splice(entry, 1);
 
 							return;
@@ -675,14 +676,15 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			} catch (e) {
 				unavailable_videos++;
 
-				if (unavailable_videos < 5) {
+				const error_lim = 4
+				if (unavailable_videos < error_lim) {
 					console.error(`${e}: ${videosarray[v].title}.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
 						.setColor("#FF0000"));
 				}
 
-				if (unavailable_videos == 5) {
+				if (unavailable_videos == error_lim) {
 					console.error(`SPAM: Stopped sending messages because of spam.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setTitle('Vários erros detectados')
