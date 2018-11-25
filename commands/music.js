@@ -704,17 +704,23 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
-	var song = {
-		id: video.id,
-		title: song_info.title,
-		url: video.url,
-		thumbnail: song_info.thumbnails.maxres.url,
-		length: song_info.durationSeconds,
-		authorID: message.author.id,
-		author: message.author,
-		channel: song_info.channel.title,
-		channel_url: song_info.channel.url
-	};
+	try {
+		var song = {
+			id: video.id,
+			title: song_info.title,
+			url: video.url,
+			thumbnail: song_info.thumbnails.maxres.url,
+			length: song_info.durationSeconds,
+			authorID: message.author.id,
+			author: message.author,
+			channel: song_info.channel.title,
+			channel_url: song_info.channel.url
+		};
+	} catch (e) {
+		return message.channel.send(new Discord.RichEmbed()
+			.setTitle("Este vídeo não está disponível, não foi adicionado à fila.")
+			.setColor('#FF0000'));
+	}
 
 	leaving = false;
 	if (!serverQueue) {
