@@ -155,6 +155,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 					var nullstr;
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await ytdl.getBasicInfo(videos[i].url);
+						var views = await current_video.view_count;
 						// var current_video = await youtube.getVideo(videos[i].url);
 						var isLivestream = `Duração: ${timing(parseInt(current_video.length_seconds))}`;
 						if (parseInt(current_video.length_seconds) === 0) isLivestream = '**🔴 Livestream**';
@@ -163,7 +164,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 						else nullstr = '\u200B';
 
 						search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.video_url})**\n` +
-							`${isLivestream} **|** ${current_video.view_count} visualizações`);
+							`${isLivestream} **|** ${views} visualizações`);
 					}
 
 					message.channel.send(search_embed
