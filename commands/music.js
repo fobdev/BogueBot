@@ -645,12 +645,35 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			try {
 				song_info = await youtube.getVideoByID(videosarray[v].id);
 
+				var tbnl = '';
+				try {
+					tbnl = song_info.thumbnails.maxres.url
+				} catch (e) {
+					try {
+						tbnl = song_info.thumbnails.standard.url
+					} catch (e) {
+						try {
+							tbnl = song_info.thumbnails.high.url
+						} catch (e) {
+							try {
+								tbnl = song_info.thumbnails.medium.url
+							} catch (e) {
+								try {
+									tbnl = song_info.thumbnails.default.url
+								} catch (e) {
+									console.error('no thumbnail available');
+								}
+							}
+						}
+					}
+				}
+
 				if (song_info) {
 					song_playlist[v] = {
 						id: videosarray[v].id,
 						title: song_info.title,
 						url: videosarray[v].url,
-						thumbnail: song_info.thumbnails.maxres.url,
+						thumbnail: tbnl,
 						length: song_info.durationSeconds,
 						authorID: message.author.id,
 						author: message.author,
@@ -693,19 +716,44 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
+	var tbnl = '';
+	try {
+		tbnl = song_info.thumbnails.maxres.url
+	} catch (e) {
+		try {
+			tbnl = song_info.thumbnails.standard.url
+		} catch (e) {
+			try {
+				tbnl = song_info.thumbnails.high.url
+			} catch (e) {
+				try {
+					tbnl = song_info.thumbnails.medium.url
+				} catch (e) {
+					try {
+						tbnl = song_info.thumbnails.default.url
+					} catch (e) {
+						console.error('no thumbnail available');
+					}
+				}
+			}
+		}
+	}
+
 	try {
 		var song = {
 			id: video.id,
 			title: song_info.title,
 			url: video.url,
-			thumbnail: song_info.thumbnails.maxres.url,
+			thumbnail: tbnl,
 			length: song_info.durationSeconds,
 			authorID: message.author.id,
 			author: message.author,
 			channel: song_info.channel.title,
 			channel_url: song_info.channel.url
 		};
+
 	} catch (e) {
+		console.error(e);
 		return message.channel.send(new Discord.RichEmbed()
 			.setTitle("Este vídeo não está disponível, não foi adicionado à fila.")
 			.setColor('#FF0000'));
