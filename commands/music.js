@@ -392,23 +392,21 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "q":
 			{
 				try {
+					function swap(e1, e2, a) {
+						var t = a[e1];
+						a[e1] = a[e2];
+						a[e2] = t;
+					}
+
 					if (args[1] === 'shuffle') {
 						// Inside function to easy visualization of the algorithm
 						function rand_and_swap(array) {
-							var currentIndex = array.length,
-								temporaryValue, randomIndex;
+							var array_pos = array.length;
 
 							// While there remain elements to shuffle...
-							while (1 !== currentIndex) {
-
-								// Pick a remaining element...
-								randomIndex = Math.floor(Math.random() * currentIndex);
-								currentIndex -= 1;
-
-								// And swap it with the current element.
-								temporaryValue = array[currentIndex];
-								array[currentIndex] = array[randomIndex];
-								array[randomIndex] = temporaryValue;
+							for (let i = 0; i < array.length - 1; i++) {
+								var rand_pos = Math.floor(Math.random() * array_pos);
+								swap(array_pos, rand_pos, array);
 							}
 
 							return array;
@@ -420,12 +418,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							.setColor('#00FF00')
 							.setTitle(`**${message.author.username}** randomizou a fila de **${message.guild.name}**`)
 							.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a fila completa."));
-					}
-
-					function swap(e1, e2, a) {
-						var t = a[e1];
-						a[e1] = a[e2];
-						a[e2] = t;
 					}
 
 					if (args[1] === 'next' && args[2]) {
