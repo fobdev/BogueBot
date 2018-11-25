@@ -691,7 +691,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		id: video.id,
 		title: song_info.title,
 		url: song_info.url,
-		thumbnail: song_info.thumbnails.maxres,
+		thumbnail: song_info.maxRes,
 		length: song_info.durationSeconds,
 		authorID: message.author.id,
 		author: message.author,
