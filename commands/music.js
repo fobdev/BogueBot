@@ -541,8 +541,14 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
 							}
 
+							var page_amount = Math.ceil((serverQueue.songs.length / 20))
+							var current_page = 1;
+							var pages_string = '';
+							if (page_amount > 1) {
+								pages_string = `Página ( ${current_page} / ${page_amount} )`
+							}
 							var queue_string_constant = "```md\n" +
-								`Fila de ${message.guild.name}
+								`Fila de ${message.guild.name} | ${pages_string}
 ====================================
 Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
