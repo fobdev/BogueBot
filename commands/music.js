@@ -437,7 +437,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							return message.channel.send(new Discord.RichEmbed()
 								.setTitle('Uso incorreto do comando')
 								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1]` + "``" +
-									" para colocar [numero1] como próximo video a se reproduzir")
+									" para colocar [numero1] como próximo video a se reproduzir.")
 								.setColor('#FF0000'));
 						}
 
@@ -455,7 +455,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
-								"como próximo video a se reproduzir.")
+								"como próximo video a se reproduzir. \n``" +
+								`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
 							.setColor("#00FF00"));
 					}
 
@@ -493,7 +494,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							return message.channel.send(new Discord.RichEmbed()
 								.setDescription(`**${message.author.username}** alternou a posição de [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url}) com a de ` +
-									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})`)
+									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})\n` + "``" +
+									`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
 								.setColor("#00FF00"));
 
 						} else {
@@ -525,7 +527,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							message.channel.send(arg_embed
 								.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
-									` foi removido da fila.`));
+									` foi removido da fila.` + "\n``" +
+									`${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila."));
 							await serverQueue.songs.splice(entry, 1);
 
 							return;
@@ -559,6 +562,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							jumped = false;
 							message.channel.send(arg_embed
 								.setTitle(`Fila pulada para a posição **${args[1]}**`)
+								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
 								.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 								.setColor("#00FF00"));
 
