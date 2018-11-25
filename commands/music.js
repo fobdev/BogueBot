@@ -649,6 +649,24 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			try {
 				song_info = await youtube.getVideoByID(videosarray[v].id);
 				// song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
+
+				if (song_info) {
+					song_playlist[v] = {
+						id: videosarray[v].id,
+						title: song_info.title,
+						url: song_info.url,
+						thumbnail: song_info.thumbnails.maxres.url,
+						length: song_info.durationSeconds,
+						authorID: message.author.id,
+						author: message.author,
+						channel: song_info.channel.title,
+						channel_url: song_info.channel.url
+					};
+				} else {
+					console.error("Error ocurred getting video information.")
+				}
+
+				video = videosarray[v];
 			} catch (e) {
 				unavaliable_videos++;
 				message.channel.send(new Discord.RichEmbed()
@@ -658,23 +676,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				console.error(`${e}: ${videosarray[v].title}.`);
 			}
 
-			if (song_info) {
-				song_playlist[v] = {
-					id: videosarray[v].id,
-					title: song_info.title,
-					url: song_info.url,
-					thumbnail: song_info.thumbnails.maxres.url,
-					length: song_info.durationSeconds,
-					authorID: message.author.id,
-					author: message.author,
-					channel: song_info.channel.title,
-					channel_url: song_info.channel.url
-				};
-
-				video = videosarray[v];
-			} else {
-				console.error("Error ocurred getting video information.")
-			}
 		}
 	}
 
