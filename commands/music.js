@@ -60,13 +60,6 @@ module.exports.run = async (bot, message, args) => {
 			} catch (e) {
 				console.error('Error deleting URL message.');
 			}
-
-			// Verify video availability before searching
-			if (!video.url) {
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription('**Este video está indisponível**, tente usar resultados semelhantes.')
-					.setColor('#FF0000'));
-			}
 		} catch (error) {
 
 			// If the inputted message is not a subcommand, searchs a video.
@@ -677,9 +670,30 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				video = videosarray[v];
 			} catch (e) {
 				unavaliable_videos++;
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
-					.setColor("#FF0000"));
+
+				var spam_detector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id)
+
+				var msg_count;
+				spam_detector.on('collect', () => {
+					msg_count++;
+
+					message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
+						.setColor("#FF0000"));
+
+					if (msg_count > 5) {
+						spam_detector.stop('spam');
+					}
+				});
+
+				spam_detector.on('end', () => {
+					spam_detector.collected.deleteAll();
+
+					message.channel.send(new Discord.RichEmbed()
+						.setTitle('Vários erros detectados')
+						.setDescription('Parando de emitir erros para evitar spam.')
+						.setColor('#FF0000'));
+				})
 
 				console.error(`${e}: ${videosarray[v].title}.`);
 			}
