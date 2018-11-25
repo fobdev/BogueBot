@@ -177,6 +177,10 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 					user_msgcollector.on('collect', async msg => {
 						// Verify if the message is a number between all listed videos or is a cancel command
 						if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+							if (msg.content.endsWith('-next')) {
+								message.channel.send(`>m q next ${msg.content[0]}`)
+							}
+
 							if (msg.content === 'c') {
 								try {
 									await bot_msgcollector.stop('cancelled');
