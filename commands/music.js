@@ -12,7 +12,7 @@ var jumped = false;
 var leaving = false;
 var dispatcher;
 
-var subcommands = [ /*'repeat', */ 'earrape', 'p', 'pause' /*, 'join', 'j'*/ , 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
@@ -236,37 +236,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 	// Subcommands switch
 	switch (url) {
-		// case "repeat":
-		// 	{
-		// 		{
-		// 			if (dispatcher.speaking) {
-		// 				switch (args[1]) {
-		// 					case 'on':
-		// 						{
-		// 							message.channel.send(new Discord.RichEmbed()
-		// 								.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-		// 								.setColor('#00FF00'));
-		// 							if (Math.floor(dispatcher.time / 1000) === serverQueue.songs[0].length) {
-		// 								play(bot, message, guild, serverQueue.songs[0]);
-		// 							}
-		// 						}
-		// 						break;
-		// 					case 'off':
-		// 						{
-		// 							return message.channel.send(new Discord.RichEmbed()
-		// 								.setDescription(`**${message.author.username}** começou a repetir [${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
-		// 								.setColor('#00FF00'));
-		// 						}
-		// 					default:
-		// 						return message.channel.send(new Discord.RichEmbed()
-		// 							.setTitle('Uso incorreto do comando')
-		// 							.setDescription("``" + `${botconfig.prefix}${module.exports.help.name} repeat [on/off]`)
-		// 							.setColor('#FF0000'));
-		// 				}
-		// 			}
-		// 		}
-		// 		break;
-		// 	}
 		case "earrape":
 			{
 				if (dispatcher.speaking) {
@@ -322,18 +291,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
-			// case "join":
-			// case "j":
-			// 	{
-			// 		if (voiceChannel) {
-			// 			serverQueue.connection = await voiceChannel.join();
-			// 			return dispatcher.resume();
-			// 		} else {
-			// 			return message.channel.send(new Discord.RichEmbed()
-			// 				.setDescription("Você precisa estar em um canal de voz.")
-			// 				.setColor("#FF0000"));
-			// 		}
-			// 	}
 		case "leave":
 		case "l":
 			{
@@ -584,15 +541,24 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
 							}
 
-							return message.channel.send("```md\n" +
+							var queue_string_constant = "```md\n" +
 								`Fila de ${message.guild.name}
 ====================================
 Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
-${ultralarge_queue}
+`;
+
+							var queue_string_variable = `${ultralarge_queue}
 Tempo total da fila: [${timing(queue_len)}]
-------------------------------------` +
-								"```")
+------------------------------------` + "``";
+
+							var queue_string_literals = `
+							Use '<' ou '>' para navegar pelas páginas da fila.`
+
+							var queue_string = queue_string_constant + queue_string_variable;
+							if (serverQueue.songs.length > 20) queue_string += queue_string_literals;
+
+							return message.channel.send(queue_string);
 						} catch (e) {
 							if (e != TypeError) {
 								return message.channel.send(new Discord.RichEmbed()
