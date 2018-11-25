@@ -751,7 +751,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
+				.addField("Foi adicionado à fila", `**[${song.title}](${song.url})**`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
 				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa.\n" +
@@ -798,7 +798,8 @@ async function play(bot, message, guild, song) {
 
 			if (!leaving) {
 				return message.channel.send(new Discord.RichEmbed()
-					.setTitle("A fila de músicas acabou.")
+					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
+					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.setColor("#00FF00"));
 			}
 			return;
