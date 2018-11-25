@@ -177,10 +177,6 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 					user_msgcollector.on('collect', async msg => {
 						// Verify if the message is a number between all listed videos or is a cancel command
 						if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-							if (msg.content.endsWith('-next')) {
-								message.channel.send(`>m q next ${msg.content[0]}`)
-							}
-
 							if (msg.content === 'c') {
 								try {
 									await bot_msgcollector.stop('cancelled');
@@ -758,8 +754,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField("Foi adicionado à fila", `[${song.title}](${song.url})`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
-				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name} queue]` + "`` para ver a fila completa.\n" +
-					"``[" + `${botconfig.prefix}${module.exports.help.name} queue next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.")
+				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa.\n" +
+					"``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.")
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
