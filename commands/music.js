@@ -401,12 +401,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					if (args[1] === 'shuffle') {
 						// Inside function to easy visualization of the algorithm
 						function rand_and_swap(array) {
-							var array_pos = array.length;
-
-							// While there remain elements to shuffle...
-							for (let i = 0; i < array.length - 1; i++) {
-								var rand_pos = Math.floor(Math.random() * array_pos);
-								swap(array_pos, rand_pos, array);
+							for (let i = array.length; i > 0; i--) {
+								var rand_pos = Math.floor(Math.random() * i);
+								swap(i, rand_pos, array);
 							}
 
 							return array;
