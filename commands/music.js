@@ -418,7 +418,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setColor('#00FF00')
-							.setTitle(`**${message.author.name}** randomizou a fila de **${message.guild.name}**`)
+							.setTitle(`**${message.author.username}** randomizou a fila de **${message.guild.name}**`)
 							.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a fila completa."));
 					}
 
@@ -647,7 +647,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	if (videosarray.length !== 0) {
 		for (let v = 0; v < videosarray.length; v++) {
 			try {
-				song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
+				song_info = await youtube.getVideoByID(videosarray[v].id);
+				// song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 			} catch (e) {
 				unavaliable_videos++;
 				message.channel.send(new Discord.RichEmbed()
@@ -661,16 +662,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				song_playlist[v] = {
 					id: videosarray[v].id,
 					title: song_info.title,
-					url: `https://www.youtube.com/watch?v=${videosarray[v].id}`,
-					thumbnail: song_info.thumbnail_url,
-					length: song_info.length_seconds,
+					url: song_info.url,
+					thumbnail: song_info.maxRes,
+					length: song_info.durationSeconds,
 					authorID: message.author.id,
 					author: message.author,
-					channel: song_info.author.name,
-					channel_url: song_info.author.channel_url,
-					media_artist: song_info.media.artist,
-					media_album: song_info.media.album,
-					media_writers: song_info.media.writers
+					channel: song_info.channel.title,
+					channel_url: song_info.channel.url
 				};
 
 				video = videosarray[v];
@@ -681,7 +679,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	}
 
 	try {
-		song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${video.id}`);
+		song_info = await youtube.getVideoByID(video.id);
 	} catch (e) {
 		console.error(`${e}: [${message.author.username}] Tried to call song info with no song`);
 		return message.channel.send(new Discord.RichEmbed()
@@ -692,17 +690,29 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	var song = {
 		id: video.id,
 		title: song_info.title,
-		url: `https://www.youtube.com/watch?v=${video.id}`,
-		thumbnail: song_info.thumbnail_url,
-		length: song_info.length_seconds,
+		url: song_info.url,
+		thumbnail: song_info.thumbnails.maxres,
+		length: song_info.durationSeconds,
 		authorID: message.author.id,
 		author: message.author,
-		channel: song_info.author.name,
-		channel_url: song_info.author.channel_url,
-		media_artist: song_info.media.artist,
-		media_album: song_info.media.album,
-		media_writers: song_info.media.writers
+		channel: song_info.channel.title,
+		channel_url: song_info.channel.url
 	};
+
+	// var song = {
+	// 	id: video.id,
+	// 	title: song_info.title,
+	// 	url: `https://www.youtube.com/watch?v=${video.id}`,
+	// 	thumbnail: song_info.thumbnail_url,
+	// 	length: song_info.length_seconds,
+	// 	authorID: message.author.id,
+	// 	author: message.author,
+	// 	channel: song_info.author.name,
+	// 	channel_url: song_info.author.channel_url,
+	// 	media_artist: song_info.media.artist,
+	// 	media_album: song_info.media.album,
+	// 	media_writers: song_info.media.writers
+	// };
 
 	leaving = false;
 	if (!serverQueue) {
@@ -800,7 +810,8 @@ async function play(bot, message, guild, song) {
 	if (!leaving) {
 		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-			quality: 'highestaudio'
+			quality: 'highestaudio',
+			filter: 'audioonly'
 		}));
 	} else return;
 
