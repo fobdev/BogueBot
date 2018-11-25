@@ -155,6 +155,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 					var nullstr;
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
+						var video_views = await ytdl.getBasicInfo(videos[i].url);
 						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
@@ -162,7 +163,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 						else nullstr = '\u200B';
 
 						search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
+							`${isLivestream} **|** ${video_views.view_count} visualizações`);
 					}
 
 					message.channel.send(search_embed
@@ -551,11 +552,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 								var whitespace = ' ';
 								// Whitespace is for padding of numbers
-								if (i < 10) {
-									whitespace = "  ";
-								} else {
-									whitespace = " ";
-								}
+								if (i < 10) whitespace = "  ";
+								else whitespace = " ";
 
 								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
 							}
