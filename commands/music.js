@@ -112,8 +112,9 @@ module.exports.run = async (bot, message, args) => {
 >music [música].........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue..........................Exibe toda a fila do servidor.
        (q)ueue [numero].................Pula para uma certa posição da fila.
-       (q)ueue next [numero]........Coloca o vídeo selecionado como próximo a tocar.
-       (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
+       (q)ueue next [numero]............Coloca o vídeo selecionado como próximo a tocar.
+	   (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
+       (q)ueue shuffle..................Randomiza a fila.
        (q)ueue (del)ete [numero]........Exclui um certo item da fila.
        (q)ueue purge(pg)................Limpa todos os itens da fila.
 	   
@@ -391,6 +392,36 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				var fulltime = 0;
 				try {
+					if (args[1] === 'shuffle') {
+						// Inside function to easy visualization of the algorithm
+						function rand_array(array) {
+							var currentIndex = array.length,
+								temporaryValue, randomIndex;
+
+							// While there remain elements to shuffle...
+							while (0 !== currentIndex) {
+
+								// Pick a remaining element...
+								randomIndex = Math.floor(Math.random() * currentIndex);
+								currentIndex -= 1;
+
+								// And swap it with the current element.
+								temporaryValue = array[currentIndex];
+								array[currentIndex] = array[randomIndex];
+								array[randomIndex] = temporaryValue;
+							}
+
+							return array;
+						}
+
+						rand_array(serverQueue.songs) // randomize the queue
+
+						return message.channel.send(new Discord.RichEmbed()
+							.setColor('#00FF00')
+							.setTitle(`**${message.author.name}** randomizou a fila de **${message.guild.name}**`)
+							.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a fila completa."));
+					}
+
 					function swap(e1, e2, a) {
 						var t = a[e1];
 						a[e1] = a[e2];
