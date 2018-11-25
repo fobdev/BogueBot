@@ -54,10 +54,18 @@ module.exports.run = async (bot, message, args) => {
 		try {
 			video = await youtube.getVideo(url);
 			await video_player(bot, message, video, serverQueue, voiceChannel);
+
 			try {
 				message.delete();
 			} catch (e) {
 				console.error('Error deleting URL message.');
+			}
+
+			// Verify video availability before searching
+			if (!video.url) {
+				message.channel.send(new Discord.RichEmbed()
+					.setDescription('**Este video está indisponível**, tente usar resultados semelhantes.')
+					.setColor('#FF0000'));
 			}
 		} catch (error) {
 
