@@ -642,7 +642,7 @@ Tempo total da fila: [${timing(queue_len)}]
 
 async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = []) {
 	// Collect all the information from the 'video' variable
-	var unavaliable_videos = 0;
+	var unavailable_videos = 0;
 	var song_info;
 	var song_playlist = new Array();
 
@@ -669,13 +669,16 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				video = videosarray[v];
 			} catch (e) {
-				unavaliable_videos++;
-				if (unavaliable_videos < 5) {
+				unavailable_videos++;
+
+				if (unavailable_videos < 5) {
 					console.error(`${e}: ${videosarray[v].title}.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
 						.setColor("#FF0000"));
-				} else {
+				}
+
+				if (unavailable_videos == 5) {
 					console.error(`SPAM: Stopped sending messages because of spam.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setTitle('Vários erros detectados')
@@ -729,9 +732,9 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				}
 			}
 
-			var pl_string = `**${videosarray.length - unavaliable_videos}** videos foram adicionados à fila`;
-			if (unavaliable_videos > 0) {
-				pl_string += `, **${unavaliable_videos}** videos indisponíveis.`
+			var pl_string = `**${videosarray.length - unavailable_videos}** videos foram adicionados à fila`;
+			if (unavailable_videos > 0) {
+				pl_string += `, **${unavailable_videos}** videos indisponíveis.`
 			} else pl_string += '.';
 
 			message.channel.send(new Discord.RichEmbed()
@@ -768,9 +771,9 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				}
 			}
 
-			var pl_string = `**${videosarray.length - unavaliable_videos}** videos foram adicionados à fila`;
-			if (unavaliable_videos > 0) {
-				pl_string += `, **${unavaliable_videos}** videos indisponíveis.`
+			var pl_string = `**${videosarray.length - unavailable_videos}** videos foram adicionados à fila`;
+			if (unavailable_videos > 0) {
+				pl_string += `, **${unavailable_videos}** videos indisponíveis.`
 			} else pl_string += '.';
 
 			return message.channel.send(new Discord.RichEmbed()
