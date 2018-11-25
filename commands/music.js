@@ -682,7 +682,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 						.setColor("#FF0000"));
 
 					if (msg_count > 5) {
-						spam_detector.stop('spam');
+						spam_detector.stop();
 					}
 				});
 
