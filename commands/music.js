@@ -391,11 +391,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "queue":
 		case "q":
 			{
-				var fulltime = 0;
 				try {
 					if (args[1] === 'shuffle') {
 						// Inside function to easy visualization of the algorithm
-						function rand_array(array) {
+						function rand_and_swap(array) {
 							var currentIndex = array.length,
 								temporaryValue, randomIndex;
 
@@ -415,7 +414,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							return array;
 						}
 
-						rand_array(serverQueue.songs) // randomize the queue
+						rand_and_swap(serverQueue.songs) // randomize the queue
 
 						return message.channel.send(new Discord.RichEmbed()
 							.setColor('#00FF00')
@@ -454,9 +453,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						serverQueue.songs.splice(swappable + 1, 1);
 
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**${message.author.username}** colocou [${serverQueue.songs[1].title}](${serverQueue.songs[1].url}) ` +
+							.setDescription(`**:arrow_up: ${message.author.username}** colocou **[${serverQueue.songs[1].title}](${serverQueue.songs[1].url})** ` +
 								"como próximo video a se reproduzir.")
-							.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**")
 							.setColor("#00FF00"));
 					}
 
@@ -490,12 +488,22 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 									.setColor("#FF0000"));
 							}
 
-							swap(swappable_e1, swappable_e2, serverQueue.songs);
 
+							var first_arrow = '';
+							var second_arrow = '';
+							if (swappable_e1 < swappable_e2) {
+								first_arrow = ':arrow_up:';
+								second_arrow = ':arrow_down:';
+							} else {
+								first_arrow = ':arrow_down:';
+								second_arrow = ':arrow_up:';
+							}
+
+							swap(swappable_e1, swappable_e2, serverQueue.songs);
 							return message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** alternou a posição de [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url}) com a de ` +
-									`[${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})\n`)
-								.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**")
+								.setTitle(`**${message.author.username}** alternou a posição de dois vídeos`)
+								.setDescription(`**${first_arrow} [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})**\n` +
+									`**${second_arrow} [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})**`)
 								.setColor("#00FF00"));
 
 						} else {
@@ -527,8 +535,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							message.channel.send(arg_embed
 								.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
-									` foi removido da fila.`)
-								.addField('\u200B', "**``" + `${botconfig.prefix}${module.exports.help.name} q` + "`` para ver a nova fila.**"));
+									` foi removido da fila.`));
 
 							await serverQueue.songs.splice(entry, 1);
 
