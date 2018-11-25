@@ -154,8 +154,8 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 
 					var nullstr;
 					for (let i = 0; i < videos.length; i++) {
-						var current_video = await ytdl.getBasicInfo(videos[i].url);
-						var views = parseInt(current_video.view_count);
+						var current_video = await ytdl.getInfo(videos[i].url);
+						var views = current_video.view_count;
 						// var current_video = await youtube.getVideo(videos[i].url);
 						var isLivestream = `Duração: ${timing(parseInt(current_video.length_seconds))}`;
 						if (parseInt(current_video.length_seconds) === 0) isLivestream = '**🔴 Livestream**';
