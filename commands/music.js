@@ -673,14 +673,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				var spam_detector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id)
 
-				spam_detector.on('collect', () => {
-					console.log(spam_detector.collected.size);
+				if (spam_detector.collected.size <= 5) {
 					message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
 						.setColor("#FF0000"));
-
-					if (spam_detector.collected.size > 5) spam_detector.stop();
-				});
+				} else
+					spam_detector.stop();
 
 				spam_detector.on('end', () => {
 					console.log('SPAM DETECTOR STOPPED');
