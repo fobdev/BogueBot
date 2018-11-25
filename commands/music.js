@@ -644,11 +644,11 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	var unavaliable_videos = 0;
 	var song_info;
 	var song_playlist = new Array();
+
 	if (videosarray.length !== 0) {
 		for (let v = 0; v < videosarray.length; v++) {
 			try {
 				song_info = await youtube.getVideoByID(videosarray[v].id);
-				// song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 
 				if (song_info) {
 					song_playlist[v] = {
@@ -668,12 +668,35 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				video = videosarray[v];
 			} catch (e) {
-				unavaliable_videos++;
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
-					.setColor("#FF0000"));
+				try {
+					song_info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${videosarray[v].id}`);
 
-				console.error(`${e}: ${videosarray[v].title}.`);
+					if (song_info) {
+						song_playlist[v] = {
+							id: videosarray[v].id,
+							title: song_info.title,
+							url: song_info.url,
+							thumbnail: song_info.thumbnails.maxres.url,
+							length: song_info.durationSeconds,
+							authorID: message.author.id,
+							author: message.author,
+							channel: song_info.channel.title,
+							channel_url: song_info.channel.url
+						};
+					} else {
+						console.error("Error ocurred getting video information.")
+					}
+
+					video = videosarray[v];
+				} catch (e) {
+					unavaliable_videos++;
+					message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
+						.setColor("#FF0000"));
+
+					console.error(`${e}: ${videosarray[v].title}.`);
+				}
+
 			}
 
 		}
@@ -699,21 +722,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		channel: song_info.channel.title,
 		channel_url: song_info.channel.url
 	};
-
-	// var song = {
-	// 	id: video.id,
-	// 	title: song_info.title,
-	// 	url: `https://www.youtube.com/watch?v=${video.id}`,
-	// 	thumbnail: song_info.thumbnail_url,
-	// 	length: song_info.length_seconds,
-	// 	authorID: message.author.id,
-	// 	author: message.author,
-	// 	channel: song_info.author.name,
-	// 	channel_url: song_info.author.channel_url,
-	// 	media_artist: song_info.media.artist,
-	// 	media_album: song_info.media.album,
-	// 	media_writers: song_info.media.writers
-	// };
 
 	leaving = false;
 	if (!serverQueue) {
