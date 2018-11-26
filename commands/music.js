@@ -174,7 +174,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 
 					var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 						time: 1000 * 30
-					})
+					});
 
 					user_msgcollector.on('collect', async msg => {
 						// Verify if the message is a number between all listed videos or is a cancel command
@@ -526,45 +526,94 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 						// Tries to print the normal queue
 						try {
+
 							var queue_len = 0;
 							var ultralarge_queue = '';
 							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
 
-							for (let i = 1; i < serverQueue.songs.length; i++) {
+							const page_size = 15
+							var page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
+							var current_page = 0;
+
+							for (let i = 1; i <= page_size; i++) {
+								// for (let i = 1; i < serverQueue.songs.length; i++) {
 								queue_len += parseInt(serverQueue.songs[i].length);
 
+								// Whitespace for padding of numbers
 								var whitespace = ' ';
-								// Whitespace is for padding of numbers
 								if (i < 10) whitespace = "  ";
 								else whitespace = " ";
 
 								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
 							}
 
-							var page_amount = Math.ceil((serverQueue.songs.length / 20))
-							var current_page = 1;
-							var pages_string = '';
-							if (page_amount > 1) {
-								pages_string = `Página ( ${current_page} / ${page_amount} )`
-							}
-							var queue_string_constant = "```md\n" +
-								`Fila de ${message.guild.name} | ${pages_string}
+							var queue_header = "```md\n" +
+								`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
 ====================================
 Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
-`;
+`;;
+							var queue_content = `${ultralarge_queue}`;
 
-							var queue_string_variable = `${ultralarge_queue}
+							var queue_footer = `
 Tempo total da fila: [${timing(queue_len)}]
 ------------------------------------` + "```";
 
-							var queue_string_literals = "```" + `
+							var queue_nav_help = "```" + `
 Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 
-							var queue_string = queue_string_constant + queue_string_variable;
-							if (serverQueue.songs.length > 20) queue_string += queue_string_literals;
+							var full_queue = queue_header + queue_content + queue_footer;
+							if (serverQueue.songs.length - 1 > page_size) full_queue += queue_nav_help;
 
-							return message.channel.send(queue_string);
+							if (page_amount > 1) {
+
+								var botmessage_collector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
+									time: 1000 * 60 // 1 minute time out
+								});
+								var usermessage_navigator = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+									time: 1000 * 60 // 1 minute time out
+								});
+
+								message.channel.send(full_queue);
+
+								usermessage_navigator.on('collect', msg => {
+									if (msg.content === '>' || msg.content === '<') {
+										msg.delete();
+										if (msg.content === '>') current_page++;
+										if (msg.content === '<') current_page--;
+										if (current_page < 0) current_page = page_amount - 1;
+										if (current_page >= page_amount) current_page = 0;
+
+										var new_header = "```md\n" +
+											`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
+====================================
+Agora Tocando: [${serverQueue.songs[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(serverQueue.songs[0].length)})
+
+`;;
+
+										var new_content = '';
+										for (let i = (page_size * current_page) + 1; i <= (page_size * current_page) + page_size; i++) {
+											// Whitespace for padding of numbers
+											var whitespace = ' ';
+											if (i < 10) whitespace = "  ";
+											else whitespace = " ";
+
+											try {
+												new_content += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
+											} catch (e) {
+												continue;
+											}
+										}
+
+										var new_page = new_header + new_content + queue_footer + queue_nav_help;
+
+										botmessage_collector.collected.array()[0].edit(new_page);
+									}
+								});
+							} else {
+								message.channel.send(full_queue);
+							}
+							return;
 						} catch (e) {
 							if (e != TypeError) {
 								return message.channel.send(new Discord.RichEmbed()
