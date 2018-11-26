@@ -535,10 +535,11 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							var page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 							var current_page = 0;
 
-							for (let i = 1; i <= page_size; i++) {
-								// for (let i = 1; i < serverQueue.songs.length; i++) {
+							for (let i = 0; i < serverQueue.songs.length; i++) {
 								queue_len += parseInt(serverQueue.songs[i].length);
+							}
 
+							for (let i = 1; i <= page_size; i++) {
 								// Whitespace for padding of numbers
 								var whitespace = ' ';
 								if (i < 10) whitespace = "  ";
