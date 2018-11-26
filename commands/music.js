@@ -392,8 +392,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						serverQueue.songs.splice(swappable + 1, 1);
 
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**:arrow_up: ${message.author.username}** colocou **[${serverQueue.songs[1].title}](${serverQueue.songs[1].url})** ` +
-								"como próximo video a se reproduzir.")
+							.setDescription(`:arrow_up: **[${serverQueue.songs[1].title}](${serverQueue.songs[1].url})** reproduzindo a seguir.`)
+							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 							.setColor("#00FF00"));
 					}
 
@@ -440,9 +440,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							swap(swappable_e1, swappable_e2, serverQueue.songs);
 							return message.channel.send(new Discord.RichEmbed()
-								.setTitle(`**${message.author.username}** alternou a posição de dois vídeos`)
+								.setTitle(`Posição de vídeos alternadas`)
 								.setDescription(`**${first_arrow} [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})**\n` +
 									`**${second_arrow} [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})**`)
+								.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 								.setColor("#00FF00"));
 
 						} else {
