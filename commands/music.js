@@ -610,6 +610,15 @@ Agora Tocando: [${serverQueue.songs[0].title}](${timing(parseInt(Math.floor(disp
 										botmessage_collector.collected.array()[0].edit(new_page);
 									}
 								});
+
+								usermessage_navigator.on('end', () => {
+									var new_navhelp = "```O tempo de navegação expirou```";
+
+									var final_page = queue_header + queue_content + queue_footer + new_navhelp;
+									botmessage_collector.collected.array()[0].edit(final_page)
+								})
+
+
 							} else {
 								message.channel.send(full_queue);
 							}
