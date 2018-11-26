@@ -501,21 +501,14 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 					if (args[1]) {
 						if (parseInt(args[1]) > 1 && parseInt(args[1]) <= serverQueue.songs.length) {
-							for (let i = 0; i < args[1] - 1; i++) {
-								jumped = true;
-								await dispatcher.end();
-							}
+							serverQueue.songs.splice(0, parseInt(args[1] - 1));
 
-							jumped = false;
-							message.channel.send(arg_embed
+							dispatcher.end();
+							return message.channel.send(arg_embed
 								.setTitle(`Fila pulada para a posição **${args[1]}**`)
 								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
 								.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 								.setColor("#00FF00"));
-
-							await dispatcher.end();
-
-							return;
 						} else {
 							return message.channel.send(arg_embed
 								.setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length - 1}**`)
@@ -545,7 +538,11 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								if (i < 10) whitespace = "  ";
 								else whitespace = " ";
 
-								ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
+								try {
+									ultralarge_queue += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
+								} catch (e) {
+									continue;
+								}
 							}
 
 							var queue_header = "```md\n" +
@@ -618,14 +615,14 @@ Agora Tocando: [${serverQueue.songs[0].title}](${timing(parseInt(Math.floor(disp
 									var final_page = queue_header + queue_content + queue_footer + new_navhelp;
 									botmessage_collector.collected.array()[0].edit(final_page)
 								})
-
-
 							} else {
 								message.channel.send(full_queue);
 							}
 							return;
 						} catch (e) {
+							console.error(e);
 							if (e != TypeError) {
+								console.error(e);
 								return message.channel.send(new Discord.RichEmbed()
 									.setDescription('Não tem filas criadas neste servidor.')
 									.setColor("#FF0000"));
