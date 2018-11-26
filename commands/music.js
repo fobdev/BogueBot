@@ -356,10 +356,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					}
 
 					if (args[1] === 'shuffle') {
-						for (let i = 1; i < serverQueue.songs.length; i++) {
-							while (true) {
-								var rand_pos = Math.floor((Math.random() * i) + 1);
-								if (rand_pos != i) break;
+						for (var i = 1; i < serverQueue.songs.length; i++) {
+							var rand_pos = Math.floor((Math.random() * i) + 1);
+							while (rand_pos === i) {
+								rand_pos = Math.floor((Math.random() * i) + 1);
 							}
 
 							swap(i, rand_pos, serverQueue.songs);
