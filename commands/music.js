@@ -603,7 +603,16 @@ Agora Tocando: [${serverQueue.songs[0].title}](${timing(parseInt(Math.floor(disp
 											}
 										}
 
-										var new_page = new_header + new_content + queue_footer + queue_nav_help;
+										var new_length = 0
+										for (let i = 0; i < serverQueue.songs.length; i++) {
+											new_length += parseInt(serverQueue.songs[i].length);
+										}
+
+										var new_footer = `
+Tempo total da fila: [${timing(new_length)}]
+------------------------------------` + "```";
+
+										var new_page = new_header + new_content + new_footer + queue_nav_help;
 
 										botmessage_collector.collected.array()[0].edit(new_page);
 									}
