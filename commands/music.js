@@ -811,11 +811,12 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 		if (videosarray.length !== 0) {
 			var playlist_length = 0;
-
-			for (let i = 0; i < videosarray.length; i++)
-				if (song_playlist[i]) playlist_length += parseInt(song_playlist[i].length);
-
-			await queueConstruct.songs.concat(song_playlist);
+			for (let i = 0; i < videosarray.length; i++) {
+				if (song_playlist[i]) {
+					playlist_length += parseInt(song_playlist[i].length);
+					await queueConstruct.songs.push(song_playlist[i]);
+				}
+			}
 
 			var pl_string = `**${videosarray.length - unavailable_videos}** videos foram adicionados à fila`;
 			if (unavailable_videos > 0) {
