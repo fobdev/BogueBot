@@ -80,7 +80,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 
     let help_embed = new Discord.RichEmbed()
         .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
-        .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL)
+        .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
         .setTimestamp(bot.user.createdAt)
         .setURL("https://github.com/pedroxvi")
         .setFooter("Fobenga, criado em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
