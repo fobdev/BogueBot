@@ -7,3 +7,4 @@ bottoken.json
 /node_modules
 package-lock.json
 test.js
+commands/global_message.js
