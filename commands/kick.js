@@ -5,9 +5,13 @@ module.exports.run = async (bot, message, args) => {
     if (message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
 
         let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        if (!kick_user) return message.channel.send("**User not found.**");
+        let kick_reason = args.join(" ").slice(args[0].length + 1);
 
-        let kick_reason = args.join(" ").slice(22);
+        if (!kick_user) {
+            return message.channel.send(new Discord.RichEmbed()
+                .setDescription(`Usuário não encontrado no servidor **${message.guild.name}**`)
+                .setColor("#FF0000"));
+        }
 
         const kick_embed = new Discord.RichEmbed()
             .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
