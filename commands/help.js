@@ -2,9 +2,10 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 const fs = require("fs");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args) =>
+{
     const music_commands_small =
-        "[``(m)usic                    ``]";
+        "[``music                    ``]";
 
     const new_music_commands = "```css\n" +
         `[Comandos de música do ${bot.user.username}]
@@ -99,7 +100,8 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         .setFooter('Fobenga, criado em ')
         .setTimestamp(bot.user.createdAt);
 
-    switch (helpcommand) {
+    switch (helpcommand)
+    {
         case 'music':
             {
                 return message.channel.send(new_music_commands);
