@@ -12,9 +12,7 @@ module.exports.run = async (bot, message, args) => {
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
-            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [100]` +
-            "``**\nOu usar: **``" + `${botconfig.prefix}help ${this.help.name}` +
-            "``**\npara informação detalhada sobre o comando**");
+            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [100]` + "``");
 
     if (del_arg > 100 || del_arg <= 0) {
         return message.channel.send(delfail_embed);
