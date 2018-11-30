@@ -4,13 +4,14 @@ const botconfig = require("../botconfig.json");
 module.exports.run = async (bot, message, args) => {
 
     let ban_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    let ban_reason = args.join(" ").slice(22);
+    let ban_reason = args.join(" ").slice(args[0].length + 1); // slices the length of the ID and the space after it
+    console.log(ban_reason);
 
     const ban_embed = new Discord.RichEmbed()
         .setFooter(`Requisitado por ${message.author.username}`, message.author.displayAvatarURL);
 
     if (!ban_user) return message.channel.send(ban_embed
-        .setTitle("Usuário não encontrado.")
+        .setTitle(`Usuário não encontrado no servidor **${message.guild.name}**.`)
         .setColor("#FF0000"));
 
     if (ban_user.hasPermission('ADMINISTRATOR')) {
