@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('Canal Principal', syschannel, true)
         .addField('Canais', `${text_channels} texto / ${voice_channels} voz`, true)
         .addField('Cargos', server.roles.array().join(', '))
-        .setFooter(`Criado em ${server.createdAt}`, server.iconURL, true)
+        .setFooter(`Criado em ${server.createdAt}`, message.guild.owner.user.displayAvatarURL, true)
     )
 }
 
