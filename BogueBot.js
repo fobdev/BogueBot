@@ -87,10 +87,14 @@ function status_updater() {
 
     for (var i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
 
+    var cmd_plural = 'comando';
+    if (commands_used !== 1)
+        cmd_plural += 's';
+
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários\n[${commands_used}] comandos usados hoje.`, {
+        ` | ${members_reached} usuários usaram ${commands_used} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
         });
 }
