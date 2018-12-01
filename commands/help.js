@@ -71,7 +71,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
     const fun_commands_small =
         "[``dice                ``, " +
         "``flipcoin             ``, " +
-        "``lenny                ``, ";
+        "``lenny                ``]";
 
     const fun_commands =
         "|``" + `${botconfig.prefix}` + "dice [dados]       ``| " + "`` - `` **Role 1 ou mais dados para cima e veja o resultado.\n**" +
