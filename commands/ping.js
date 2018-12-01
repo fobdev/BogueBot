@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 
-module.exports.run = async (bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
+	var ping = await bot.ping;
 	return message.channel.send(new Discord.RichEmbed()
-		.setDescription(`**${bot.user.username} Ping: ${Math.floor(bot.ping)}ms**`)
+		.setDescription(`**${bot.user.username} Ping: ${Math.floor(ping)}ms**`)
 		.setColor("#00FF00"));
 }
 
