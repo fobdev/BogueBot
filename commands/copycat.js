@@ -2,15 +2,15 @@ const Discord = require('discord.js');
 const botconfig = require('../botconfig.json');
 
 function col_recursive(message, first, collector) {
-    if (first)
+    if (first) {
         message.channel.send(new Discord.RichEmbed()
             .setDescription('Copycat **ativado**.')
             .setColor('#00FF00'));
+    }
 
     collector.on('collect', collected_message => {
         if (collected_message.content !== `${botconfig.prefix}${this.help.name}`) {
-            // console.log(collected_message.content);
-            message.channel.send(collected_message.content);
+            message.channel.send(collector.collected.array()[0].content);
             collector.stop('restart');
         } else {
             collector.stop('finished');
@@ -33,7 +33,6 @@ function col_recursive(message, first, collector) {
 }
 
 module.exports.run = async (bot, message, args) => {
-    // message.channel.send('Comando indisponível no momento.');
     col_recursive(message, true, new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id));
 }
 
