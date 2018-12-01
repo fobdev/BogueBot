@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
 const i18n = require("i18n");
-
+var commands_used = 0;
 var bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
@@ -90,11 +90,9 @@ function status_updater() {
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários`, {
+        ` | ${members_reached} usuários | ${commands_used} comandos usados hoje.`, {
             type: 'PLAYING'
         });
-
-    console.log('Bot status updated.');
 }
 
 bot.on('ready', async () => {
@@ -238,8 +236,13 @@ bot.on('message', async message => {
     let command_file = bot.commands.get(cmd.slice(prefix.length));
 
     if (cmd[0] === prefix) {
-        if (command_file) command_file.run(bot, message, args);
+        if (command_file) {
+            commands_used++;
+            status_updater();
+            command_file.run(bot, message, args);
+        }
         console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
+
     }
 
 });
