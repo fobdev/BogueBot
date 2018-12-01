@@ -2,8 +2,7 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
 const fs = require("fs");
 
-module.exports.run = async (bot, message, args) =>
-{
+module.exports.run = async (bot, message, args) => {
     const music_commands_small =
         "[``music                    ``]";
 
@@ -49,17 +48,19 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         "|``" + `${botconfig.prefix}` + "rs [novo nome]            ``|                                                             \n" +
         "|``" + `${botconfig.prefix}` + "clear [numero]            ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.     **";
 
-    const boguebot_commands_small =
+    const botname_commands_small =
         "[``invite          ``, " +
         "``help             ``, " +
         "``serverinfo       ``, " +
+        "``ping       ``, " +
         "``uptime           ``]";
 
-    const boguebot_commands =
-        "|``" + `${botconfig.prefix}` + "invite           ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
-        "|``" + `${botconfig.prefix}` + "help             ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
-        "|``" + `${botconfig.prefix}` + "serverinfo       ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
-        "|``" + `${botconfig.prefix}` + "uptime           ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
+    const botname_commands =
+        "|``" + `${botconfig.prefix}` + "invite             ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
+        "|``" + `${botconfig.prefix}` + "help               ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
+        "|``" + `${botconfig.prefix}` + "serverinfo         ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
+        "|``" + `${botconfig.prefix}` + "ping               ``|" + "`` - `` **Exibe a latência atual do servidor do " + `${bot.user.username}` + ".**\n" +
+        "|``" + `${botconfig.prefix}` + "uptime             ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
 
     const user_commands_small =
         "[``avatar    ``]";
@@ -84,10 +85,10 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
         .setTimestamp(bot.user.createdAt)
         .setURL("https://github.com/pedroxvi")
-        .setFooter("Fobenga, criado em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
+        .setFooter("Desenvolvido por Fobenga em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
         .setColor("#00FF00")
         .addField("MUSIC", music_commands_small)
-        .addField(bot.user.username.toUpperCase(), boguebot_commands_small)
+        .addField(bot.user.username.toUpperCase(), botname_commands_small)
         .addField("ADMIN", authority_commands_small)
         .addField("USER", user_commands_small)
         .addField("FUN", fun_commands_small)
@@ -100,8 +101,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         .setFooter('Fobenga, criado em ')
         .setTimestamp(bot.user.createdAt);
 
-    switch (helpcommand)
-    {
+    switch (helpcommand) {
         case 'music':
             {
                 return message.channel.send(new_music_commands);
@@ -116,7 +116,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
             {
                 return message.channel.send(subhelp_embed
                     .setTitle(`${bot.user.username}`)
-                    .setDescription(boguebot_commands));
+                    .setDescription(botname_commands));
             }
         case 'user':
             {
