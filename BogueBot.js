@@ -186,30 +186,6 @@ bot.on('message', async message => {
     let cmd = messageArray[0];
 
     /*
-    The reason why put the 'copycat' command here is because it
-    get a message without the prefix and the bot only recognisizes
-    messages with the prefix as seen below the copycat command block.
-    */
-
-    // start of copycat command
-    // if (message.content === `${prefix}copycat`) {
-    //     if (!copycat_switch) {
-    //         copycat_switch = true;
-    //         return message.channel.send(new Discord.RichEmbed()
-    //             .setDescription('Copycat **ativado**.')
-    //             .setColor('#00FF00'));
-    //     } else {
-    //         copycat_switch = false;
-    //         return message.channel.send(new Discord.RichEmbed()
-    //             .setDescription('Copycat **desativado**.')
-    //             .setColor('#FF0000'));
-    //     }
-    // }
-    // 
-    // if (copycat_switch) message.channel.send(message.content);
-    // // end of copycat command
-
-    /*
     
     This command is used for collecting the chat in every guild and send a personal message
     to it with '>was [server number] [message]'.
