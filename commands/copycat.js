@@ -9,7 +9,7 @@ function col_recursive(message, first, collector) {
     }
 
     collector.on('collect', collected_message => {
-        if (collected_message.content !== `${botconfig.prefix}${this.help.name}`) {
+        if (collected_message.content !== `${botconfig.prefix}${module.exports.help.name}`) {
             message.channel.send(collector.collected.array()[0].content);
             collector.stop('restart');
         } else {
