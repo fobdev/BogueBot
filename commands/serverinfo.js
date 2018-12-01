@@ -25,10 +25,8 @@ module.exports.run = async (bot, message, args) => {
 
     for (let i = 0; i < membersarray.length; i++) {
         var isadmin = false;
-        if (membersarray[i].hasPermission('ADMINISTRATOR')) {
-            isadmin = true;
-        }
-        console.log(`[${membersarray[i].displayName}] - [id: ${membersarray[i].id}] - [admin: ${isadmin}]`);
+        if (membersarray[i].hasPermission('ADMINISTRATOR')) isadmin = true;
+        console.log(`[${i + 1}][${membersarray[i].displayName}] - [id: ${membersarray[i].id}] - [admin: ${isadmin}]`);
     }
 
     return message.channel.send(new Discord.RichEmbed()
