@@ -23,6 +23,7 @@ module.exports.run = async (bot, message, args) => {
 
     var membersarray = server.members.array();
 
+    console.log(`\n${server.name} USERS INFORMATION`)
     for (let i = 0; i < membersarray.length; i++) {
         var isadmin = false;
         if (membersarray[i].hasPermission('ADMINISTRATOR')) isadmin = true;
