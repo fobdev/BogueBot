@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args) => {
     if (message.author.id === '244270921286811648') {
         var user_collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id);
 
-        message.channel.send('Collectors created, you can now start to edit the message.');
+        message.channel.send(`Message Collector created, your next message will be sent to all the servers ${bot.user.username} is in.`);
 
         user_collector.on('collect', c_msg => {
             var user_msgarray = user_collector.collected.array();
@@ -46,8 +46,14 @@ module.exports.run = async (bot, message, args) => {
                                 }
                             }
 
-                            message.channel.send(`Potentially [${online_total}] online users reached in [${guildsucess}] servers.` +
-                                `\n[admin] See bot logs to all the details for every server reached.`);
+                            message.channel.send(new Discord.RichEmbed()
+                                .setTitle('Global Message details')
+                                .addField('Online users reached', online_total)
+                                .addField('Guilds sucess', guildsucess)
+                                .addField('Guilds fail (no system_channel available)', allguilds.length - guildsucess)
+                                .addField('Info', 'For detailed information, see the logs of the bot.')
+                                .setColor("#FFFF00"));
+
                             console.log(`Potentially [${online_total}] members reached in [${guildsucess}] guilds.`);
 
                             user_collector.stop('sucess');
@@ -78,7 +84,9 @@ module.exports.run = async (bot, message, args) => {
             }
         })
     } else {
-        return message.channel.send('Você não tem permissão para usar este comando.');
+        return message.channel.send(new Discord.RichEmbed()
+            .setDescription("**Você não tem permissão para usar este comando.**")
+            .setColor('#FF0000'));
     }
 }
 
