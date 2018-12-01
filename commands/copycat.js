@@ -9,8 +9,8 @@ function col_recursive(message, first, collector) {
 
     collector.on('collect', collected_message => {
         if (collected_message.content !== `${botconfig.prefix}${this.help.name}`) {
-            console.log(collected_message.content);
-            // message.channel.send(collected_message.content);
+            // console.log(collected_message.content);
+            message.channel.send(collected_message.content);
             collector.stop('restart');
         } else {
             collector.stop('finished');
@@ -33,8 +33,8 @@ function col_recursive(message, first, collector) {
 }
 
 module.exports.run = async (bot, message, args) => {
-    message.channel.send('Comando indisponível no momento.');
-    // col_recursive(message, true, new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id));
+    // message.channel.send('Comando indisponível no momento.');
+    col_recursive(message, true, new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id));
 }
 
 module.exports.help = {
