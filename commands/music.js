@@ -567,20 +567,15 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 							if (page_amount > 1) {
 
 								var botmessage_collector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
-									time: 1000 * 30 // 20 seconds timeout if not collected any nav message
+									time: 1000 * 60
 								});
 								var usermessage_navigator = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-									time: 1000 * 30 // 20 seconds timeout if not collected any nav message
+									time: 1000 * 60
 								});
 
 								message.channel.send(full_queue);
-
 								usermessage_navigator.on('collect', msg => {
 									if (msg.content === '>' || msg.content === '<') {
-										// If a message is collected, resets the counter to 20 seconds.
-										botmessage_collector.options.time = 1000 * 20;
-										usermessage_navigator.options.time = 1000 * 20;
-
 										try {
 											msg.delete();
 										} catch (e) {
