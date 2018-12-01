@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
 const i18n = require("i18n");
-var commands_used = 0;
+var functions_used = 0;
 var bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
@@ -87,14 +87,14 @@ function status_updater() {
 
     for (var i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
 
-    var cmd_plural = 'comando';
-    if (commands_used !== 1)
-        cmd_plural += 's';
+    var cmd_plural = 'função';
+    if (functions_used !== 1)
+        cmd_plural = 'funções';
 
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários usaram ${commands_used} ${cmd_plural} hoje.`, {
+        ` | ${members_reached} usuários usaram ${functions_used} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
         });
 }
@@ -177,7 +177,11 @@ bot.on('guildMemberRemove', member => {
 
 bot.on('message', async message => {
 
-    // if (message.author.bot) return; 
+    if (message.author.bot) {
+        functions_used++;
+        status_updater();
+    }
+
     if (message.channel.type === "dm") return;
 
     let prefix = botconfig.prefix;
@@ -185,43 +189,11 @@ bot.on('message', async message => {
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
 
-    /*
-    
-    This command is used for collecting the chat in every guild and send a personal message
-    to it with '>was [server number] [message]'.
-
-    Server number can be found in the servers array, starting with 0.
-    
-    */
-
-    // var svnumber = args[0];
-    // var guilds_array = bot.guilds.array();
-    // 
-    // var system_channel;
-    // var themsg = args.join(' ').slice(2);
-    // var msgarr;
-    // 
-    // if (cmd === '>was') {
-    //     system_channel = guilds_array[svnumber].channels.find(ch => ch.id === guilds_array[svnumber].systemChannelID);
-    //     system_channel.send(themsg)
-    // 
-    //     if (system_channel) {
-    //         msgarr = `[${message.guild.name}][#${message.channel.name}][${message.author.username}]: ${message.content}`;
-    //         if (message.author.bot) console.log(`bot: ${msgarr}`);;
-    //     }
-    // }
-    // console.log(`[${message.guild.name}][#${message.channel.name}][${message.author.username}]: ${message.content}`);
-
     let command_file = bot.commands.get(cmd.slice(prefix.length));
 
     if (cmd[0] === prefix) {
-        if (command_file) {
-            commands_used++;
-            status_updater();
-            command_file.run(bot, message, args);
-        }
+        if (command_file) command_file.run(bot, message, args);
         console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
-
     }
 
 });
