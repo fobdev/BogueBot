@@ -90,7 +90,7 @@ function status_updater() {
     const helpfile = require("./commands/help.js");
     const invitefile = require("./commands/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários | ${commands_used} comandos usados hoje.`, {
+        ` | ${members_reached} usuários\n[${commands_used}] comandos usados hoje.`, {
             type: 'PLAYING'
         });
 }
