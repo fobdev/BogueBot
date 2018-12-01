@@ -24,11 +24,11 @@ module.exports.run = async (bot, message, args) => {
                         {
                             var allguilds = bot.guilds.array();
                             var guildsucess = 0;
+                            var online_total = 0;
                             console.log('\n--------------------------------')
                             for (let i = 0; i < allguilds.length; i++) {
                                 const system_channel = allguilds[i].channels.find(ch => ch.id === allguilds[i].systemChannelID);
                                 var user_inserver = allguilds[i].members.array();
-                                var online_total = 0;
                                 for (let j = 0; j < user_inserver.length; j++) {
                                     var is_online = user_inserver[j].presence.status;
                                     if (is_online !== 'offline') {
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
                                 }
 
                                 if (system_channel) {
-                                    system_channel.send(user_msgarray[1].content);
+                                    system_channel.send(user_msgarray[0].content);
                                     guildsucess++;
                                     console.log(`GUILD[${i}] SUCESS: [${allguilds[i]}] - Message sent to System Channel.`);
                                     console.log('--------------------------------')
