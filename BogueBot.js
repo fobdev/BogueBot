@@ -175,7 +175,6 @@ bot.on('guildMemberRemove', member => {
     return;
 });
 
-var copycat_switch = false;
 bot.on('message', async message => {
 
     // if (message.author.bot) return; 
