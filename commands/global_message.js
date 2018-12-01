@@ -15,6 +15,7 @@ module.exports.run = async (bot, message, args) => {
             }
 
             if (!user_msgarray[1]) {
+                user_collector.collected.deleteAll();
                 message.channel.send(`**Global message generated:**\n\n${user_msgarray[0]}\n\n` +
                     "**Do you want to send it? (y/n)**")
             } else {
