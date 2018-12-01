@@ -28,6 +28,7 @@ module.exports.run = async (bot, message, args) => {
                             for (let i = 0; i < allguilds.length; i++) {
                                 const system_channel = allguilds[i].channels.find(ch => ch.id === allguilds[i].systemChannelID);
                                 var user_inserver = allguilds[i].members.array();
+                                var online_total = 0;
                                 for (let j = 0; j < user_inserver.length; j++) {
                                     var is_online = user_inserver[j].presence.status;
                                     if (is_online !== 'offline') {
