@@ -24,10 +24,12 @@ module.exports.run = async (bot, message, args) => {
                         {
                             var allguilds = bot.guilds.array();
                             var guildsucess = 0;
+                            var channels_sent = 0;
                             var online_total = 0;
                             console.log('\n--------------------------------')
                             for (let i = 0; i < allguilds.length; i++) {
-                                const system_channel = allguilds[i].channels.find(ch => ch.id === allguilds[i].systemChannelID);
+
+                                // Verify all the members in all guilds
                                 var user_inserver = allguilds[i].members.array();
                                 for (let j = 0; j < user_inserver.length; j++) {
                                     var is_online = user_inserver[j].presence.status;
@@ -36,22 +38,27 @@ module.exports.run = async (bot, message, args) => {
                                     }
                                 }
 
-                                if (system_channel) {
-                                    system_channel.send(user_msgarray[0].content);
-                                    guildsucess++;
-                                    console.log(`GUILD[${i}] SUCESS: [${allguilds[i]}] - Message sent to System Channel.`);
-                                    console.log('--------------------------------')
-                                } else {
-                                    console.log(`GUILD[${i}] FAIL: [${allguilds[i]}] - No System Channel in guild.`);
+                                // Verify all the channels in all guilds
+                                var allchannels_fromguilds = allguilds[i].channels.array();;
+                                for (let j = 0; j < allchannels_fromguilds.length; j++) {
+
+                                    // Filter only text channels
+                                    if (allchannels_fromguilds[j].type === 'text') {
+                                        allchannels_fromguilds[j].send(user_msgarray[0].content)
+                                        channels_sent++;
+                                    }
+
+                                    console.log(`GUILD[${i}] SUCESS: [${allguilds[i]}] - Message sent to [${allchannels_fromguilds.length}] text channels.`);
                                     console.log('--------------------------------')
                                 }
+                                guildsucess++;
                             }
 
                             message.channel.send(new Discord.RichEmbed()
                                 .setTitle('Global Message details')
                                 .addField('Online users reached', online_total)
-                                .addField('Guilds sucess', guildsucess)
-                                .addField('Guilds fail (no system_channel available)', allguilds.length - guildsucess)
+                                .addField('Guilds received', guildsucess)
+                                .addField('Text channels received', channels_sent)
                                 .addField('Info', 'For detailed information, see the logs of the bot.')
                                 .setColor("#FFFF00"));
 
