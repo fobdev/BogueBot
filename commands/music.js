@@ -19,6 +19,13 @@ var url;
 var isPlaylist;
 
 module.exports.run = async (bot, message, args) => {
+
+	if (!args[0]) {
+		return message.channel.send('>help music').then(msg => {
+			msg.delete();
+		})
+	}
+
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	url = args[0];
