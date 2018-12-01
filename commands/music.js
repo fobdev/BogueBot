@@ -22,7 +22,11 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!args[0]) {
 		return message.channel.send('>help music').then(msg => {
-			msg.delete();
+			try {
+				msg.delete();
+			} catch (e) {
+				console.error(`${message.guild.name} [self-message]: Could not delete self message.`);
+			}
 		})
 	}
 
@@ -114,26 +118,13 @@ module.exports.run = async (bot, message, args) => {
 							{
 								await bot_msgcollector.collected.deleteAll();
 								await user_msgcollector.collected.deleteAll();
-								return message.channel.send("```css\n" +
-									`[Comandos de música do ${bot.user.username}]
-	
->music [música].........................Toca um vídeo do YouTube / adiciona à fila.
->music (q)ueue..........................Exibe toda a fila do servidor.
-       (q)ueue [numero].................Pula para uma certa posição da fila.
-       (q)ueue next [numero]............Coloca o vídeo selecionado como próximo a tocar.
-	   (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
-       (q)ueue shuffle..................Randomiza a fila.
-       (q)ueue (del)ete [numero]........Exclui um certo item da fila.
-       (q)ueue purge(pg)................Limpa todos os itens da fila.
-	   
->music np.........Mostra informações sobre o que está sendo tocado.
->music (s)kip.....Pula a reprodução atual.
->music p..........Pausa ou despausa a reprodução atual.
->music (l)eave....Sai do canal de voz e exclui a fila atual.
->music earrape....Aumenta extremamente o volume da reprodução atual.
-
-Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-									"```");
+								return message.channel.send('>help music').then(msg => {
+									try {
+										msg.delete();
+									} catch (e) {
+										console.error(`${message.guild.name} [self-message]: Could not delete self message.`);
+									}
+								});
 							}
 						case 'no_video':
 							{
