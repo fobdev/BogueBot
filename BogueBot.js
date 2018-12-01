@@ -176,7 +176,7 @@ bot.on('guildMemberRemove', member => {
 var copycat_switch = false;
 bot.on('message', async message => {
 
-    if (message.author.bot) return; // comment this if you uncomment the '>was' command.
+    // if (message.author.bot) return; 
     if (message.channel.type === "dm") return;
 
     let prefix = botconfig.prefix;
