@@ -633,6 +633,9 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 							// Update the queue message everytime a bot message is received.
 							botmessage_collector.on('collect', () => {
 								var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
+
+								if (new_content_f(current_page, serverQueue.songs).length === 0) current_page = 0;
+
 								var dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
 									new_content_f(current_page, serverQueue.songs) +
 									new_footer_f(serverQueue.songs) + queue_nav_help;
@@ -644,8 +647,8 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 								message.channel.send(full_queue);
 								usermessage_navigator.on('collect', msg => {
 									if (msg.content === '>' || msg.content === '<') {
-
 										var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
+
 										try {
 											msg.delete();
 										} catch (e) {
