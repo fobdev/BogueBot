@@ -632,7 +632,8 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 							// Update the queue message everytime a bot message is received.
 							botmessage_collector.on('collect', () => {
-								var dynamic_update = new_header_f(current_page, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
+								var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
+								var dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
 									new_content_f(current_page, serverQueue.songs) +
 									new_footer_f(serverQueue.songs) + queue_nav_help;
 
@@ -643,6 +644,8 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 								message.channel.send(full_queue);
 								usermessage_navigator.on('collect', msg => {
 									if (msg.content === '>' || msg.content === '<') {
+
+										var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 										try {
 											msg.delete();
 										} catch (e) {
@@ -651,10 +654,10 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 										if (msg.content === '>') current_page++;
 										if (msg.content === '<') current_page--;
-										if (current_page < 0) current_page = page_amount - 1;
-										if (current_page >= page_amount) current_page = 0;
+										if (current_page < 0) current_page = new_page_amount - 1;
+										if (current_page >= new_page_amount) current_page = 0;
 
-										var new_page = new_header_f(current_page, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
+										var new_page = new_header_f(current_page, new_page_amount, serverQueue.songs) +
 											new_content_f(current_page, serverQueue.songs) +
 											new_footer_f(serverQueue.songs) + queue_nav_help;
 
