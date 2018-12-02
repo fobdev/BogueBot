@@ -664,8 +664,10 @@ Tempo total da fila: [${timing(new_length)}]
 
 								usermessage_navigator.on('end', () => {
 									var new_navhelp = "```O tempo de navegação expirou```";
-									var final_page = new_header_f(current_page, page_amount, serverQueue.songs) +
-										new_content_f(current_page, serverQueue.songs) +
+
+									// Go back to the first page.
+									var final_page = new_header_f(0, page_amount, serverQueue.songs) +
+										new_content_f(0, serverQueue.songs) +
 										new_footer_f(serverQueue.songs) + new_navhelp;
 
 									botmessage_collector.collected.array()[0].edit(final_page)
