@@ -8,7 +8,6 @@ var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
 const youtube = new YouTube(ytkey);
-var jumped = false;
 var leaving = false;
 var dispatcher;
 
@@ -19,7 +18,6 @@ var url;
 var isPlaylist;
 
 module.exports.run = async (bot, message, args) => {
-
 	if (!args[0]) {
 		return message.channel.send('>help music').then(msg => {
 			try {
@@ -454,34 +452,55 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					}
 
 					if (args[1] === 'delete' || args[1] === 'del') {
-						var entry = parseInt(args[2]);
+						if (!args[3]) {
+							var entry = parseInt(args[2]);
+							if (entry < 1) {
+								await message.channel.send(new Discord.RichEmbed()
+									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
+								await dispatcher.end();
+								return;
+							}
 
-						if (entry < 1) {
-							await message.channel.send(new Discord.RichEmbed()
-								.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
-							await dispatcher.end();
-							return;
-						}
+							if (!entry) {
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription('**Você não especificou o video que quer excluir da fila.**')
+									.setColor("#FF0000"));
+							}
 
-						if (!entry) {
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription('**Você não especificou o video que quer excluir da fila.**')
-								.setColor("#FF0000"));
-						}
+							if (entry > 0 && entry <= serverQueue.songs.length) {
 
-						if (entry > 0 && entry <= serverQueue.songs.length) {
+								message.channel.send(arg_embed
+									.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
+										` foi removido da fila.`));
 
-							message.channel.send(arg_embed
-								.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
-									` foi removido da fila.`));
-
-							await serverQueue.songs.splice(entry, 1);
-
-							return;
+								await serverQueue.songs.splice(entry, 1);
+								return;
+							} else {
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription('**Não foram encontrados vídeos na fila com este número**')
+									.setColor('#FF000'));
+							}
 						} else {
-							return message.channel.send(new Discord.RichEmbed()
-								.setDescription('**Não foram encontrados vídeos na fila com este número**')
-								.setColor('#FF000'));
+							var start = parseInt(args[2]);
+							var end = parseInt(args[3]);
+
+							if (end > start) return message.channel.send(new Discord.RichEmbed()
+								.setDescription('O valor de **início** deve ser menor que o valor de **final**.')
+								.setColor('#FF0000'));
+
+							if (end === start) return message.channel.send(new Discord.RichEmbed()
+								.setDescription('Os valores precisam ser **diferentes**.')
+								.setColor('#FF0000'));
+
+							if (start > 0 && end <= serverQueue.songs.length) {
+								var deleted_entries = await serverQueue.songs.splice(start, end);
+								return message.channel.send(arg_embed
+									.setDescription(`Foram removidos **${deleted_entries.length}** vídeos da fila de **${message.guild.name}**`)
+									.setColor("#00FF00"));
+
+							} else return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`Você deve colocar valores entre **1** e **${serverQueue.songs.length}**`)
+								.setColor('#FF0000'));
 						}
 					}
 
@@ -919,8 +938,7 @@ async function play(bot, message, guild, song) {
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true);
 
-	if (!jumped)
-		await message.channel.send(music_embed);
+	await message.channel.send(music_embed);
 
 	dispatcher.on('end', () => {
 		if (serverQueue.songs.length === 1) {
