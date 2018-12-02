@@ -293,9 +293,13 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 					await voiceChannel.join();
 					if (dispatcher) {
 						await dispatcher.resume();
-						return message.channel.send(`Continuando a tocar a fila de ${serverQueue.guildname}`);
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`Continuando a tocar a fila de ${serverQueue.guildname}.`)
+							.setColor("00FF00"));
 					} else
-						return message.channel.send(`Entrei na sala de voz ${voiceChannel}`)
+						return message.channel.send(new Discord.RichEmbed()
+							.setDescription(`Entrei no canal de voz ${voiceChannel}.`)
+							.setColor("00FF00"));
 				} catch (e) {
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('Ocorreu um erro ao entrar na sala, favor verifique minhas permissões.')
@@ -992,9 +996,9 @@ async function play(bot, message, guild, song) {
 			case 'left':
 				{
 					await dispatcher.pause();
-					await voiceChannel.leave();
+					await serverQueue.voiceChannel.leave();
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`Saí do canal de voz **${voiceChannel}**.`)
+						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}**.`)
 						.setColor('#00FF00'));
 				}
 			case 'forced':
@@ -1017,7 +1021,7 @@ async function play(bot, message, guild, song) {
 							.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 							.setColor("#00FF00"));
 					}
-					serverQueue.songs.shift();
+					await serverQueue.songs.shift();
 					play(bot, message, guild, serverQueue.songs[0]);
 				}
 				break;
