@@ -579,13 +579,57 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 							if (serverQueue.songs.length - 1 > page_size) full_queue += queue_nav_help;
 
 							if (page_amount > 1) {
-
 								var botmessage_collector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
 									time: 1000 * 60
 								});
 								var usermessage_navigator = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 									time: 1000 * 60
 								});
+
+								function new_header_f(current_page, page_amount, songs_array) {
+									var new_header = "```md\n" +
+										`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
+====================================
+Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
+
+`;
+
+									return new_header;
+								}
+
+								function new_content_f(current_page, songs_array) {
+									var new_content = '';
+									for (let i = (page_size * current_page) + 1; i <= (page_size * current_page) + page_size; i++) {
+										// Whitespace for padding of numbers
+										var whitespace = ' ';
+										if (i < 10) whitespace = "  ";
+										else whitespace = " ";
+
+										/*
+										Try to print the max amount, if the max amount isn't available in the current page
+										print only the available, continue after catch the error
+										*/
+										try {
+											new_content += `${i}.${whitespace}${songs_array[i].title} <${songs_array[i].author.username}> | < ${timing(songs_array[i].length)} >\n`;
+										} catch (e) {
+											continue;
+										}
+									}
+									return new_content;
+								}
+
+								function new_footer_f(song_array) {
+									var new_length = 0
+									for (let i = 0; i < song_array.length; i++) {
+										new_length += parseInt(song_array[i].length);
+									}
+
+									var new_footer = `
+Tempo total da fila: [${timing(new_length)}]
+------------------------------------` + "```";
+
+									return new_footer;
+								}
 
 								message.channel.send(full_queue);
 								usermessage_navigator.on('collect', msg => {
@@ -601,50 +645,51 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 										if (current_page < 0) current_page = page_amount - 1;
 										if (current_page >= page_amount) current_page = 0;
 
-										var new_header = "```md\n" +
-											`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
-====================================
-Agora Tocando: [${serverQueue.songs[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(serverQueue.songs[0].length)})
+										var new_page = new_header_f(current_page, page_amount, serverQueue.songs) +
+											new_content_f(current_page, serverQueue.songs) +
+											new_footer_f(serverQueue.songs) + queue_nav_help;
 
-`;;
-
-										var new_content = '';
-										for (let i = (page_size * current_page) + 1; i <= (page_size * current_page) + page_size; i++) {
-											// Whitespace for padding of numbers
-											var whitespace = ' ';
-											if (i < 10) whitespace = "  ";
-											else whitespace = " ";
-
-											/*
-											Try to print the max amount, if the max amount isn't available in the current page
-											print only the available, continue after catch the error
-											*/
-											try {
-												new_content += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
-											} catch (e) {
-												continue;
-											}
-										}
-
-										var new_length = 0
-										for (let i = 0; i < serverQueue.songs.length; i++) {
-											new_length += parseInt(serverQueue.songs[i].length);
-										}
-
-										var new_footer = `
-Tempo total da fila: [${timing(new_length)}]
-------------------------------------` + "```";
-
-										var new_page = new_header + new_content + new_footer + queue_nav_help;
+										// var new_page = new_header + new_content + new_footer + queue_nav_help;
 
 										botmessage_collector.collected.array()[0].edit(new_page);
 									}
 								});
 
+								// Update the queue message everytime a bot message is received.
+								botmessage_collector.on('collect', () => {
+									var dynamic_update = new_header_f(current_page, page_amount, serverQueue.songs) +
+										new_content_f(current_page, serverQueue.songs) +
+										new_footer_f(serverQueue.songs) + queue_nav_help;
+
+									botmessage_collector.collected.array()[0].edit(dynamic_update);
+								});
+
 								usermessage_navigator.on('end', () => {
 									var new_navhelp = "```O tempo de navegação expirou```";
 
-									var final_page = queue_header + queue_content + queue_footer + new_navhelp;
+									var new_content = '';
+									for (let i = (page_size * current_page) + 1; i <= (page_size * current_page) + page_size; i++) {
+										// Whitespace for padding of numbers
+										var whitespace = ' ';
+										if (i < 10) whitespace = "  ";
+										else whitespace = " ";
+
+										/*
+										Try to print the max amount, if the max amount isn't available in the current page
+										print only the available, continue after catch the error
+										*/
+										try {
+											new_content += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
+										} catch (e) {
+											continue;
+										}
+									}
+
+
+									var final_page = new_header_f(current_page, page_amount, serverQueue.songs) +
+										new_content_f(current_page, serverQueue.songs) +
+										new_footer_f(serverQueue.songs) + queue_nav_help;
+
 									botmessage_collector.collected.array()[0].edit(final_page)
 								})
 							} else {
