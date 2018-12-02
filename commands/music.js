@@ -292,7 +292,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				try {
 					await voiceChannel.join();
 					if (dispatcher) {
-						await dispatcher.resume();
+						play(bot, message, guild, serverQueue.songs[0]);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`Continuando a tocar a fila de ${serverQueue.guildname}.`)
 							.setColor("00FF00"));
@@ -319,6 +319,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
+			break;
 		case "np":
 			{
 				try {
