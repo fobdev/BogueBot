@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
 
         if (mute.hasPermission('ADMINISTRATOR')) {
             return message.channel.send(mute_embed
-                .setTitle("Você não pode silenciar um administrador.")
+                .setDescription("Você não pode silenciar um **administrador**.")
                 .setColor("#FF0000"));
         }
 
@@ -43,11 +43,11 @@ module.exports.run = async (bot, message, args) => {
             mute.addRole(muterole.id);
             console.log(`${message.author.username} muted user [${mute.displayName}].`);
             return message.channel.send(mute_embed
-                .setTitle(`**${mute.displayName}** foi mutado.`)
+                .setDescription(`**${mute.displayName}** foi mutado.`)
                 .setColor("#00FF00"));
         } else {
             return message.channel.send(mute_embed
-                .setTitle(`**${mute.displayName}** já está mutado.`)
+                .setDescription(`**${mute.displayName}** já está mutado.`)
                 .setColor("#FF0000"));
         }
     }
