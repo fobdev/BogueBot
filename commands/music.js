@@ -8,7 +8,7 @@ var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
 const youtube = new YouTube(ytkey);
-var leaving = false;
+// var leaving = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -291,11 +291,9 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "l":
 			{
 				try {
-					leaving = true;
-					voiceChannel.leave();
-					queue.delete(message.guild.id);
-					return message.channel.send(arg_embed
-						.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
+					// leaving = true;
+					await serverQueue.songs.splice(0);
+					dispatcher.end('forced');
 				} catch (error) {
 					console.error("Error ocurred when leaving the voice channel");
 					return message.channel.send(arg_embed
@@ -859,9 +857,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor('#FF0000'));
 	}
 
-	leaving = false;
+	// leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
+			guildname: message.guild.name,
 			id: message.guild.id,
 			textChannel: message.channel,
 			voiceChannel: voiceChannel,
@@ -952,13 +951,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	if (!leaving) {
-		dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-			highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-			quality: 'highestaudio',
-			filter: 'audioonly'
-		}));
-	} else return;
+	// if (!leaving) {
+	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
+		quality: 'highestaudio',
+		filter: 'audioonly'
+	}));
+	// } else return;
 
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
@@ -977,20 +976,26 @@ async function play(bot, message, guild, song) {
 
 	await message.channel.send(music_embed);
 
-	dispatcher.on('end', () => {
-		if (serverQueue.songs.length === 1) {
-			queue.delete(guild.id);
-			serverQueue.voiceChannel.leave();
-			if (!leaving) {
+	dispatcher.on('end', reason => {
+		if (reason === 'forced') {
+			return message.channel.send(arg_embed
+				.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
+		} else {
+			if (serverQueue.songs.length <= 1) {
+				queue.delete(guild.id);
+				// serverQueue.voiceChannel.leave();
+				console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+				// if (!leaving) {
 				return message.channel.send(new Discord.RichEmbed()
 					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
 					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.setColor("#00FF00"));
+				// }
+				return;
 			}
-			return;
+			serverQueue.songs.shift();
+			play(bot, message, guild, serverQueue.songs[0]);
 		}
-		serverQueue.songs.shift();
-		play(bot, message, guild, serverQueue.songs[0]);
 	});
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
