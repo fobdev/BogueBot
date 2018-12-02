@@ -292,17 +292,18 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				try {
 					await voiceChannel.join();
 					if (dispatcher) {
-						play(bot, message, guild, serverQueue.songs[0]);
+						play(bot, message, message.guild, serverQueue.songs[0]);
 						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`Continuando a tocar a fila de ${serverQueue.guildname}.`)
+							.setDescription(`Continuando a tocar a fila de **${serverQueue.guildname}**.`)
 							.setColor("00FF00"));
 					} else
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`Entrei no canal de voz ${voiceChannel}.`)
 							.setColor("00FF00"));
 				} catch (e) {
+					console.log(`Join command error: ${e}`);
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Ocorreu um erro ao entrar na sala, favor verifique minhas permissões.')
+						.setDescription('Ocorreu um erro ao entrar na sala, favor verifique minhas **permissões**.')
 						.setColor('#FF0000'));
 				}
 			}
@@ -325,7 +326,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				try {
 					var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
 				} catch (e) {
-					console.error('Tried to see a now playing of nothing playing.');
+					console.error(`NP error: ${e}`);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('**Não tem nada tocando no momento**')
 						.setColor('#FF0000'));
