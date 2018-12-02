@@ -8,7 +8,6 @@ var ytkey = helper.loadKeys("youtube_key");
 
 const queue = new Map();
 const youtube = new YouTube(ytkey);
-// var leaving = false;
 var dispatcher;
 
 var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
@@ -857,7 +856,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor('#FF0000'));
 	}
 
-	// leaving = false;
 	if (!serverQueue) {
 		const queueConstruct = {
 			guildname: message.guild.name,
@@ -951,13 +949,11 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, guild, song) {
 	var serverQueue = queue.get(guild.id);
-	// if (!leaving) {
 	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
 		quality: 'highestaudio',
 		filter: 'audioonly'
 	}));
-	// } else return;
 
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
@@ -989,13 +985,10 @@ async function play(bot, message, guild, song) {
 				queue.delete(guild.id);
 				serverQueue.voiceChannel.leave();
 				console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-				// if (!leaving) {
 				return message.channel.send(new Discord.RichEmbed()
 					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
 					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.setColor("#00FF00"));
-				// }
-				return;
 			}
 			serverQueue.songs.shift();
 			play(bot, message, guild, serverQueue.songs[0]);
