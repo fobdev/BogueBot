@@ -645,14 +645,14 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 							if (page_amount > 1) {
 								message.channel.send(full_queue);
-								usermessage_navigator.on('collect', msg => {
+								usermessage_navigator.on('collect', async (msg) => {
 									if (msg.content === '>' || msg.content === '<') {
 										var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 
 										try {
-											msg.delete();
+											await msg.delete();
 										} catch (e) {
-											console.log(`${message.guild.name} [queue]: ${e}.`);
+											console.error(`${message.guild.name} [queue]: ${e}.`);
 										}
 
 										if (msg.content === '>') current_page++;
