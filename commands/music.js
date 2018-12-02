@@ -650,9 +650,9 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 										var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 
 										try {
-											usermessage_navigator.collected.delete();
+											msg.delete();
 										} catch (e) {
-											console.log(`${message.guild.name} [queue]: Nav message not found to be deleted.`);
+											console.log(`${message.guild.name} [queue]: ${e}.`);
 										}
 
 										if (msg.content === '>') current_page++;
