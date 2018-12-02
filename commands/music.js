@@ -290,16 +290,19 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case 'j':
 			{
 				try {
-					await voiceChannel.join();
 					if (dispatcher) {
-						play(bot, message, message.guild, serverQueue.songs[0]);
+						serverQueue.connection = await voiceChannel.join().then(() => {
+							play(bot, message, message.guild, serverQueue.songs[0]);
+						});
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`Continuando a tocar a fila de **${serverQueue.guildname}**.`)
 							.setColor("00FF00"));
-					} else
+					} else {
+						await voiceChannel.join();
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`Entrei no canal de voz ${voiceChannel}.`)
 							.setColor("00FF00"));
+					}
 				} catch (e) {
 					console.log(`Join command error: ${e}`);
 					return message.channel.send(new Discord.RichEmbed()
@@ -997,8 +1000,7 @@ async function play(bot, message, guild, song) {
 		switch (reason) {
 			case 'left':
 				{
-					await dispatcher.pause();
-					await serverQueue.voiceChannel.leave();
+					serverQueue.connection = await serverQueue.voiceChannel.leave();
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}**.`)
 						.setColor('#00FF00'));
