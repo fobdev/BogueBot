@@ -10,7 +10,7 @@ const queue = new Map();
 const youtube = new YouTube(ytkey);
 var dispatcher;
 
-var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'join', 'j', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
