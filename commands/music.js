@@ -995,7 +995,7 @@ async function play(bot, message, guild, song) {
 				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 				.setColor("#00FF00"));
 		}
-		await serverQueue.songs.shift();
+		serverQueue.songs.shift();
 		play(bot, message, guild, serverQueue.songs[0]);
 	});
 
