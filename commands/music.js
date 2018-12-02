@@ -291,11 +291,10 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 		case "l":
 			{
 				try {
-					// leaving = true;
-					await serverQueue.songs.splice(0);
 					dispatcher.end('forced');
-				} catch (error) {
+				} catch (e) {
 					console.error("Error ocurred when leaving the voice channel");
+					console.error(`Error: ${e}`)
 					return message.channel.send(arg_embed
 						.setTitle("Ocorreu um erro ao sair da sala.")
 						.setColor("#FF0000"));
@@ -978,12 +977,15 @@ async function play(bot, message, guild, song) {
 
 	dispatcher.on('end', reason => {
 		if (reason === 'forced') {
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+			queue.delete(guild.id);
+			serverQueue.voiceChannel.leave();
 			return message.channel.send(arg_embed
 				.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
 		} else {
 			if (serverQueue.songs.length <= 1) {
 				queue.delete(guild.id);
-				// serverQueue.voiceChannel.leave();
+				serverQueue.voiceChannel.leave();
 				console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 				// if (!leaving) {
 				return message.channel.send(new Discord.RichEmbed()
