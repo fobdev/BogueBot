@@ -665,11 +665,20 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 											new_footer_f(serverQueue.songs) + queue_nav_help;
 
 										botmessage_collector.collected.array()[0].edit(new_page);
+									} else {
+										usermessage_navigator.stop('forced');
+										botmessage_collector.stop('forced');
 									}
 								});
 
-								usermessage_navigator.on('end', () => {
-									var new_navhelp = "```O tempo de navegação expirou```";
+								usermessage_navigator.on('end', (msg, reason) => {
+									var new_navhelp = '';
+
+									if (reason === 'forced') {
+										new_navhelp += "```Interação cancelada, peça uma nova fila para continuar.```";
+									} else {
+										new_navhelp += "```O tempo de navegação expirou```";
+									}
 
 									// Go back to the first page.
 									var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
