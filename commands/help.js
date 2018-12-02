@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
        (q)ueue next [numero]..............Coloca o vídeo selecionado como próximo a tocar.
 	   (q)ueue pos [numero1] [numero2]....Alterna a posição entre dois vídeos na fila.
        (q)ueue shuffle....................Randomiza a fila.
-       (q)ueue (del)ete [inicio] [fim]....Exclui uma certa quantidade de itens da fila.
+       (q)ueue (del)ete [inicio] [numero].Exclui uma certa quantidade de itens da fila a partir de um inicio.
        (q)ueue (del)ete [numero]..........Exclui um certo item da fila.
        (q)ueue purge(pg)..................Limpa todos os itens da fila.
 	   
