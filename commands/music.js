@@ -300,6 +300,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
+			break;
 		case "np":
 			{
 				try {
@@ -322,7 +323,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 				if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = '**🔴 Livestream**';
 
 				var now_playing_embed = new Discord.RichEmbed()
-					.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+					.setAuthor(`${bot.user.username} Now Playing`, bot.user.displayAvatarURL)
 					.addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`)
 					.addField("Tempo", `${isLivestream}`, true)
 					.addField("Adicionado por", `[${current_music.author}]`, true)
@@ -973,15 +974,16 @@ async function play(bot, message, guild, song) {
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true);
 
-	await message.channel.send(music_embed);
+	message.channel.send(music_embed);
 
 	dispatcher.on('end', reason => {
 		if (reason === 'forced') {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
-			return message.channel.send(arg_embed
-				.setDescription(`Saí do canal de voz **${voiceChannel}** e apaguei minha fila.`));
+			return message.channel.send(new Discord.RichEmbed()
+				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+				.setColor('#00FF00'));
 		} else {
 			if (serverQueue.songs.length <= 1) {
 				queue.delete(guild.id);
