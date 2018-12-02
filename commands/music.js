@@ -590,7 +590,7 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 									`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
 ====================================
 Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
-			
+
 			`;
 
 								return new_header;
