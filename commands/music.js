@@ -490,7 +490,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 								.setColor('#FF0000'));
 
 							if (start > 0 && end <= serverQueue.songs.length) {
-								var deleted_entries = await serverQueue.songs.splice(start, amount);
+								var deleted_entries = await serverQueue.songs.splice(start, amount + 1);
 								return message.channel.send(arg_embed
 									.setDescription(`Foram removidos **${deleted_entries.length}** vídeos da fila de **${message.guild.name}**`)
 									.setColor("#00FF00"));
