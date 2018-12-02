@@ -291,7 +291,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				try {
 					await voiceChannel.join();
-					if (serverQueue) {
+					if (dispatcher) {
 						await dispatcher.resume();
 						return message.channel.send(`Continuando a tocar a fila de ${serverQueue.guildname}`);
 					} else
@@ -302,17 +302,11 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor('#FF0000'));
 				}
 			}
-			break;
 		case "leave":
 		case "l":
 			{
 				try {
-					await dispatcher.pause();
-					await voiceChannel.leave();
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`Saí do canal de voz **${voiceChannel}**.`)
-						.setColor('#00FF00'));
-					// dispatcher.end('forced');
+					dispatcher.end('left');
 				} catch (e) {
 					console.error("Error ocurred when leaving the voice channel");
 					console.error(`Error: ${e}`)
@@ -321,7 +315,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
-			break;
 		case "np":
 			{
 				try {
@@ -995,25 +988,39 @@ async function play(bot, message, guild, song) {
 	message.channel.send(music_embed);
 
 	dispatcher.on('end', reason => {
-		if (reason === 'forced') {
-			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-			queue.delete(guild.id);
-			serverQueue.voiceChannel.leave();
-			return message.channel.send(new Discord.RichEmbed()
-				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-				.setColor('#00FF00'));
-		} else {
-			if (serverQueue.songs.length <= 1) {
-				queue.delete(guild.id);
-				serverQueue.voiceChannel.leave();
-				console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-				return message.channel.send(new Discord.RichEmbed()
-					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-					.setColor("#00FF00"));
-			}
-			serverQueue.songs.shift();
-			play(bot, message, guild, serverQueue.songs[0]);
+		switch (reason) {
+			case 'left':
+				{
+					await dispatcher.pause();
+					await voiceChannel.leave();
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Saí do canal de voz **${voiceChannel}**.`)
+						.setColor('#00FF00'));
+				}
+			case 'forced':
+				{
+					console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+					queue.delete(guild.id);
+					serverQueue.voiceChannel.leave();
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+						.setColor('#00FF00'));
+				}
+			default:
+				{
+					if (serverQueue.songs.length <= 1) {
+						queue.delete(guild.id);
+						serverQueue.voiceChannel.leave();
+						console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+						return message.channel.send(new Discord.RichEmbed()
+							.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
+							.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+							.setColor("#00FF00"));
+					}
+					serverQueue.songs.shift();
+					play(bot, message, guild, serverQueue.songs[0]);
+				}
+				break;
 		}
 	});
 
