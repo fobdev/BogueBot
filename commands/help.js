@@ -9,14 +9,15 @@ module.exports.run = async (bot, message, args) => {
     const new_music_commands = "```css\n" +
         `[Comandos de música do ${bot.user.username}]
 	
->music [música].........................Toca um vídeo do YouTube / adiciona à fila.
->music (q)ueue..........................Exibe toda a fila do servidor.
-       (q)ueue [numero].................Pula para uma certa posição da fila.
-       (q)ueue next [numero]............Coloca o vídeo selecionado como próximo a tocar.
-	   (q)ueue pos [numero1] [numero2]..Alterna a posição entre dois vídeos na fila.
-       (q)ueue shuffle..................Randomiza a fila.
-       (q)ueue (del)ete [numero]........Exclui um certo item da fila.
-       (q)ueue purge(pg)................Limpa todos os itens da fila.
+>music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
+>music (q)ueue............................Exibe toda a fila do servidor.
+       (q)ueue [numero]...................Pula para uma certa posição da fila.
+       (q)ueue next [numero]..............Coloca o vídeo selecionado como próximo a tocar.
+	   (q)ueue pos [numero1] [numero2]....Alterna a posição entre dois vídeos na fila.
+       (q)ueue shuffle....................Randomiza a fila.
+       (q)ueue (del)ete [inicio] [fim]....Exclui uma certa quantidade de itens da fila.
+       (q)ueue (del)ete [numero]..........Exclui um certo item da fila.
+       (q)ueue purge(pg)..................Limpa todos os itens da fila.
 	   
 >music np.........Mostra informações sobre o que está sendo tocado.
 >music (s)kip.....Pula a reprodução atual.
