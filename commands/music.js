@@ -286,11 +286,33 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
+		case 'join':
+		case 'j':
+			{
+				try {
+					await voiceChannel.join();
+					if (serverQueue) {
+						await dispatcher.resume();
+						return message.channel.send(`Continuando a tocar a fila de ${serverQueue.guildname}`);
+					} else
+						return message.channel.send(`Entrei na sala de voz ${voiceChannel}`)
+				} catch (e) {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('Ocorreu um erro ao entrar na sala, favor verifique minhas permissões.')
+						.setColor('#FF0000'));
+				}
+			}
+			break;
 		case "leave":
 		case "l":
 			{
 				try {
-					dispatcher.end('forced');
+					await dispatcher.pause();
+					await voiceChannel.leave();
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Saí do canal de voz **${voiceChannel}**.`)
+						.setColor('#00FF00'));
+					// dispatcher.end('forced');
 				} catch (e) {
 					console.error("Error ocurred when leaving the voice channel");
 					console.error(`Error: ${e}`)
