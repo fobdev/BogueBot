@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!voiceChannel) {
 		return message.channel.send(new Discord.RichEmbed()
-			.setTitle("Você não está em um canal de voz.")
+			.setTitle("Você precisa estar em um canal de voz para usar os comandos de música.")
 			.setColor("FF0000"));
 	}
 
@@ -987,7 +987,7 @@ async function play(bot, message, guild, song) {
 
 	message.channel.send(music_embed);
 
-	dispatcher.on('end', reason => {
+	dispatcher.on('end', async (reason) => {
 		switch (reason) {
 			case 'left':
 				{
