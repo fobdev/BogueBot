@@ -562,15 +562,15 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 
 							var queue_header = "```md\n" +
 								`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
-====================================
+========================================================================
 Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
 `;;
 							var queue_content = `${ultralarge_queue}`;
 
 							var queue_footer = `
-Tempo total da fila: [${timing(queue_len)}]
-------------------------------------` + "```";
+Tempo total da fila: [${timing(queue_len)}] | [${serverQueue.songs.length}] vídeos.
+------------------------------------------------------------------------` + "```";
 
 							var queue_nav_help = "```" + `
 Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
@@ -588,7 +588,7 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 							function new_header_f(current_page, page_amount, songs_array) {
 								var new_header = "```md\n" +
 									`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
-====================================
+========================================================================
 Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
 
 `;
@@ -624,8 +624,8 @@ Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher
 								}
 
 								var new_footer = `
-Tempo total da fila: [${timing(new_length)}]
-------------------------------------` + "```";
+Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
+------------------------------------------------------------------------` + "```";
 
 								return new_footer;
 							}
@@ -966,7 +966,6 @@ async function play(bot, message, guild, song) {
 		if (serverQueue.songs.length === 1) {
 			queue.delete(guild.id);
 			serverQueue.voiceChannel.leave();
-
 			if (!leaving) {
 				return message.channel.send(new Discord.RichEmbed()
 					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
@@ -975,7 +974,6 @@ async function play(bot, message, guild, song) {
 			}
 			return;
 		}
-
 		serverQueue.songs.shift();
 		play(bot, message, guild, serverQueue.songs[0]);
 	});
