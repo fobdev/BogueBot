@@ -484,7 +484,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 							var start = parseInt(args[2]);
 							var end = parseInt(args[3]);
 
-							if (end > start) return message.channel.send(new Discord.RichEmbed()
+							if (start > end) return message.channel.send(new Discord.RichEmbed()
 								.setDescription('O valor de **início** deve ser menor que o valor de **final**.')
 								.setColor('#FF0000'));
 
