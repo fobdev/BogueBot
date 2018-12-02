@@ -632,7 +632,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 							// Update the queue message everytime a bot message is received.
 							botmessage_collector.on('collect', () => {
-								var dynamic_update = new_header_f(current_page, page_amount, serverQueue.songs) +
+								var dynamic_update = new_header_f(current_page, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 									new_content_f(current_page, serverQueue.songs) +
 									new_footer_f(serverQueue.songs) + queue_nav_help;
 
@@ -654,7 +654,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 										if (current_page < 0) current_page = page_amount - 1;
 										if (current_page >= page_amount) current_page = 0;
 
-										var new_page = new_header_f(current_page, page_amount, serverQueue.songs) +
+										var new_page = new_header_f(current_page, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 											new_content_f(current_page, serverQueue.songs) +
 											new_footer_f(serverQueue.songs) + queue_nav_help;
 
@@ -666,7 +666,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 									var new_navhelp = "```O tempo de navegação expirou```";
 
 									// Go back to the first page.
-									var final_page = new_header_f(0, page_amount, serverQueue.songs) +
+									var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 										new_content_f(0, serverQueue.songs) +
 										new_footer_f(serverQueue.songs) + new_navhelp;
 
