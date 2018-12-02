@@ -588,8 +588,8 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 							function new_header_f(current_page, page_amount, songs_array) {
 								var new_header = "```md\n" +
 									`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
-			====================================
-			Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
+====================================
+Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
 			
 			`;
 
@@ -624,8 +624,8 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 								}
 
 								var new_footer = `
-			Tempo total da fila: [${timing(new_length)}]
-			------------------------------------` + "```";
+Tempo total da fila: [${timing(new_length)}]
+------------------------------------` + "```";
 
 								return new_footer;
 							}
