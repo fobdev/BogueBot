@@ -483,17 +483,14 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						} else {
 							var start = parseInt(args[2]);
 							var end = parseInt(args[3]);
-
-							if (start > end) return message.channel.send(new Discord.RichEmbed()
-								.setDescription('O valor de **início** deve ser menor que o valor de **final**.')
-								.setColor('#FF0000'));
-
-							if (end === start) return message.channel.send(new Discord.RichEmbed()
+							var amount = start - end;
+							if (amount < 0) amount *= -1;
+							if (amount === 0) return message.channel.send(new Discord.RichEmbed()
 								.setDescription('Os valores precisam ser **diferentes**.')
 								.setColor('#FF0000'));
 
 							if (start > 0 && end <= serverQueue.songs.length) {
-								var deleted_entries = await serverQueue.songs.splice(start, end);
+								var deleted_entries = await serverQueue.songs.splice(start, amount);
 								return message.channel.send(arg_embed
 									.setDescription(`Foram removidos **${deleted_entries.length}** vídeos da fila de **${message.guild.name}**`)
 									.setColor("#00FF00"));
