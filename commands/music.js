@@ -606,8 +606,10 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 							});
 
 							function new_header_f(current_page, page_amount, songs_array) {
+								var page_str = '';
+								if (page_amount > 1) page_str = `Página ( ${current_page + 1} / ${page_amount} )`
 								var new_header = "```md\n" +
-									`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
+									`Fila de ${message.guild.name} | ${page_str}
 ========================================================================
 Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
 
@@ -656,9 +658,16 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 								if (new_content_f(current_page, serverQueue.songs).length === 0) current_page = 0;
 
-								var dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
-									new_content_f(current_page, serverQueue.songs) +
-									new_footer_f(serverQueue.songs) + queue_nav_help;
+								var dynamic_update = '';
+								if (page_amount > 1) {
+									dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
+										new_content_f(current_page, serverQueue.songs) +
+										new_footer_f(serverQueue.songs) + queue_nav_help;
+								} else {
+									dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
+										new_content_f(current_page, serverQueue.songs) +
+										new_footer_f(serverQueue.songs);
+								}
 
 								botmessage_collector.collected.array()[0].edit(dynamic_update);
 							});
