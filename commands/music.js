@@ -10,7 +10,7 @@ const queue = new Map();
 const youtube = new YouTube(ytkey);
 var dispatcher;
 
-var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'join', 'j', 'np', 'queue', 'q', 'skip', 's'];
+var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 var video;
 var videos;
 var url;
@@ -286,34 +286,16 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
-		case 'join':
-		case 'j':
-			{
-				try {
-					if (dispatcher) {
-						serverQueue.connection = await voiceChannel.join();
-						play(bot, message, message.guild, serverQueue.songs[0]);
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`Continuando a tocar a fila de **${serverQueue.guildname}**.`)
-							.setColor("00FF00"));
-					} else {
-						await voiceChannel.join();
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription(`Entrei no canal de voz ${voiceChannel}.`)
-							.setColor("00FF00"));
-					}
-				} catch (e) {
-					console.log(`Join command error: ${e}`);
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('Ocorreu um erro ao entrar na sala, favor verifique minhas **permissões**.')
-						.setColor('#FF0000'));
-				}
-			}
 		case "leave":
 		case "l":
 			{
 				try {
-					dispatcher.end('left');
+					await serverQueue.voiceChannel.leave();
+					await queue.delete(guild.id);
+					console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+						.setColor("#00FF00"));
 				} catch (e) {
 					console.error("Error ocurred when leaving the voice channel");
 					console.error(`Error: ${e}`)
@@ -322,7 +304,6 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 						.setColor("#FF0000"));
 				}
 			}
-			break;
 		case "np":
 			{
 				try {
@@ -744,10 +725,10 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 				try {
 					if (dispatcher.speaking) {
 						var current_music = serverQueue.songs[0];
+						await dispatcher.end();
 						await message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** pulou **[${current_music.title}](${current_music.url})**`)
 							.setColor("#00FF00"));
-						await dispatcher.end();
 						return;
 					} else {
 						return message.channel.send(new Discord.RichEmbed()
@@ -1004,40 +985,18 @@ async function play(bot, message, guild, song) {
 
 	message.channel.send(music_embed);
 
-	dispatcher.on('end', async (reason) => {
-		switch (reason) {
-			case 'left':
-				{
-					serverQueue.connection = await serverQueue.voiceChannel.leave();
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}**.`)
-						.setColor('#00FF00'));
-				}
-			case 'forced':
-				{
-					console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-					queue.delete(guild.id);
-					serverQueue.voiceChannel.leave();
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-						.setColor('#00FF00'));
-				}
-			default:
-				{
-					if (serverQueue.songs.length <= 1) {
-						queue.delete(guild.id);
-						serverQueue.voiceChannel.leave();
-						console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-						return message.channel.send(new Discord.RichEmbed()
-							.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-							.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-							.setColor("#00FF00"));
-					}
-					await serverQueue.songs.shift();
-					play(bot, message, guild, serverQueue.songs[0]);
-				}
-				break;
+	dispatcher.on('end', () => {
+		if (serverQueue.songs.length <= 1) {
+			queue.delete(guild.id);
+			serverQueue.voiceChannel.leave();
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+			return message.channel.send(new Discord.RichEmbed()
+				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
+				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+				.setColor("#00FF00"));
 		}
+		await serverQueue.songs.shift();
+		play(bot, message, guild, serverQueue.songs[0]);
 	});
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
