@@ -291,9 +291,8 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				try {
 					if (dispatcher) {
-						serverQueue.connection = await voiceChannel.join().then(() => {
-							play(bot, message, message.guild, serverQueue.songs[0]);
-						});
+						serverQueue.connection = await voiceChannel.join();
+						play(bot, message, message.guild, serverQueue.songs[0]);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`Continuando a tocar a fila de **${serverQueue.guildname}**.`)
 							.setColor("00FF00"));
