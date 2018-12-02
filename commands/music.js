@@ -649,8 +649,6 @@ Tempo total da fila: [${timing(new_length)}]
 											new_content_f(current_page, serverQueue.songs) +
 											new_footer_f(serverQueue.songs) + queue_nav_help;
 
-										// var new_page = new_header + new_content + new_footer + queue_nav_help;
-
 										botmessage_collector.collected.array()[0].edit(new_page);
 									}
 								});
@@ -666,29 +664,9 @@ Tempo total da fila: [${timing(new_length)}]
 
 								usermessage_navigator.on('end', () => {
 									var new_navhelp = "```O tempo de navegação expirou```";
-
-									var new_content = '';
-									for (let i = (page_size * current_page) + 1; i <= (page_size * current_page) + page_size; i++) {
-										// Whitespace for padding of numbers
-										var whitespace = ' ';
-										if (i < 10) whitespace = "  ";
-										else whitespace = " ";
-
-										/*
-										Try to print the max amount, if the max amount isn't available in the current page
-										print only the available, continue after catch the error
-										*/
-										try {
-											new_content += `${i}.${whitespace}${serverQueue.songs[i].title} <${serverQueue.songs[i].author.username}> | < ${timing(serverQueue.songs[i].length)} >\n`;
-										} catch (e) {
-											continue;
-										}
-									}
-
-
 									var final_page = new_header_f(current_page, page_amount, serverQueue.songs) +
 										new_content_f(current_page, serverQueue.songs) +
-										new_footer_f(serverQueue.songs) + queue_nav_help;
+										new_footer_f(serverQueue.songs) + new_navhelp;
 
 									botmessage_collector.collected.array()[0].edit(final_page)
 								})
