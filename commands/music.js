@@ -1021,6 +1021,8 @@ async function play(bot, message, song) {
 		}
 
 		if (reason === 'skipped') {
+			serverQueue.songs.shift();
+			play(bot, message, serverQueue.songs[0]);
 			return message.channel.send(new Discord.RichEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 				.setColor("#00FF00")).then(() => {
