@@ -1,21 +1,22 @@
+// Includes
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTube = require("simple-youtube-api");
 const botconfig = require.main.require("./botconfig.json");
 const helper = require.main.require('./core/helper.js');
 
+// Keys and Maps 
 var ytkey = helper.loadKeys("youtube_key");
-
-const queue = new Map();
 const youtube = new YouTube(ytkey);
-var dispatcher;
+const queue = new Map();
 
+
+// Globals
 var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
-var video;
-var videos;
+var dispatcher;
 var url;
-var isPlaylist;
 
+//Functions
 module.exports.run = async (bot, message, args) => {
 	if (!args[0]) {
 		return message.channel.send('>help music').then(msg => {
@@ -30,8 +31,10 @@ module.exports.run = async (bot, message, args) => {
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
 	url = args[0];
-	isPlaylist = url.includes('list=');
+	var isPlaylist = url.includes('list=');
 	var search = args.join(" ");
+	var video;
+	var videos;
 
 	// queue.forEach((value, key) => {
 	// 	var songs_string = '';
@@ -917,7 +920,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
 
-			play(bot, message, message.guild, queueConstruct.songs[0]);
+			play(bot, message, queueConstruct.songs[0]);
 
 		} catch (e) {
 			console.error(`Bot could not join a voice channel: + ${e}`);
@@ -968,14 +971,15 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	}
 }
 
-async function play(bot, message, guild, song) {
-	var serverQueue = queue.get(guild.id);
+async function play(bot, message, song) {
+	var serverQueue = queue.get(message.guild.id);
 	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
 		quality: 'highestaudio',
 		filter: 'audioonly'
 	}));
 
+	// Music embed start
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
@@ -992,10 +996,11 @@ async function play(bot, message, guild, song) {
 		.addField("Duração", `${isLivestream}`, true);
 
 	message.channel.send(music_embed);
+	// Music embed end
 
 	dispatcher.on('end', () => {
 		if (serverQueue.songs.length <= 1) {
-			queue.delete(guild.id);
+			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 			return message.channel.send(new Discord.RichEmbed()
@@ -1004,7 +1009,7 @@ async function play(bot, message, guild, song) {
 				.setColor("#00FF00"));
 		}
 		serverQueue.songs.shift();
-		play(bot, message, guild, serverQueue.songs[0]);
+		play(bot, message, serverQueue.songs[0]);
 	});
 
 	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
