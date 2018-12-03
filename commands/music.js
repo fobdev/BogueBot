@@ -301,14 +301,19 @@ async function subcmd(bot, message, args, serverQueue) {
 		case "leave":
 		case "l":
 			{
-				try {
-					await serverQueue.voiceChannel.leave('left');
-					await queue.delete(message.guild.id);
-				} catch (e) {
-					console.error("Error ocurred when leaving the voice channel");
-					console.error(`Error: ${e}`)
-					return message.channel.send(arg_embed
-						.setTitle("Ocorreu um erro ao sair da sala.")
+				if (serverQueue) {
+					try {
+						await serverQueue.streamdispatcher.end('left');
+					} catch (e) {
+						console.error("Error ocurred when leaving the voice channel");
+						console.error(`${e}`)
+						return message.channel.send(arg_embed
+							.setTitle("Ocorreu um erro ao sair da sala.")
+							.setColor("#FF0000"));
+					}
+				} else {
+					return message.channel.send(new Discord.RichEmbed()
+						.setDescription('O bot não está em nenhuma sala de voz.')
 						.setColor("#FF0000"));
 				}
 			}
@@ -320,7 +325,7 @@ async function subcmd(bot, message, args, serverQueue) {
 				} catch (e) {
 					console.error(`NP error: ${e}`);
 					return message.channel.send(new Discord.RichEmbed()
-						.setDescription('**Não tem nada tocando no momento**')
+						.setDescription('Não tem nada sendo tocado no momento.')
 						.setColor('#FF0000'));
 				}
 
@@ -737,7 +742,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 						serverQueue.streamdispatcher.end('skipped');
 					} else {
 						return message.channel.send(new Discord.RichEmbed()
-							.setTitle("Não tem nada tocando que possa ser pulado.")
+							.setTitle('Não tem nada tocando no momento.')
 							.setColor("#FF0000"));
 					}
 				} catch (error) {
@@ -1009,6 +1014,8 @@ async function play(bot, message, song) {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			if (reason === 'left') {
+				await serverQueue.voiceChannel.leave();
+				await queue.delete(message.guild.id);
 				return message.channel.send(new Discord.RichEmbed()
 					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
 					.setColor("#00FF00"));
