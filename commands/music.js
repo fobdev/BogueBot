@@ -244,18 +244,17 @@ async function subcmd(bot, message, args, serverQueue) {
 	switch (url) {
 		case "earrape":
 			{
-				var sb_dispatcher = serverQueue.streamdispatcher;
-				if (sb_dispatcher.speaking) {
-					var sv_volume = serverQueue.connection.sb_dispatcher.volume;
-					if (sv_volume !== 1) serverQueue.connection.sb_dispatcher.setVolume(1);
+				if (serverQueue.streamdispatcher.speaking) {
+					var sv_volume = serverQueue.connection.dispatcher.volume;
+					if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 
 					if (sv_volume === 1) {
-						serverQueue.connection.sb_dispatcher.setVolume(200);
+						serverQueue.connection.dispatcher.setVolume(200);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
 							.setColor("#00FF00"));
 					} else if (sv_volume === 200) {
-						serverQueue.connection.sb_dispatcher.setVolume(1);
+						serverQueue.connection.dispatcher.setVolume(1);
 						return message.channel.send(arg_embed
 							.setDescription(`**O volume voltou ao normal.**`)
 							.setColor("#00FF00"));
