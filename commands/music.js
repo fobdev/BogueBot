@@ -986,7 +986,7 @@ async function play(bot, message, song) {
 
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`, true)
+		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
 
@@ -1021,13 +1021,11 @@ async function play(bot, message, song) {
 		}
 
 		if (reason === 'skipped') {
-			serverQueue.songs.shift();
-			play(bot, message, serverQueue.songs[0]);
+			await serverQueue.songs.shift();
+			await play(bot, message, serverQueue.songs[0]);
 			return message.channel.send(new Discord.RichEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-				.setColor("#00FF00")).then(() => {
-				message.channel.send(music_embed);
-			});
+				.setColor("#00FF00"));
 		}
 
 		serverQueue.songs.shift();
