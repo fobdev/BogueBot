@@ -473,11 +473,7 @@ async function subcmd(bot, message, args, serverQueue) {
 									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 									.setColor('#00FF00'));
 
-								if (serverQueue.songs.length <= 1)
-									await serverQueue.streamdispatcher.end();
-								else
-									await serverQueue.streamdispatcher.end('skipped');
-
+								await serverQueue.streamdispatcher.end('skipped');
 								return;
 							}
 
@@ -743,11 +739,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 			{
 				try {
 					if (serverQueue.streamdispatcher.speaking) {
-						if (serverQueue.songs.length <= 1)
-							serverQueue.streamdispatcher.end();
-						else
-							serverQueue.streamdispatcher.end('skipped');
-
+						serverQueue.streamdispatcher.end('skipped');
 					} else {
 						return message.channel.send(new Discord.RichEmbed()
 							.setTitle('Não tem nada tocando no momento.')
@@ -1008,14 +1000,6 @@ async function play(bot, message, song) {
 	// Music embed end
 
 	serverQueue.streamdispatcher.on('end', reason => {
-		if (reason === 'skipped') {
-			return message.channel.send(new Discord.RichEmbed()
-				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-				.setColor("#00FF00")).then(() => {
-				message.channel.send(music_embed);
-			});
-		}
-
 		if (serverQueue.songs.length <= 1) {
 			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
@@ -1035,6 +1019,15 @@ async function play(bot, message, song) {
 
 			}
 		}
+
+		if (reason === 'skipped') {
+			return message.channel.send(new Discord.RichEmbed()
+				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+				.setColor("#00FF00")).then(() => {
+				message.channel.send(music_embed);
+			});
+		}
+
 		serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0]);
 	});
