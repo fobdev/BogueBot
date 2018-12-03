@@ -999,24 +999,24 @@ async function play(bot, message, song) {
 	message.channel.send(music_embed);
 
 	serverQueue.streamdispatcher.on('end', async (reason) => {
+		if (reason === 'left') {
+			serverQueue.voiceChannel.leave();
+			queue.delete(message.guild.id);
+			return message.channel.send(new Discord.RichEmbed()
+				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+				.setColor("#00FF00"));
+		}
+
 		if (serverQueue.songs.length <= 1) {
 			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
-			if (reason === 'left') {
-				serverQueue.voiceChannel.leave();
-				queue.delete(message.guild.id);
-				return message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-					.setColor("#00FF00"));
-			} else {
-				return message.channel.send(new Discord.RichEmbed()
-					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-					.setColor("#00FF00"));
+			return message.channel.send(new Discord.RichEmbed()
+				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
+				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+				.setColor("#00FF00"));
 
-			}
 		}
 
 		if (reason === 'skipped') {
