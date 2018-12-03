@@ -656,13 +656,15 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 								var new_navhelp = "```Interação cancelada, peça uma nova fila para continuar.```";
 
 								if (usermessage_navigator.ended) {
-									if (page_amount > 1) {
+									if (page_amount > 1)
 										botmessage_collector.collected.array()[0].edit(dynamic_update + new_navhelp);
-									} else {
+									else
 										botmessage_collector.collected.array()[0].edit(dynamic_update);
-									}
 								} else {
-									botmessage_collector.collected.array()[0].edit(dynamic_update + queue_nav_help);
+									if (page_amount > 1)
+										botmessage_collector.collected.array()[0].edit(dynamic_update + queue_nav_help);
+									else
+										botmessage_collector.collected.array()[0].edit(dynamic_update);
 								}
 
 								if (page_amount > 1) {
@@ -682,7 +684,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 								// Go back to the first page
 								let final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 									new_content_f(0, serverQueue.songs) +
-									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]');
+									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]') + "```O tempo de navegação expirou```";
 
 								botmessage_collector.collected.array()[0].edit(final_page);
 							})
