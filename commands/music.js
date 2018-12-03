@@ -1002,7 +1002,7 @@ async function play(bot, message, song, user_url) {
 	music_embed
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true)
-		.addField('\u200B', "``" + `${botconfig.prefix}${module.exports.help.name} queue` + "``\npara visualizar fila completa");
+		.addField('\u200B', "``" + `${botconfig.prefix}${module.exports.help.name} queue` + "``\npara visualizar fila completa", true);
 
 	// Music embed end
 	message.channel.send(music_embed);
