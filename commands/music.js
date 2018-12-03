@@ -13,7 +13,6 @@ const queue = new Map();
 
 // Globals
 var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
-var dispatcher;
 var url;
 
 //Functions
@@ -245,17 +244,17 @@ async function subcmd(bot, message, args, serverQueue) {
 	switch (url) {
 		case "earrape":
 			{
-				if (dispatcher.speaking) {
-					var sv_volume = serverQueue.connection.dispatcher.volume;
-					if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
+				if (serverQueue.streamdispatcher.speaking) {
+					var sv_volume = serverQueue.connection.serverQueue.streamdispatcher.volume;
+					if (sv_volume !== 1) serverQueue.connection.serverQueue.streamdispatcher.setVolume(1);
 
 					if (sv_volume === 1) {
-						serverQueue.connection.dispatcher.setVolume(200);
+						serverQueue.connection.serverQueue.streamdispatcher.setVolume(200);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
 							.setColor("#00FF00"));
 					} else if (sv_volume === 200) {
-						serverQueue.connection.dispatcher.setVolume(1);
+						serverQueue.connection.serverQueue.streamdispatcher.setVolume(1);
 						return message.channel.send(arg_embed
 							.setDescription(`**O volume voltou ao normal.**`)
 							.setColor("#00FF00"));
@@ -276,13 +275,13 @@ async function subcmd(bot, message, args, serverQueue) {
 				// the same command for play and pause
 				if (serverQueue) {
 					try {
-						if (!dispatcher.paused) {
-							dispatcher.pause();
+						if (!serverQueue.streamdispatcher.paused) {
+							serverQueue.streamdispatcher.pause();
 							return message.channel.send(arg_embed
 								.setTitle(":pause_button: Reprodução pausada.")
 								.setColor("#FFFF00"));
 						} else {
-							dispatcher.resume();
+							serverQueue.streamdispatcher.resume();
 							return message.channel.send(arg_embed
 								.setTitle(":arrow_forward: Reprodução continuada."));
 						}
@@ -302,12 +301,8 @@ async function subcmd(bot, message, args, serverQueue) {
 		case "l":
 			{
 				try {
-					await serverQueue.voiceChannel.leave();
+					await serverQueue.voiceChannel.leave('left');
 					await queue.delete(message.guild.id);
-					console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-					return message.channel.send(new Discord.RichEmbed()
-						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-						.setColor("#00FF00"));
 				} catch (e) {
 					console.error("Error ocurred when leaving the voice channel");
 					console.error(`Error: ${e}`)
@@ -319,7 +314,7 @@ async function subcmd(bot, message, args, serverQueue) {
 		case "np":
 			{
 				try {
-					var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
+					var dispatchertime_seconds = Math.floor(serverQueue.streamdispatcher.time / 1000);
 				} catch (e) {
 					console.error(`NP error: ${e}`);
 					return message.channel.send(new Discord.RichEmbed()
@@ -469,8 +464,9 @@ async function subcmd(bot, message, args, serverQueue) {
 							var entry = parseInt(args[2]);
 							if (entry < 1) {
 								await message.channel.send(new Discord.RichEmbed()
-									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`));
-								await dispatcher.end();
+									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+									.setColor('#00FF00'));
+								await serverQueue.streamdispatcher.end();
 								return;
 							}
 
@@ -531,7 +527,7 @@ async function subcmd(bot, message, args, serverQueue) {
 						if (parseInt(args[1]) > 1 && parseInt(args[1]) <= serverQueue.songs.length) {
 							serverQueue.songs.splice(0, parseInt(args[1] - 1));
 
-							dispatcher.end();
+							serverQueue.streamdispatcher.end();
 							return message.channel.send(arg_embed
 								.setTitle(`Fila pulada para a posição **${args[1]}**`)
 								.setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
@@ -543,14 +539,14 @@ async function subcmd(bot, message, args, serverQueue) {
 								.setColor("#FF0000"));
 						}
 					} else {
-						var dispatchertime_seconds = Math.floor(dispatcher.time / 1000);
+						var dispatchertime_seconds = Math.floor(serverQueue.streamdispatcher.time / 1000);
 
 						// Tries to print the normal queue
 						try {
 
 							var queue_len = 0;
 							var ultralarge_queue = '';
-							var dispatchertime_seconds = parseInt(Math.floor(dispatcher.time / 1000));
+							var dispatchertime_seconds = parseInt(Math.floor(serverQueue.streamdispatcher.time / 1000));
 
 							const page_size = 15
 							var page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
@@ -604,7 +600,7 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 								var new_header = "```md\n" +
 									`Fila de ${message.guild.name} | ${page_str}
 ========================================================================
-Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(dispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
+Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(serverQueue.streamdispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
 
 `;
 
@@ -735,8 +731,8 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 		case "s":
 			{
 				try {
-					if (dispatcher.speaking) {
-						await dispatcher.end();
+					if (serverQueue.streamdispatcher.speaking) {
+						await serverQueue.streamdispatcher.end();
 						await message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 							.setColor("#00FF00"));
@@ -882,6 +878,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 	if (!serverQueue) {
 		const queueConstruct = {
+			streamdispatcher: null,
 			guildname: message.guild.name,
 			id: message.guild.id,
 			textChannel: message.channel,
@@ -973,7 +970,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, song) {
 	var serverQueue = queue.get(message.guild.id);
-	dispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
 		quality: 'highestaudio',
 		filter: 'audioonly'
@@ -998,21 +995,29 @@ async function play(bot, message, song) {
 	message.channel.send(music_embed);
 	// Music embed end
 
-	dispatcher.on('end', () => {
+	serverQueue.streamdispatcher.on('end', reason => {
 		if (serverQueue.songs.length <= 1) {
 			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-			return message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
-				.setColor("#00FF00"));
+
+			if (reason !== 'left') {
+				return message.channel.send(new Discord.RichEmbed()
+					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
+					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+					.setColor("#00FF00"));
+			} else {
+				return message.channel.send(new Discord.RichEmbed()
+					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+					.setColor("#00FF00"));
+			}
 		}
+
 		serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0]);
 	});
 
-	dispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
+	serverQueue.streamdispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
 }
 
 function timing(secs) {
