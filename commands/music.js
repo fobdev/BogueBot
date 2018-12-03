@@ -668,7 +668,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 							botmessage_collector.on('end', () => {
 
 								// Go back to the first page
-								var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
+								let final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 									new_content_f(0, serverQueue.songs) +
 									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]');
 
@@ -693,7 +693,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 										if (current_page < 0) current_page = new_page_amount - 1;
 										if (current_page >= new_page_amount) current_page = 0;
 
-										var new_page = new_header_f(current_page, new_page_amount, serverQueue.songs) +
+										let new_page = new_header_f(current_page, new_page_amount, serverQueue.songs) +
 											new_content_f(current_page, serverQueue.songs) +
 											new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + queue_nav_help;
 
@@ -713,7 +713,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 									}
 
 									// Go back to the first page.
-									var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
+									let final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 										new_content_f(0, serverQueue.songs) +
 										new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + new_navhelp;
 
