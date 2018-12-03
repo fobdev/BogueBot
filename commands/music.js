@@ -6,7 +6,7 @@ const botconfig = require.main.require("./botconfig.json");
 const helper = require.main.require('./core/helper.js');
 
 // Keys and Maps 
-var ytkey = helper.loadKeys("youtube_key");
+const ytkey = helper.loadKeys("youtube_key");
 const youtube = new YouTube(ytkey);
 const queue = new Map();
 
