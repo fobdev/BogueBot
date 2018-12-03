@@ -1014,8 +1014,8 @@ async function play(bot, message, song) {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			if (reason === 'left') {
-				await serverQueue.voiceChannel.leave();
-				await queue.delete(message.guild.id);
+				serverQueue.voiceChannel.leave();
+				queue.delete(message.guild.id);
 				return message.channel.send(new Discord.RichEmbed()
 					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
 					.setColor("#00FF00"));
