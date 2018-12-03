@@ -33,6 +33,15 @@ module.exports.run = async (bot, message, args) => {
 	isPlaylist = url.includes('list=');
 	var search = args.join(" ");
 
+	// queue.forEach((value, key) => {
+	// 	var songs_string = '';
+	// 	for (let i = 0; i < value.songs.length; i++) {
+	// 		songs_string += `|${value.songs[i].title}|`
+	// 	}
+	// 
+	// 	console.log(`Songs for queue of ${value.guildname}[${key}]:\n${songs_string}`)
+	// })
+
 	if (!voiceChannel) {
 		return message.channel.send(new Discord.RichEmbed()
 			.setTitle("Você precisa estar em um canal de voz para usar os comandos de música.")
@@ -217,14 +226,14 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd(bot, message, args, serverQueue, voiceChannel);
+				subcmd(bot, message, args, serverQueue);
 			}
 		}
 	}
 
 }
 
-async function subcmd(bot, message, args, serverQueue, voiceChannel) {
+async function subcmd(bot, message, args, serverQueue) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
@@ -291,7 +300,7 @@ async function subcmd(bot, message, args, serverQueue, voiceChannel) {
 			{
 				try {
 					await serverQueue.voiceChannel.leave();
-					await queue.delete(guild.id);
+					await queue.delete(message.guild.id);
 					console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
@@ -724,10 +733,9 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 			{
 				try {
 					if (dispatcher.speaking) {
-						var current_music = serverQueue.songs[0];
 						await dispatcher.end();
 						await message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**${message.author.username}** pulou **[${current_music.title}](${current_music.url})**`)
+							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 							.setColor("#00FF00"));
 						return;
 					} else {
