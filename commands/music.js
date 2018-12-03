@@ -489,6 +489,12 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 							var start = parseInt(args[2]);
 							var end = parseInt(args[3]);
 							var amount = start - end;
+
+							if (start > end) return message.channel.send(new Discord.RichEmbed()
+								.setTitle('O valor **final** deve ser maior que o valor **inicial**.')
+								.setDescription("Dessa vez, tente usar ``" + `${botconfig.prefix}${module.exports.help.name} q del ${start} ${end}` + "``")
+								.setColor('#FF0000'));
+
 							if (amount < 0) amount *= -1;
 							if (amount === 0) return message.channel.send(new Discord.RichEmbed()
 								.setDescription('Os valores precisam ser **diferentes**.')
