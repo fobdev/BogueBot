@@ -18,10 +18,11 @@ module.exports.run = async (bot, message, args) => {
 	var servers_pl = 'server';
 	if (queue.size !== 1) servers_pl += 's';
 	if (queue.size > 0)
-		console.log(`Streaming to ${queue.size} ${servers_pl}`);
+		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
 
 	if (!args[0]) {
-		return message.channel.send('>help music').then(msg => {
+		let help_file = require('./help')
+		return message.channel.send(`${botconfig.prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
 				msg.delete();
 			} catch (e) {
@@ -462,7 +463,7 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 					if (args[1] === 'delete' || args[1] === 'del') {
 						if (!args[3]) {
 							var entry = parseInt(args[2]);
-							if (entry < 1) {
+							if (entry === 0) {
 								await serverQueue.streamdispatcher.end('skipped');
 								return;
 							}
@@ -474,7 +475,6 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 							}
 
 							if (entry > 0 && entry <= serverQueue.songs.length) {
-
 								message.channel.send(arg_embed
 									.setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
 										` foi removido da fila.`));
@@ -546,7 +546,6 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 
 						// Tries to print the normal queue
 						try {
-
 							var queue_len = 0;
 							var ultralarge_queue = '';
 							var dispatchertime_seconds = parseInt(Math.floor(serverQueue.streamdispatcher.time / 1000));
@@ -631,18 +630,20 @@ Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(serverQueu
 								return new_content;
 							}
 
-							function new_footer_f(song_array) {
+							function new_footer_f(song_array, autoupdate_str) {
 								var new_length = 0
 								for (let i = 0; i < song_array.length; i++) {
 									new_length += parseInt(song_array[i].length);
 								}
 
 								var new_footer = `
-Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
+Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | ${autoupdate_str}
 ------------------------------------------------------------------------` + "```";
 
 								return new_footer;
 							}
+
+
 
 							// Update the queue message everytime a bot message is received.
 							botmessage_collector.on('collect', () => {
@@ -654,15 +655,26 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 								if (page_amount > 1) {
 									dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
 										new_content_f(current_page, serverQueue.songs) +
-										new_footer_f(serverQueue.songs) + queue_nav_help;
+										new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + queue_nav_help;
 								} else {
 									dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
 										new_content_f(current_page, serverQueue.songs) +
-										new_footer_f(serverQueue.songs);
+										new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
 								}
 
 								botmessage_collector.collected.array()[0].edit(dynamic_update);
 							});
+
+							botmessage_collector.on('end', () => {
+
+								// Go back to the first page
+								var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
+									new_content_f(0, serverQueue.songs) +
+									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]');
+
+								botmessage_collector.collected.array()[0].edit(final_page);
+							})
+
 
 							if (page_amount > 1) {
 								message.channel.send(full_queue);
@@ -683,12 +695,11 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 
 										var new_page = new_header_f(current_page, new_page_amount, serverQueue.songs) +
 											new_content_f(current_page, serverQueue.songs) +
-											new_footer_f(serverQueue.songs) + queue_nav_help;
+											new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + queue_nav_help;
 
 										botmessage_collector.collected.array()[0].edit(new_page);
 									} else {
 										usermessage_navigator.stop('forced');
-										botmessage_collector.stop('forced');
 									}
 								});
 
@@ -704,7 +715,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 									// Go back to the first page.
 									var final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 										new_content_f(0, serverQueue.songs) +
-										new_footer_f(serverQueue.songs) + new_navhelp;
+										new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + new_navhelp;
 
 									botmessage_collector.collected.array()[0].edit(final_page)
 								})
