@@ -15,15 +15,15 @@ fs.readdir('./commands/', (err, files) => {
 
     let jsfile = files.filter(f => f.split(".").pop() === "js");
 
-    if (jsfile.length < 1) {
+    if (jsfile.length < 1)
         throw new Error("Could not find commands.")
-    }
+
     console.log("---------------------------------");
     console.log("Loading Command Files");
     console.log("---------------------------------");
     jsfile.forEach((f, i) => {
         let props = require(`./commands/${f}`);
-        console.log(`${f} loaded.`);
+        console.log(`[FILE LOAD SUCESS]: ${f}`);
         bot.commands.set(props.help.name, props);
         try {
             bot.commands.set(props.help.name_2, props);
@@ -32,7 +32,7 @@ fs.readdir('./commands/', (err, files) => {
             bot.commands.set(props.help.name_3, props);
             bot.commands.set(props.help.name_4, props);
         } catch (e) {
-            console.error(`${e}: Secondary / terciary command name not loaded properly.`);
+            console.error(`${e}: Secondary / terciary / quaternary command name not loaded properly.`);
         }
     });
     console.log("---------------------------------");
@@ -193,7 +193,11 @@ bot.on('message', async message => {
     if (cmd[0] === prefix) {
         if (command_file) {
             console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
-            command_file.run(bot, message, args);
+            try {
+                command_file.run(bot, message, args);
+            } catch (e) {
+                console.error(`${e}: 'run' function not found in file [${command_file}].`)
+            }
         }
     }
 
