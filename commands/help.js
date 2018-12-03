@@ -12,8 +12,8 @@ module.exports.run = async (bot, message, args) => {
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
        (q)ueue [num]......................Pula para uma certa posição da fila.
-       (q)ueue next [num].................Coloca o vídeo selecionado como próximo a tocar.
-	   (q)ueue pos [num1] [num2]..........Alterna a posição entre dois vídeos na fila.
+       (q)ueue next [num].................Coloca um item da fila como próximo a tocar.
+	   (q)ueue pos [num1] [num2]..........Alterna a posição entre dois itens na fila.
        (q)ueue shuffle....................Randomiza a fila.
        (q)ueue (del)ete [num].............Exclui um certo item da fila.
        (q)ueue (del)ete [inicio] [num]....Exclui uma certa quantidade de itens da fila.
