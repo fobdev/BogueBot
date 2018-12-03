@@ -472,7 +472,12 @@ async function subcmd(bot, message, args, serverQueue) {
 								await message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 									.setColor('#00FF00'));
-								await serverQueue.streamdispatcher.end('skipped');
+
+								if (serverQueue.songs.length <= 1)
+									await serverQueue.streamdispatcher.end();
+								else
+									await serverQueue.streamdispatcher.end('skipped');
+
 								return;
 							}
 
@@ -738,7 +743,11 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 			{
 				try {
 					if (serverQueue.streamdispatcher.speaking) {
-						serverQueue.streamdispatcher.end('skipped');
+						if (serverQueue.songs.length <= 1)
+							serverQueue.streamdispatcher.end();
+						else
+							serverQueue.streamdispatcher.end('skipped');
+
 					} else {
 						return message.channel.send(new Discord.RichEmbed()
 							.setTitle('Não tem nada tocando no momento.')
