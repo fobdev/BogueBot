@@ -996,8 +996,9 @@ async function play(bot, message, song) {
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.addField("Duração", `${isLivestream}`, true);
 	// Music embed end
+	message.channel.send(music_embed);
 
-	serverQueue.streamdispatcher.on('end', reason => {
+	serverQueue.streamdispatcher.on('end', async (reason) => {
 		if (serverQueue.songs.length <= 1) {
 			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
@@ -1019,15 +1020,14 @@ async function play(bot, message, song) {
 		}
 
 		if (reason === 'skipped') {
-			serverQueue.songs.shift();
-			play(bot, message, serverQueue.songs[0]);
-			return message.channel.send(new Discord.RichEmbed()
+			await serverQueue.songs.shift();
+			await message.channel.send(new Discord.RichEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 				.setColor("#00FF00"));
+			return play(bot, message, serverQueue.songs[0]);
 		}
 
-		serverQueue.songs.shift();
-		message.channel.send(music_embed);
+		await serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0]);
 	});
 
