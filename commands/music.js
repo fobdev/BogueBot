@@ -15,6 +15,11 @@ const subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 
 
 //Functions
 module.exports.run = async (bot, message, args) => {
+	var servers_pl = 'server';
+	if (queue.size !== 1) servers_pl += 's';
+	if (queue.size > 0)
+		console.log(`Streaming to ${queue.size} ${servers_pl}`);
+
 	if (!args[0]) {
 		return message.channel.send('>help music').then(msg => {
 			try {
@@ -458,10 +463,6 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 						if (!args[3]) {
 							var entry = parseInt(args[2]);
 							if (entry < 1) {
-								await message.channel.send(new Discord.RichEmbed()
-									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-									.setColor('#00FF00'));
-
 								await serverQueue.streamdispatcher.end('skipped');
 								return;
 							}
@@ -1015,10 +1016,10 @@ async function play(bot, message, song, user_url) {
 		}
 
 		if (reason === 'skipped') {
-			await serverQueue.songs.shift();
 			await message.channel.send(new Discord.RichEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 				.setColor("#00FF00"));
+			await serverQueue.songs.shift();
 			return play(bot, message, serverQueue.songs[0], user_url);
 		}
 
@@ -1046,8 +1047,3 @@ module.exports.help = {
 	name_3: "play",
 	name_4: "p"
 }
-
-var servers_pl = 'server';
-if (queue.size !== 1) servers_pl += 's';
-if (queue.size > 0)
-	console.log(`Streaming to ${queue.size} ${servers_pl}`);
