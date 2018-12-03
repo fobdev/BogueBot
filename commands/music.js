@@ -35,14 +35,10 @@ module.exports.run = async (bot, message, args) => {
 	var video;
 	var videos;
 
-	// queue.forEach((value, key) => {
-	// 	var songs_string = '';
-	// 	for (let i = 0; i < value.songs.length; i++) {
-	// 		songs_string += `|${value.songs[i].title}|`
-	// 	}
-	// 
-	// 	console.log(`Songs for queue of ${value.guildname}[${key}]:\n${songs_string}`)
-	// })
+	var servers_pl = 'server';
+	if (queue.size !== 1) servers_pl += 's';
+	if (queue.size > 0)
+		console.log(`Streaming to ${queue.size} ${servers_pl}`);
 
 	if (!voiceChannel) {
 		return message.channel.send(new Discord.RichEmbed()
