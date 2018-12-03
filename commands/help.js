@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args) => {
 	   (q)ueue pos [num1] [num2]..........Alterna a posição entre dois itens na fila.
        (q)ueue shuffle....................Randomiza a fila.
        (q)ueue (del)ete [num].............Exclui um certo item da fila.
-       (q)ueue (del)ete [inicio] [num]....Exclui uma certa quantidade de itens da fila.
+       (q)ueue (del)ete [inicio] [fim]....Exclui os itens entre [inicio] e [fim].
        (q)ueue purge(pg)..................Limpa todos os itens da fila.
 	   
 >music np.........Mostra informações sobre o que está sendo tocado.
