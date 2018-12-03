@@ -643,15 +643,28 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 								return new_footer;
 							}
 
-
-
 							// Update the queue message everytime a bot message is received.
-							botmessage_collector.on('collect', () => {
+							botmessage_collector.on('collect', bot_msg => {
 								var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 
 								if (new_content_f(current_page, serverQueue.songs).length === 0) current_page = 0;
 
-								var dynamic_update = '';
+								let dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
+									new_content_f(current_page, serverQueue.songs) +
+									new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
+
+								var new_navhelp = "```Interação cancelada, peça uma nova fila para continuar.```";
+
+								if (usermessage_navigator.ended) {
+									if (page_amount > 1) {
+										botmessage_collector.collected.array()[0].edit(dynamic_update + new_navhelp);
+									} else {
+										botmessage_collector.collected.array()[0].edit(dynamic_update);
+									}
+								} else {
+									botmessage_collector.collected.array()[0].edit(dynamic_update + queue_nav_help);
+								}
+
 								if (page_amount > 1) {
 									dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
 										new_content_f(current_page, serverQueue.songs) +
@@ -662,7 +675,6 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 										new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
 								}
 
-								botmessage_collector.collected.array()[0].edit(dynamic_update);
 							});
 
 							botmessage_collector.on('end', () => {
@@ -717,7 +729,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 										new_content_f(0, serverQueue.songs) +
 										new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + new_navhelp;
 
-									botmessage_collector.collected.array()[0].edit(final_page)
+									botmessage_collector.collected.array()[0].edit(final_page);
 								})
 							} else {
 								message.channel.send(full_queue);
