@@ -2,7 +2,6 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
-const i18n = require("i18n");
 var functions_used = 0;
 var bot_token = helper.loadKeys("token");
 
@@ -157,14 +156,14 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} was kicked/banned from server [${guild.name}].`);
+    console.log(`${bot.user.username} left server [${guild.name}].`);
     servers_show();
     status_updater();
     return;
 });
 
 bot.on('guildMemberAdd', member => {
-    console.log(`MEMBER: [${member.displayName}] joined server -> [${member.guild.name}].`);
+    console.log(`MEMBER: [${member.displayName}] joined server [${member.guild.name}].`);
     status_updater();
     return;
 });
