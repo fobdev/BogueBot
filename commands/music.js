@@ -244,17 +244,18 @@ async function subcmd(bot, message, args, serverQueue) {
 	switch (url) {
 		case "earrape":
 			{
-				if (serverQueue.streamdispatcher.speaking) {
-					var sv_volume = serverQueue.connection.serverQueue.streamdispatcher.volume;
-					if (sv_volume !== 1) serverQueue.connection.serverQueue.streamdispatcher.setVolume(1);
+				var sb_dispatcher = serverQueue.streamdispatcher;
+				if (sb_dispatcher.speaking) {
+					var sv_volume = serverQueue.connection.sb_dispatcher.volume;
+					if (sv_volume !== 1) serverQueue.connection.sb_dispatcher.setVolume(1);
 
 					if (sv_volume === 1) {
-						serverQueue.connection.serverQueue.streamdispatcher.setVolume(200);
+						serverQueue.connection.sb_dispatcher.setVolume(200);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription(`**<@${message.author.id}> ativou earrape.**`)
 							.setColor("#00FF00"));
 					} else if (sv_volume === 200) {
-						serverQueue.connection.serverQueue.streamdispatcher.setVolume(1);
+						serverQueue.connection.sb_dispatcher.setVolume(1);
 						return message.channel.send(arg_embed
 							.setDescription(`**O volume voltou ao normal.**`)
 							.setColor("#00FF00"));
@@ -311,6 +312,7 @@ async function subcmd(bot, message, args, serverQueue) {
 						.setColor("#FF0000"));
 				}
 			}
+			break;
 		case "np":
 			{
 				try {
@@ -466,7 +468,7 @@ async function subcmd(bot, message, args, serverQueue) {
 								await message.channel.send(new Discord.RichEmbed()
 									.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 									.setColor('#00FF00'));
-								await serverQueue.streamdispatcher.end();
+								await serverQueue.streamdispatcher.end('skipped');
 								return;
 							}
 
@@ -732,11 +734,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 			{
 				try {
 					if (serverQueue.streamdispatcher.speaking) {
-						await serverQueue.streamdispatcher.end();
-						await message.channel.send(new Discord.RichEmbed()
-							.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-							.setColor("#00FF00"));
-						return;
+						serverQueue.streamdispatcher.end('skipped');
 					} else {
 						return message.channel.send(new Discord.RichEmbed()
 							.setTitle("Não tem nada tocando que possa ser pulado.")
@@ -746,6 +744,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 					return console.error('Tried to skip nothing');
 				}
 			}
+			break;
 		default:
 			break;
 	}
@@ -996,23 +995,31 @@ async function play(bot, message, song) {
 	// Music embed end
 
 	serverQueue.streamdispatcher.on('end', reason => {
+		if (reason === 'skipped') {
+			return message.channel.send(new Discord.RichEmbed()
+				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+				.setColor("#00FF00")).then(() => {
+				message.channel.send(music_embed);
+			});
+		}
+
 		if (serverQueue.songs.length <= 1) {
 			queue.delete(message.guild.id);
 			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
-			if (reason !== 'left') {
+			if (reason === 'left') {
+				return message.channel.send(new Discord.RichEmbed()
+					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+					.setColor("#00FF00"));
+			} else {
 				return message.channel.send(new Discord.RichEmbed()
 					.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
 					.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 					.setColor("#00FF00"));
-			} else {
-				return message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-					.setColor("#00FF00"));
+
 			}
 		}
-
 		serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0]);
 	});
