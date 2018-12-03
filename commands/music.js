@@ -10,10 +10,8 @@ var ytkey = helper.loadKeys("youtube_key");
 const youtube = new YouTube(ytkey);
 const queue = new Map();
 
-
 // Globals
-var subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
-var url;
+const subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
 
 //Functions
 module.exports.run = async (bot, message, args) => {
@@ -29,16 +27,11 @@ module.exports.run = async (bot, message, args) => {
 
 	const voiceChannel = message.member.voiceChannel;
 	var serverQueue = queue.get(message.guild.id);
-	url = args[0];
+	var url = args[0];
 	var isPlaylist = url.includes('list=');
 	var search = args.join(" ");
 	var video;
 	var videos;
-
-	var servers_pl = 'server';
-	if (queue.size !== 1) servers_pl += 's';
-	if (queue.size > 0)
-		console.log(`Streaming to ${queue.size} ${servers_pl}`);
 
 	if (!voiceChannel) {
 		return message.channel.send(new Discord.RichEmbed()
@@ -58,7 +51,7 @@ module.exports.run = async (bot, message, args) => {
 					.setColor('#00FF00'));
 			}
 
-			await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray);
+			await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
 		} catch (e) {
 			console.error(`${e}: Erro ao carregar playlist.`);
 			return message.channel.send(new Discord.RichEmbed()
@@ -68,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
 	} else {
 		try {
 			video = await youtube.getVideo(url);
-			await video_player(bot, message, video, serverQueue, voiceChannel);
+			await video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 
 			try {
 				message.delete();
@@ -201,7 +194,7 @@ module.exports.run = async (bot, message, args) => {
 									console.error('Error handling the stop off all collectors.');
 								}
 
-								video_player(bot, message, video, serverQueue, voiceChannel);
+								video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 							} catch (e) {
 								console.error('Error selecting video');
 								return message.channel.send(new Discord.RichEmbed()
@@ -224,20 +217,20 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd(bot, message, args, serverQueue);
+				subcmd(bot, message, args, serverQueue, url);
 			}
 		}
 	}
 
 }
 
-async function subcmd(bot, message, args, serverQueue) {
+async function subcmd(bot, message, args, serverQueue, user_url) {
 	const arg_embed = new Discord.RichEmbed()
 		.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 		.setColor("#00FF00");
 
 	// Subcommands switch
-	switch (url) {
+	switch (user_url) {
 		case "earrape":
 			{
 				if (serverQueue.streamdispatcher.speaking) {
@@ -751,7 +744,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos.
 	}
 }
 
-async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = []) {
+async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = [], user_url) {
 	// Collect all the information from the 'video' variable
 	var unavailable_videos = 0;
 	var song_info;
@@ -917,7 +910,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
 
-			play(bot, message, queueConstruct.songs[0]);
+			play(bot, message, queueConstruct.songs[0], user_url);
 
 		} catch (e) {
 			console.error(`Bot could not join a voice channel: + ${e}`);
@@ -968,7 +961,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	}
 }
 
-async function play(bot, message, song) {
+async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
@@ -1020,11 +1013,11 @@ async function play(bot, message, song) {
 			await message.channel.send(new Discord.RichEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 				.setColor("#00FF00"));
-			return play(bot, message, serverQueue.songs[0]);
+			return play(bot, message, serverQueue.songs[0], user_url);
 		}
 
 		await serverQueue.songs.shift();
-		play(bot, message, serverQueue.songs[0]);
+		play(bot, message, serverQueue.songs[0], user_url);
 	});
 
 	serverQueue.streamdispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
@@ -1047,3 +1040,8 @@ module.exports.help = {
 	name_3: "play",
 	name_4: "p"
 }
+
+var servers_pl = 'server';
+if (queue.size !== 1) servers_pl += 's';
+if (queue.size > 0)
+	console.log(`Streaming to ${queue.size} ${servers_pl}`);
