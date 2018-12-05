@@ -1029,6 +1029,7 @@ async function play(bot, message, song, user_url) {
 		if (reason === 'left') {
 			serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 			return message.channel.send(new Discord.RichEmbed()
 				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
 				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
