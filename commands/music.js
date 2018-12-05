@@ -1009,18 +1009,16 @@ async function play(bot, message, song, user_url) {
 	var isLivestream = `${timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
+	let author_str = `${bot.user.username} Music Player`;
+	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} restantes)`;
+
 	var music_embed = new Discord.RichEmbed()
-		.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+		.setAuthor(author_str, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
+		.addField("Duração", `${isLivestream}`, true)
+		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.setThumbnail(song.thumbnail)
 		.setColor("#00FF00");
-
-	if (serverQueue.songs.length > 1) music_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
-
-	music_embed
-		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
-		.addField("Duração", `${isLivestream}`, true)
-		.addField('\u200B', "``" + `${botconfig.prefix}${module.exports.help.name} queue` + "``\npara visualizar fila completa", true);
 
 	// Music embed end
 	message.channel.send(music_embed);
