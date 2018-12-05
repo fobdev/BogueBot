@@ -978,13 +978,17 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			var isLivestream = `${timing(song.length)}`;
 			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
+			let verify_qlenstr = "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa."
+
+			if (serverQueue.songs.length > 2)
+				verify_qlenstr += "\n``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.";
+
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 				.addField("Foi adicionado à fila", `**[${song.title}](${song.url})**`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
-				.addField('\u200B', "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa.\n" +
-					"``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.")
+				.addField('\u200B', verify_qlenstr)
 				.setThumbnail(song.thumbnail)
 				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00")
@@ -996,9 +1000,9 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
-		quality: 'highestaudio',
-		filter: 'audioonly'
+		// highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
+		filter: 'audioonly',
+		quality: 'highestaudio'
 	}));
 
 	// Music embed start
@@ -1027,6 +1031,7 @@ async function play(bot, message, song, user_url) {
 			queue.delete(message.guild.id);
 			return message.channel.send(new Discord.RichEmbed()
 				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
+				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00"));
 		}
 
