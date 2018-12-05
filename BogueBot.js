@@ -176,7 +176,7 @@ bot.on('guildMemberRemove', member => {
 
 bot.on('message', async message => {
 
-    if (message.author.bot) {
+    if (message.author.id === bot.user.id) {
         functions_used++;
         status_updater();
     }
