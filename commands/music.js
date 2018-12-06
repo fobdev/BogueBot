@@ -572,7 +572,7 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 							}
 
 							var queue_header = "```md\n" +
-								`Fila de ${message.guild.name} | Página ( ${current_page + 1} / ${page_amount} )
+								`Fila de ${message.guild.name}
 ========================================================================
 Agora Tocando: [${serverQueue.songs[0].title}](${timing(dispatchertime_seconds)} / ${timing(serverQueue.songs[0].length)})
 
@@ -598,9 +598,9 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
 
 							function new_header_f(current_page, page_amount, songs_array) {
 								var page_str = '';
-								if (page_amount > 1) page_str = `Página ( ${current_page + 1} / ${page_amount} )`
+								if (page_amount > 1) page_str = `| Página ( ${current_page + 1} / ${page_amount} )`
 								var new_header = "```md\n" +
-									`Fila de ${message.guild.name} | ${page_str}
+									`Fila de ${message.guild.name} ${page_str}
 ========================================================================
 Agora Tocando: [${songs_array[0].title}](${timing(parseInt(Math.floor(serverQueue.streamdispatcher.time / 1000)))} / ${timing(songs_array[0].length)})
 
@@ -684,7 +684,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 								// Go back to the first page
 								let final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
 									new_content_f(0, serverQueue.songs) +
-									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]') + "```O tempo de navegação expirou```";
+									new_footer_f(serverQueue.songs, 'Autoupdate [OFF]') + "```O tempo de navegação da mensagem expirou```";
 
 								botmessage_collector.collected.array()[0].edit(final_page);
 							})
@@ -830,8 +830,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			} catch (e) {
 				unavailable_videos++;
 
-				const error_lim = 4
-				if (unavailable_videos < error_lim) {
+				const error_lim = 2;
+				if (unavailable_videos <= error_lim) {
 					console.error(`${e}: ${videosarray[v].title}.`);
 					message.channel.send(new Discord.RichEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
@@ -1010,7 +1010,10 @@ async function play(bot, message, song, user_url) {
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 	let author_str = `${bot.user.username} Music Player`;
-	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} restantes)`;
+
+	let remaining_pl = 'restante';
+	if (serverQueue.songs.length !== 2) remaining_pl += 's';
+	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} ${remaining_pl})`;
 
 	var music_embed = new Discord.RichEmbed()
 		.setAuthor(author_str, bot.user.displayAvatarURL)
