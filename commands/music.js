@@ -342,7 +342,7 @@ async function subcmd(bot, message, args, serverQueue, user_url) {
 					.setThumbnail(current_music.thumbnail)
 					.setColor("#00FF00");
 
-				if (serverQueue.songs.length > 1) now_playing_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`);
+				if (serverQueue.songs.length > 1) now_playing_embed.addField("Restantes na fila", `**${serverQueue.songs.length - 1}**`, true);
 
 				if (artist_str !== 'undefined') now_playing_embed.addField("Artista", `*${artist_str}*`, true);
 				if (album_str !== 'undefined') now_playing_embed.addField("Álbum", `*${album_str}*`, true);
@@ -1000,9 +1000,9 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		// highWaterMark: 1024 * 1024 * 2, // 2MB Video Buffer
 		filter: 'audioonly',
-		quality: 'highestaudio'
+		quality: 'highestaudio',
+		highWaterMark: 1024 * 1024 // 1MB Audio Buffer
 	}));
 
 	// Music embed start
