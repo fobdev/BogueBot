@@ -1002,7 +1002,7 @@ async function play(bot, message, song, user_url) {
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		// filter: 'audioonly',
 		// quality: 'highestaudio',
-		highWaterMark: 1024 * 1024 // 1MB Audio Buffer
+		highWaterMark: 1024 * 1024 * 10 // 10 MB Audio Buffer
 	}));
 
 	// Music embed start
