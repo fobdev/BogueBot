@@ -1000,8 +1000,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		filter: 'audioonly',
-		quality: 'highestaudio',
+		// filter: 'audioonly',
+		// quality: 'highestaudio',
 		highWaterMark: 1024 * 1024 // 1MB Audio Buffer
 	}));
 
