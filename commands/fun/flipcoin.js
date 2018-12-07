@@ -1,5 +1,3 @@
-const Discord = require('discord.js');
-
 module.exports.run = async (bot, message, args) => {
     var coin = Math.floor(Math.random() * 20);
     var coin_string = '';

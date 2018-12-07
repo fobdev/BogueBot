@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
-const botconfig = require('../botconfig.json')
+const botconfig = require("../../botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
-    const music = require('./music');
+    const music = require('../music/music.js');
 
     return message.channel.send(new Discord.RichEmbed()
         .setTitle(`Atualizações recentes do ${bot.user.username}.`)

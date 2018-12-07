@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../botconfig.json");
-const fs = require("fs");
+const botconfig = require("../../botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     const music_commands_small =

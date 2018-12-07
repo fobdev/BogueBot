@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 const lennys = ['( ͡° ͜ʖ ͡°)', '( ͠° ͟ʖ ͡°)', '( ͡~ ͜ʖ ͡°)', '( ͡ʘ ͜ʖ ͡ʘ)', '( ͡o ͜ʖ ͡o)', '(° ͜ʖ °)', '( ‾ʖ̫‾)', '( ಠ ͜ʖಠ)', '( ͡° ʖ̯ ͡°)', '( ͡ಥ ͜ʖ ͡ಥ)', '༼ ͡° ͜ʖ ͡° ༽', '(·̿Ĺ̯·̿ ̿)'];
 module.exports.run = async (bot, message, args) => {
     var rand_num = Math.floor(Math.random() * lennys.length);

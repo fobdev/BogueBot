@@ -1,13 +1,13 @@
 // Includes
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
-const YouTube = require("simple-youtube-api");
-const botconfig = require.main.require("./botconfig.json");
+const YouTubeAPI = require("simple-youtube-api");
+const botconfig = require("../../botconfig.json");
 const helper = require.main.require('./core/helper.js');
 
 // Keys and Maps 
 const ytkey = helper.loadKeys("youtube_key");
-const youtube = new YouTube(ytkey);
+const youtube = new YouTubeAPI(ytkey);
 const queue = new Map();
 
 // Globals
@@ -21,7 +21,7 @@ module.exports.run = async (bot, message, args) => {
 		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
 
 	if (!args[0]) {
-		let help_file = require('./help')
+		let help_file = require('../bot/help')
 		return message.channel.send(`${botconfig.prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
 				msg.delete();

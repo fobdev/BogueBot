@@ -10,34 +10,40 @@ const bot = new Discord.Client({
 });
 
 bot.commands = new Discord.Collection();
-fs.readdir('./commands/', (err, files) => {
-    if (err) console.error(err);
 
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
+function cmdload(folder) {
+    let path = './commands/' + folder + '/';
+    let type = path.split('./commands').pop();
 
-    if (jsfile.length < 1)
-        throw new Error("Could not find commands.")
+    fs.readdir(path, (err, files) => {
+        if (err)
+            return console.error(`\n=====\nThe directory ${getpath.toLowerCase()} does not exist.\n=====`);
 
-    console.log("---------------------------------");
-    console.log("Loading Command Files");
-    console.log("---------------------------------");
-    jsfile.forEach((f, i) => {
-        let props = require(`./commands/${f}`);
-        console.log(`[FILE LOAD SUCESS]: ${f}`);
-        bot.commands.set(props.help.name, props);
-        try {
-            bot.commands.set(props.help.name_2, props);
+        var jsfile = files.filter(f => f.split(".").pop() === "js");
+        if (jsfile.length < 1)
+            throw new Error("Could not find commands.")
+        console.log(`\n=== Loading ${type.toLowerCase()} ===`);
 
-            // names 3 and 4 are exclusively used for music command.
-            bot.commands.set(props.help.name_3, props);
-            bot.commands.set(props.help.name_4, props);
-        } catch (e) {
-            console.error(`${e}: Secondary / terciary / quaternary command name not loaded properly.`);
-        }
-    });
-    console.log("---------------------------------");
-    console.log("All files loaded sucessfully");
-});
+        jsfile.forEach((f, i) => {
+            let props = require(`${path}${f}`)
+            console.log(`[FILE LOAD SUCESS]: ${f}`);
+            bot.commands.set(props.help.name, props);
+            try {
+                bot.commands.set(props.help.name_2, props);
+                bot.commands.set(props.help.name_3, props);
+                bot.commands.set(props.help.name_4, props);
+            } catch (e) {
+                console.error(`${e}: Unable to load name in file.`);
+            }
+        })
+    })
+}
+
+cmdload('admin')
+cmdload('bot')
+cmdload('user')
+cmdload('fun')
+cmdload('music')
 
 function servers_show() {
     // All the servers that the bot are in.
@@ -90,8 +96,8 @@ function status_updater() {
     if (functions_used !== 1)
         cmd_plural = 'funções';
 
-    const helpfile = require("./commands/help.js");
-    const invitefile = require("./commands/invite.js");
+    const helpfile = require("./commands/bot/help.js");
+    const invitefile = require("./commands/bot/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
         ` | ${members_reached} usuários usaram ${functions_used} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
@@ -99,7 +105,7 @@ function status_updater() {
 }
 
 bot.on('ready', async () => {
-    console.log("---------------------------------");
+    console.log("\n---------------------------------");
     console.log(`${bot.user.username} is online!`);
     servers_show();
     status_updater();
@@ -107,8 +113,8 @@ bot.on('ready', async () => {
 });
 
 bot.on('guildCreate', guild => {
-    const help_file = require('./commands/help.js');
-    const music_file = require('./commands/music.js');
+    const help_file = require('./commands/bot/help.js');
+    const music_file = require('./commands/music/music.js');
     const welcome_embed = new Discord.RichEmbed()
         .setColor("#00FF00")
         .setAuthor(`Obrigado por adicionar o ${bot.user.username} ao seu servidor!`, bot.user.displayAvatarURL)
