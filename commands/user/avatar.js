@@ -25,5 +25,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-	name: "avatar"
+	name: "avatar",
+	descr: 'Mostra o avatar de um usuário.',
+	arg: ['membro']
 }

@@ -32,5 +32,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: 'dice'
+    name: 'dice',
+    descr: 'Joga um ou mais dados para cima e exibe o resultado.',
+    arg: ['dados']
 }

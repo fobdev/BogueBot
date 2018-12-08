@@ -19,22 +19,28 @@ function cmdload(folder) {
         if (err)
             return console.error(`\n=====\nThe directory ${getpath.toLowerCase()} does not exist.\n=====`);
 
-        var jsfile = files.filter(f => f.split(".").pop() === "js");
+        let jsfile = files.filter(f => f.split(".").pop() === "js");
         if (jsfile.length < 1)
             throw new Error("Could not find commands.")
-        console.log(`\n=== Loading ${type.toLowerCase()} ===`);
 
+        console.log(`\n=== Loading ${type.toLowerCase()} ===`);
         jsfile.forEach((f, i) => {
             let props = require(`${path}${f}`)
             console.log(`[FILE LOAD SUCESS]: ${f}`);
-            bot.commands.set(props.help.name, props);
-            try {
+
+            if (props.help.name)
+                bot.commands.set(props.help.name, props);
+            else
+                console.log('[WARNING]: Commands with no name are impossible to call.')
+
+            if (props.help.name_2)
                 bot.commands.set(props.help.name_2, props);
+
+            if (props.help.name_3)
                 bot.commands.set(props.help.name_3, props);
+
+            if (props.help.name_4)
                 bot.commands.set(props.help.name_4, props);
-            } catch (e) {
-                console.error(`${e}: Unable to load name in file.`);
-            }
         })
     })
 }
@@ -162,7 +168,7 @@ bot.on('guildCreate', guild => {
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`${bot.user.username} left server [${guild.name}].`);
+    console.log(`<${bot.user.username}> left server [${guild.name}].`);
     servers_show();
     status_updater();
     return;
@@ -175,19 +181,20 @@ bot.on('guildMemberAdd', member => {
 });
 
 bot.on('guildMemberRemove', member => {
-    console.log(`MEMBER: [${member.displayName}] left server -> [${member.guild.name}].`)
+    console.log(`[${member.displayName}] left server [${member.guild.name}].`)
     status_updater();
     return;
 });
 
 bot.on('message', async message => {
-
     if (message.author.id === bot.user.id) {
         functions_used++;
         status_updater();
     }
 
-    if (message.channel.type === "dm") return;
+    if (message.channel.type === "dm") {
+        return message.channel.send(`O ${bot.user.username} apenas funciona em servidores...`);
+    }
 
     let prefix = botconfig.prefix;
     let messageArray = message.content.split(" ");

@@ -32,5 +32,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "desmute"
+    name: "desmute",
+    descr: 'Desmuta um membro já mutado no servidor.',
+    arg: ['membro']
 }

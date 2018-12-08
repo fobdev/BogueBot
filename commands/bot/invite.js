@@ -21,5 +21,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "invite"
+    name: "invite",
+    descr: 'Mostra o link de convite do bot.'
 }

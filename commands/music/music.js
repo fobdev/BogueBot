@@ -10,8 +10,29 @@ const ytkey = helper.loadKeys("youtube_key");
 const youtube = new YouTubeAPI(ytkey);
 const queue = new Map();
 
-// Globals
+// Subcommands loader
 const subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+
+function subcmd_loader(file) {
+	let path = './commands/music/subcommands/' + file + '/';
+	let ignore = 'global_message.js';
+
+	fs.readdir(path, (e, files) => {
+		if (e)
+			console.error(`\nPath '${path}' does not exists.\n`);
+
+		var jsfile = files.filter(f => f.split(".").pop() === "js");
+		if (jsfile.length < 1)
+			throw new Error("Could not find commands.")
+
+		jsfile.forEach(f => {
+			// removes the .js from file name and push full file name into array
+			if (f != ignore)
+				array.push(f.slice(0, f.length - 3));
+		})
+	})
+}
+
 
 //Functions
 module.exports.run = async (bot, message, args) => {
@@ -750,7 +771,7 @@ Tempo total da fila: [${timing(new_length)}] | [${song_array.length}] vídeos | 
 						}
 					}
 				} catch (e) {
-					console.error(`${e} / Tried to call queue without a queue`);
+					console.error(`${e} / Queue fatal error.`);
 					return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
 						.setColor("#FF0000"));
 				}
@@ -941,6 +962,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		try {
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
+
 
 			play(bot, message, queueConstruct.songs[0], user_url);
 

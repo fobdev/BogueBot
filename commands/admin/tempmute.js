@@ -62,8 +62,7 @@ module.exports.run = async (bot, message, args) => {
             await (tomute.addRole(muterole.id));
         } catch (e) {
             console.log(e);
-        } finally {
-            return message.channel.send(mute_embed
+            message.channel.send(mute_embed
                 .setTitle("O comando foi inserido de forma incorreta")
                 .addField("Tente usar", "``" + `${botconfig.prefix}${this.help.name}` + " [@membro] [tempo](s/m/h)``")
                 .addField("Ou usar", "``" + `${botconfig.prefix}help ${this.help.name}` +
@@ -97,5 +96,7 @@ module.exports.run = async (bot, message, args) => {
     }
 }
 module.exports.help = {
-    name: "tempmute"
+    name: "tempmute",
+    descr: 'Muta temporariamente um usuário.',
+    arg: ['membro']
 }

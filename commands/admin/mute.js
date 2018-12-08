@@ -55,5 +55,7 @@ module.exports.run = async (bot, message, args) => {
 
 
 module.exports.help = {
-    name: "mute"
+    name: "mute",
+    descr: 'Muta um membro do servidor.',
+    arg: ['membro']
 }

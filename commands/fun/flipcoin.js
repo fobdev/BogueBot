@@ -12,5 +12,6 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: 'coinflip',
-    name_2: 'flipcoin'
+    name_2: 'flipcoin',
+    descr: 'Joga uma moeda para cima e exibe o resultado.'
 }

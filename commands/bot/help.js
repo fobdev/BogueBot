@@ -1,12 +1,101 @@
 const Discord = require("discord.js");
 const botconfig = require("../../botconfig.json");
+const fs = require("fs");
+
+function getcmd_name(foldername, array) {
+    let path = './commands/' + foldername + '/';
+    let ignore = 'global_message.js';
+
+    fs.readdir(path, (e, files) => {
+        if (e)
+            console.error(`\nPath '${path}' does not exists.\n`);
+
+        var jsfile = files.filter(f => f.split(".").pop() === "js");
+        if (jsfile.length < 1)
+            throw new Error("Could not find commands.")
+
+        jsfile.forEach(f => {
+            if (f != ignore)
+                // removes the .js from file name and push full file name into array
+                array.push(f.slice(0, f.length - 3));
+        })
+    })
+}
+
+let admin_cmdarr = new Array();
+let bot_cmdarr = new Array();
+let user_cmdarr = new Array();
+let fun_cmdarr = new Array();
+getcmd_name('admin', admin_cmdarr);
+getcmd_name('bot', bot_cmdarr);
+getcmd_name('user', user_cmdarr);
+getcmd_name('fun', fun_cmdarr);
+
+function getcmd_descr(foldername, array) {
+    let descr_map = new Map();
+    let fn_arr = new Array();
+
+    for (let i = 0; i < array.length; i++) {
+        let c_path = require('../' + foldername + '/' + array[i] + '.js');
+        fn_arr.push(c_path.help.descr);
+        descr_map.set(array[i], fn_arr[i]);
+    }
+
+    return descr_map;
+}
 
 module.exports.run = async (bot, message, args) => {
-    const music_commands_small =
-        "[``music                    ``]";
+    const admin_commands = "[``" + admin_cmdarr.join(', ') + "``]"
+    const bot_commands = "[``" + bot_cmdarr.join(', ') + "``]"
+    const user_commands = "[``" + user_cmdarr.join(', ') + "``]"
+    const fun_commands = "[``" + fun_cmdarr.join(', ') + "``]"
 
-    const new_music_commands = "```css\n" +
-        `[Comandos de música do ${bot.user.username}]
+    let help_embed = new Discord.RichEmbed()
+        .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
+        .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
+        .setURL("https://github.com/Fobenga")
+        .setFooter("Desenvolvido por Fobenga em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
+        .setTimestamp(bot.user.createdAt)
+        .setColor("#00FF00")
+        .addField("MUSIC", "[``music``]")
+        .addField(bot.user.username.toUpperCase(), bot_commands)
+        .addField("ADMIN", admin_commands)
+        .addField("USER", user_commands)
+        .addField("FUN", fun_commands)
+        .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
+        .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música");
+
+    function writefn(array) {
+        let titlename = '';
+        if (array === bot_cmdarr)
+            titlename += 'bot'
+        else titlename += args[0];
+
+        let cur_cmd = getcmd_descr(titlename, array);
+
+        let descr_str = '';
+        cur_cmd.forEach((value, key) => {
+            let cmd_file = require('../' + titlename + '/' + key + '.js');
+
+            if (cmd_file.help.arg) {
+                descr_str += "``" + `${botconfig.prefix}${key} [${cmd_file.help.arg.join('] [')}]` + "`` " + `${value}\n`;
+            } else {
+                descr_str += "``" + `${botconfig.prefix}${key}` + "`` " + `${value}\n`;
+            }
+
+        })
+
+        message.channel.send(new Discord.RichEmbed()
+            .setTitle(args[0].toUpperCase() + ' Commands')
+            .setDescription(`**${descr_str}**`)
+            .setColor('#00FF00'));
+    }
+
+    switch (args[0]) {
+        case 'music':
+            {
+                return message.channel.send("```css\n" +
+                    `[Comandos de música do ${bot.user.username}]
 	
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
@@ -25,109 +114,16 @@ module.exports.run = async (bot, message, args) => {
 >music earrape....Aumenta extremamente o volume da reprodução atual.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-        "```";
-
-    const authority_commands_small =
-        "[``mute                ``, " +
-        "`` desmute             ``, " +
-        "`` tempmute            ``, " +
-        "`` kick                ``, " +
-        "`` ban                 ``, " +
-        "`` report              ``, " +
-        "`` renameserver (rs)   ``, " +
-        "`` clear               ``]";
-
-    const authority_commands =
-        "|``" + `${botconfig.prefix}` + "mute [membro]             ``|" + "`` - `` **Muta um membro do servidor.\n                **" +
-        "|``" + `${botconfig.prefix}` + "desmute [membro]          ``|" + "`` - `` **Desmuta um membro já mutado no servidor.\n   **" +
-        "|``" + `${botconfig.prefix}` + "tempmute [membro] [tempo] ``|" + "`` - `` **Muta temporariamente um usuário.\n           **" +
-        "|``" + `${botconfig.prefix}` + "kick [membro] [motivo]    ``|" + "`` - `` **Expulsa um membro do servidor.\n             **" +
-        "|``" + `${botconfig.prefix}` + "ban [membro] [motivo]     ``|" + "`` - `` **Bane um membro do servidor.\n                **" +
-        "|``" + `${botconfig.prefix}` + "report [membro] [motivo]  ``|" + "`` - `` **Denuncia um membro do servidor.\n            **" +
-        "|``" + `${botconfig.prefix}` + "renameserver [novo nome]  ``|" + "`` - `` **Renomeia o servidor.\n                       **" +
-        "|``" + `${botconfig.prefix}` + "rs [novo nome]            ``|                                                             \n" +
-        "|``" + `${botconfig.prefix}` + "clear [numero]            ``|" + "`` - `` **Apaga uma certa quantidade de mensagens.     **";
-
-    const botname_commands_small =
-        "[``invite          ``, " +
-        "``help             ``, " +
-        "``serverinfo       ``, " +
-        "``ping       ``, " +
-        "``uptime           ``]";
-
-    const botname_commands =
-        "|``" + `${botconfig.prefix}` + "invite             ``|" + "`` - `` **Mostra o link para convidar o " + `${bot.user.username}` + " para qualquer servidor.\n**" +
-        "|``" + `${botconfig.prefix}` + "help               ``|" + "`` - `` **Todos os comandos disponíveis.**\n" +
-        "|``" + `${botconfig.prefix}` + "serverinfo         ``|" + "`` - `` **Exibe todas as informações do servidor.**\n" +
-        "|``" + `${botconfig.prefix}` + "ping               ``|" + "`` - `` **Exibe a latência atual do servidor do " + `${bot.user.username}` + ".**\n" +
-        "|``" + `${botconfig.prefix}` + "uptime             ``|" + "`` - `` **Mostra o tempo que o bot está online desde a ultima atualização.**\n";
-
-    const user_commands_small =
-        "[``avatar    ``]";
-
-    const user_commands =
-        "|``" + `${botconfig.prefix}` + "avatar [membro]    ``|" + "`` - `` **Exibe em tamanho grande o avatar de um membro.**";
-
-    const fun_commands_small =
-        "[``dice                ``, " +
-        "``flipcoin             ``, " +
-        "``lenny                ``]";
-
-    const fun_commands =
-        "|``" + `${botconfig.prefix}` + "dice [dados]       ``| " + "`` - `` **Role 1 ou mais dados para cima e veja o resultado.\n**" +
-        "|``" + `${botconfig.prefix}` + "flipcoin           ``| " + "`` - `` **Jogue uma moeda para cima.\n**" +
-        "|``" + `${botconfig.prefix}` + "lenny              ``| " + "`` - `` **Lenny face.\n**";
-
-    let help_embed = new Discord.RichEmbed()
-        .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
-        .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
-        .setTimestamp(bot.user.createdAt)
-        .setURL("https://github.com/pedroxvi")
-        .setFooter("Desenvolvido por Fobenga em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
-        .setColor("#00FF00")
-        .addField("MUSIC", music_commands_small)
-        .addField(bot.user.username.toUpperCase(), botname_commands_small)
-        .addField("ADMIN", authority_commands_small)
-        .addField("USER", user_commands_small)
-        .addField("FUN", fun_commands_small)
-        .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para informação detalhada sobre uma categoria**")
-        .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música");
-
-    let helpcommand = args.join(" ");
-    let subhelp_embed = new Discord.RichEmbed()
-        .setColor("#00FF00")
-        .setFooter('Fobenga, criado em ')
-        .setTimestamp(bot.user.createdAt);
-
-    switch (helpcommand) {
-        case 'music':
-            {
-                return message.channel.send(new_music_commands);
-            }
-        case 'admin':
-            {
-                return message.channel.send(subhelp_embed
-                    .setTitle(`Comandos Administrativos`)
-                    .setDescription(authority_commands));
+                    "```");
             }
         case `${bot.user.username.toLowerCase()}`:
-            {
-                return message.channel.send(subhelp_embed
-                    .setTitle(`${bot.user.username}`)
-                    .setDescription(botname_commands));
-            }
+            return writefn(bot_cmdarr);
         case 'user':
-            {
-                return message.channel.send(subhelp_embed
-                    .setTitle(`Comandos de Usuário`)
-                    .setDescription(user_commands));
-            }
+            return writefn(user_cmdarr);
         case 'fun':
-            {
-                return message.channel.send(subhelp_embed
-                    .setTitle(`Aleatórios`)
-                    .setDescription(fun_commands));
-            }
+            return writefn(fun_cmdarr);
+        case 'admin':
+            return writefn(admin_cmdarr);
         default:
             break;
     }
@@ -138,4 +134,6 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
 module.exports.help = {
     name: "help",
     name_2: 'h',
+    descr: 'Mostra todos os comandos do bot.',
+    arg: ['categoria']
 }

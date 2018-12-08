@@ -8,5 +8,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-	name: 'ping'
+	name: 'ping',
+	descr: 'Mostra o ping atual do servidor do bot.'
 }

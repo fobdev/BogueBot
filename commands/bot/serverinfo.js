@@ -47,5 +47,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: 'serverinfo'
+    name: 'serverinfo',
+    descr: 'Exibe informações sobre o servidor atual.'
 }

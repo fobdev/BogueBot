@@ -35,5 +35,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "renameserver",
-    name_2: "rs"
+    name_2: "rs",
+    descr: 'Renomeia o servidor.',
+    arg: ['novo nome']
 }

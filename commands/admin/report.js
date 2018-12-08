@@ -30,5 +30,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: "report"
+    name: "report",
+    descr: 'Denuncia um membro do servidor.',
+    arg: ['membro', 'motivo']
 }

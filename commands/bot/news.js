@@ -16,5 +16,6 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: 'news'
+    name: 'news',
+    descr: 'Mostra as atualizações mais recentes do bot.'
 }

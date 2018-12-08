@@ -40,5 +40,7 @@ module.exports.run = async (bot, message, args) => {
     return;
 }
 module.exports.help = {
-    name: "kick"
+    name: "kick",
+    descr: 'Expulsa um membro do servidor.',
+    arg: ['membro', 'motivo']
 }
