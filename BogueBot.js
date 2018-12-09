@@ -187,7 +187,7 @@ bot.on('message', async message => {
 
     if (message.channel.type === "dm") {
         if (message.author.id === bot.user.id) return;
-        console.log(`[${message.author}] Direct Message: ${message.content}`)
+        console.log(`[${message.author.username}] Direct Message: ${message.content}`)
         return bot.generateInvite(8).then(link => {
             message.channel.send(new Discord.RichEmbed()
                 .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
