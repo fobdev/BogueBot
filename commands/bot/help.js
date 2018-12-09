@@ -22,27 +22,15 @@ function getcmd_name(foldername, array) {
     })
 }
 
-let admin_cmdarr = new Array();
-let bot_cmdarr = new Array();
-let user_cmdarr = new Array();
-let fun_cmdarr = new Array();
+let admin_cmdarr = new Array(),
+    bot_cmdarr = new Array(),
+    user_cmdarr = new Array(),
+    fun_cmdarr = new Array();
+
 getcmd_name('admin', admin_cmdarr);
 getcmd_name('bot', bot_cmdarr);
 getcmd_name('user', user_cmdarr);
 getcmd_name('fun', fun_cmdarr);
-
-function getcmd_descr(foldername, array) {
-    let descr_map = new Map();
-    let fn_arr = new Array();
-
-    for (let i = 0; i < array.length; i++) {
-        let c_path = require('../' + foldername + '/' + array[i] + '.js');
-        fn_arr.push(c_path.help.descr);
-        descr_map.set(array[i], fn_arr[i]);
-    }
-
-    return descr_map;
-}
 
 module.exports.run = async (bot, message, args) => {
     const admin_commands = "[``" + admin_cmdarr.join(', ') + "``]"
@@ -51,8 +39,8 @@ module.exports.run = async (bot, message, args) => {
     const fun_commands = "[``" + fun_cmdarr.join(', ') + "``]"
 
     let help_embed = new Discord.RichEmbed()
-        .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
+        .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
         .setURL("https://github.com/Fobenga")
         .setFooter("Desenvolvido por Fobenga em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
         .setTimestamp(bot.user.createdAt)
@@ -65,17 +53,31 @@ module.exports.run = async (bot, message, args) => {
         .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
         .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música");
 
+    // Function writes the information in the subhelp
     function writefn(array) {
-        let titlename = '';
+        let foldername = '';
         if (array === bot_cmdarr)
-            titlename += 'bot'
-        else titlename += args[0];
+            foldername += 'bot'
+        else foldername += args[0];
 
-        let cur_cmd = getcmd_descr(titlename, array);
+        /*
+        Get the description of the current command in a given category as a map
+        that sets as [key : value] -> [command : description]
+        */
+        let descr_map = new Map();
+        let fn_arr = new Array();
 
+        // Reads the commands in runtime
+        for (let i = 0; i < array.length; i++) {
+            let c_path = require('../' + foldername + '/' + array[i] + '.js');
+            fn_arr.push(c_path.help.descr);
+            descr_map.set(array[i], fn_arr[i]);
+        }
+
+        // Write the map as output in a Discord embed
         let descr_str = '';
-        cur_cmd.forEach((value, key) => {
-            let cmd_file = require('../' + titlename + '/' + key + '.js');
+        descr_map.forEach((value, key) => {
+            let cmd_file = require('../' + foldername + '/' + key + '.js');
 
             if (cmd_file.help.arg) {
                 descr_str += "``" + `${botconfig.prefix}${key} [${cmd_file.help.arg.join('] [')}]` + "`` " + `${value}\n`;
@@ -125,10 +127,8 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         case 'admin':
             return writefn(admin_cmdarr);
         default:
-            break;
+            return message.channel.send(help_embed);
     }
-
-    return message.channel.send(help_embed);
 }
 
 module.exports.help = {
