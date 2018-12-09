@@ -185,8 +185,15 @@ bot.on('message', async message => {
         status_updater();
     }
 
-    if (message.channel.type === "dm" && message.author.id !== bot.user.id) {
-        return message.channel.send(`O ${bot.user.username} apenas funciona em servidores...`);
+    if (message.channel.type === "dm") {
+        if (message.author.id === bot.user.id) return;
+        return bot.generateInvite(8).then(link => {
+            message.channel.send(new Discord.RichEmbed()
+                .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
+                .setDescription(`Use esse convite para adiciona-lo ao seu servidor:
+            **${link}**`)
+                .setColor('#FFFFFF'))
+        })
     }
 
     let prefix = botconfig.prefix;
