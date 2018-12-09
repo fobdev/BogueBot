@@ -2,7 +2,7 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
-var functions_used = 0;
+var cmd_counter = 0;
 var bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
@@ -24,14 +24,14 @@ function cmdload(folder) {
             throw new Error("Could not find commands.")
 
         console.log(`\n=== Loading ${type.toLowerCase()} ===`);
-        jsfile.forEach((f, i) => {
-            let props = require(`${path}${f}`)
+        jsfile.forEach(f => {
+            let props = require(path + f)
             console.log(`[FILE LOAD SUCESS]: ${f}`);
 
             if (props.help.name)
                 bot.commands.set(props.help.name, props);
             else
-                console.log('[WARNING]: Commands with no name are impossible to call.')
+                console.warn('[WARNING]: Commands with no name are impossible to call.')
 
             if (props.help.name_2)
                 bot.commands.set(props.help.name_2, props);
@@ -99,13 +99,13 @@ function status_updater() {
     for (var i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
 
     var cmd_plural = 'função';
-    if (functions_used !== 1)
+    if (cmd_counter !== 1)
         cmd_plural = 'funções';
 
     const helpfile = require("./commands/bot/help.js");
     const invitefile = require("./commands/bot/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários usaram ${functions_used} ${cmd_plural} hoje.`, {
+        ` | ${members_reached} usuários usaram ${cmd_counter} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
         });
 }
@@ -150,49 +150,42 @@ bot.on('guildCreate', guild => {
     servers_show();
 
     const system_channel = guild.channels.find(ch => ch.id === guild.systemChannelID);
-    try {
-        system_channel.send(welcome_embed);
-    } catch (e) {
-        console.log('No System Channel Available');
-    }
-
     if (system_channel) {
+        system_channel.send(welcome_embed);
         console.log("Welcome message sent to system channel.");
+    } else {
+        console.log('No System Channel Available');
     }
 
     console.log(`Welcome being sent to [${guild.owner.displayName}]\nOwner ID: [${guild.ownerID}]`);
 
-    guild.owner.send(welcome_embed);
     status_updater();
-    return;
+    return guild.owner.send(welcome_embed);
 });
 
 bot.on('guildDelete', guild => {
-    console.log(`<${bot.user.username}> left server [${guild.name}].`);
     servers_show();
     status_updater();
-    return;
+    return console.log(`<${bot.user.username}> left server [${guild.name}].`);
 });
 
 bot.on('guildMemberAdd', member => {
-    console.log(`MEMBER: [${member.displayName}] joined server [${member.guild.name}].`);
     status_updater();
-    return;
+    return console.log(`MEMBER: [${member.displayName}] joined server [${member.guild.name}].`);
 });
 
 bot.on('guildMemberRemove', member => {
-    console.log(`[${member.displayName}] left server [${member.guild.name}].`)
     status_updater();
-    return;
+    return console.log(`[${member.displayName}] left server [${member.guild.name}].`);
 });
 
 bot.on('message', async message => {
     if (message.author.id === bot.user.id) {
-        functions_used++;
+        cmd_counter++;
         status_updater();
     }
 
-    if (message.channel.type === "dm") {
+    if (message.channel.type === "dm" && message.author.id !== bot.user.id) {
         return message.channel.send(`O ${bot.user.username} apenas funciona em servidores...`);
     }
 
