@@ -12,12 +12,12 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         if (sv_volume === 1) {
             serverQueue.connection.dispatcher.setVolume(200);
             return message.channel.send(new Discord.RichEmbed()
-                .setDescription(`**<@${message.author.id}> ativou earrape.**`)
+                .setTitle(`:loudspeaker: **${message.author.id}** ativou earrape.`)
                 .setColor("#00FF00"));
         } else if (sv_volume === 200) {
             serverQueue.connection.dispatcher.setVolume(1);
             return message.channel.send(new Discord.RichEmbed()
-                .setDescription(`**O volume voltou ao normal.**`)
+                .setTitle(`:pray: O volume voltou ao normal.`)
                 .setColor("#00FF00"));
         } else {
             return message.channel.send(new Discord.RichEmbed()
