@@ -132,7 +132,8 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 if (entry > 0 && entry <= serverQueue.songs.length) {
                     message.channel.send(new Discord.RichEmbed()
                         .setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
-                            ` foi removido da fila.`));
+                            ` foi removido da fila.`)
+                        .setColor('#00FF00'));
 
                     await serverQueue.songs.splice(entry, 1);
                     return;
