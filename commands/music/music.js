@@ -35,7 +35,12 @@ fs.readdir(subcmd_path, (e, files) => {
 	})
 })
 
-//Functions
+//////////////////////////////////////////////////
+//	      The Core of bot music support			//
+//												//
+//	All code written by Fobenga and completely 	//
+//		available at: github.com/fobenga 		//
+//////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
 	let subcmd_arr = new Array();
@@ -49,7 +54,7 @@ module.exports.run = async (bot, message, args) => {
 		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
 
 	if (!args[0]) {
-		let help_file = require('../bot/help')
+		let help_file = require('../bot/help.js')
 		return message.channel.send(`${botconfig.prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
 				msg.delete();
@@ -255,7 +260,6 @@ module.exports.run = async (bot, message, args) => {
 			}
 		}
 	}
-
 }
 
 async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = [], user_url) {
@@ -547,10 +551,10 @@ async function play(bot, message, song, user_url) {
 
 module.exports.util = {
 	timing: function (secs) {
-		var sec_num = parseInt(secs, 10);
-		var hours = Math.floor(sec_num / 3600) % 24;
-		var minutes = Math.floor(sec_num / 60) % 60;
-		var seconds = sec_num % 60;
+		let sec_num = parseInt(secs, 10);
+		let hours = Math.floor(sec_num / 3600) % 24;
+		let minutes = Math.floor(sec_num / 60) % 60;
+		let seconds = sec_num % 60;
 		return [hours, minutes, seconds]
 			.map(v => v < 10 ? "0" + v : v)
 			.filter((v, i) => v !== "00" || i > 0)
