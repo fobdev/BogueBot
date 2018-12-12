@@ -187,7 +187,7 @@ module.exports.run = async (bot, message, args) => {
 					for (let i = 0; i < videos.length; i++) {
 						var current_video = await youtube.getVideo(videos[i].url);
 
-						var isLivestream = `Duração: ${timing(current_video.durationSeconds)}`;
+						var isLivestream = `Duração: ${module.exports.util.timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
@@ -415,7 +415,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.username} - Total de ${timing(playlist_length)}`, message.author.displayAvatarURL));
+				.setFooter(`Adicionado por ${message.author.username} - Total de ${module.exports.util.timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			await queueConstruct.songs.push(song);
 		}
@@ -455,10 +455,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.addField(pl_string, "Use ``" +
 					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.username} - Total de ${timing(playlist_length)}`, message.author.displayAvatarURL));
+				.setFooter(`Adicionado por ${message.author.username} - Total de ${module.exports.util.timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			serverQueue.songs.push(song);
-			var isLivestream = `${timing(song.length)}`;
+			var isLivestream = `${module.exports.util.timing(song.length)}`;
 			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 			let verify_qlenstr = "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa."
@@ -487,7 +487,7 @@ async function play(bot, message, song, user_url) {
 	}));
 
 	// Music embed start
-	var isLivestream = `${timing(song.length)}`;
+	var isLivestream = `${module.exports.util.timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 	let author_str = `${bot.user.username} Music Player`;
@@ -557,18 +557,6 @@ module.exports.util = {
 			.join(":");
 	}
 }
-
-function timing(secs) {
-	var sec_num = parseInt(secs, 10);
-	var hours = Math.floor(sec_num / 3600) % 24;
-	var minutes = Math.floor(sec_num / 60) % 60;
-	var seconds = sec_num % 60;
-	return [hours, minutes, seconds]
-		.map(v => v < 10 ? "0" + v : v)
-		.filter((v, i) => v !== "00" || i > 0)
-		.join(":");
-}
-
 
 module.exports.help = {
 	name: "music",
