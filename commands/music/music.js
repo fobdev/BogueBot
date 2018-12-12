@@ -1,41 +1,48 @@
-// Includes
+// Dependencies
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
-const botconfig = require("../../botconfig.json");
+const botconfig = require.main.require('./botconfig.json');
 const helper = require.main.require('./core/helper.js');
+const fs = require('fs');
 
 // Keys and Maps 
 const ytkey = helper.loadKeys("youtube_key");
 const youtube = new YouTubeAPI(ytkey);
 const queue = new Map();
+const subcmd_map = new Discord.Collection();
 
 // Subcommands loader
-const subcommands = ['earrape', 'p', 'pause', 'leave', 'l', 'np', 'queue', 'q', 'skip', 's'];
+const subcmd_path = 'commands/music/subcommands/';
+fs.readdir(subcmd_path, (e, files) => {
+	if (e)
+		console.error(e)
 
-function subcmd_loader(file) {
-	let path = './commands/music/subcommands/' + file + '/';
-	let ignore = 'global_message.js';
+	let jsfile = files.filter(f => f.split(".").pop() === "js");
+	if (jsfile.length < 1)
+		throw new Error("No subcommands found in file.")
 
-	fs.readdir(path, (e, files) => {
-		if (e)
-			console.error(`\nPath '${path}' does not exists.\n`);
+	jsfile.forEach(f => {
+		let prop = require('./subcommands/' + f);
+		if (prop.help.name) {
+			subcmd_map.set(prop.help.name, prop);
+		} else
+			console.error('Subcommand with no command name is impossible to call.')
 
-		var jsfile = files.filter(f => f.split(".").pop() === "js");
-		if (jsfile.length < 1)
-			throw new Error("Could not find commands.")
-
-		jsfile.forEach(f => {
-			// removes the .js from file name and push full file name into array
-			if (f != ignore)
-				array.push(f.slice(0, f.length - 3));
-		})
+		if (prop.help.name_2) {
+			subcmd_map.set(prop.help.name_2, prop);
+		}
 	})
-}
-
+})
 
 //Functions
 module.exports.run = async (bot, message, args) => {
+	// Adds all the subcommands to a array to be verified later if it is a command or not.
+	let subcmd_arr = new Array();
+	subcmd_map.forEach((value, key) => {
+		subcmd_arr.push(key);
+	})
+
 	var servers_pl = 'server';
 	if (queue.size !== 1) servers_pl += 's';
 	if (queue.size > 0)
@@ -98,7 +105,7 @@ module.exports.run = async (bot, message, args) => {
 		} catch (error) {
 
 			// If the inputted message is not a subcommand, searchs a video.
-			if (subcommands.indexOf(args[0]) < 0) {
+			if (subcmd_arr.indexOf(args[0]) < 0) {
 
 				// Tro to get the args[0] string and puts the string in the search engine.
 				const search_limit = 8;
@@ -244,7 +251,9 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd(bot, message, args, serverQueue, url);
+				// still use subcmd directly cuz maintenance
+				subcmd(bot, message, args, serverQueue, url)
+				// subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 			}
 		}
 	}
@@ -1022,8 +1031,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		// filter: 'audioonly',
-		// quality: 'highestaudio',
+		quality: 'highestaudio',
 		highWaterMark: 1024 * 1024 * 10 // 10 MB Audio Buffer
 	}));
 

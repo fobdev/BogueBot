@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../../botconfig.json");
+const botconfig = require.main.require("./botconfig.json");
 const fs = require("fs");
 
 function getcmd_name(foldername, array) {

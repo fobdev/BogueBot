@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../../botconfig.json");
+const botconfig = require.main.require("./botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     let del_arg = args.join(" ");

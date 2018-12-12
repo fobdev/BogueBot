@@ -17,7 +17,7 @@ function cmdload(folder) {
 
     fs.readdir(path, (err, files) => {
         if (err)
-            return console.error(`\n=====\nThe directory ${getpath.toLowerCase()} does not exist.\n=====`);
+            return console.error(`\n=====\nThe directory ${path.toLowerCase()} does not exist.\n=====`);
 
         let jsfile = files.filter(f => f.split(".").pop() === "js");
         if (jsfile.length < 1)
