@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports.run = async (bot, message, args, serverQueue) => {
     if (!serverQueue)
         return message.channel.send(new Discord.RichEmbed()
-            .setDescription('Não tem nada na fila de músicas.')
+            .setTitle('Não tem nada tocando no momento.')
             .setColor("#FF0000"));
 
     try {
@@ -15,7 +15,8 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         } else {
             serverQueue.streamdispatcher.resume();
             return message.channel.send(new Discord.RichEmbed()
-                .setTitle(":arrow_forward: Reprodução continuada."));
+                .setTitle(":arrow_forward: Reprodução continuada.")
+                .setColor("#00FF00"));
         }
     } catch (e) {
         console.error(e);

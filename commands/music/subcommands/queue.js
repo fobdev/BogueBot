@@ -407,7 +407,7 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
         }
     } catch (e) {
         console.error(`${e} / Queue fatal error.`);
-        return message.channel.send(new Discord.RichEmbed().setDescription('**Não tem nada sendo tocado no momento.**')
+        return message.channel.send(new Discord.RichEmbed().setTitle('Não tem nada sendo tocado no momento.')
             .setColor("#FF0000"));
     }
 }
