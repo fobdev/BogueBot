@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
     serverQueue.songs.splice(1, 0, nowplaying);
 
     return message.channel.send(new Discord.RichEmbed()
-        .setTitle(`:repeat: **${message.author.username}** colocou para repetir`)
+        .setTitle(`:repeat: **${message.author.username}** adicionou novamente à fila`)
         .setDescription(`[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})`)
         .setColor('#00FF00'));
 }
