@@ -1,6 +1,10 @@
 const Discord = require('discord.js');
 
-module.exports.run = async (bot, message, args, serverQueue, user_url) => {
+module.exports.run = async (bot, message, args, serverQueue) => {
+    if (!serverQueue) return message.channel.send(new Discord.RichEmbed()
+        .setDescription('Não tem nada sendo tocado no momento.')
+        .setColor("#FF0000"));
+
     if (serverQueue.streamdispatcher.speaking) {
         var sv_volume = serverQueue.connection.dispatcher.volume;
         if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
@@ -12,7 +16,7 @@ module.exports.run = async (bot, message, args, serverQueue, user_url) => {
                 .setColor("#00FF00"));
         } else if (sv_volume === 200) {
             serverQueue.connection.dispatcher.setVolume(1);
-            return message.channel.send(arg_embed
+            return message.channel.send(new Discord.RichEmbed()
                 .setDescription(`**O volume voltou ao normal.**`)
                 .setColor("#00FF00"));
         } else {

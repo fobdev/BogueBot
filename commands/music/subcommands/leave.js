@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-module.exports.run = async (bot, message, args, serverQueue, user_url) => {
+module.exports.run = async (bot, message, args, serverQueue) => {
     if (serverQueue) {
         try {
             await serverQueue.streamdispatcher.end('left');
@@ -17,7 +17,6 @@ module.exports.run = async (bot, message, args, serverQueue, user_url) => {
             .setColor("#FF0000"));
     }
 }
-
 
 module.exports.help = {
     name: 'leave',
