@@ -486,11 +486,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
-	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url
-		/*, {
+	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+		filter: 'audioonly',
 		highWaterMark: 1024 * 1024 * 2 // 2 MB Audio Buffer
-	}*/
-	));
+	}));
 
 	// Music embed start
 	var isLivestream = `${module.exports.util.timing(song.length)}`;
