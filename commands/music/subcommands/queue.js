@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             return message.channel.send(new Discord.RichEmbed()
                 .setColor('#00FF00')
                 .setTitle(`**${message.author.username}** randomizou a fila de **${message.guild.name}**`)
-                .setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a fila completa."));
+                .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a fila completa."));
         }
 
         if (args[1] === 'next' && args[2]) {
@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 console.error(`${e}: invalid input in 'swap' command.`)
                 return message.channel.send(new Discord.RichEmbed()
                     .setTitle('Uso incorreto do comando')
-                    .setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1]` + "``" +
+                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1]` + "``" +
                         " para colocar [numero1] como próximo video a se reproduzir.")
                     .setColor('#FF0000'));
             }
@@ -61,7 +61,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     console.error(`${e}: invalid input in 'swap' command.`)
                     return message.channel.send(new Discord.RichEmbed()
                         .setTitle('Uso incorreto do comando')
-                        .setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1] [numero2]` + "``" +
+                        .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                             " alterna a posição de dois vídeos na fila.")
                         .setColor('#FF0000'));
                 }
@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             } else {
                 return message.channel.send(new Discord.RichEmbed()
                     .setTitle('Uso incorreto do comando')
-                    .setDescription("``" + `${botconfig.prefix}${module.exports.help.name} queue position [numero1] [numero2]` + "``" +
+                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                         " alterna a posição de dois vídeos na fila.")
                     .setColor('#FF0000'));
             }
@@ -149,7 +149,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
                 if (start > end) return message.channel.send(new Discord.RichEmbed()
                     .setTitle('O valor **final** deve ser maior que o valor **inicial**.')
-                    .setDescription("Dessa vez, tente usar ``" + `${botconfig.prefix}${module.exports.help.name} q del ${end} ${start}` + "``")
+                    .setDescription("Dessa vez, tente usar ``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} del ${end} ${start}` + "``")
                     .setColor('#FF0000'));
 
                 if (amount < 0) amount *= -1;
@@ -189,7 +189,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 serverQueue.streamdispatcher.end();
                 return message.channel.send(new Discord.RichEmbed()
                     .setTitle(`Fila pulada para a posição **${args[1]}**`)
-                    .setDescription("``" + `${botconfig.prefix}${module.exports.help.name_2} q` + "`` para ver a nova fila.")
+                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a nova fila.")
                     .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
                     .setColor("#00FF00"));
             } else {
