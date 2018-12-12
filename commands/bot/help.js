@@ -108,7 +108,8 @@ module.exports.run = async (bot, message, args) => {
        (q)ueue (del)ete [num].............Exclui um certo item da fila.
        (q)ueue (del)ete [inicio] [fim]....Exclui os itens entre [inicio] e [fim].
        (q)ueue purge(pg)..................Limpa todos os itens da fila.
-	   
+       
+>music (r)epeat.....Coloca a música atual como próxima na fila novamente.
 >music np.........Mostra informações sobre o que está sendo tocado.
 >music (s)kip.....Pula a reprodução atual.
 >music p..........Pausa ou despausa a reprodução atual.
