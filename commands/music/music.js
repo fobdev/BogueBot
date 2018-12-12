@@ -1031,8 +1031,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
-		quality: 'highestaudio',
-		highWaterMark: 1024 * 1024 * 10 // 10 MB Audio Buffer
+		highWaterMark: 1024 * 1024 * 2 // 2 MB Audio Buffer
 	}));
 
 	// Music embed start
