@@ -15,9 +15,10 @@ function getcmd_name(foldername, array) {
             throw new Error("Could not find commands.")
 
         jsfile.forEach(f => {
-            if (f != ignore)
+            if (f != ignore) {
                 // removes the .js from file name and push full file name into array
                 array.push(f.slice(0, f.length - 3));
+            }
         })
     })
 }
@@ -50,8 +51,10 @@ module.exports.run = async (bot, message, args) => {
         .addField("ADMIN", admin_commands)
         .addField("USER", user_commands)
         .addField("FUN", fun_commands)
-        .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
-        .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música");
+        .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [comando]` + "`` para ajuda sobre determinado comando\n" +
+            "Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
+        .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música\n" +
+            "``" + `${botconfig.prefix}${this.help.name} ban` + "`` exibe as informações do comando 'ban'");
 
     // Function writes the information in the subhelp
     function writefn(array) {
@@ -88,9 +91,40 @@ module.exports.run = async (bot, message, args) => {
         })
 
         message.channel.send(new Discord.RichEmbed()
-            .setTitle(args[0].toUpperCase() + ' Commands')
+            .setTitle(`Categoria ${args[0].toUpperCase()}`)
             .setDescription(`**${descr_str}**`)
             .setColor('#00FF00'));
+    }
+
+    function send_singlemsg(path) {
+        let havearg = ''
+        if (path.help.arg)
+            havearg += ` [${path.help.arg.join('] [')}]`;
+
+        return message.channel.send(new Discord.RichEmbed()
+            .addField('Uso', "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``")
+            .addField('Descrição', path.help.descr)
+            .setColor('#00FF00'));
+    }
+
+    if (admin_cmdarr.includes(args[0])) {
+        let fn = require('../admin/' + args[0])
+        return send_singlemsg(fn);
+    }
+
+    if (bot_cmdarr.includes(args[0])) {
+        let fn = require('../bot/' + args[0])
+        return send_singlemsg(fn);
+    }
+
+    if (user_cmdarr.includes(args[0])) {
+        let fn = require('../user/' + args[0])
+        return send_singlemsg(fn);
+    }
+
+    if (fun_cmdarr.includes(args[0])) {
+        let fn = require('../fun/' + args[0])
+        return send_singlemsg(fn);
     }
 
     switch (args[0]) {
