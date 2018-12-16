@@ -135,16 +135,20 @@ bot.on('guildCreate', guild => {
     const bots_channel = guild.channels.find(ch => ch.name === 'bots');
     const music_channel = guild.channels.find(ch => ch.name === 'music');
 
-    if (!bots_channel) console.log("No channel named 'bots' found in this server.");
-    else {
+    if (bots_channel && bots_channel.type === 'text') {
         bots_channel.send(welcome_embed);
         console.log("Welcome message sent at 'bots' channel.");
+    } else {
+        console.log("No channel named 'bots' found in this server.");
     }
-    if (!music_channel) console.log("No channel named 'music' found in this server.");
-    else {
-        bots_channel.send(welcome_embed);
+
+    if (music_channel && music_channel.type === 'text') {
+        music_channel.send(welcome_embed);
         console.log("Welcome message sent at 'music' channel.")
+    } else {
+        console.log("No channel named 'music' found in this server.");
     }
+
     console.log("---------------------------------");
     console.log(`${bot.user.username} joined server [${guild.name}].`);
     servers_show();
