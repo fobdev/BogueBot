@@ -1,55 +1,61 @@
-const Discord = require("discord.js")
+const Discord = require("discord.js");
+const botconfig = require.main.require('./botconfig.json');
 
 module.exports.run = async (bot, message, args) => {
-    if (message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
-        let mute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        let muterole = message.guild.roles.find(role => role.name === 'mutado');
+    const report_file = require('./report.js');
+    if (!message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle('Você não tem permissões suficientes para isso')
+            .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``"));
+    }
 
-        const mute_embed = new Discord.RichEmbed()
-            .setTitle(`${bot.user.username} Mutar`)
-            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+    let mute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let muterole = message.guild.roles.find(role => role.name === 'mutado');
 
-        if (!mute) {
-            return message.channel.send(unmute_embed
-                .setTitle("Uso incorreto do comando")
-                .addField("Tente usar", `${botconfig.prefix}${this.help.name} [@user]`));
-        }
+    if (!mute) {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle("Uso incorreto do comando")
+            .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
+            .setColor('#FF0000'));
+    }
 
-        if (mute.hasPermission('ADMINISTRATOR')) {
-            return message.channel.send(mute_embed
-                .setDescription("Você não pode silenciar um **administrador**.")
-                .setColor("#FF0000"));
-        }
+    if (mute.hasPermission('ADMINISTRATOR')) {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle('Permissões insuficientes')
+            .setDescription("Você não pode silenciar um **administrador**.")
+            .setColor("#FF0000"));
+    }
 
-        if (!muterole) {
-            try {
-                muterole = await message.guild.createRole({
-                    name: "mutado",
-                    color: "#000000",
-                    permissions: []
+    if (!muterole) {
+        try {
+            muterole = await message.guild.createRole({
+                name: "mutado",
+                color: "#000000",
+                permissions: []
+            });
+
+            message.guild.channels.forEach(async (channel, id) => {
+                await channel.overwritePermissions(muterole, {
+                    SEND_MESSAGES: false
                 });
-
-                message.guild.channels.forEach(async (channel, id) => {
-                    await channel.overwritePermissions(muterole, {
-                        SEND_MESSAGES: false
-                    });
-                });
-            } catch (e) {
-                console.log(e.stack);
-            }
+            });
+        } catch (e) {
+            console.error(e);
         }
+    }
 
-        if (!mute.roles.find(role => role.name === 'mutado')) {
-            mute.addRole(muterole.id);
-            console.log(`${message.author.username} muted user [${mute.displayName}].`);
-            return message.channel.send(mute_embed
-                .setDescription(`**${mute.displayName}** foi mutado.`)
-                .setColor("#00FF00"));
-        } else {
-            return message.channel.send(mute_embed
-                .setDescription(`**${mute.displayName}** já está mutado.`)
-                .setColor("#FF0000"));
-        }
+    const desmute_file = require('./desmute');
+    if (!mute.roles.find(role => role.name === 'mutado')) {
+        mute.addRole(muterole.id);
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle(`**${mute.displayName}** foi silenciado.`)
+            .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
+            .setColor("#00FF00"));
+    } else {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle(`**${mute.displayName}** já está silenciado.`)
+            .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
+            .setColor("#FF0000"));
     }
 }
 

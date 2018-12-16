@@ -6,27 +6,39 @@ module.exports.run = async (bot, message, args) => {
     let r_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     let reason = args.join(" ").slice(22);
 
-    const report_embed = new Discord.RichEmbed()
-        .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL);
-
-    if (!r_user) return message.channel.send(report_embed
-        .setTitle("Usuário não encontrado.")
-        .setColor("#FF0000"));
-
-    if (reason === "") {
-        message.channel.send(report_embed
-            .addField("Você deve especificar um motivo para denunciar esse usuário",
-                "``" + `${botconfig.prefix}${this.help.name} [@usuário] [motivo]` + "``")
+    if (!r_user)
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle(`Usuário não encontrado no servidor **${message.guild.name}**.`)
             .setColor("#FF0000"));
-    } else {
+
+    if (reason === "")
+        return message.channel.send(new Discord.RichEmbed()
+            .addField("Você deve especificar um motivo para denunciar um membro",
+                "``" + `${botconfig.prefix}${this.help.name} [${this.help.arg.join('] [')}]` + "``")
+            .setColor("#FF0000"));
+    else {
         message.delete();
-        message.channel.send(report_embed
-            .setColor("#00FF00")
-            .addField("Úsuário denunciado", `| ${r_user} | ID: ${r_user.id}`)
+
+        // Message that goes to the guild owner
+        message.guild.owner.send(new Discord.RichEmbed()
+            .setAuthor('Aviso de denúncia')
+            .setTitle('Um usuário foi denunciado em seu servidor.')
+            .setDescription(`Servidor: **${message.guild.name}**`)
+            .addField("Usuário", `| ${r_user} | ID: ${r_user.id}`)
             .addField("Motivo", reason)
-            .setThumbnail(r_user.user.displayAvatarURL));
+            .setThumbnail(r_user.user.displayAvatarURL)
+            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL)
+            .setColor('#FFE100'));
+
+        // Message that goes to the guild
+        return message.channel.send(new Discord.RichEmbed()
+            .setColor("#00FF00")
+            .setTitle("Mensagem de denúncia enviada ao dono do servidor")
+            .addField("Usuário", `| ${r_user} | ID: ${r_user.id}`)
+            .addField("Motivo", reason)
+            .setThumbnail(r_user.user.displayAvatarURL)
+            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL));
     }
-    return;
 }
 
 module.exports.help = {

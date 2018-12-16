@@ -1,44 +1,65 @@
 const Discord = require("discord.js");
+const botconfig = require.main.require('./botconfig.json');
 
 module.exports.run = async (bot, message, args) => {
-    if (message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
-
-        let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        let kick_reason = args.join(" ").slice(args[0].length + 1);
-
-        if (!kick_user) {
-            return message.channel.send(new Discord.RichEmbed()
-                .setDescription(`Usuário não encontrado no servidor **${message.guild.name}**`)
-                .setColor("#FF0000"));
-        }
-
-        const kick_embed = new Discord.RichEmbed()
-            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
-
-        if (kick_user.hasPermission('ADMINISTRATOR')) {
-            return message.channel.send(kick_embed
-                .setTitle("Você não pode expulsar um administrador.")
-                .setColor("#FF0000"));
-        }
-
-        kick_embed.addField("Usuário foi expulso do servidor", `${kick_user}`);
-        if (kick_reason === "") {
-            message.guild.member(kick_user).kick();
-            return message.channel.send(kick_embed
-                .setColor("#00FF00"));
-        } else {
-            message.guild.member(kick_user).kick(kick_reason);
-            return message.channel.send(kick_embed
-                .setColor("#00FF00")
-                .addField("Motivo", `${kick_reason}`));
-        }
-    } else {
+    const report_file = require('./report.js');
+    if (!message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
         return message.channel.send(new Discord.RichEmbed()
-            .setTitle("Você não tem permissão para usar esse comando.")
-            .setColor("#FF0000")
-            .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL));
+            .setTitle('Você não tem permissão para expulsar membros desse servidor.')
+            .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+            .setColor('#FF0000'));
     }
-    return;
+
+    let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let kick_reason = args.join(" ").slice(args[0].length + 1);
+
+    if (!kick_user)
+        return message.channel.send(new Discord.RichEmbed()
+            .setDescription(`Usuário não encontrado no servidor **${message.guild.name}**`)
+            .setDescription('Use **@** para identificar o usuário corretamente.')
+            .setColor("#FF0000"));
+
+    if (kick_user.hasPermission('ADMINISTRATOR')) {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle(`**${kick_user.displayName}** é administrador desse servidor e não pode ser expulso.`)
+            .setColor("#FF0000"));
+    }
+
+    if (kick_reason === "") {
+        try {
+            await message.guild.member(kick_user).kick();
+        } catch (e) {
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle(`Permissões insuficientes para expulsar **${kick_user.displayName}**.`)
+                .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+                .setColor('#FF0000'));
+        }
+
+        return message.channel.send(new Discord.RichEmbed()
+            .addField("Usuário foi expulso do servidor", `${kick_user}`)
+            .setThumbnail(kick_user.user.displayAvatarURL)
+            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL)
+            .setColor("#00FF00"));
+    } else {
+        try {
+            await message.guild.member(kick_user).kick(kick_reason);
+        } catch (e) {
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle(`Permissões insuficientes para expulsar **${kick_user.displayName}**.`)
+                .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+                .setColor('#FF0000'));
+        }
+
+        return message.channel.send(new Discord.RichEmbed()
+            .addField("Usuário foi expulso do servidor", `${kick_user}`)
+            .addField("Motivo", `${kick_reason}`)
+            .setThumbnail(kick_user.user.displayAvatarURL)
+            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL)
+            .setColor("#00FF00"));
+    }
+
+
+
 }
 module.exports.help = {
     name: "kick",
