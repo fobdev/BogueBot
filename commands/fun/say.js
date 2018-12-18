@@ -11,11 +11,12 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
 
 
-    return message.channel.send(output);
+    await message.channel.send(output);
+    return message.delete();
 }
 
 module.exports.help = {
     name: 'say',
-    descr: `Faz o bot enviar uma mensagem escrita pelo usuário`,
+    descr: `Faz o bot enviar uma mensagem escrita pelo usuário.`,
     arg: ['mensagem']
 }
