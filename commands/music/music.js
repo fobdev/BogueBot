@@ -100,6 +100,7 @@ module.exports.run = async (bot, message, args) => {
 						.setDescription(`**${videosarray.length}** videos foram adicionados à fila`)
 						.addField('\u200B', "Use ``" +
 							`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+						.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL)
 						.setColor('#00FF00'));
 				});
 			}
@@ -406,17 +407,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					await serverQueue.songs.push(song_playlist[i]);
 				}
 			}
-
-			var pl_string = `**${videosarray.length - unavailable_videos}** videos foram adicionados à fila`;
-			if (unavailable_videos > 0) {
-				pl_string += `, **${unavailable_videos}** videos indisponíveis.`
-			} else pl_string += '.';
-
-			return message.channel.send(new Discord.RichEmbed()
-				.addField(pl_string, "Use ``" +
-					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
-				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.username} - Total de ${module.exports.util.timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			serverQueue.songs.push(song);
 			var isLivestream = `${module.exports.util.timing(song.length)}`;
