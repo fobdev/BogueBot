@@ -285,29 +285,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			try {
 				song_info = await youtube.getVideoByID(videosarray[v].id);
 
-				var tbnl = '';
-				try {
-					tbnl = song_info.thumbnails.maxres.url
-				} catch (e) {
-					try {
-						tbnl = song_info.thumbnails.standard.url
-					} catch (e) {
-						try {
-							tbnl = song_info.thumbnails.high.url
-						} catch (e) {
-							try {
-								tbnl = song_info.thumbnails.medium.url
-							} catch (e) {
-								try {
-									tbnl = song_info.thumbnails.default.url
-								} catch (e) {
-									console.error('no thumbnail available');
-								}
-							}
-						}
-					}
-				}
-
+				let tbnl = await module.exports.util.thumbnail_getter(song_info);
 				if (song_info) {
 					song_playlist[v] = {
 						id: videosarray[v].id,
@@ -356,29 +334,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
-	var tbnl = '';
-	try {
-		tbnl = song_info.thumbnails.maxres.url
-	} catch (e) {
-		try {
-			tbnl = song_info.thumbnails.standard.url
-		} catch (e) {
-			try {
-				tbnl = song_info.thumbnails.high.url
-			} catch (e) {
-				try {
-					tbnl = song_info.thumbnails.medium.url
-				} catch (e) {
-					try {
-						tbnl = song_info.thumbnails.default.url
-					} catch (e) {
-						console.error('no thumbnail available');
-					}
-				}
-			}
-		}
-	}
-
+	let tbnl = await module.exports.util.thumbnail_getter(song_info);
 	try {
 		var song = {
 			id: video.id,
@@ -561,6 +517,30 @@ module.exports.util = {
 			.map(v => v < 10 ? "0" + v : v)
 			.filter((v, i) => v !== "00" || i > 0)
 			.join(":");
+	},
+	thumbnail_getter: function (current_song) {
+		let r_tbnl = '';
+		try {
+			return r_tbnl = current_song.thumbnails.maxres.url;
+		} catch (e) {
+			try {
+				return r_tbnl = current_song.thumbnails.standard.url;
+			} catch (e) {
+				try {
+					return r_tbnl = current_song.thumbnails.high.url;
+				} catch (e) {
+					try {
+						return r_tbnl = current_song.thumbnails.medium.url;
+					} catch (e) {
+						try {
+							return r_tbnl = current_song.thumbnails.default.url;
+						} catch (e) {
+							return console.error('no thumbnail available');
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
