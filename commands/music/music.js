@@ -85,12 +85,24 @@ module.exports.run = async (bot, message, args) => {
 			const videosarray = await playlist.getVideos();
 
 			if (videosarray) {
-				message.channel.send(new Discord.RichEmbed()
-					.setDescription(`Carregando **${videosarray.length}** videos da playlist **[${playlist.title}](${playlist.url})** de **[${playlist.channelTitle}](${playlist.channel.url})**...`)
-					.setColor('#00FF00'));
-			}
+				message.delete();
+				let pl_out_embed = new Discord.RichEmbed()
+					.setTitle(`Playlist **${playlist.title}**`)
+					.setDescription(`Carregando **${videosarray.length}** videos da [playlist](${playlist.url}) de **[${playlist.channelTitle}](${playlist.channel.url})**`)
+					.setThumbnail(playlist.thumbnails.default.url)
+					.setColor('#00FF00');
 
-			await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
+				message.channel.send(pl_out_embed).then(async msg => {
+					await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
+					msg.edit(new Discord.RichEmbed()
+						.setTitle(pl_out_embed.title)
+						.setThumbnail(playlist.thumbnails.default.url)
+						.setDescription(`**${videosarray.length}** videos foram adicionados à fila`)
+						.addField('\u200B', "Use ``" +
+							`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+						.setColor('#00FF00'));
+				});
+			}
 		} catch (e) {
 			console.error(`${e}: Erro ao carregar playlist.`);
 			return message.channel.send(new Discord.RichEmbed()
@@ -409,17 +421,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 					await queueConstruct.songs.push(song_playlist[i]);
 				}
 			}
-
-			var pl_string = `**${videosarray.length - unavailable_videos}** videos foram adicionados à fila`;
-			if (unavailable_videos > 0) {
-				pl_string += `, **${unavailable_videos}** videos indisponíveis.`
-			} else pl_string += '.';
-
-			message.channel.send(new Discord.RichEmbed()
-				.addField(pl_string, "Use ``" +
-					`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
-				.setColor('#00FF00')
-				.setFooter(`Adicionado por ${message.author.username} - Total de ${module.exports.util.timing(playlist_length)}`, message.author.displayAvatarURL));
 		} else {
 			await queueConstruct.songs.push(song);
 		}
