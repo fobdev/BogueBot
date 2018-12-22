@@ -13,8 +13,7 @@ const queue = new Map();
 const subcmd_map = new Discord.Collection();
 
 // Subcommands loader
-const subcmd_path = 'commands/music/subcommands/';
-fs.readdir(subcmd_path, (e, files) => {
+fs.readdir('commands/music/subcommands/', (e, files) => {
 	if (e)
 		console.error(e)
 
@@ -435,6 +434,7 @@ async function play(bot, message, song, user_url) {
 	var serverQueue = queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
 		filter: 'audioonly',
+		quality: 'highestaudio',
 		highWaterMark: 1024 * 1024 * 2 // 2 MB Audio Buffer
 	}));
 
