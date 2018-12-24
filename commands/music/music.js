@@ -96,7 +96,7 @@ module.exports.run = async (bot, message, args) => {
 					msg.edit(new Discord.RichEmbed()
 						.setTitle(pl_out_embed.title)
 						.setThumbnail(playlist.thumbnails.default.url)
-						.setDescription(`**${videosarray.length}** videos foram adicionados à fila`)
+						.setDescription(`**[${videosarray.length} videos](${playlist.url})** foram adicionados à fila`)
 						.addField('\u200B', "Use ``" +
 							`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 						.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL)
