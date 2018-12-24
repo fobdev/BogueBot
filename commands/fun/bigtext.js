@@ -17,8 +17,7 @@ module.exports.run = async (bot, message, args) => {
             bigtext_arr.push(`:${num_conv.toWords(output[i])}:`)
         else {
             if (output[i] !== ' ') {
-                let alphabet_regex = /^[a-zA-Z]+$/;
-                if (!output[i].match(alphabet_regex))
+                if (!output[i].match(/^[a-zA-Z]+$/)) // Regex for alphabetical entries
                     bigtext_arr.push(`:question:`)
                 else
                     bigtext_arr.push(`:regional_indicator_${output[i].toLowerCase()}:`)
