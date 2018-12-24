@@ -73,7 +73,7 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!voiceChannel) {
 		return message.channel.send(new Discord.RichEmbed()
-			.setTitle("Você precisa estar em um canal de voz para usar os comandos de música.")
+			.setTitle("Você **precisa estar em um canal de voz** para usar os comandos de música.")
 			.setColor("FF0000"));
 	}
 
@@ -271,7 +271,7 @@ module.exports.run = async (bot, message, args) => {
 				if (serverQueue.voiceChannel === message.member.voiceChannel)
 					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 				else return message.channel.send(new Discord.RichEmbed()
-					.setTitle('Você precisa estar no mesmo canal de voz do bot para usar os comandos de música.')
+					.setTitle('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
 					.setColor('#FF0000'));
 			}
 		}
