@@ -269,7 +269,7 @@ module.exports.run = async (bot, message, args) => {
 				}
 			} else {
 				if (serverQueue.voiceChannel === message.member.voiceChannel)
-					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message.toLowerCase(), args, serverQueue, url) : undefined;
+					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 				else return message.channel.send(new Discord.RichEmbed()
 					.setTitle('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
 					.setColor('#FF0000'));

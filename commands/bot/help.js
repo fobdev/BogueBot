@@ -127,9 +127,11 @@ module.exports.run = async (bot, message, args) => {
         return send_singlemsg(fn);
     }
 
-    if (args[0].toLowerCase() === 'music') {
-        return message.channel.send("```css\n" +
-            `[Comandos de música do ${bot.user.username}]
+    switch (args[0]) {
+        case 'music':
+            {
+                return message.channel.send("```css\n" +
+                    `[Comandos de música do ${bot.user.username}]
 	
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
@@ -149,10 +151,8 @@ module.exports.run = async (bot, message, args) => {
 >music earrape....Aumenta extremamente o volume da reprodução atual.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-            "```");
-    }
-
-    switch (args[0]) {
+                    "```");
+            }
         case `${bot.user.username.toLowerCase()}`:
             return writefn(bot_cmdarr);
         case 'user':

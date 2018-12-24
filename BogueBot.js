@@ -184,8 +184,6 @@ bot.on('guildMemberRemove', member => {
 });
 
 bot.on('message', async message => {
-    let valid_message = await message.toLowerCase();
-
     if (message.author.id === bot.user.id) {
         cmd_counter++;
         status_updater();
@@ -204,7 +202,7 @@ bot.on('message', async message => {
     }
 
     let prefix = botconfig.prefix;
-    let messageArray = valid_message.content.split(" ");
+    let messageArray = message.content.split(" ");
     let args = messageArray.slice(1);
     let cmd = messageArray[0];
 
