@@ -3,6 +3,7 @@ const botconfig = require.main.require('./botconfig.json');
 const num_conv = require('number-to-words');
 
 module.exports.run = async (bot, message, args) => {
+    await message.delete();
     let output = args.join(' ');
     if (!output)
         return message.channel.send(new Discord.RichEmbed()
