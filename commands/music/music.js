@@ -374,7 +374,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		queue.set(message.guild.id, queueConstruct);
 
 		if (videosarray.length !== 0) {
-			var playlist_length = 0;
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
 					playlist_length += parseInt(song_playlist[i].length);
@@ -389,7 +388,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
 
-
 			play(bot, message, queueConstruct.songs[0], user_url);
 
 		} catch (e) {
@@ -403,7 +401,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		}
 	} else {
 		if (videosarray.length !== 0) {
-			var playlist_length = 0;
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
 					playlist_length += parseInt(song_playlist[i].length);
@@ -515,19 +512,19 @@ module.exports.util = {
 	thumbnail_getter: function (current_song) {
 		let r_tbnl = '';
 		try {
-			return r_tbnl = current_song.thumbnails.maxres.url;
+			return r_tbnl += current_song.thumbnails.maxres.url;
 		} catch (e) {
 			try {
-				return r_tbnl = current_song.thumbnails.standard.url;
+				return r_tbnl += current_song.thumbnails.standard.url;
 			} catch (e) {
 				try {
-					return r_tbnl = current_song.thumbnails.high.url;
+					return r_tbnl += current_song.thumbnails.high.url;
 				} catch (e) {
 					try {
-						return r_tbnl = current_song.thumbnails.medium.url;
+						return r_tbnl += current_song.thumbnails.medium.url;
 					} catch (e) {
 						try {
-							return r_tbnl = current_song.thumbnails.default.url;
+							return r_tbnl += current_song.thumbnails.default.url;
 						} catch (e) {
 							return console.error('no thumbnail available');
 						}
