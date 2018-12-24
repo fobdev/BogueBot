@@ -27,13 +27,14 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         await message.channel.send(bigtext_arr.join(''));
+        return message.delete()
     } catch (e) {
-        message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.RichEmbed()
             .setTitle('Ocorreu um erro ao enviar a mensagem.')
             .setColor('#FF0000'));
     }
 
-    return message.delete();
+
 }
 module.exports.help = {
     name: 'bigtext',
