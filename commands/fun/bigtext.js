@@ -3,7 +3,6 @@ const botconfig = require.main.require('./botconfig.json');
 const num_conv = require('number-to-words');
 
 module.exports.run = async (bot, message, args) => {
-    await message.delete();
     let output = args.join(' ');
     if (!output)
         return message.channel.send(new Discord.RichEmbed()
@@ -26,7 +25,15 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
-    return message.channel.send(bigtext_arr.join(''));
+    try {
+        await message.channel.send(bigtext_arr.join(''));
+    } catch (e) {
+        message.channel.send(new Discord.RichEmbed()
+            .setTitle('Ocorreu um erro ao enviar a mensagem.')
+            .setColor('#FF0000'));
+    }
+
+    return message.delete();
 }
 module.exports.help = {
     name: 'bigtext',
