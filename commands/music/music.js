@@ -268,7 +268,11 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
+				if (serverQueue.voiceChannel === message.member.voiceChannel)
+					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
+				else return message.channel.send(new Discord.RichEmbed()
+					.setTitle('Você precisa estar no mesmo canal de voz do bot para usar os comandos de música.')
+					.setColor('#FF0000'));
 			}
 		}
 	}
