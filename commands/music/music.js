@@ -376,7 +376,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
-					playlist_length += parseInt(song_playlist[i].length);
 					await queueConstruct.songs.push(song_playlist[i]);
 				}
 			}
