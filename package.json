@@ -15,6 +15,7 @@
     "i18n": "^0.8.3",
     "ms": "^2.1.1",
     "node-opus": "^0.3.1",
+    "number-to-words": "^1.2.4",
     "simple-youtube-api": "^5.1.1",
     "uws": "^99.0.0",
     "ytdl-core": "^0.27.1"
