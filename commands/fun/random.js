@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
     let maximum = await parseInt(args[1]);
 
     if (!args[0])
-        return message.reply(`pegou o numero **${Math.floor(Math.random() * 100 + 1)}**`);
+        return message.reply(`seu numero é **${Math.floor(Math.random() * 100 + 1)}**`);
 
     if (minimum < 1 || !minimum)
         return message.channel.send(new Discord.RichEmbed()
@@ -18,9 +18,9 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
 
     if (!maximum)
-        return message.reply(`pegou o numero **${Math.floor(Math.random() * minimum + 1)}**`);
+        return message.reply(`seu numero é **${Math.floor(Math.random() * minimum + 1)}**`);
     else
-        return message.reply(`pegou o numero **${Math.floor(Math.random() * (maximum - minimum + 1)) + minimum}**`);
+        return message.reply(`seu numero é **${Math.floor(Math.random() * (maximum - minimum + 1)) + minimum}**`);
 }
 
 module.exports.help = {
