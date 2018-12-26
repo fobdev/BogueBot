@@ -338,8 +338,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
-	let tbnl = await module.exports.util.thumbnail_getter(song_info);
 	try {
+		let tbnl = await module.exports.util.thumbnail_getter(song_info);
 		var song = {
 			id: video.id,
 			title: song_info.title,
@@ -351,7 +351,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			channel: song_info.channel.title,
 			channel_url: song_info.channel.url
 		};
-
 	} catch (e) {
 		console.error(e);
 		return message.channel.send(new Discord.RichEmbed()
