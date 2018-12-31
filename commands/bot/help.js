@@ -26,18 +26,21 @@ function getcmd_name(foldername, array) {
 let admin_cmdarr = new Array(),
     bot_cmdarr = new Array(),
     user_cmdarr = new Array(),
+    games_cmdarr = new Array(),
     fun_cmdarr = new Array();
 
 getcmd_name('admin', admin_cmdarr);
 getcmd_name('bot', bot_cmdarr);
 getcmd_name('user', user_cmdarr);
 getcmd_name('fun', fun_cmdarr);
+getcmd_name('games', games_cmdarr);
 
 module.exports.run = async (bot, message, args) => {
     const admin_commands = "[``" + admin_cmdarr.join(', ') + "``]"
     const bot_commands = "[``" + bot_cmdarr.join(', ') + "``]"
     const user_commands = "[``" + user_cmdarr.join(', ') + "``]"
     const fun_commands = "[``" + fun_cmdarr.join(', ') + "``]"
+    const game_commands = "[``" + games_cmdarr.join(', ') + "``]"
 
     let help_embed = new Discord.RichEmbed()
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
@@ -51,6 +54,7 @@ module.exports.run = async (bot, message, args) => {
         .addField("ADMIN", admin_commands)
         .addField("USER", user_commands)
         .addField("FUN", fun_commands)
+        .addField("GAMES", game_commands)
         .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [comando]` + "`` para ajuda sobre determinado comando\n" +
             "Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
         .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música\n" +
@@ -127,6 +131,11 @@ module.exports.run = async (bot, message, args) => {
         return send_singlemsg(fn);
     }
 
+    if (games_cmdarr.includes(args[0])) {
+        let fn = require('../games/' + args[0])
+        return send_singlemsg(fn);
+    }
+
     switch (args[0]) {
         case 'music':
             {
@@ -161,6 +170,8 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
             return writefn(fun_cmdarr);
         case 'admin':
             return writefn(admin_cmdarr);
+        case 'games':
+            return writefn(games_cmdarr);
         default:
             return message.channel.send(help_embed);
     }

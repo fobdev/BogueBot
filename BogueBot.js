@@ -50,6 +50,7 @@ cmdload('bot')
 cmdload('user')
 cmdload('fun')
 cmdload('music')
+cmdload('games')
 
 function servers_show() {
     // All the servers that the bot are in.
