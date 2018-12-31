@@ -1,4 +1,3 @@
-// This is a prototype
 const Discord = require('discord.js');
 const botconfig = require.main.require('./botconfig.json');
 
@@ -39,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
 
     let random_number = Math.floor(Math.random() * (gameconfig.maximum - gameconfig.minimum + 1)) + gameconfig.minimum;
     message.channel.send(new Discord.RichEmbed()
-        .setTitle('Adivinha o número')
+        .setTitle('Descubra o número secreto')
         .setDescription(`Seu numero secreto está entre **${gameconfig.minimum}** e **${gameconfig.maximum}.**
         Você tem ${gameconfig.tries} chances de acerta-lo.
         
@@ -64,8 +63,6 @@ module.exports.run = async (bot, message, args) => {
             return game_collector.stop('forced')
 
         if (parseInt(u_msg.content) === random_number) {
-
-            console.log(gameconfig.trycount);
             if (gameconfig.trycount <= 11) gameconfig.title = 'Devagar';
             if (gameconfig.trycount <= 9) gameconfig.title = 'Azilado';
             if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
@@ -77,8 +74,8 @@ module.exports.run = async (bot, message, args) => {
                 .setTitle('Vitória')
                 .setDescription('Parabéns, você acertou o numero secreto!')
                 .addField('Estatísticas',
-                    `**Numero secreto:** ${random_number}
-                    **Numeros tentados:** ${gameconfig.trycount + 1}
+                    `**Número secreto:** ${random_number}
+                    **Números tentados:** ${gameconfig.trycount + 1}
                     **Tentativas restantes:** ${gameconfig.tries - 1}
                     **Título:** ${gameconfig.title}`)
                 .setColor('#00FF00'));
