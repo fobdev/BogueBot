@@ -4,7 +4,8 @@ const botconfig = require.main.require('./botconfig.json');
 module.exports.run = async (bot, message, args) => {
     let incorrect_input = new Discord.RichEmbed()
         .setTitle('Uso incorreto do comando')
-        .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg[0]}]` + "``")
+        .setDescription("Selecione a dificuldade usando\n``" + `${botconfig.prefix}${this.help.name} 1` + "`` - Fácil\n``" +
+            `${botconfig.prefix}${this.help.name} 2` + "`` - Médio\n``" + `${botconfig.prefix}${this.help.name} 3` + "`` - Difícil")
         .setColor('#FF0000');
 
     if (!args[0])
@@ -147,5 +148,5 @@ module.exports.run = async (bot, message, args) => {
 module.exports.help = {
     name: 'guess',
     descr: 'Jogo de adivinhação de números.',
-    arg: ['dificuldade (1 | 2 | 3)']
+    arg: ['dificuldade']
 }
