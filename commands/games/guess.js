@@ -64,10 +64,10 @@ module.exports.run = async (bot, message, args) => {
 
         if (parseInt(u_msg.content) === random_number) {
             if (gameconfig.trycount <= 11) gameconfig.title = 'Muito Lento';
-            if (gameconfig.trycount <= 9) gameconfig.title = 'Devagar';
-            if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
-            if (gameconfig.trycount <= 3) gameconfig.title = 'Deus';
-            if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
+            else if (gameconfig.trycount <= 9) gameconfig.title = 'Devagar';
+            else if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
+            else if (gameconfig.trycount <= 3) gameconfig.title = 'Deus';
+            else if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
 
             game_collector.stop();
             return message.channel.send(new Discord.RichEmbed()
@@ -88,13 +88,13 @@ module.exports.run = async (bot, message, args) => {
         let tryplural = 'tentativa restante';
         if (gameconfig.tries > 2) tryplural = 'tentativas restantes';
 
-        if (dist < 10) color = '#26ff00';
-        if (dist >= 10) color = '#aaff00';
-        if (dist >= 20) color = '#e1ff00';
-        if (dist >= 50) color = '#ffe500';
-        if (dist >= 100) color = '#ffaa00';
-        if (dist >= 200) color = '#ff5900';
-        if (dist >= 300) color = '#ff0000';
+        if (dist <= 9) color = '#26ff00';
+        else if (dist >= 10) color = '#aaff00';
+        else if (dist >= 20) color = '#e1ff00';
+        else if (dist >= 50) color = '#ffe500';
+        else if (dist >= 100) color = '#ffaa00';
+        else if (dist >= 200) color = '#ff5900';
+        else if (dist >= 300) color = '#ff0000';
 
         if (parseInt(u_msg.content) < random_number) {
             gameconfig.trycount++;
