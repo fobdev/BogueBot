@@ -84,6 +84,7 @@ module.exports.run = async (bot, message, args) => {
         if (gameconfig.tries === 1) return game_collector.stop('gameover');
 
         let dist = parseInt(u_msg.content) - random_number;
+        if (dist < 0) dist *= -1;
 
         let tryplural = 'tentativa restante';
         if (gameconfig.tries > 2) tryplural = 'tentativas restantes';
