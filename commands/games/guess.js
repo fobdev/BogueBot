@@ -25,7 +25,11 @@ module.exports.run = async (bot, message, args) => {
         time: 1000 * 60 * 5 // 5 minutes to game timeout
     });
 
-    serversmap.set(message.guild.id, game_collector);
+    let bot_collector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
+        time: 1000 * 60 * 5 // 5 minutes to game timeout
+    });
+
+    serversmap.set(message.guild.id, [game_collector, bot_collector]);
 
     // Default values for maximum and minimum, that will change depending on the difficulty selected
     let gameconfig = {
@@ -123,6 +127,8 @@ module.exports.run = async (bot, message, args) => {
 
     game_collector.on('end', (msg, reason) => {
         serversmap.delete(message.guild.id);
+        bot_collector.collected.deleteAll();
+        bot_collector.stop();
         switch (reason) {
             case 'gameover':
                 return message.channel.send(new Discord.RichEmbed()
