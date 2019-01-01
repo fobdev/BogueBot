@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const botconfig = require.main.require('./botconfig.json');
+let serversmap = new Map(); // List all the servers that the game is running
 
 module.exports.run = async (bot, message, args) => {
     let incorrect_input = new Discord.RichEmbed()
@@ -11,16 +12,26 @@ module.exports.run = async (bot, message, args) => {
     if (!args[0])
         return message.channel.send(incorrect_input)
 
+    if (serversmap.has(message.guild.id)) {
+        return message.channel.send(new Discord.RichEmbed()
+            .setTitle('Erro')
+            .setDescription('Já existe uma instância do jogo rodando neste servidor.')
+            .setColor("#FF0000"));
+    }
+
+
     // This collector only will get the message from the caller of the game
     let game_collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
         time: 1000 * 60 * 5 // 5 minutes to game timeout
     });
 
+    serversmap.set(message.guild.id, game_collector);
+
     // Default values for maximum and minimum, that will change depending on the difficulty selected
     let gameconfig = {
         maximum: Math.floor(Math.random() * 899) + 100, // random between 100 and 1000
         minimum: Math.floor(Math.random() * 100) + 1, // random between 1 and 100
-        tries: 5,
+        tries: 0,
         trycount: 0,
         title: ''
     }
@@ -111,6 +122,7 @@ module.exports.run = async (bot, message, args) => {
     })
 
     game_collector.on('end', (msg, reason) => {
+        serversmap.delete(message.guild.id);
         switch (reason) {
             case 'gameover':
                 return message.channel.send(new Discord.RichEmbed()
