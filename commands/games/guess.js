@@ -136,7 +136,8 @@ module.exports.run = async (bot, message, args) => {
             default:
                 return message.channel.send(new Discord.RichEmbed()
                     .setTitle('Game Over!')
-                    .setDescription('O jogo excedeu o limite de tempo de 5 minutos.')
+                    .setDescription(`O jogo excedeu o limite de tempo de 5 minutos.
+                    O número secreto era **${random_number}**.`)
                     .setColor('#FF0000'));
         }
     })
