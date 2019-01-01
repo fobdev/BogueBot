@@ -65,11 +65,11 @@ module.exports.run = async (bot, message, args) => {
             return game_collector.stop('forced')
 
         if (parseInt(u_msg.content) === random_number) {
-            if (gameconfig.trycount <= 11) gameconfig.title = 'Muito Lento';
-            else if (gameconfig.trycount <= 9) gameconfig.title = 'Devagar';
-            else if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
+            if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
             else if (gameconfig.trycount <= 3) gameconfig.title = 'Deus';
-            else if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
+            else if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
+            else if (gameconfig.trycount <= 9) gameconfig.title = 'Devagar';
+            else if (gameconfig.trycount <= 11) gameconfig.title = 'Muito Lento';
 
             game_collector.stop('win');
         }
