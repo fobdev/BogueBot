@@ -11,7 +11,9 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send(incorrect_input)
 
     // This collector only will get the message from the caller of the game
-    let game_collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id);
+    let game_collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+        time: 1000 * 60 * 5 // 5 minutes to game timeout
+    });
 
     // Default values for maximum and minimum, that will change depending on the difficulty selected
     let gameconfig = {
@@ -69,16 +71,7 @@ module.exports.run = async (bot, message, args) => {
             else if (gameconfig.trycount <= 3) gameconfig.title = 'Deus';
             else if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
 
-            game_collector.stop();
-            return message.channel.send(new Discord.RichEmbed()
-                .setTitle('Vitória')
-                .setDescription('Parabéns, você acertou o numero secreto!')
-                .addField('Estatísticas',
-                    `**Número secreto:** ${random_number}
-                    **Números tentados:** ${gameconfig.trycount + 1}
-                    **Tentativas restantes:** ${gameconfig.tries - 1}
-                    **Título:** ${gameconfig.title}`)
-                .setColor('#00FF00'));
+            game_collector.stop('win');
         }
 
         if (gameconfig.tries === 1) return game_collector.stop('gameover');
@@ -130,8 +123,21 @@ module.exports.run = async (bot, message, args) => {
                     .setDescription(`Jogo terminado pelo usuário.
                     O número secreto era **${random_number}**.`)
                     .setColor('#FF0000'));
+            case 'win':
+                return message.channel.send(new Discord.RichEmbed()
+                    .setTitle('Vitória')
+                    .setDescription('Parabéns, você acertou o numero secreto!')
+                    .addField('Estatísticas',
+                        `**Número secreto:** ${random_number}
+                    **Números tentados:** ${gameconfig.trycount + 1}
+                    **Tentativas restantes:** ${gameconfig.tries - 1}
+                    **Título:** ${gameconfig.title}`)
+                    .setColor('#00FF00'));
             default:
-                break;
+                return message.channel.send(new Discord.RichEmbed()
+                    .setTitle('Game Over!')
+                    .setDescription('O jogo excedeu o limite de tempo de 5 minutos.')
+                    .setColor('#FF0000'));
         }
     })
 
