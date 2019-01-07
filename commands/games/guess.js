@@ -3,22 +3,12 @@ const botconfig = require.main.require('./botconfig.json');
 let serversmap = new Map(); // List all the servers that the game is running
 
 module.exports.run = async (bot, message, args) => {
-    let incorrect_input = new Discord.RichEmbed()
-        .setTitle('Uso incorreto do comando')
-        .setDescription("Selecione a dificuldade usando\n``" + `${botconfig.prefix}${this.help.name} 1` + "`` - Fácil\n``" +
-            `${botconfig.prefix}${this.help.name} 2` + "`` - Médio\n``" + `${botconfig.prefix}${this.help.name} 3` + "`` - Difícil")
-        .setColor('#FF0000');
-
-    if (!args[0])
-        return message.channel.send(incorrect_input)
-
     if (serversmap.has(message.guild.id)) {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle('Erro')
             .setDescription('Já existe uma instância do jogo rodando neste servidor.')
             .setColor("#FF0000"));
     }
-
 
     // This collector only will get the message from the caller of the game
     let game_collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
@@ -35,23 +25,9 @@ module.exports.run = async (bot, message, args) => {
     let gameconfig = {
         maximum: Math.floor(Math.random() * 899) + 100, // random between 100 and 1000
         minimum: Math.floor(Math.random() * 100) + 1, // random between 1 and 100
-        tries: 0,
+        tries: 8,
         trycount: 0,
         title: ''
-    }
-
-    switch (args[0]) {
-        case '1':
-            gameconfig.tries = 15;
-            break;
-        case '2':
-            gameconfig.tries = 10;
-            break;
-        case '3':
-            gameconfig.tries = 5;
-            break;
-        default:
-            return message.channel.send(incorrect_input)
     }
 
     let random_number = Math.floor(Math.random() * (gameconfig.maximum - gameconfig.minimum + 1)) + gameconfig.minimum;
@@ -82,10 +58,10 @@ module.exports.run = async (bot, message, args) => {
 
         if (parseInt(u_msg.content) === random_number) {
             if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
-            else if (gameconfig.trycount <= 3) gameconfig.title = 'Deus';
-            else if (gameconfig.trycount <= 7) gameconfig.title = 'Frio e calculista';
-            else if (gameconfig.trycount <= 9) gameconfig.title = 'Devagar';
-            else if (gameconfig.trycount <= 11) gameconfig.title = 'Muito Lento';
+            else if (gameconfig.trycount <= 2) gameconfig.title = 'Deus';
+            else if (gameconfig.trycount <= 4) gameconfig.title = 'Frio e calculista';
+            else if (gameconfig.trycount <= 6) gameconfig.title = 'Devagar';
+            else if (gameconfig.trycount <= 8) gameconfig.title = 'Muito Lento';
 
             game_collector.stop('win');
         }
