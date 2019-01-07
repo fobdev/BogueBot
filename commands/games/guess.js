@@ -141,6 +141,5 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: 'guess',
-    descr: 'Jogo de adivinhação de números.',
-    arg: ['dificuldade']
+    descr: 'Jogo de adivinhação de números.'
 }
