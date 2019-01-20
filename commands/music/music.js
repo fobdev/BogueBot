@@ -268,19 +268,20 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				if (!serverQueue.voiceChannel) {
+				// Try to get a already created serverQueue.
+				try {
+					if (serverQueue.voiceChannel === message.member.voiceChannel)
+						subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
+					else {
+						console.error(`USER ERROR: Wrong voice channel.`);
+						return message.channel.send(new Discord.RichEmbed()
+							.setTitle('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
+							.setColor('#FF0000'));
+					}
+				} catch (e) {
 					console.error(`USER ERROR: No voice channel detected.`);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('O bot não está em nenhum canal de voz.')
-						.setColor('#FF0000'));
-				}
-
-				if (serverQueue.voiceChannel === message.member.voiceChannel)
-					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
-				else {
-					console.error(`USER ERROR: Wrong voice channel.`);
-					return message.channel.send(new Discord.RichEmbed()
-						.setTitle('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
 						.setColor('#FF0000'));
 				}
 			}
