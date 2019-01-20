@@ -170,6 +170,11 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         }
 
         if (args[1] === 'purge' || args[1] === 'pg') {
+            if (!serverQueue)
+                return message.channel.send(new Discord.RichEmbed()
+                    .setDescription('Não tem nada sendo reproduzido no momento.')
+                    .setColor('#FF0000'));
+
             if (serverQueue.songs.length > 1) {
                 await serverQueue.songs.splice(1);
                 return message.channel.send(new Discord.RichEmbed()
@@ -177,7 +182,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     .setColor("#00FF00"));
             } else {
                 return message.channel.send(new Discord.RichEmbed()
-                    .setTitle(`A fila já está vazia.`)
+                    .setDescription(`Não tem nada na fila para ser excluído.`)
                     .setColor("#FF0000"));
             }
         }

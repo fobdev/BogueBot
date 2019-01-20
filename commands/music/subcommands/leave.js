@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         try {
             await serverQueue.streamdispatcher.end('left');
         } catch (e) {
-            console.error("Error ocurred when leaving the voice channel");
+            console.error("Error ocurred when leaving the voice channel:");
             console.error(`${e}`)
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle("Ocorreu um erro ao sair da sala.")
@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         }
     } else {
         return message.channel.send(new Discord.RichEmbed()
-            .setDescription('O bot não está em nenhuma sala de voz.')
+            .setDescription('O bot não está em nenhum canal de voz.')
             .setColor("#FF0000"));
     }
 }
