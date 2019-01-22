@@ -106,7 +106,7 @@ function status_updater() {
     const helpfile = require("./commands/bot/help.js");
     const invitefile = require("./commands/bot/invite.js");
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
-        ` | ${members_reached} usuários usaram ${cmd_counter} ${cmd_plural} hoje.`, {
+        ` | ${members_reached} usuários em ${current_servers.length} servidores usaram ${cmd_counter} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
         });
 }
