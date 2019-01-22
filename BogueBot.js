@@ -2,8 +2,8 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
-var cmd_counter = 0;
-var bot_token = helper.loadKeys("token");
+let cmd_counter = 0;
+let bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
     disableEveryone: true
@@ -54,23 +54,23 @@ cmdload('games')
 
 function servers_show() {
     // All the servers that the bot are in.
-    var current_servers = bot.guilds.array();
+    let current_servers = bot.guilds.array();
 
     // All the users that can see the bot.
-    var members_reached = 0;
-    var online_total = 0;
+    let members_reached = 0;
+    let online_total = 0;
 
     console.log("---------------------------------");
     console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
 
     // Get the name of all the servers
-    for (var i = 0; i < current_servers.length; i++) {
-        var user_inserver = current_servers[i].members.array();
-        var online_inserver = 0;
+    for (let i = 0; i < current_servers.length; i++) {
+        let user_inserver = current_servers[i].members.array();
+        let online_inserver = 0;
 
         // Get all the users in the current server loop
         for (let j = 0; j < user_inserver.length; j++) {
-            var is_online = user_inserver[j].presence.status;
+            let is_online = user_inserver[j].presence.status;
 
             // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
             if (is_online !== 'offline') {
@@ -94,12 +94,12 @@ function servers_show() {
 }
 
 function status_updater() {
-    var current_servers = bot.guilds.array();
-    var members_reached = 0;
+    let current_servers = bot.guilds.array();
+    let members_reached = 0;
 
-    for (var i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
+    for (let i = 0; i < current_servers.length; i++) members_reached += current_servers[i].memberCount;
 
-    var cmd_plural = 'função';
+    let cmd_plural = 'função';
     if (cmd_counter !== 1)
         cmd_plural = 'funções';
 
