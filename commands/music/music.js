@@ -382,6 +382,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		};
 
 		queue.set(message.guild.id, queueConstruct);
+		console.log(`[STREAM] Stream started in ${queueConstruct.guildname}`)
 
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
@@ -408,6 +409,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setTitle("Não foi possível conectar ao canal de voz.")
 				.setColor("#FF0000"));
 		}
+
+		console.log(`Queue started with [${queueConstruct.songs[0].title}](${queueConstruct.songs[0].url})`);
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
