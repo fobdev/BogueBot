@@ -410,7 +410,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor("#FF0000"));
 		}
 
-		console.log(`Queue started with [${queueConstruct.songs[0].title}](${queueConstruct.songs[0].url})`);
+		console.log(`Queue started with: ${queueConstruct.songs[0].title}\nURL: ${queueConstruct.songs[0].url}`);
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
