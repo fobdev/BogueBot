@@ -491,7 +491,6 @@ async function play(bot, message, song, user_url) {
 				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
 				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 				.setColor("#00FF00"));
-
 		}
 
 		if (reason === 'skipped') {
@@ -502,6 +501,21 @@ async function play(bot, message, song, user_url) {
 			return play(bot, message, serverQueue.songs[0], user_url);
 		}
 
+		// If there is no one in the voice channel when song is ready to skip, leave it.
+		let users_inchannel = serverQueue.voiceChannel.members.array();
+		if (users_inchannel.length < 2) {
+			queue.delete(message.guild.id);
+			serverQueue.voiceChannel.leave();
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+
+			const helpfile = require('../bot/help.js');
+			return message.channel.send(new Discord.RichEmbed()
+				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`)
+				.setFooter(`Use ${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name} para ajuda.`)
+				.setColor('#FFAA00'));
+		}
+
+		// if (serverQueue.voiceChannel)
 		await serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0], user_url);
 	});
