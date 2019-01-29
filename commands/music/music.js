@@ -382,8 +382,6 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		};
 
 		queue.set(message.guild.id, queueConstruct);
-		console.log(`[STREAM] Stream started in ${queueConstruct.guildname}`)
-
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
@@ -410,7 +408,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor("#FF0000"));
 		}
 
-		console.log(`Queue started with: ${queueConstruct.songs[0].title}\nURL: ${queueConstruct.songs[0].url}`);
+		console.log(`[STREAM] Stream started in ${queueConstruct.guildname}
+		Queue started with: ${queueConstruct.songs[0].title}
+		URL: ${queueConstruct.songs[0].url}
+		Started by: ${message.author.username}`);
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
@@ -473,7 +474,7 @@ async function play(bot, message, song, user_url) {
 
 	serverQueue.streamdispatcher.on('end', async (reason) => {
 		if (reason === 'left') {
-			serverQueue.voiceChannel.leave();
+			await serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 			return message.channel.send(new Discord.RichEmbed()
@@ -483,8 +484,8 @@ async function play(bot, message, song, user_url) {
 		}
 
 		if (serverQueue.songs.length <= 1) {
+			await serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
-			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			return message.channel.send(new Discord.RichEmbed()
@@ -504,18 +505,17 @@ async function play(bot, message, song, user_url) {
 		// If there is no one in the voice channel when song is ready to skip, leave it.
 		let users_inchannel = serverQueue.voiceChannel.members.array();
 		if (users_inchannel.length < 2) {
+			await serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
-			serverQueue.voiceChannel.leave();
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			const helpfile = require('../bot/help.js');
 			return message.channel.send(new Discord.RichEmbed()
 				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`)
-				.setFooter(`Use ${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name} para ajuda.`)
+				.setFooter(`Use [${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}] para ajuda.`)
 				.setColor('#FFAA00'));
 		}
 
-		// if (serverQueue.voiceChannel)
 		await serverQueue.songs.shift();
 		play(bot, message, serverQueue.songs[0], user_url);
 	});
