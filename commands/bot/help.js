@@ -153,11 +153,11 @@ module.exports.run = async (bot, message, args) => {
        (q)ueue purge(pg)..................Limpa todos os itens da fila.
        
 >music (r)epeat.....Coloca a música atual como próxima na fila novamente.
->music np.........Mostra informações sobre o que está sendo tocado.
->music (s)kip.....Pula a reprodução atual.
->music p..........Pausa ou despausa a reprodução atual.
->music (l)eave....Sai do canal de voz e exclui a fila atual.
->music earrape....Aumenta extremamente o volume da reprodução atual.
+>music np...........Mostra informações sobre o que está sendo tocado.
+>music (s)kip.......Pula a reprodução atual.
+>music p............Pausa ou despausa a reprodução atual.
+>music (l)eave......Sai do canal de voz e exclui a fila atual.
+>music earrape......Aumenta extremamente o volume da reprodução atual.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
                     "```");
