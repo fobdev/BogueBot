@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 
         if (sv_volume === 1) {
-            serverQueue.connection.dispatcher.setVolume(200);
+            serverQueue.connection.dispatcher.setVolume(500);
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`:loudspeaker: **${message.author.username}** ativou earrape.`)
                 .setColor("#00FF00"));
