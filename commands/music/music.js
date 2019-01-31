@@ -411,6 +411,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		console.log(`[STREAM] Stream started in ${queueConstruct.guildname}
 		Queue started with: ${queueConstruct.songs[0].title}
 		URL: ${queueConstruct.songs[0].url}
+		Length: ${module.exports.util.timing(queueConstruct.songs[0].length)}
 		Started by: ${message.author.username}`);
 	} else {
 		if (videosarray.length !== 0) {
@@ -428,6 +429,17 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			if (serverQueue.songs.length > 2)
 				verify_qlenstr += "\n``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.";
+
+			let fullqueue_length = 0;
+			for (let i = 0; i < serverQueue.songs.length; i++)
+				fullqueue_length += serverQueue.songs[i].length;
+
+			console.log(`[STREAM] A video has been added to ${serverQueue.guildname} queue.
+			Song title: ${song.title}
+			URL: ${song.url}
+			Added by: ${message.author.username}
+			Length: ${module.exports.util.timing(song.length)}
+			Full ${serverQueue.guildname} queue length: ${module.exports.util.timing(fullqueue_length)}`);
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
