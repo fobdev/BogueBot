@@ -408,11 +408,14 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				.setColor("#FF0000"));
 		}
 
+		let users_inchannel = queueConstruct.voiceChannel.members.array();
 		console.log(`[STREAM] Stream started in ${queueConstruct.guildname}
 		Queue started with: ${queueConstruct.songs[0].title}
 		URL: ${queueConstruct.songs[0].url}
 		Length: ${module.exports.util.timing(queueConstruct.songs[0].length)}
-		Started by: ${message.author.username}`);
+		Started by: ${message.author.username}
+		Users listening: ${users_inchannel.length - 1}`);
+
 	} else {
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
@@ -431,6 +434,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				verify_qlenstr += "\n``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.";
 
 			let fullqueue_length = 0;
+			let users_inchannel = serverQueue.voiceChannel.members.array();
 			for (let i = 0; i < serverQueue.songs.length; i++)
 				fullqueue_length += serverQueue.songs[i].length;
 
@@ -439,7 +443,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			URL: ${song.url}
 			Added by: ${message.author.username}
 			Length: ${module.exports.util.timing(song.length)}
-			Full ${serverQueue.guildname} queue length: ${module.exports.util.timing(fullqueue_length)}`);
+			Full queue length: ${module.exports.util.timing(fullqueue_length)}
+			Users listening: ${users_inchannel.length - 1}`);
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
