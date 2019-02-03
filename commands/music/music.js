@@ -271,13 +271,13 @@ module.exports.run = async (bot, message, args) => {
 					if (serverQueue.voiceChannel === message.member.voiceChannel)
 						subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 					else {
-						console.error(`USER ERROR: Wrong voice channel.`);
+						console.error(`[USER ERROR] message.author is not in the same channel as the bot.`);
 						return message.channel.send(new Discord.RichEmbed()
 							.setDescription('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
 							.setColor('#FF0000'));
 					}
 				} catch (e) {
-					console.error(`USER ERROR: No voice channel detected.`);
+					console.error(`[USER ERROR] The bot is not in a voice channel.`);
 					return message.channel.send(new Discord.RichEmbed()
 						.setDescription('O bot não está em nenhum canal de voz.')
 						.setColor('#FF0000'));
