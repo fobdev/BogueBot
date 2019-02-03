@@ -72,6 +72,7 @@ module.exports.run = async (bot, message, args) => {
 	var videos;
 
 	if (!voiceChannel) {
+		console.log('[USER ERROR] message.author not in a voice channel.')
 		return message.channel.send(new Discord.RichEmbed()
 			.setTitle("Você **precisa estar em um canal de voz** para usar os comandos de música.")
 			.setColor("FF0000"));
@@ -113,23 +114,20 @@ module.exports.run = async (bot, message, args) => {
 		try {
 			video = await youtube.getVideo(url);
 			await video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
-
 			try {
 				message.delete();
 			} catch (e) {
 				console.error('Error deleting URL message.');
 			}
-		} catch (error) {
 
+		} catch (error) {
 			// If the inputted message is not a subcommand, searchs a video.
 			if (subcmd_arr.indexOf(args[0]) < 0) {
-
 				// Tro to get the args[0] string and puts the string in the search engine.
 				const search_limit = 8;
 				try {
 					videos = await youtube.searchVideos(search, search_limit);
 				} catch (e) {
-
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Ocorreu um erro na busca.")
 						.setColor("#FF0000"));
