@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
+    const rape_vol = 500;
     if (!serverQueue) return message.channel.send(new Discord.RichEmbed()
         .setDescription('Não tem nada sendo tocado no momento.')
         .setColor("#FF0000"));
@@ -10,11 +11,11 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 
         if (sv_volume === 1) {
-            serverQueue.connection.dispatcher.setVolume(500);
+            serverQueue.connection.dispatcher.setVolume(rape_vol);
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`:loudspeaker: **${message.author.username}** ativou earrape.`)
                 .setColor("#00FF00"));
-        } else if (sv_volume === 200) {
+        } else if (sv_volume === rape_vol) {
             serverQueue.connection.dispatcher.setVolume(1);
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`:pray: O volume voltou ao normal.`)
