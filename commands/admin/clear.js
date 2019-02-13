@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
-            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [100]` + "``");
+            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [${this.help.arg[0]}]` + "``");
 
     if (del_arg > 100 || del_arg <= 0) {
         return message.channel.send(delfail_embed);
@@ -23,7 +23,6 @@ module.exports.run = async (bot, message, args) => {
 
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();
-
                 message.channel.bulkDelete(del_arg, true);
                 return message.channel.send(perm_embed
                     .setTitle(`${del_arg} ${messages} foram excluídas no canal #**${message.channel.name}**`)
