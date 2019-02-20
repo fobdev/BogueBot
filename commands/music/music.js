@@ -550,6 +550,7 @@ module.exports.util = {
 			.join(":");
 	},
 	thumbnail_getter: function (current_song) {
+		// Try to find and set the best	available thumbnail from the current video
 		let r_tbnl = '';
 		try {
 			return r_tbnl += current_song.thumbnails.maxres.url;
@@ -566,6 +567,9 @@ module.exports.util = {
 						try {
 							return r_tbnl += current_song.thumbnails.default.url;
 						} catch (e) {
+							message.channel.send(new Discord.RichEmbed()
+								.setDescription('Não há nenhuma thumbnail disponível para este vídeo.')
+								.setColor('#FF000'));
 							return console.error('no thumbnail available');
 						}
 					}
