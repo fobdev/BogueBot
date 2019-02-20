@@ -48,8 +48,10 @@ module.exports.run = async (bot, message, args) => {
                                         channels_sent++;
                                     }
 
-                                    console.log(`GUILD[${i}] SUCESS: [${allguilds[i]}] - Message sent to [${allchannels_fromguilds.length}] text channels.`);
-                                    console.log('--------------------------------')
+                                    if (j === allchannels_fromguilds.length - 1) {
+                                        console.log(`GUILD[${i}] SUCESS: [${allguilds[i]}] - Message sent to [${allchannels_fromguilds.length}] text channels.`);
+                                        console.log('--------------------------------')
+                                    }
                                 }
                                 guildsucess++;
                             }
