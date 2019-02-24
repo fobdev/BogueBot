@@ -14,8 +14,8 @@ function ms_convert(ms, bot) {
   if (hours !== 1) hourword = 'horas';
   if (minutes !== 1) minuteword = 'minutos';
 
-  let hourstring = `**${hours} ${hourword} e`;
-  let minutestring = `**${minutes} ${minuteword}.**`;
+  let hourstring = `**${hours} ${hourword} e**`;
+  let minutestring = `** ${minutes} ${minuteword}.**`;
   let fulltime_string = ``;
 
   if (((24 * 60 * 60 * 1000) - bot.uptime) >= (60 * 60 * 100))
