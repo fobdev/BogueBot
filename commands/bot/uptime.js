@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-function ms_convert(ms) {
+function ms_convert(ms, bot) {
   days = Math.floor(ms / (24 * 60 * 60 * 1000));
   daysms = ms % (24 * 60 * 60 * 1000);
   hours = Math.floor((daysms) / (60 * 60 * 1000));
@@ -8,24 +8,31 @@ function ms_convert(ms) {
   minutes = Math.floor((hoursms) / (60 * 1000));
   minutesms = ms % (60 * 1000);
 
-  var day_string = 'dia';
-  var hour_string = 'hora';
-  var minute_string = 'minuto';
+  let hourword = 'hora';
+  let minuteword = 'minuto';
 
-  if (days !== 1) day_string = 'dias';
-  if (hours !== 1) hour_string = 'horas';
-  if (minutes !== 1) minute_string = 'minutos';
+  if (hours !== 1) hourword = 'horas';
+  if (minutes !== 1) minuteword = 'minutos';
 
-  return `**${days} ${day_string}, ${hours} ${hour_string} e ${minutes} ${minute_string}.**`;
+  let hourstring = `**${hours} ${hourword} e`;
+  let minutestring = `**${minutes} ${minuteword}.**`;
+  let fulltime_string = ``;
+
+  if (((24 * 60 * 60 * 1000) - bot.uptime) >= (60 * 60 * 100))
+    fulltime_string += hourstring + minutestring;
+  else
+    fulltime_string += minutestring;
+
+  return fulltime_string;
 }
 
 module.exports.run = async (bot, message, args) => {
-  return message.channel.send(new Discord.RichEmbed().addField(`Tempo online do ${bot.user.username} desde a ultima atualização.`,
-      ms_convert(bot.uptime))
+  return message.channel.send(new Discord.RichEmbed().addField(`Tempo restarte do ${bot.user.username} até a próxima reinicialização.`,
+      ms_convert((24 * 60 * 60 * 1000) - bot.uptime, bot))
     .setColor("#00FF00"));
 }
 
 module.exports.help = {
   name: 'uptime',
-  descr: 'Mostra o tempo online do bot desde sua ultima atualização.'
+  descr: 'Mostra o tempo restante até o bot ser reiniciado. (24h)'
 }
