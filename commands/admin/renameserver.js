@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args) => {
                 .setTitle("Uso incorreto do comando")
                 .setColor("#FF0000")
                 .addField("O nome do servidor deve ter entre 2 a 100 caracteres.",
-                    "**Tente usar: **``" + `${botconfig.prefix}${this.help.name} [novo nome]`));
+                    "**Tente usar: **``" + `${botconfig.prefix}${this.help.name} [novo nome]` + "``"));
         }
 
         try {
