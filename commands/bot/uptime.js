@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
+const fullday = 24 * 60 * 60 * 1000;
 
 function ms_convert(ms, bot) {
-  hours = Math.floor((ms % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-  hoursms = ms % (60 * 60 * 1000);
-  minutes = Math.floor((hoursms) / (60 * 1000));
-  minutesms = ms % (60 * 1000);
+  hours = Math.floor((ms % fullday) / (fullday / 24));
+  hoursms = ms % (fullday / 24);
+  minutes = Math.floor((hoursms) / (fullday / (24 * 60)));
+  minutesms = ms % (fullday / (24 * 60));
 
   let hourword = 'hora';
   let minuteword = 'minuto';
@@ -16,7 +17,7 @@ function ms_convert(ms, bot) {
   let minutestring = ` ${minutes} ${minuteword}.`;
   let fulltime_string = ``;
 
-  if (((24 * 60 * 60 * 1000) - bot.uptime) >= (60 * 60 * 100))
+  if ((fullday - bot.uptime) >= (fullday / 24))
     fulltime_string += hourstring + minutestring;
   else
     fulltime_string += minutestring;
@@ -26,7 +27,7 @@ function ms_convert(ms, bot) {
 
 module.exports.run = async (bot, message, args) => {
   return message.channel.send(new Discord.RichEmbed().addField(`Tempo restarte do ${bot.user.username} até a próxima reinicialização.`,
-      ms_convert((24 * 60 * 60 * 1000) - bot.uptime, bot))
+      ms_convert(fullday - bot.uptime, bot))
     .setColor("#00FF00"));
 }
 
