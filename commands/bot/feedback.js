@@ -28,6 +28,15 @@ module.exports.run = async (bot, message, args) => {
         .setTimestamp(message.createdTimestamp)
     );
 
+    return message.channel.send(new Discord.RichEmbed()
+        .setColor('#0000FF')
+        .setTitle('Uma mensagem de feedback foi enviada para Fobenga#2863!')
+        .setThumbnail(message.author.displayAvatarURL)
+        .setDescription(user_message)
+        .addField('Enviado por:', message.author.tag)
+        .addField('Enviado do servidor:', message.guild.name)
+        .setFooter('Enviada em')
+        .setTimestamp(message.createdTimestamp))
 }
 
 module.exports.help = {
