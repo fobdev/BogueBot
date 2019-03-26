@@ -13,11 +13,17 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             .setDescription(`**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
             .setColor('#00FF00'));
     } else {
-        if (adder > 0) {
+        if (args[1] > 0) {
             let adder = parseInt(args[1]);
             for (let i = 0; i < adder; i++)
                 serverQueue.songs.splice(1, 0, serverQueue.songs[0]);
-            
+
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle(`:repeat: **${message.author.username}** adicionou novamente à fila **(${adder}x)**`)
+                .setDescription(`**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
+                .setColor('#00FF00'));
+
+
         } else {
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle('Uso incorreto do comando.')
