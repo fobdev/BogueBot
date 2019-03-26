@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
         .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
         .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
         .setURL("https://github.com/Fobenga")
-        .setFooter("Desenvolvido por Fobenga em ", 'https://images-ext-1.discordapp.net/external/HRRbNejI4Jdna8UcivhiBDfEj382i4-yPwkArneYpLU/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/244270921286811648/09318e9b9103e6806fa74258f414394c.png')
+        .setFooter("Desenvolvido por Fobenga em ")
         .setTimestamp(bot.user.createdAt)
         .setColor("#00FF00")
         .addField("MUSIC", "[``music``]")

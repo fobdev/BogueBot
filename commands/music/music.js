@@ -488,6 +488,21 @@ async function play(bot, message, song, user_url) {
 	message.channel.send(music_embed);
 
 	serverQueue.streamdispatcher.on('end', async (reason) => {
+		// Session end based on priority from higher to lower:
+
+		let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
+		if (songcalled_voicechannel.length < 2) {
+			serverQueue.voiceChannel.leave();
+			queue.delete(message.guild.id);
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+
+			const helpfile = require('../bot/help.js');
+			return message.channel.send(new Discord.RichEmbed()
+				// .setDescription()
+				.addField(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
+				.setColor('#FFAA00'));
+		}
+
 		if (reason === 'left') {
 			await serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
@@ -515,20 +530,6 @@ async function play(bot, message, song, user_url) {
 				.setColor("#00FF00"));
 			await serverQueue.songs.shift();
 			return play(bot, message, serverQueue.songs[0], user_url);
-		}
-
-		// If there is no one in the voice channel when song is ready to skip, leave it.
-		let users_inchannel = serverQueue.voiceChannel.members.array();
-		if (users_inchannel.length < 2) {
-			await serverQueue.voiceChannel.leave();
-			queue.delete(message.guild.id);
-			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-
-			const helpfile = require('../bot/help.js');
-			return message.channel.send(new Discord.RichEmbed()
-				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`)
-				.setFooter(`Use [${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}] para ajuda.`)
-				.setColor('#FFAA00'));
 		}
 
 		await serverQueue.songs.shift();
