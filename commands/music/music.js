@@ -498,8 +498,7 @@ async function play(bot, message, song, user_url) {
 
 			const helpfile = require('../bot/help.js');
 			return message.channel.send(new Discord.RichEmbed()
-				// .setDescription()
-				.addField(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
+				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
 				.setColor('#FFAA00'));
 		}
 
