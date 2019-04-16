@@ -6,8 +6,6 @@ let global_count = 0;
 module.exports.run = async (bot, message, args) => {
     let user1 = message.guild.member(message.mentions.users.firstKey());
     let user2 = message.guild.member(message.mentions.users.lastKey());
-    let firstmention_id = args[0].slice(0, -1).replace(/[\\<>@#&!]/g, "");
-
     if (!args[0] || (!args[0] && !args[1]) || !args[1]) {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle('Uso incorreto do comando.')
@@ -15,6 +13,7 @@ module.exports.run = async (bot, message, args) => {
             .setColor("#FF0000"));
     }
 
+    let firstmention_id = args[0].slice(0, -1).replace(/[\\<>@#&!]/g, "");
     if (firstmention_id != user1.user.id) {
         await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
             img.write(`couple_${message.guild.id}_${global_count}.png`, () => {
