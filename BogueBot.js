@@ -65,26 +65,28 @@ function servers_show() {
 
     // Get the name of all the servers
     for (let i = 0; i < current_servers.length; i++) {
-        let user_inserver = current_servers[i].members.array();
-        let online_inserver = 0;
+        // let user_inserver = current_servers[i].members.array();
+        // let online_inserver = 0;
 
-        // Get all the users in the current server loop
-        for (let j = 0; j < user_inserver.length; j++) {
-            let is_online = user_inserver[j].presence.status;
+        // // Get all the users in the current server loop
+        // for (let j = 0; j < user_inserver.length; j++) {
+        //     let is_online = user_inserver[j].presence.status;
 
-            // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
-            if (is_online !== 'offline') {
-                online_inserver++;
-                online_total++;
-            }
+        //     // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
+        //     if (is_online !== 'offline') {
+        //         online_inserver++;
+        //         online_total++;
+        //     }
 
-            // Finishes the current loop and restart the variable to count again in the next server
-            if (j === user_inserver - 1) online_inserver = 0;
-        }
+        //     // Finishes the current loop and restart the variable to count again in the next server
+        //     if (j === user_inserver - 1) online_inserver = 0;
+        // }
 
-        console.log(`${i + 1} - [${current_servers[i]}] - ` +
-            `${online_inserver} online from ${current_servers[i].memberCount} members.`);
-        members_reached += current_servers[i].memberCount;
+        console.log(`${i + 1} - [${current_servers[i]}]`);
+
+        // console.log(`${i + 1} - [${current_servers[i]}] - ` +
+        //     `${online_inserver} online from ${current_servers[i].memberCount} members.`);
+        // members_reached += current_servers[i].memberCount;
     }
 
     console.log("---------------------------------");
@@ -105,6 +107,11 @@ function status_updater() {
 
     const helpfile = require("./commands/bot/help.js");
     const invitefile = require("./commands/bot/invite.js");
+    // bot.user.setStatus("dnd");
+    // bot.user.setActivity(`bila me programar.`, {
+    //     type: 'WATCHING'
+    // });
+
     bot.user.setActivity(`${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${invitefile.help.name}` +
         ` | ${members_reached} usuários em ${current_servers.length} servidores usaram ${cmd_counter} ${cmd_plural} hoje.`, {
             type: 'PLAYING'
@@ -212,6 +219,13 @@ bot.on('message', async message => {
     let command_file = bot.commands.get(cmd.slice(prefix.length));
 
     if (cmd[0] === prefix) {
+        // Maintenance flag
+        // if (message.author.id !== "244270921286811648") {
+        //     return message.channel.send(new Discord.RichEmbed()
+        //         .setTitle("O bot está em manutenção no momento")
+        //         .setDescription("Trabalhando para melhorar o bot, por favor use-o mais tarde."));
+        // }
+
         if (command_file) {
             console.log(`\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}]\nchannel: #${message.channel.name}`)
             try {
@@ -221,7 +235,6 @@ bot.on('message', async message => {
             }
         }
     }
-
 });
 
 bot.login(bot_token);
