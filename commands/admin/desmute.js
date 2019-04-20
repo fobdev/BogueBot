@@ -5,7 +5,6 @@ module.exports.run = async (bot, message, args) => {
     if (message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
         let desmute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
         let muterole = message.guild.roles.find(role => role.name === 'mutado');
-        let tempmute_role = message.guild.roles.find(role => role.name === 'mute temporário');
 
         if (!desmute) {
             return message.channel.send(new Discord.RichEmbed()
@@ -16,10 +15,6 @@ module.exports.run = async (bot, message, args) => {
 
         if (desmute.roles.has(muterole.id)) {
             desmute.removeRole(muterole.id);
-
-            if (desmute.roles.has(tempmute_role.id))
-                desmute.removeRole(tempmute_role.id);
-
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`**${desmute.displayName}** foi desmutado.`)
                 .setColor("#00FF00"));
