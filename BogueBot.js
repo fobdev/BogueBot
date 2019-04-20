@@ -53,46 +53,21 @@ cmdload('music');
 cmdload('games');
 
 function servers_show() {
-    // All the servers that the bot are in.
     let current_servers = bot.guilds.array();
-
-    // All the users that can see the bot.
     let members_reached = 0;
-    let online_total = 0;
-
-    console.log("---------------------------------");
-    console.log(`Currently connected to [${current_servers.length}] servers.\nServer List:`);
+    console.log("--------------------------------------------");
+    console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
 
     // Get the name of all the servers
     for (let i = 0; i < current_servers.length; i++) {
-        // let user_inserver = current_servers[i].members.array();
-        // let online_inserver = 0;
-
-        // // Get all the users in the current server loop
-        // for (let j = 0; j < user_inserver.length; j++) {
-        //     let is_online = user_inserver[j].presence.status;
-
-        //     // Verify every member to see if it is not offline (can be AFK / Do Not Disturb / Online).
-        //     if (is_online !== 'offline') {
-        //         online_inserver++;
-        //         online_total++;
-        //     }
-
-        //     // Finishes the current loop and restart the variable to count again in the next server
-        //     if (j === user_inserver - 1) online_inserver = 0;
-        // }
-
-        console.log(`${i + 1} - [${current_servers[i]}]`);
-
-        // console.log(`${i + 1} - [${current_servers[i]}] - ` +
-        //     `${online_inserver} online from ${current_servers[i].memberCount} members.`);
-        // members_reached += current_servers[i].memberCount;
+        let leftzero = '';
+        if (i < 10) leftzero += '0';
+        members_reached += current_servers[i].memberCount;
+        console.log(`${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`);
     }
-
-    console.log("---------------------------------");
-    console.log(`  - [${members_reached}] users reached | [${online_total}] online.`);
-    console.log("---------------------------------");
-
+    console.log("--------------------------------------------");
+    console.log(`A total of [${members_reached}] Discord users reached.`);
+    console.log("--------------------------------------------");
 }
 
 function status_updater() {
