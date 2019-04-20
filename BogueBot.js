@@ -61,7 +61,7 @@ function servers_show() {
     // Get the name of all the servers
     for (let i = 0; i < current_servers.length; i++) {
         let leftzero = '';
-        if (i < 10) leftzero += '0';
+        if (i < 9) leftzero += '0';
         members_reached += current_servers[i].memberCount;
         console.log(`${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`);
     }
