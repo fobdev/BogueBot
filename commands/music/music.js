@@ -266,16 +266,8 @@ module.exports.run = async (bot, message, args) => {
 					return;
 				}
 			} else {
-				// Try to get a already created serverQueue.
 				try {
-					if (serverQueue.voiceChannel === message.member.voiceChannel)
-						subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
-					else {
-						console.error(`[USER ERROR] message.author is not in the same channel as the bot.`);
-						return message.channel.send(new Discord.RichEmbed()
-							.setDescription('Você **precisa estar no mesmo canal de voz do bot** para usar os comandos de música.')
-							.setColor('#FF0000'));
-					}
+					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 				} catch (e) {
 					console.error(`[USER ERROR] The bot is not in a voice channel.`);
 					return message.channel.send(new Discord.RichEmbed()
