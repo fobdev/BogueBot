@@ -155,7 +155,7 @@ module.exports.run = async (bot, message, args) => {
 >music (r)epeat [num].......Coloca a música atual como próxima na fila novamente.
 >music np...................Mostra informações sobre o que está sendo tocado.
 >music (s)kip...............Pula a reprodução atual.
->music p....................Pausa a reprodução atual;
+>music pause................Pausa a reprodução atual;
                             Use-o novamente para despausar.
 >music (l)eave..............Sai do canal de voz e exclui a fila atual.
 >music earrape..............Aumenta extremamente o volume da reprodução atual;

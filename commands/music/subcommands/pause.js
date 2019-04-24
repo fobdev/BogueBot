@@ -28,6 +28,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
 
 module.exports.help = {
-    name: 'p',
-    name_2: 'pause'
+    name: 'pause',
+    static: true
 }
