@@ -38,5 +38,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 }
 
 module.exports.help = {
-    name: 'np'
+    name: 'np',
+    name_2: 'nowplaying',
+    static: true
 }
