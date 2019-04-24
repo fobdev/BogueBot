@@ -158,12 +158,12 @@ bot.on('guildDelete', guild => {
 
 bot.on('guildMemberAdd', member => {
     status_updater();
-    return console.log(`MEMBER JOIN: [${member.displayName}] joined server [${member.guild.name}].`);
+    return console.log(`[+]: JOIN [${member.displayName}] -> [${member.guild.name}].`);
 });
 
 bot.on('guildMemberRemove', member => {
     status_updater();
-    return console.log(`MEMBER LEAVE: [${member.displayName}] left server [${member.guild.name}].`);
+    return console.log(`[-]: LEFT [${member.displayName}] <- [${member.guild.name}].`);
 });
 
 bot.on('message', async message => {
