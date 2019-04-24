@@ -20,5 +20,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
 module.exports.help = {
     name: 'leave',
-    name_2: 'l'
+    name_2: 'l',
+    static: true
 }

@@ -16,5 +16,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
 module.exports.help = {
     name: 'skip',
-    name_2: 's'
+    name_2: 's',
+    static: true
 }

@@ -33,5 +33,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 }
 
 module.exports.help = {
-    name: 'earrape'
+    name: 'earrape',
+    static: true
 }

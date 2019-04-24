@@ -36,5 +36,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 module.exports.help = {
     name: 'repeat',
     name_2: 'r',
-    arg: ['numero']
+    arg: ['numero'],
+    static: false
 }

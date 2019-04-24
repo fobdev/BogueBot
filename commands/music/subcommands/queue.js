@@ -419,5 +419,6 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
 
 module.exports.help = {
     name: 'queue',
-    name_2: 'q'
+    name_2: 'q',
+    static: false
 }
