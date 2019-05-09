@@ -153,17 +153,7 @@ bot.on('guildCreate', guild => {
 bot.on('guildDelete', guild => {
     servers_show();
     status_updater();
-    return console.log(`<${bot.user.username}> left server [${guild.name}].`);
-});
-
-bot.on('guildMemberAdd', member => {
-    status_updater();
-    return console.log(`[+]: JOIN [${member.displayName}] -> [${member.guild.name}].`);
-});
-
-bot.on('guildMemberRemove', member => {
-    status_updater();
-    return console.log(`[-]: LEFT [${member.displayName}] <- [${member.guild.name}].`);
+    return console.log(`>>${bot.user.username} was removed from server [${guild.name}].`);
 });
 
 bot.on('message', async message => {
