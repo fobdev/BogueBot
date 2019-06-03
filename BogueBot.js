@@ -159,8 +159,13 @@ bot.on('guildDelete', guild => {
 bot.on('guildMemberRemove', member => {
     const system_channel = member.guild.channels.find(ch => ch.id === member.guild.systemChannelID);
     if (system_channel) {
-        system_channel.send(`**${member}** kito do sv...`);
-        console.log(`[MEMBER LEAVE] member [${member}] leave message successfully sent to ${member.guild.name} system channel.`);
+        try {
+            system_channel.send(`**${member}** kito do sv...`);
+            console.log(`[MEMBER LEAVE] member [${member.user.username}] leave message successfully sent to ${member.guild.name} system channel.`);
+        } catch (e) {
+            console.log(`[MEMBER LEAVE] member [${member.user.username}] left but bot has no permissions to send messages to system channel.`);
+        }
+
     }
 })
 
