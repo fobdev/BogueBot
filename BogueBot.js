@@ -158,7 +158,10 @@ bot.on('guildDelete', guild => {
 
 bot.on('guildMemberRemove', member => {
     const system_channel = member.guild.channels.find(ch => ch.id === member.guild.systemChannelID);
-    system_channel.send(`**${member}** kito do sv...`);
+    if (system_channel) {
+        system_channel.send(`**${member}** kito do sv...`);
+        console.log(`[MEMBER LEAVE] member [${member}] leave message successfully sent to ${member.guild.name} system channel.`);
+    }
 })
 
 bot.on('message', async message => {
