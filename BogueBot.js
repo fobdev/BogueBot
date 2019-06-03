@@ -162,8 +162,6 @@ bot.on('guildMemberRemove', member => {
         if (member.guild.member(bot.user).hasPermission('ADMINISTRATOR')) {
             system_channel.send(`**${member}** kito do sv...`);
             console.log(`[MEMBER LEAVE] member [${member.user.username}] leave message successfully sent to ${member.guild.name} system channel.`);
-        } else {
-            console.log(`[MEMBER LEAVE] member [${member.user.username}] left but bot has no permissions to send messages to system channel.`);
         }
     }
 })
