@@ -156,6 +156,11 @@ bot.on('guildDelete', guild => {
     return console.log(`>>${bot.user.username} was removed from server [${guild.name}].`);
 });
 
+bot.on('guildMemberRemove', member => {
+    const system_channel = member.guild.channels.find(ch => ch.id === member.guild.systemChannelID);
+    system_channel.send(`**${member}** kito do sv...`);
+})
+
 bot.on('message', async message => {
     if (message.author.id === bot.user.id) {
         cmd_counter++;
