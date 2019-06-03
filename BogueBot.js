@@ -157,9 +157,6 @@ bot.on('guildDelete', guild => {
 });
 
 bot.on('guildMemberRemove', member => {
-    // get the current guild that the bot is in.
-    console.log(`[${member.user.username}] left [${member.guild.name}]`);
-
     const system_channel = member.guild.channels.find(ch => ch.id === member.guild.systemChannelID);
     if (system_channel) {
         if (member.guild.member(bot.user).hasPermission('ADMINISTRATOR')) {
