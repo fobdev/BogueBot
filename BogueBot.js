@@ -167,6 +167,9 @@ bot.on('guildMemberRemove', member => {
 })
 
 bot.on('message', async message => {
+    if(message.content == 'bogue' || message.content == 'bog')
+        message.channel.send('iae');
+    
     if (message.author.id === bot.user.id) {
         cmd_counter++;
         status_updater();
