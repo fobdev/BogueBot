@@ -4,7 +4,7 @@ const fs = require("fs");
 
 function getcmd_name(foldername, array) {
     let path = './commands/' + foldername + '/';
-    let ignore = 'global_message.js';
+    let ignore = ['global_message.js', 'serverlist.js']
 
     fs.readdir(path, (e, files) => {
         if (e)
@@ -15,7 +15,8 @@ function getcmd_name(foldername, array) {
             throw new Error("Could not find commands.")
 
         jsfile.forEach(f => {
-            if (f != ignore) {
+            // ignores all the files listed in the 'ignore' array
+            if (ignore.every((val, i, arr) => f != val)) {
                 // removes the .js from file name and push full file name into array
                 array.push(f.slice(0, f.length - 3));
             }
@@ -137,10 +138,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     switch (args[0]) {
-        case 'music':
-            {
-                return message.channel.send("```css\n" +
-                    `[Comandos de música do ${bot.user.username}]
+        case 'music': {
+            return message.channel.send("```css\n" +
+                `[Comandos de música do ${bot.user.username}]
 	
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
@@ -162,8 +162,8 @@ module.exports.run = async (bot, message, args) => {
                             Use-o novamente para desativar.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-                    "```");
-            }
+                "```");
+        }
         case `${bot.user.username.toLowerCase()}`:
             return writefn(bot_cmdarr);
         case 'user':
