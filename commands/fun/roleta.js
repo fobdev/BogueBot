@@ -51,8 +51,11 @@ module.exports.run = async (bot, message, args) => {
             let rng = Math.ceil(Math.random() * (membersArray.length - adminMembers + 1));
 
             // Forces a non-admin entry
-            while (membersArray[rng].hasPermission('ADMINISTRATOR'))
-                rng = Math.ceil(Math.random() * (membersArray.length - adminMembers + 1));
+            while (true) {
+                if (membersArray[rng].hasPermission('ADMINISTRATOR'))
+                    rng = Math.ceil(Math.random() * (membersArray.length - adminMembers + 1));
+                else break;
+            }
 
             message.channel.send(new Discord.RichEmbed()
                 .setTitle('Membro expulso do servidor.')
