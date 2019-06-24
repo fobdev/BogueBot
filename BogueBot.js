@@ -160,16 +160,16 @@ bot.on('guildMemberRemove', member => {
     const system_channel = member.guild.channels.find(ch => ch.id === member.guild.systemChannelID);
     if (system_channel) {
         if (member.guild.member(bot.user).hasPermission('ADMINISTRATOR')) {
-            system_channel.send(`**${member}** kito do sv...`);
+            system_channel.send(`**${member}** saiu.`);
             console.log(`[MEMBER LEAVE] member [${member.user.username}] leave message successfully sent to ${member.guild.name} system channel.`);
         }
     }
 })
 
 bot.on('message', async message => {
-    if(message.content == 'bogue' || message.content == 'bog')
+    if (message.content == 'bogue' || message.content == 'bog')
         message.channel.send('iae');
-    
+
     if (message.author.id === bot.user.id) {
         cmd_counter++;
         status_updater();
