@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args) => {
 
-    if (message.guild.member(bot.user).hasPermission('ADMINISTRATOR'))
+    if (!message.guild.member(bot.user).hasPermission('ADMINISTRATOR'))
         return message.channel.send(new Discord.RichEmbed()
             .setTitle('Faltando permissões')
             .setDescription('O bot não tem permissão de administrador para executar a roleta russa.')
