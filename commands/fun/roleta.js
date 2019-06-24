@@ -59,8 +59,6 @@ module.exports.run = async (bot, message, args) => {
                 .setDescription(`${membersArray[rng]} foi removido do servidor na roleta russa.`)
                 .setColor('#FF9102')
                 .setThumbnail(membersArray[rng].displayAvatarURL));
-            message.channel.send("rng: " + rng);
-
             try {
                 console.log(`Member ${membersArray[rng].displayName} kicked in roulette.`);
                 return membersArray[rng].kick();
