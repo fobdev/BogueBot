@@ -3,144 +3,171 @@ const botconfig = require.main.require("./botconfig.json");
 const fs = require("fs");
 
 function getcmd_name(foldername, array) {
-    let path = './commands/' + foldername + '/';
-    let ignore = ['global_message.js', 'serverlist.js']
+  let path = "./commands/" + foldername + "/";
+  let ignore = ["global_message.js", "serverlist.js"];
 
-    fs.readdir(path, (e, files) => {
-        if (e)
-            console.error(`\nPath '${path}' does not exists.\n`);
+  fs.readdir(path, (e, files) => {
+    if (e) console.error(`\nPath '${path}' does not exists.\n`);
 
-        var jsfile = files.filter(f => f.split(".").pop() === "js");
-        if (jsfile.length < 1)
-            throw new Error("Could not find commands.")
+    var jsfile = files.filter(f => f.split(".").pop() === "js");
+    if (jsfile.length < 1) throw new Error("Could not find commands.");
 
-        jsfile.forEach(f => {
-            // ignores all the files listed in the 'ignore' array
-            if (ignore.every((val, i, arr) => f != val)) {
-                // removes the .js from file name and push full file name into array
-                array.push(f.slice(0, f.length - 3));
-            }
-        })
-    })
+    jsfile.forEach(f => {
+      // ignores all the files listed in the 'ignore' array
+      if (ignore.every((val, i, arr) => f != val)) {
+        // removes the .js from file name and push full file name into array
+        array.push(f.slice(0, f.length - 3));
+      }
+    });
+  });
 }
 
 let admin_cmdarr = new Array(),
-    bot_cmdarr = new Array(),
-    user_cmdarr = new Array(),
-    games_cmdarr = new Array(),
-    fun_cmdarr = new Array();
+  bot_cmdarr = new Array(),
+  user_cmdarr = new Array(),
+  games_cmdarr = new Array(),
+  fun_cmdarr = new Array();
 
-getcmd_name('admin', admin_cmdarr);
-getcmd_name('bot', bot_cmdarr);
-getcmd_name('user', user_cmdarr);
-getcmd_name('fun', fun_cmdarr);
-getcmd_name('games', games_cmdarr);
+getcmd_name("admin", admin_cmdarr);
+getcmd_name("bot", bot_cmdarr);
+getcmd_name("user", user_cmdarr);
+getcmd_name("fun", fun_cmdarr);
+getcmd_name("games", games_cmdarr);
 
 module.exports.run = async (bot, message, args) => {
-    const admin_commands = "[``" + admin_cmdarr.join(', ') + "``]"
-    const bot_commands = "[``" + bot_cmdarr.join(', ') + "``]"
-    const user_commands = "[``" + user_cmdarr.join(', ') + "``]"
-    const fun_commands = "[``" + fun_cmdarr.join(', ') + "``]"
-    const game_commands = "[``" + games_cmdarr.join(', ') + "``]"
+  const admin_commands = "[``" + admin_cmdarr.join(", ") + "``]";
+  const bot_commands = "[``" + bot_cmdarr.join(", ") + "``]";
+  const user_commands = "[``" + user_cmdarr.join(", ") + "``]";
+  const fun_commands = "[``" + fun_cmdarr.join(", ") + "``]";
+  const game_commands = "[``" + games_cmdarr.join(", ") + "``]";
 
-    let help_embed = new Discord.RichEmbed()
-        .setAuthor(`Comandos do ${bot.user.username}`, bot.user.displayAvatarURL, "https://github.com/Fobenga")
-        .setDescription(`Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`)
-        .setURL("https://github.com/Fobenga")
-        .setFooter("Desenvolvido por Fobenga em ")
-        .setTimestamp(bot.user.createdAt)
-        .setColor("#00FF00")
-        .addField("MUSIC", "[``music``]")
-        .addField(bot.user.username.toUpperCase(), bot_commands)
-        .addField("ADMIN", admin_commands)
-        .addField("USER", user_commands)
-        .addField("FUN", fun_commands)
-        .addField("GAMES", game_commands)
-        .addField('\u200B', "**Use ``" + `${botconfig.prefix}${this.help.name} [comando]` + "`` para ajuda sobre determinado comando\n" +
-            "Use ``" + `${botconfig.prefix}${this.help.name} [categoria]` + "`` para ajuda sobre determinada categoria**")
-        .addField('Exemplos', "``" + `${botconfig.prefix}${this.help.name} music` + "`` exibe todos os comandos de música\n" +
-            "``" + `${botconfig.prefix}${this.help.name} ban` + "`` exibe as informações do comando 'ban'");
+  let help_embed = new Discord.RichEmbed()
+    .setAuthor(
+      `Comandos do ${bot.user.username}`,
+      bot.user.displayAvatarURL,
+      "https://github.com/Fobenga"
+    )
+    .setDescription(
+      `Esses são todos os comandos que eu sei até o momento.\nEstou em constante atualização, então novos comandos poderão surgir em breve.`
+    )
+    .setURL("https://github.com/Fobenga")
+    .setFooter("Desenvolvido por Fobenga em ")
+    .setTimestamp(bot.user.createdAt)
+    .setColor("#00FF00")
+    .addField("MUSIC", "[``music``]")
+    .addField(bot.user.username.toUpperCase(), bot_commands)
+    .addField("ADMIN", admin_commands)
+    .addField("USER", user_commands)
+    .addField("FUN", fun_commands)
+    .addField("GAMES", game_commands)
+    .addField(
+      "\u200B",
+      "**Use ``" +
+        `${botconfig.prefix}${this.help.name} [comando]` +
+        "`` para ajuda sobre determinado comando\n" +
+        "Use ``" +
+        `${botconfig.prefix}${this.help.name} [categoria]` +
+        "`` para ajuda sobre determinada categoria**"
+    )
+    .addField(
+      "Exemplos",
+      "``" +
+        `${botconfig.prefix}${this.help.name} music` +
+        "`` exibe todos os comandos de música\n" +
+        "``" +
+        `${botconfig.prefix}${this.help.name} ban` +
+        "`` exibe as informações do comando 'ban'"
+    );
 
-    // Function writes the information in the subhelp
-    function writefn(array) {
-        let foldername = '';
-        if (array === bot_cmdarr)
-            foldername += 'bot'
-        else foldername += args[0];
+  // Function writes the information in the subhelp
+  function writefn(array) {
+    let foldername = "";
+    if (array === bot_cmdarr) foldername += "bot";
+    else foldername += args[0];
 
-        /*
+    /*
         Get the description of the current command in a given category as a map
         that sets as [key : value] -> [command : description]
         */
-        let descr_map = new Map();
-        let fn_arr = new Array();
+    let descr_map = new Map();
+    let fn_arr = new Array();
 
-        // Reads the commands in runtime
-        for (let i = 0; i < array.length; i++) {
-            let c_path = require('../' + foldername + '/' + array[i] + '.js');
-            fn_arr.push(c_path.help.descr);
-            descr_map.set(array[i], fn_arr[i]);
-        }
-
-        // Write the map as output in a Discord embed
-        let descr_str = '';
-        descr_map.forEach((value, key) => {
-            let cmd_file = require('../' + foldername + '/' + key + '.js');
-
-            if (cmd_file.help.arg) {
-                descr_str += "``" + `${botconfig.prefix}${key} [${cmd_file.help.arg.join('] [')}]` + "`` " + `${value}\n`;
-            } else {
-                descr_str += "``" + `${botconfig.prefix}${key}` + "`` " + `${value}\n`;
-            }
-
-        })
-
-        message.channel.send(new Discord.RichEmbed()
-            .setTitle(`Categoria ${args[0].toUpperCase()}`)
-            .setDescription(`**${descr_str}**`)
-            .setColor('#00FF00'));
+    // Reads the commands in runtime
+    for (let i = 0; i < array.length; i++) {
+      let c_path = require("../" + foldername + "/" + array[i] + ".js");
+      fn_arr.push(c_path.help.descr);
+      descr_map.set(array[i], fn_arr[i]);
     }
 
-    function send_singlemsg(path) {
-        let havearg = ''
-        if (path.help.arg)
-            havearg += ` [${path.help.arg.join('] [')}]`;
+    // Write the map as output in a Discord embed
+    let descr_str = "";
+    descr_map.forEach((value, key) => {
+      let cmd_file = require("../" + foldername + "/" + key + ".js");
 
-        return message.channel.send(new Discord.RichEmbed()
-            .addField('Uso', "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``")
-            .addField('Descrição', path.help.descr)
-            .setColor('#00FF00'));
-    }
+      if (cmd_file.help.arg) {
+        descr_str +=
+          "``" +
+          `${botconfig.prefix}${key} [${cmd_file.help.arg.join("] [")}]` +
+          "`` " +
+          `${value}\n`;
+      } else {
+        descr_str += "``" + `${botconfig.prefix}${key}` + "`` " + `${value}\n`;
+      }
+    });
 
-    if (admin_cmdarr.includes(args[0])) {
-        let fn = require('../admin/' + args[0])
-        return send_singlemsg(fn);
-    }
+    message.channel.send(
+      new Discord.RichEmbed()
+        .setTitle(`Categoria ${args[0].toUpperCase()}`)
+        .setDescription(`**${descr_str}**`)
+        .setColor("#00FF00")
+    );
+  }
 
-    if (bot_cmdarr.includes(args[0])) {
-        let fn = require('../bot/' + args[0])
-        return send_singlemsg(fn);
-    }
+  function send_singlemsg(path) {
+    let havearg = "";
+    if (path.help.arg) havearg += ` [${path.help.arg.join("] [")}]`;
 
-    if (user_cmdarr.includes(args[0])) {
-        let fn = require('../user/' + args[0])
-        return send_singlemsg(fn);
-    }
+    return message.channel.send(
+      new Discord.RichEmbed()
+        .addField(
+          "Uso",
+          "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``"
+        )
+        .addField("Descrição", path.help.descr)
+        .setColor("#00FF00")
+    );
+  }
 
-    if (fun_cmdarr.includes(args[0])) {
-        let fn = require('../fun/' + args[0])
-        return send_singlemsg(fn);
-    }
+  if (admin_cmdarr.includes(args[0])) {
+    let fn = require("../admin/" + args[0]);
+    return send_singlemsg(fn);
+  }
 
-    if (games_cmdarr.includes(args[0])) {
-        let fn = require('../games/' + args[0])
-        return send_singlemsg(fn);
-    }
+  if (bot_cmdarr.includes(args[0])) {
+    let fn = require("../bot/" + args[0]);
+    return send_singlemsg(fn);
+  }
 
-    switch (args[0]) {
-        case 'music': {
-            return message.channel.send("```css\n" +
-                `[Comandos de música do ${bot.user.username}]
+  if (user_cmdarr.includes(args[0])) {
+    let fn = require("../user/" + args[0]);
+    return send_singlemsg(fn);
+  }
+
+  if (fun_cmdarr.includes(args[0])) {
+    let fn = require("../fun/" + args[0]);
+    return send_singlemsg(fn);
+  }
+
+  if (games_cmdarr.includes(args[0])) {
+    let fn = require("../games/" + args[0]);
+    return send_singlemsg(fn);
+  }
+
+  switch (args[0]) {
+    case "music": {
+      return message.channel.send(
+        "```css\n" +
+          `[Comandos de música do ${bot.user.username}]
 	
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
@@ -162,26 +189,27 @@ module.exports.run = async (bot, message, args) => {
                             Use-o novamente para desativar.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-                "```");
-        }
-        case `${bot.user.username.toLowerCase()}`:
-            return writefn(bot_cmdarr);
-        case 'user':
-            return writefn(user_cmdarr);
-        case 'fun':
-            return writefn(fun_cmdarr);
-        case 'admin':
-            return writefn(admin_cmdarr);
-        case 'games':
-            return writefn(games_cmdarr);
-        default:
-            return message.channel.send(help_embed);
+          "```"
+      );
     }
-}
+    case `${bot.user.username.toLowerCase()}`:
+      return writefn(bot_cmdarr);
+    case "user":
+      return writefn(user_cmdarr);
+    case "fun":
+      return writefn(fun_cmdarr);
+    case "admin":
+      return writefn(admin_cmdarr);
+    case "games":
+      return writefn(games_cmdarr);
+    default:
+      return message.channel.send(help_embed);
+  }
+};
 
 module.exports.help = {
-    name: "help",
-    name_2: 'h',
-    descr: 'Mostra todos os comandos do bot.',
-    arg: ['categoria']
-}
+  name: "help",
+  name_2: "h",
+  descr: "Mostra todos os comandos do bot.",
+  arg: ["categoria"]
+};
