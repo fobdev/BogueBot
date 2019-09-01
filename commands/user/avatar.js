@@ -12,12 +12,10 @@ module.exports.run = async (bot, message, args) => {
 				.setImage(message.guild.iconURL)
 				.setColor("#00FF00"));
 		}
-		return message.channel.send(avatar_embed.setTitle(`Você deve especificar um membro de ` +
-				`**${message.guild.name}**`)
-			.setColor("#FF0000"));
+		return message.channel.send(avatar_embed.setTitle(`Avatar de **${message.author.username}**`)
+			.setImage(message.author.displayAvatarURL)
+			.setColor("#00FF00"));
 	}
-
-
 
 	return message.channel.send(avatar_embed.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setImage(user_avatar.user.displayAvatarURL)
