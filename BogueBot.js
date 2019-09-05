@@ -36,9 +36,7 @@ function cmdload(folder) {
         );
 
       if (props.help.name_2) bot.commands.set(props.help.name_2, props);
-
       if (props.help.name_3) bot.commands.set(props.help.name_3, props);
-
       if (props.help.name_4) bot.commands.set(props.help.name_4, props);
     });
   });
@@ -96,10 +94,9 @@ function status_updater() {
     `${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${
       invitefile.help.name
     }` +
-      ` | ${members_reached} usuários em ${
+    ` | ${members_reached} usuários em ${
         current_servers.length
-      } servidores usaram ${cmd_counter} ${cmd_plural} hoje.`,
-    {
+      } servidores usaram ${cmd_counter} ${cmd_plural} hoje.`, {
       type: "PLAYING"
     }
   );
@@ -133,7 +130,7 @@ bot.on("guildCreate", guild => {
       `**${botconfig.prefix}${
         music_file.help.name
       }** para usar os comandos de música\n` +
-        `Ou **${botconfig.prefix}${help_file.help.name} ${
+      `Ou **${botconfig.prefix}${help_file.help.name} ${
           music_file.help.name
         }** para ajuda sobre os comandos de música.`
     )
@@ -196,7 +193,7 @@ bot.on("guildMemberRemove", member => {
   );
   if (system_channel) {
     if (member.guild.member(bot.user).hasPermission("ADMINISTRATOR")) {
-      system_channel.send(`**${member}** saiu.`);
+      system_channel.send(`${member} (**${member.user.tag}**) saiu.`);
       console.log(
         `[MEMBER LEAVE] member [${
           member.user.username
@@ -226,12 +223,12 @@ bot.on("message", async message => {
       return bot.generateInvite(8).then(link => {
         message.channel.send(
           new Discord.RichEmbed()
-            .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
-            .setDescription(
-              `Use esse convite para adiciona-lo ao seu servidor:
+          .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
+          .setDescription(
+            `Use esse convite para adiciona-lo ao seu servidor:
                 **${link}**`
-            )
-            .setColor("#FFFFFF")
+          )
+          .setColor("#FFFFFF")
         );
       });
     }
@@ -241,7 +238,6 @@ bot.on("message", async message => {
   let messageArray = message.content.split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
-
   let command_file = bot.commands.get(cmd.slice(prefix.length));
 
   if (cmd[0] === prefix) {
@@ -252,6 +248,27 @@ bot.on("message", async message => {
     //         .setDescription("Trabalhando para melhorar o bot, por favor use-o mais tarde."));
     // }
 
+    // Verify if the message is a reserved command
+    // get earrape file
+
+    /* =============================== Requires testing
+    let res_cmds = ["earrape"];
+    if (res_cmds.indexOf(args[0]) < 0) {
+      return message.channel
+        .send(`${botconfig.prefix}${help_file.help.name} earrape`)
+        .then(msg => {
+          try {
+            msg.delete();
+          } catch (e) {
+            console.error(
+              `${
+                message.guild.name
+              } [self-message]: Could not delete self message.`
+            );
+          }
+        });
+    }
+ */
     if (command_file) {
       console.log(
         `\nUser [${message.author.username}] sent [${message}]\nserver: [${
