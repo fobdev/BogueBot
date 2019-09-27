@@ -2,6 +2,7 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const helper = require("./core/helper");
 const fs = require("fs");
+const numeral = require("numeral");
 let cmd_counter = 0;
 let bot_token = helper.loadKeys("token");
 
@@ -94,7 +95,7 @@ function status_updater() {
     `${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${
       invitefile.help.name
     }` +
-    ` | ${members_reached} usuários | ${
+    ` | ${numeral(members_reached).format()} usuários | ${
         current_servers.length
       } servidores | ${cmd_counter} ${cmd_plural}`, {
       type: "PLAYING"
