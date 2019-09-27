@@ -80,8 +80,8 @@ function status_updater() {
   for (let i = 0; i < current_servers.length; i++)
     members_reached += current_servers[i].memberCount;
 
-  let cmd_plural = "comando";
-  if (cmd_counter !== 1) cmd_plural = "comandos";
+  let cmd_plural = "comando usado hoje.";
+  if (cmd_counter !== 1) cmd_plural = "comandos usados hoje.";
 
   const helpfile = require("./commands/bot/help.js");
   const invitefile = require("./commands/bot/invite.js");
