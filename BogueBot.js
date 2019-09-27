@@ -80,8 +80,8 @@ function status_updater() {
   for (let i = 0; i < current_servers.length; i++)
     members_reached += current_servers[i].memberCount;
 
-  let cmd_plural = "função";
-  if (cmd_counter !== 1) cmd_plural = "funções";
+  let cmd_plural = "comando";
+  if (cmd_counter !== 1) cmd_plural = "comandos";
 
   const helpfile = require("./commands/bot/help.js");
   const invitefile = require("./commands/bot/invite.js");
@@ -94,9 +94,9 @@ function status_updater() {
     `${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${
       invitefile.help.name
     }` +
-    ` | ${members_reached} usuários em ${
+    ` | ${members_reached} usuários | ${
         current_servers.length
-      } servidores usaram ${cmd_counter} ${cmd_plural} hoje.`, {
+      } servidores | ${cmd_counter} ${cmd_plural}`, {
       type: "PLAYING"
     }
   );
@@ -116,7 +116,7 @@ bot.on("guildCreate", guild => {
   const welcome_embed = new Discord.RichEmbed()
     .setColor("#00FF00")
     .setAuthor(
-      `Obrigado por adicionar o ${bot.user.username} ao seu servidor!`,
+      `Obrigado por adicionar o ${bot.user.username} ao servidor ${guild.name}!`,
       bot.user.displayAvatarURL
     )
     .addBlankField()
@@ -135,7 +135,8 @@ bot.on("guildCreate", guild => {
         }** para ajuda sobre os comandos de música.`
     )
     .addBlankField()
-    .setFooter("Bila, criado em ")
+    .setFooter("Você é um administrador deste servidor, por isso recebeu esta mesagem. \n" +
+      "Bot criado por Bila, em ")
     .setTimestamp(bot.user.createdAt);
 
   const bots_channel = guild.channels.find(ch => ch.name === "bots");
