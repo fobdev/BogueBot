@@ -39,7 +39,7 @@ module.exports.run = async (bot, message, args) => {
         Use ` + "``stop`` para terminar o jogo a qualquer momento.")
         .setColor('#00ffe5'))
 
-    await console.log(`answer: ${random_number}`);
+    await console.log(`Guess game started at server [${message.guild.name}] | answer: ${random_number}`);
     game_collector.on('collect', u_msg => {
         if (parseInt(u_msg.content) > gameconfig.maximum)
             return message.channel.send(new Discord.RichEmbed()
@@ -105,6 +105,7 @@ module.exports.run = async (bot, message, args) => {
         serversmap.delete(message.guild.id);
         bot_collector.collected.deleteAll();
         bot_collector.stop();
+        console.log(`Guess game ended at server [${msg.guild.name}].`);
         switch (reason) {
             case 'gameover':
                 return message.channel.send(new Discord.RichEmbed()
