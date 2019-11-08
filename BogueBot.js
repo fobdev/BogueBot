@@ -243,34 +243,6 @@ bot.on("message", async message => {
   let command_file = bot.commands.get(cmd.slice(prefix.length));
 
   if (cmd[0] === prefix) {
-    // Maintenance flag
-    // if (message.author.id !== "244270921286811648") {
-    //     return message.channel.send(new Discord.RichEmbed()
-    //         .setTitle("O bot está em manutenção no momento")
-    //         .setDescription("Trabalhando para melhorar o bot, por favor use-o mais tarde."));
-    // }
-
-    // Verify if the message is a reserved command
-    // get earrape file
-
-    /* =============================== Requires testing
-    let res_cmds = ["earrape"];
-    if (res_cmds.indexOf(args[0]) < 0) {
-      return message.channel
-        .send(`${botconfig.prefix}${help_file.help.name} earrape`)
-        .then(msg => {
-          try {
-            msg.delete();
-          } catch (e) {
-            console.error(
-              `${
-                message.guild.name
-              } [self-message]: Could not delete self message.`
-            );
-          }
-        });
-    }
- */
     if (command_file) {
       console.log(
         `\nUser [${message.author.username}] sent [${message}]\nserver: [${
