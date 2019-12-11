@@ -141,52 +141,47 @@ module.exports.run = async (bot, message, args) => {
 
 				bot_msgcollector.on('end', async (messages, reason) => {
 					switch (reason) {
-						case 'sucess':
-							{
+						case 'sucess': {
+							await bot_msgcollector.collected.deleteAll();
+							await user_msgcollector.collected.deleteAll();
+							return;
+						}
+						case 'cancelled': {
+							try {
+								user_msgcollector.stop();
 								await bot_msgcollector.collected.deleteAll();
-								await user_msgcollector.collected.deleteAll();
+								return message.channel.send(new Discord.RichEmbed()
+									.setDescription(`A busca por **${search}** foi cancelada`)
+									.setColor("#FF0000"))
+							} catch (e) {
+								console.error('Error deleting all bot message after ending.');
 								return;
 							}
-						case 'cancelled':
-							{
+						}
+						case 'incorrect_answer': {
+							await bot_msgcollector.collected.deleteAll();
+							await user_msgcollector.collected.deleteAll();
+							return message.channel.send('>help music').then(msg => {
 								try {
-									user_msgcollector.stop();
-									await bot_msgcollector.collected.deleteAll();
-									return message.channel.send(new Discord.RichEmbed()
-										.setDescription(`A busca por **${search}** foi cancelada`)
-										.setColor("#FF0000"))
+									msg.delete();
 								} catch (e) {
-									console.error('Error deleting all bot message after ending.');
-									return;
+									console.error(`${message.guild.name} [self-message]: Could not delete self message.`);
 								}
-							}
-						case 'incorrect_answer':
-							{
-								await bot_msgcollector.collected.deleteAll();
-								await user_msgcollector.collected.deleteAll();
-								return message.channel.send('>help music').then(msg => {
-									try {
-										msg.delete();
-									} catch (e) {
-										console.error(`${message.guild.name} [self-message]: Could not delete self message.`);
-									}
-								});
-							}
-						case 'no_video':
-							{
-								return message.channel.send(new Discord.RichEmbed()
-									.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
-									.setColor('#FF0000'));
-							}
+							});
+						}
+						case 'no_video': {
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
+								.setColor('#FF0000'));
+						}
 						case 'playlist':
 							return;
-						default:
-							{
-								await bot_msgcollector.collected.deleteAll();
-								return message.channel.send(new Discord.RichEmbed()
-									.setDescription(`A busca por **${search}** expirou.`)
-									.setColor("#FF0000"));
-							}
+						default: {
+							await bot_msgcollector.collected.deleteAll();
+							return message.channel.send(new Discord.RichEmbed()
+								.setDescription(`A busca por **${search}** expirou.`)
+								.setColor("#FF0000"));
+						}
 					}
 				})
 
