@@ -5,4 +5,5 @@ bottoken.json
 *.bat
 .vscode/settings.json
 package-lock.json
+/node_modules
 test.js
