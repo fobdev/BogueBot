@@ -21,9 +21,12 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
+                    let attachment = new Discord.Attachment(filename);
                     await message.channel.send(new Discord.RichEmbed()
                         .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
-                        .setImage(`./${filename}`));
+                        .attachFile(attachment)
+                        .setImage(`attachment://${filename}`)
+                        .setColor("#00FF00"));
                     // await message.channel.send(new Discord.Attachment(filename));
                     // delete
                     fs.unlink(`./${filename}`, err => {
@@ -45,9 +48,12 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
+                    let attachment = new Discord.Attachment(filename);
                     await message.channel.send(new Discord.RichEmbed()
                         .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
-                        .setImage(`./${filename}`));
+                        .attachFile(attachment)
+                        .setImage(`attachment://${filename}`)
+                        .setColor("#00FF00"));
                     //await message.channel.send(new Discord.Attachment(filename))
                     // delete
                     fs.unlink(`./${filename}`, err => {
