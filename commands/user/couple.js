@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
             img.write(filename, () => {
                 // send
-                await message.channel.send(new Discord.Attachment(filename))
+                message.channel.send(new Discord.Attachment(filename))
                 // delete
                 try {
                     fs.unlink(`./${filename}`);
@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
             img.write(filename, () => {
                 // send
-                await message.channel.send(new Discord.Attachment(filename))
+                message.channel.send(new Discord.Attachment(filename))
                 // delete
                 try {
                     fs.unlink(`./${filename}`);
