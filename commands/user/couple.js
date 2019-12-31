@@ -18,12 +18,12 @@ module.exports.run = async (bot, message, args) => {
     if (firstmention_id != user1.user.id) {
         await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, async = () => {
+            img.write(filename, () => {
                 // send
                 await message.channel.send(new Discord.Attachment(filename))
                 // delete
                 try {
-                    fs.unlinkSync(`./${filename}`);
+                    fs.unlink(`./${filename}`);
                     console.log(`File [${filename}] deleted sucessfully after sending.`)
                 } catch (e) {
                     console.log(`Error in deleting file ${filename}: ${e}`)
@@ -33,12 +33,12 @@ module.exports.run = async (bot, message, args) => {
     } else {
         await mergeImg([user1.user.displayAvatarURL + "?size=8192", user2.user.displayAvatarURL + "?size=8192"]).then((img) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, async = () => {
+            img.write(filename, () => {
                 // send
                 await message.channel.send(new Discord.Attachment(filename))
                 // delete
                 try {
-                    fs.unlinkSync(`./${filename}`);
+                    fs.unlink(`./${filename}`);
                     console.log(`File [${filename}] deleted sucessfully after sending.`)
                 } catch (e) {
                     console.log(`Error in deleting file ${filename}: ${e}`)
