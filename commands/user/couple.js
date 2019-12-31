@@ -16,33 +16,47 @@ module.exports.run = async (bot, message, args) => {
     let firstmention_id = args[0].slice(0, -1).replace(/[\\<>@#&!]/g, "");
     let filename = `couple_${message.guild.id}_${message.id}.png`;
     if (firstmention_id != user1.user.id) {
-        await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
-            console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, async () => {
-                // send
-                await message.channel.send(new Discord.Attachment(filename))
-                // delete
-                fs.unlink(`./${filename}`, err => {
-                    if (err)
-                        console.log(`Error in deleting file ${filename}: ${e}`);
-                    else return console.log(`File [${filename}] deleted sucessfully`);
+        try {
+            await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
+                console.log(`Couple image generated sucessfully as [${filename}] locally.`);
+                img.write(filename, async () => {
+                    // send
+                    await message.channel.send(new Discord.Attachment(filename))
+                    // delete
+                    fs.unlink(`./${filename}`, err => {
+                        if (err)
+                            console.log(`Error in deleting file ${filename}: ${e}`);
+                        else return console.log(`File [${filename}] deleted sucessfully`);
+                    })
                 })
-            })
-        });
+            });
+        } catch (e) {
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle("Erro ao criar o couple.")
+                .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
+                .setColor("#FF0000"));
+        }
     } else {
-        await mergeImg([user1.user.displayAvatarURL + "?size=8192", user2.user.displayAvatarURL + "?size=8192"]).then((img) => {
-            console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, async () => {
-                // send
-                await message.channel.send(new Discord.Attachment(filename))
-                // delete
-                fs.unlink(`./${filename}`, err => {
-                    if (err)
-                        console.log(`Error in deleting file ${filename}: ${e}`);
-                    else return console.log(`File [${filename}] deleted sucessfully`);
+        try {
+            await mergeImg([user1.user.displayAvatarURL + "?size=8192", user2.user.displayAvatarURL + "?size=8192"]).then((img) => {
+                console.log(`Couple image generated sucessfully as [${filename}] locally.`);
+                img.write(filename, async () => {
+                    // send
+                    await message.channel.send(new Discord.Attachment(filename))
+                    // delete
+                    fs.unlink(`./${filename}`, err => {
+                        if (err)
+                            console.log(`Error in deleting file ${filename}: ${e}`);
+                        else return console.log(`File [${filename}] deleted sucessfully`);
+                    })
                 })
-            })
-        });
+            });
+        } catch (e) {
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle("Erro ao criar o couple.")
+                .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
+                .setColor("#FF0000"));
+        }
     }
 }
 
