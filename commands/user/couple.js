@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     let firstmention_id = args[0].slice(0, -1).replace(/[\\<>@#&!]/g, "");
-    let filename = `couple_${message.guild.id}_${message.id}.png`;
+    let filename = `couple_${message.id}.png`;
     if (firstmention_id != user1.user.id) {
         try {
             await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                     fs.unlink(`./${filename}`, err => {
                         if (err)
                             console.log(`Error in deleting file ${filename}: ${e}`);
-                        else return console.log(`File [${filename}] deleted sucessfully`);
+                        else return console.log(`File [${filename}] deleted sucessfully.`);
                     })
                 })
             });
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
                     fs.unlink(`./${filename}`, err => {
                         if (err)
                             console.log(`Error in deleting file ${filename}: ${e}`);
-                        else return console.log(`File [${filename}] deleted sucessfully`);
+                        else return console.log(`File [${filename}] deleted sucessfully.`);
                     })
                 })
             });
