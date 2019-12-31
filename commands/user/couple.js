@@ -21,7 +21,10 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    await message.channel.send(new Discord.Attachment(filename))
+                    await message.channel.send(new Discord.RichEmbed()
+                        .setTitle(`${user1} :heart: ${user2}`)
+                        .attachFile(new Discord.Attachment(filename)));
+                    // await message.channel.send(new Discord.Attachment(filename));
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
@@ -42,7 +45,10 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    await message.channel.send(new Discord.Attachment(filename))
+                    await message.channel.send(new Discord.RichEmbed()
+                        .setTitle(`${user1} :heart: ${user2}`)
+                        .attachFile(new Discord.Attachment(filename)));
+                    //await message.channel.send(new Discord.Attachment(filename))
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
