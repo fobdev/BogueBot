@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
                     // send
                     let attachment = new Discord.Attachment(filename);
                     await message.channel.send(new Discord.RichEmbed()
-                        .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
+                        .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
                         .setColor("#00FF00"));
@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
                     // send
                     let attachment = new Discord.Attachment(filename);
                     await message.channel.send(new Discord.RichEmbed()
-                        .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
+                        .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
                         .setColor("#00FF00"));
