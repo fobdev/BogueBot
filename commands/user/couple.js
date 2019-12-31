@@ -22,12 +22,11 @@ module.exports.run = async (bot, message, args) => {
                 // send
                 message.channel.send(new Discord.Attachment(filename))
                 // delete
-                try {
-                    fs.unlink(`./${filename}`);
-                    console.log(`File [${filename}] deleted sucessfully after sending.`)
-                } catch (e) {
-                    console.log(`Error in deleting file ${filename}: ${e}`)
-                }
+                fs.unlink(`./${filename}`, err => {
+                    if (err)
+                        console.log(`Error in deleting file ${filename}: ${e}`);
+                    else return console.log(`File [${filename}] deleted sucessfully`);
+                })
             })
         });
     } else {
@@ -37,12 +36,11 @@ module.exports.run = async (bot, message, args) => {
                 // send
                 message.channel.send(new Discord.Attachment(filename))
                 // delete
-                try {
-                    fs.unlink(`./${filename}`);
-                    console.log(`File [${filename}] deleted sucessfully after sending.`)
-                } catch (e) {
-                    console.log(`Error in deleting file ${filename}: ${e}`)
-                }
+                fs.unlink(`./${filename}`, err => {
+                    if (err)
+                        console.log(`Error in deleting file ${filename}: ${e}`);
+                    else return console.log(`File [${filename}] deleted sucessfully`);
+                })
             })
         });
     }
