@@ -22,8 +22,8 @@ module.exports.run = async (bot, message, args) => {
                 img.write(filename, async () => {
                     // send
                     await message.channel.send(new Discord.RichEmbed()
-                        .setTitle(`${user1} :heart: ${user2}`)
-                        .attachFile(new Discord.Attachment(filename)));
+                        .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
+                        .setImage(`./${filename}`));
                     // await message.channel.send(new Discord.Attachment(filename));
                     // delete
                     fs.unlink(`./${filename}`, err => {
@@ -46,8 +46,8 @@ module.exports.run = async (bot, message, args) => {
                 img.write(filename, async () => {
                     // send
                     await message.channel.send(new Discord.RichEmbed()
-                        .setTitle(`${user1} :heart: ${user2}`)
-                        .attachFile(new Discord.Attachment(filename)));
+                        .setTitle(`${user1.nickname} :heart: ${user2.nickname}`)
+                        .setImage(`./${filename}`));
                     //await message.channel.send(new Discord.Attachment(filename))
                     // delete
                     fs.unlink(`./${filename}`, err => {
