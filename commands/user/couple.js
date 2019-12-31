@@ -18,9 +18,9 @@ module.exports.run = async (bot, message, args) => {
     if (firstmention_id != user1.user.id) {
         await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, () => {
+            img.write(filename, async () => {
                 // send
-                message.channel.send(new Discord.Attachment(filename))
+                await message.channel.send(new Discord.Attachment(filename))
                 // delete
                 fs.unlink(`./${filename}`, err => {
                     if (err)
@@ -32,9 +32,9 @@ module.exports.run = async (bot, message, args) => {
     } else {
         await mergeImg([user1.user.displayAvatarURL + "?size=8192", user2.user.displayAvatarURL + "?size=8192"]).then((img) => {
             console.log(`Couple image generated sucessfully as [${filename}] locally.`);
-            img.write(filename, () => {
+            img.write(filename, async () => {
                 // send
-                message.channel.send(new Discord.Attachment(filename))
+                await message.channel.send(new Discord.Attachment(filename))
                 // delete
                 fs.unlink(`./${filename}`, err => {
                     if (err)
