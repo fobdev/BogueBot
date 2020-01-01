@@ -2,8 +2,6 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
     let user = message.mentions.users.first() || message.author;
-    let user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-
     if (user.presence.game !== null &&
         user.presence.game.type === 'LISTENING' &&
         user.presence.game.name === 'Spotify' &&
