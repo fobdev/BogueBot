@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
     let user = message.mentions.users.first() || message.author;
     if (user.presence.game !== null &&
-        user.presence.game.type === 'LISTENING' &&
+        user.presence.game.type === 2 &&
         user.presence.game.name === 'Spotify' &&
         user.presence.game.assets !== null) {
         let trackImgURL = `https://i.scdn.co/image/${user.presence.game.assets.largeImage.slice(8)}`;
