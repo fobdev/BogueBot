@@ -20,8 +20,8 @@ module.exports.run = async (bot, message, args) => {
             .setColor(0x1ED760));
     } else {
         return message.channel.send(new Discord.RichEmbed()
-            .setTitle("Uso incorreto do comando.")
-            .setDescription("O usuário que enviou a mensagem, ou o usuário que foi marcado na mensagem não estão ouvindo nada no Spotify.")
+            .setTitle("Erro no comando.")
+            .setDescription("Não consigo ver nada relacionado a spotify no status do usuário.")
             .setColor("#FF0000"));
     }
 }
