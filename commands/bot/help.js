@@ -54,7 +54,7 @@ module.exports.run = async (bot, message, args) => {
     .setFooter("Desenvolvido por Fobenga em ")
     .setTimestamp(bot.user.createdAt)
     .setColor("#00FF00")
-    .addField("MUSIC", "[``music``]")
+    .addField("MUSIC", "[``music, spotify``]")
     .addField(bot.user.username.toUpperCase(), bot_commands)
     .addField("ADMIN", admin_commands)
     .addField("USER", user_commands)
@@ -63,20 +63,20 @@ module.exports.run = async (bot, message, args) => {
     .addField(
       "\u200B",
       "**Use ``" +
-        `${botconfig.prefix}${this.help.name} [comando]` +
-        "`` para ajuda sobre determinado comando\n" +
-        "Use ``" +
-        `${botconfig.prefix}${this.help.name} [categoria]` +
-        "`` para ajuda sobre determinada categoria**"
+      `${botconfig.prefix}${this.help.name} [comando]` +
+      "`` para ajuda sobre determinado comando\n" +
+      "Use ``" +
+      `${botconfig.prefix}${this.help.name} [categoria]` +
+      "`` para ajuda sobre determinada categoria**"
     )
     .addField(
       "Exemplos",
       "``" +
-        `${botconfig.prefix}${this.help.name} music` +
-        "`` exibe todos os comandos de música\n" +
-        "``" +
-        `${botconfig.prefix}${this.help.name} ban` +
-        "`` exibe as informações do comando 'ban'"
+      `${botconfig.prefix}${this.help.name} music` +
+      "`` exibe todos os comandos de música\n" +
+      "``" +
+      `${botconfig.prefix}${this.help.name} ban` +
+      "`` exibe as informações do comando 'ban'"
     );
 
   // Function writes the information in the subhelp
@@ -117,9 +117,9 @@ module.exports.run = async (bot, message, args) => {
 
     message.channel.send(
       new Discord.RichEmbed()
-        .setTitle(`Categoria ${args[0].toUpperCase()}`)
-        .setDescription(`**${descr_str}**`)
-        .setColor("#00FF00")
+      .setTitle(`Categoria ${args[0].toUpperCase()}`)
+      .setDescription(`**${descr_str}**`)
+      .setColor("#00FF00")
     );
   }
 
@@ -129,12 +129,12 @@ module.exports.run = async (bot, message, args) => {
 
     return message.channel.send(
       new Discord.RichEmbed()
-        .addField(
-          "Uso",
-          "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``"
-        )
-        .addField("Descrição", path.help.descr)
-        .setColor("#00FF00")
+      .addField(
+        "Uso",
+        "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``"
+      )
+      .addField("Descrição", path.help.descr)
+      .setColor("#00FF00")
     );
   }
 
@@ -167,7 +167,7 @@ module.exports.run = async (bot, message, args) => {
     case "music": {
       return message.channel.send(
         "```css\n" +
-          `[Comandos de música do ${bot.user.username}]
+        `[Comandos de música do ${bot.user.username}]
 	
 >music [música]...........................Toca um vídeo do YouTube / adiciona à fila.
 >music (q)ueue............................Exibe toda a fila do servidor.
@@ -189,7 +189,7 @@ module.exports.run = async (bot, message, args) => {
                             Use-o novamente para desativar.
 
 Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
-          "```"
+        "```"
       );
     }
     case `${bot.user.username.toLowerCase()}`:
