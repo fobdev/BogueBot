@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args) => {
             .addField('Nome', user.presence.game.details, true)
             .addField('Album', user.presence.game.assets.largeText, true)
             .addField('Autor', user.presence.game.state, true)
-            .addField('Ouvir a música: ', `[\`${trackUrl}\`](trackUrl)`, false)
+            .addField('Ouvir a música: ', `[${trackUrl}](${trackUrl})`, false)
             .setColor(0x1ED760));
     } else {
         return message.channel.send(new Discord.RichEmbed()
