@@ -192,6 +192,14 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
         "```"
       );
     }
+    case "spotify": {
+      return message.channel.send(
+        new Discord.RichEmbed()
+        .addField("Uso", "``>spotify | >spotify [usuário]``")
+        .addField("Descrição", "Exibe informações sobre o que o usuário está ouvindo no spofity.")
+        .setColor("#00FF00")
+      );
+    }
     case `${bot.user.username.toLowerCase()}`:
       return writefn(bot_cmdarr);
     case "user":
