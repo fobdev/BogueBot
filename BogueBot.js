@@ -171,14 +171,7 @@ bot.on("guildCreate", guild => {
     console.log("No System Channel Available");
   }
 
-  console.log(
-    `Welcome being sent to [${guild.owner.displayName}]\nOwner ID: [${
-      guild.ownerID
-    }]`
-  );
-
   status_updater();
-  return guild.owner.send(welcome_embed);
 });
 
 bot.on("guildDelete", guild => {
