@@ -203,8 +203,12 @@ bot.on("guildMemberRemove", member => {
 bot.on("message", async message => {
   if (message.content.includes('bog')) {
     // randomizes a set of messages that the bot can send
-    let msg_array = ['iae', 'salve', 'tmj', 'oi', 'fala', 'bog', 'bila',
-      'José', 'TMJ', '?', 'fdp', 'oiiiii', 'me deixa em paz', 'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'me chamou'
+    let msg_array = ['iae', 'salve', 'tmj', 'oi',
+      'fala', 'bog', 'bila', 'José', 'TMJ',
+      '?', '?????', 'fdp', 'oiiiii', 'me deixa em paz',
+      'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk',
+      'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
+      'tamo juntó', 'vó', 'VÓ', 'porque'
     ];
     let rng = Math.floor(Math.random() * msg_array.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response: [${msg_array[rng]}].`);
