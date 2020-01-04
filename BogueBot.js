@@ -207,7 +207,7 @@ bot.on("message", async message => {
       'José', 'TMJ', '?', 'fdp', 'oiiiii', 'me deixa em paz', 'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'me chamou'
     ];
     let rng = Math.floor(Math.random() * msg_array.length);
-    console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response.`);
+    console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response: [${msg_array[rng]}].`);
     if (message.author.id === bot.user.id) return
     else
       return message.channel.send(msg_array[rng]);
