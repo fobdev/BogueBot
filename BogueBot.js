@@ -201,7 +201,7 @@ bot.on("guildMemberRemove", member => {
 });
 
 bot.on("message", async message => {
-  if (message.content.includes('bog')) {
+  if (message.content.includes('bog') && !message.content.includes('help')) {
     // randomizes a set of messages that the bot can send
     let msg_array = ['iae', 'salve', 'tmj', 'oi',
       'fala', 'bog', 'bila', 'José', 'TMJ',
