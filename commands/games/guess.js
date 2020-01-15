@@ -105,7 +105,7 @@ module.exports.run = async (bot, message, args) => {
         serversmap.delete(message.guild.id);
         bot_collector.collected.deleteAll();
         bot_collector.stop();
-        console.log(`Guess game ended at server [${msg.guild.name}].`);
+        console.log(`Guess game ended at server [${message.guild.name}].`);
         switch (reason) {
             case 'gameover':
                 return message.channel.send(new Discord.RichEmbed()
