@@ -218,22 +218,26 @@ bot.on("message", async message => {
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response: [${answers[rng]}].`);
 
     switch (rng) {
-      case 0:
+      case 0: {
         let bog_att = new Discord.Attachment('bog.png');
         await message.channel.send(new Discord.RichEmbed()
           .setTitle(`Eu mesmo como como descobriu.`)
           .attachFile(bog_att)
           .setImage(`attachment://${'bog.png'}`)
           .setColor("#00FF00"));
-        break;
-      case 1:
-        let bog2_att = new Discord.Attachment('bog2.png');
-        await message.channel.send(new Discord.RichEmbed()
-          .attachFile(bog2_att)
-          .setImage(`attachment://${'bog.png'}`)
-          .setColor("#00FF00"));
-      default:
-        return message.channel.send(answers[rng]);
+      }
+      break;
+    case 1: {
+      let bog2_att = new Discord.Attachment('bog2.png');
+      await message.channel.send(new Discord.RichEmbed()
+        .attachFile(bog2_att)
+        .setImage(`attachment://${'bog.png'}`)
+        .setColor("#00FF00"));
+    }
+    break;
+    default:
+      return message.channel.send(answers[rng]);
+      break;
     }
   }
 
