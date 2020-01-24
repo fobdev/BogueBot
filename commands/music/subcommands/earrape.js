@@ -13,11 +13,13 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
     if (sv_volume === 1) {
       serverQueue.connection.dispatcher.setVolume(rape_vol);
+      console.log(`Earrape is ON in server [${serverQueue.guildname}].`);
       return message.channel.send(new Discord.RichEmbed()
         .setTitle(`:loudspeaker: **${message.author.username}** ativou earrape.`)
         .setColor("#00FF00"));
     } else if (sv_volume === rape_vol) {
       serverQueue.connection.dispatcher.setVolume(1);
+      console.log(`Earrape is OFF in server [${serverQueue.guildname}].`);
       return message.channel.send(new Discord.RichEmbed()
         .setTitle(`:pray: O volume voltou ao normal.`)
         .setColor("#00FF00"));
