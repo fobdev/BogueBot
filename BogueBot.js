@@ -231,7 +231,7 @@ bot.on("message", async message => {
       let bog2_att = new Discord.Attachment('bog2.png');
       await message.channel.send(new Discord.RichEmbed()
         .attachFile(bog2_att)
-        .setImage(`attachment://${'bog.png'}`)
+        .setImage(`attachment://${'bog2.png'}`)
         .setColor("#00FF00"));
     }
     break;
