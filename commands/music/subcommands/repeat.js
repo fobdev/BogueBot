@@ -14,11 +14,13 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             .setColor('#00FF00'));
     } else {
         if (args[1] > 0) {
-            if (args[1] > 50)
+            if (args[1] > 50) {
+                console.log('Repeat limit exceeded.');
                 return message.channel.send(new Discord.RichEmbed()
                     .setTitle('Uso inválido do comando')
                     .setDescription('Você só pode repetir músicas um máximo de 50 vezes.')
                     .setColor("#FF0000"));
+            }
 
             let adder = parseInt(args[1]);
             for (let i = 0; i < adder; i++)
