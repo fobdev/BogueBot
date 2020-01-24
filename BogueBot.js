@@ -237,7 +237,6 @@ bot.on("message", async message => {
     break;
     default:
       return message.channel.send(answers[rng]);
-      break;
     }
   }
 
