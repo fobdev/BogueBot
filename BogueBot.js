@@ -203,16 +203,14 @@ bot.on("guildMemberRemove", member => {
 bot.on("message", async message => {
   if (message.content.includes('bog') && !message.content.includes('help')) {
     // randomizes a set of messages that the bot can send
-    let answers = ['bog.png', 'bog2.png', 'iae', 'salve'
-      /*,
-            'tmj', 'oi',
-                 'fala', 'bog', 'bila', 'José', 'TMJ',
-                 '?', '?????', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-                 'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk',
-                 'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
-                 'tamo juntó', 'vó', 'VÓ', 'porque', 'para de me chamar por favor', 'nao tenho nada pra voce',
-                 'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu', 'luis inacio lula da silva', 'jair bolsonaro',
-                 'parece a veia'*/
+    let answers = ['bog.png', 'bog2.png', 'iae', 'salve', 'tmj', 'oi', 'ói',
+      'fala', 'bog', 'bila', 'José', 'TMJ',
+      '?', '?????', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
+      'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk',
+      'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
+      'tamo juntó', 'vó', 'VÓ', 'porque', 'para de me chamar por favor', 'nao tenho nada pra voce',
+      'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu', 'jair bolsonaro',
+      'parece a veia'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response: [${answers[rng]}].`);
