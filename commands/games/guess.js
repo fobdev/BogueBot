@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
     let gameconfig = {
         maximum: Math.floor(Math.random() * 899) + 100, // random between 100 and 1000
         minimum: Math.floor(Math.random() * 100) + 1, // random between 1 and 100
-        tries: 8,
+        tries: 9,
         trycount: 0,
         title: ''
     }
@@ -57,11 +57,15 @@ module.exports.run = async (bot, message, args) => {
             return game_collector.stop('forced')
 
         if (parseInt(u_msg.content) === random_number) {
-            if (gameconfig.trycount <= 1) gameconfig.title = 'Cagada';
-            else if (gameconfig.trycount <= 2) gameconfig.title = 'Deus';
-            else if (gameconfig.trycount <= 4) gameconfig.title = 'Frio e calculista';
-            else if (gameconfig.trycount <= 6) gameconfig.title = 'Devagar';
-            else if (gameconfig.trycount <= 8) gameconfig.title = 'Muito Lento';
+            if (gameconfig.trycount <= 1) gameconfig.title = 'Impossível.';
+            else if (gameconfig.trycount <= 2) gameconfig.title = 'Deus.';
+            else if (gameconfig.trycount <= 3) gameconfig.title = 'Gênio.';
+            else if (gameconfig.trycount <= 4) gameconfig.title = 'Frio e Calculista';
+            else if (gameconfig.trycount <= 5) gameconfig.title = 'Cagada.';
+            else if (gameconfig.trycount <= 6) gameconfig.title = 'Muito bom.';
+            else if (gameconfig.trycount <= 7) gameconfig.title = 'Bom.';
+            else if (gameconfig.trycount <= 8) gameconfig.title = 'Quase não consegue.';
+            else if (gameconfig.trycount <= 9) gameconfig.title = 'Na ultima tentativa.';
 
             game_collector.stop('win');
         }
@@ -74,21 +78,13 @@ module.exports.run = async (bot, message, args) => {
         let tryplural = 'tentativa restante';
         if (gameconfig.tries > 2) tryplural = 'tentativas restantes';
 
-        if (dist <= 9) color = '#26ff00';
-        else if (dist >= 10) color = '#aaff00';
-        else if (dist >= 20) color = '#e1ff00';
-        else if (dist >= 50) color = '#ffe500';
-        else if (dist >= 100) color = '#ffaa00';
-        else if (dist >= 200) color = '#ff5900';
-        else if (dist >= 300) color = '#ff0000';
-
         if (parseInt(u_msg.content) < random_number) {
             gameconfig.trycount++;
             gameconfig.tries--;
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`**${u_msg.content}** é **menor** que o numero secreto, tente novamente.`)
                 .setDescription(`${gameconfig.tries} ${tryplural}.`)
-                .setColor(color))
+                .setColor("#0000FF"))
         }
 
         if (parseInt(u_msg.content) > random_number) {
@@ -97,7 +93,7 @@ module.exports.run = async (bot, message, args) => {
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle(`**${u_msg.content}** é **maior** que o numero secreto, tente novamente.`)
                 .setDescription(`${gameconfig.tries} ${tryplural}.`)
-                .setColor(color))
+                .setColor("#0000FF"))
         }
     })
 
