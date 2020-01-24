@@ -14,6 +14,12 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             .setColor('#00FF00'));
     } else {
         if (args[1] > 0) {
+            if (args[1] > 50)
+                return message.channel.send(new Discord.RichEmbed()
+                    .setTitle('Uso inválido do comando')
+                    .setDescription('Você só pode repetir músicas um máximo de 50 vezes.')
+                    .setColor("#FF0000"));
+
             let adder = parseInt(args[1]);
             for (let i = 0; i < adder; i++)
                 serverQueue.songs.splice(1, 0, serverQueue.songs[0]);
@@ -22,8 +28,6 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 .setTitle(`:repeat: **${message.author.username}** adicionou novamente à fila **(${adder}x)**`)
                 .setDescription(`**[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
                 .setColor('#00FF00'));
-
-
         } else {
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle('Uso incorreto do comando.')
