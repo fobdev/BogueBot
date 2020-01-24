@@ -213,7 +213,7 @@ bot.on("message", async message => {
       'parece a veia'
     ];
     let rng = Math.floor(Math.random() * answers.length);
-    console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] and triggered a response: [${answers[rng]}].`);
+    console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
 
     switch (rng) {
       case 0: {
