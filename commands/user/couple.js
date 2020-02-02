@@ -17,6 +17,7 @@ module.exports.run = async (bot, message, args) => {
     let filename = `couple_${message.id}.png`;
     if (firstmention_id != user1.user.id) {
         try {
+            console.log('Couple image processing...')
             await mergeImg([user2.user.displayAvatarURL + "?size=8192", user1.user.displayAvatarURL + "?size=8192"]).then((img) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
