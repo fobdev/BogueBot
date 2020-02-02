@@ -209,8 +209,7 @@ bot.on("message", async message => {
       'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk',
       'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
       'tamo juntó', 'vó', 'VÓ', 'porque', 'para de me chamar por favor', 'nao tenho nada pra voce',
-      'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu', 'jair bolsonaro',
-      'parece a veia'
+      'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
