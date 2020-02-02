@@ -47,10 +47,24 @@ module.exports.run = async (bot, message, args) => {
 		subcmd_arr.push(key);
 	})
 
-	var servers_pl = 'server';
+	let servers_pl = 'server';
 	if (queue.size !== 1) servers_pl += 's';
 	if (queue.size > 0)
 		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
+
+
+	// quick subcommand for developers to verify the amount of servers using the streaming service
+	if (args[0] == 'stream-status') {
+		if (message.author.id == '244270921286811648') {
+			console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
+			return message.channel.send(`[${queue.size}] instances of stream running.`);
+		} else
+			return message.channel.send(new Discord.RichEmbed()
+				.setTitle('Erro')
+				.setDescription('Comando apenas para desenvolvedores.')
+				.setColor('#FF0000'));
+	}
+
 
 	if (!args[0]) {
 		let help_file = require('../bot/help.js')
