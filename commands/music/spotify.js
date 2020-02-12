@@ -10,14 +10,24 @@ module.exports.run = async (bot, message, args) => {
         let trackUrl = `https://open.spotify.com/track/${user.presence.game.syncID}`;
         const spotifyEmoji = 'https://cdn.discordapp.com/emojis/408668371039682560.png';
 
-        return message.channel.send(new Discord.RichEmbed()
-            .setAuthor(`Música que ${user.username} está ouvindo no Spotify.`, spotifyEmoji)
-            .setThumbnail(trackImgURL)
-            .addField('Nome', user.presence.game.details, true)
-            .addField('Album', user.presence.game.assets.largeText, true)
-            .addField('Autor', user.presence.game.state, true)
-            .addField('Ouvir a música: ', `[${trackUrl}](${trackUrl})`, false)
-            .setColor(0x1ED760));
+        if (args[0] == 'art')
+            return message.channel.send(new Discord.RichEmbed()
+                .setTitle(`Arte do album ${user.presence.game.assets.largeText}, de ${user.presence.game.state}`)
+                .setImage(trackImgURL)
+                .setColor("#00FF00"));
+        else
+            return message.channel.send(new Discord.RichEmbed()
+                .setAuthor(`Música que ${user.username} está ouvindo no Spotify.`, spotifyEmoji)
+                .setThumbnail(trackImgURL)
+                .addField('Nome', user.presence.game.details, true)
+                .addField('Album', user.presence.game.assets.largeText, true)
+                .addField('Autor', user.presence.game.state, true)
+                .addField('Ouvir a música: ', `[${trackUrl}](${trackUrl})`, false)
+                .setColor(0x1ED760));
+
+
+
+
     } else {
         return message.channel.send(new Discord.RichEmbed()
             .setTitle("Erro no comando.")
