@@ -2,10 +2,10 @@ const Discord = require('discord.js');
 const boletafile = require.main.require("./boleta.jpeg");
 
 module.exports.run = async (bot, message, args) => {
-    let ze = new Discord.Attachment('../../boleta.jpeg');
+    let ze = new Discord.Attachment(boletafile);
     await message.channel.send(new Discord.RichEmbed()
         .setTitle("Parabéns Zé.")
-        .attachFile(boletafile)
+        .attachFile(ze)
         .setImage(`attachment://${'boleta.jpeg'}`)
         .setColor("#00FF00"));
 }
