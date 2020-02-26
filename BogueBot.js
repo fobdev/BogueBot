@@ -201,15 +201,6 @@ bot.on("guildMemberRemove", member => {
 });
 
 bot.on("message", async message => {
-  if (message.content == '>boleta') {
-    let attachment = new Discord.Attachment('boleta.jpeg');
-    await message.channel.send(new Discord.RichEmbed()
-      .setTitle("Parabéns Zé.")
-      .attachFile(attachment)
-      .setImage(`attachment://boleta.jpeg`)
-      .setColor("#00FF00"));
-  }
-
   if (message.content.includes('bog') && !message.content.includes('help')) {
     // randomizes a set of messages that the bot can send
     let answers = ['bog.png', 'bog2.png', 'iae', 'salve', 'tmj', 'oi', 'ói',
