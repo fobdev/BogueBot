@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
-const boletafile = require.main.require("./boleta.jpeg");
 
 module.exports.run = async (bot, message, args) => {
-    let ze = new Discord.Attachment(boletafile);
+    let ze = new Discord.Attachment('../../boleta.jpeg');
     await message.channel.send(new Discord.RichEmbed()
         .setTitle("Parabéns Zé.")
         .attachFile(ze)
