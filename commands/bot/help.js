@@ -195,8 +195,9 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
     case "spotify": {
       return message.channel.send(
         new Discord.RichEmbed()
-        .addField("Uso", "``>spotify | >spotify [usuário]``")
-        .addField("Descrição", "Exibe informações sobre o que o usuário está ouvindo no spofity.")
+        .addField("Uso", "``>spotify | >spotify [usuário] | >spotify art``")
+        .addField("Descrição", "Exibe informações sobre o que o usuário está ouvindo no spofity.\n" +
+          "``>spotify art`` exibe a arte do album que está sendo tocado no momento.")
         .setColor("#00FF00")
       );
     }
