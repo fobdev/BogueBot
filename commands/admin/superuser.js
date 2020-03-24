@@ -19,9 +19,9 @@ module.exports.run = async (bot, message, args) => {
 
         switch (args[0]) {
             case 'serverlist': {
-                try {
+                if (guildstring.length < 2000) {
                     message.channel.send("```" + guildstring + `\nUm total de [${membercount}] usuários alcançados` + "```");
-                } catch (e) {
+                } else {
                     console.log("--------------------------------------------");
                     console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
 
@@ -36,28 +36,29 @@ module.exports.run = async (bot, message, args) => {
                         .setColor('#FFFF00'));
                 }
             }
-            case 'leaveserver': {
-                if (args[1]) {
-                    try {
-                        current_servers[parseInt(args[1] - 1)].leave().then(g => console.log(`Boguebot left the guild [${g}]`));
-                    } catch (e) {
-                        message.channel.send(new Discord.RichEmbed()
-                            .setTitle('Erro ao sair do servidor.')
-                            .setDescription("Verifique corretamente a entrada numérica e tente novamente.\nLogs de erros enviados ao HerokuCLI.")
-                            .setColor('#FF0000'));
-
-                        console.log('An error ocurred trying to leave the designated server, try again.');
-                        console.log(e);
-                    }
-
-                } else {
-                    return message.channel.send(new Discord.RichEmbed()
-                        .setTitle('Erro no comando.')
-                        .setDescription("É necessário selecionar um servidor (numero) para sair.")
-                        .setColor("#FF0000"));
-                }
-            }
             break;
+        case 'leaveserver': {
+            if (args[1]) {
+                try {
+                    current_servers[parseInt(args[1] - 1)].leave().then(g => console.log(`Boguebot left the guild [${g}]`));
+                } catch (e) {
+                    message.channel.send(new Discord.RichEmbed()
+                        .setTitle('Erro ao sair do servidor.')
+                        .setDescription("Verifique corretamente a entrada numérica e tente novamente.\nLogs de erros enviados ao HerokuCLI.")
+                        .setColor('#FF0000'));
+
+                    console.log('An error ocurred trying to leave the designated server, try again.');
+                    console.log(e);
+                }
+
+            } else {
+                return message.channel.send(new Discord.RichEmbed()
+                    .setTitle('Erro no comando.')
+                    .setDescription("É necessário selecionar um servidor (numero) para sair.")
+                    .setColor("#FF0000"));
+            }
+        }
+        break;
         default:
             return message.channel.send(new Discord.RichEmbed()
                 .setTitle("Erro no comando.")
