@@ -15,6 +15,8 @@ module.exports.run = async (bot, message, args) => {
 
             if (current_servers[i].memberCount >= 5000)
                 guildstring += ' (user overload)';
+
+            guildstring += '\n';
         }
 
         switch (args[0]) {
