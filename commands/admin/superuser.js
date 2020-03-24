@@ -42,7 +42,13 @@ module.exports.run = async (bot, message, args) => {
         case 'leaveserver': {
             if (args[1]) {
                 try {
-                    current_servers[parseInt(args[1] - 1)].leave().then(g => console.log(`Boguebot left the guild [${g}]`));
+                    current_servers[parseInt(args[1] - 1)].leave().then(g => {
+                        message.channel.send(new Discord.RichEmbed()
+                            .setTitle('Comando executado com sucesso.')
+                            .setDescription(`BogueBot saiu do servidor [${g}]`)
+                            .setColor("#00FF00"));
+                        console.log(`Boguebot left the guild [${g}]`)
+                    });
                 } catch (e) {
                     message.channel.send(new Discord.RichEmbed()
                         .setTitle('Erro ao sair do servidor.')
