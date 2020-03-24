@@ -17,15 +17,15 @@ module.exports.run = async (bot, message, args) => {
 
     return message.channel.send(
       "```" +
-        guildstring +
-        `\nUm total de [${membercount}] usuários alcançados` +
-        "```"
+      guildstring +
+      `\nUm total de [${membercount}] usuários alcançados` +
+      "```"
     );
   } else {
     return message.channel.send(
       new Discord.RichEmbed()
-        .setDescription("Só **Fobenga** pode usar esse comando mals.")
-        .setColor("#FF0000")
+      .setDescription("Comando disponível apenas para desenvolvedores do BogueBot.")
+      .setColor("#FF0000")
     );
   }
 };
