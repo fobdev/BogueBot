@@ -201,11 +201,13 @@ bot.on("guildMemberRemove", member => {
 });
 
 bot.on("message", async message => {
-  if (message.content.includes('bog') &&
-    !message.content.includes('help') &&
-    !message.content.includes('prime') &&
-    !message.content.includes('pixel') &&
-    !message.content.includes('bogue')) {
+  let prefix = botconfig.prefix;
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  let cmd = messageArray[0];
+  let command_file = bot.commands.get(cmd.slice(prefix.length));
+
+  if (message.content.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
     let answers = ['bog.png', 'bog2.png', 'iae', 'salve', 'tmj', 'oi', 'ói',
       'fala', 'bog', 'bila', 'José', 'TMJ',
@@ -265,12 +267,6 @@ bot.on("message", async message => {
       });
     }
   }
-
-  let prefix = botconfig.prefix;
-  let messageArray = message.content.split(" ");
-  let args = messageArray.slice(1);
-  let cmd = messageArray[0];
-  let command_file = bot.commands.get(cmd.slice(prefix.length));
 
   if (cmd[0] === prefix) {
     if (command_file) {
