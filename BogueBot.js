@@ -112,7 +112,6 @@ bot.on("ready", async () => {
 });
 
 bot.on("guildCreate", guild => {
-  /* 
   const help_file = require("./commands/bot/help.js");
   const music_file = require("./commands/music/music.js");
   const welcome_embed = new Discord.RichEmbed()
@@ -157,7 +156,6 @@ bot.on("guildCreate", guild => {
   } else {
     console.log("No channel named 'music' found in this server.");
   }
-  */
 
   console.log("---------------------------------");
   console.log(`${bot.user.username} joined server [${guild.name}].`);
