@@ -160,17 +160,6 @@ bot.on("guildCreate", guild => {
   console.log("---------------------------------");
   console.log(`${bot.user.username} joined server [${guild.name}].`);
   servers_show();
-
-  const system_channel = guild.channels.find(
-    ch => ch.id === guild.systemChannelID
-  );
-  if (system_channel) {
-    system_channel.send(welcome_embed);
-    console.log("Welcome message sent to system channel.");
-  } else {
-    console.log("No System Channel Available");
-  }
-
   status_updater();
 });
 
