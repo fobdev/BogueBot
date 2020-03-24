@@ -54,21 +54,20 @@ function servers_show() {
   let current_servers = bot.guilds.array();
   let members_reached = 0;
   console.log("--------------------------------------------");
-  console.log(
-    `Connected to [${current_servers.length}] servers.\nServer List:`
-  );
-
+  console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
   // Get the name of all the servers
   for (let i = 0; i < current_servers.length; i++) {
     let leftzero = "";
     if (i < 9) leftzero += "0";
     members_reached += current_servers[i].memberCount;
-    console.log(
-      `${leftzero}${i + 1} - [${current_servers[i]}] [${
-        current_servers[i].memberCount
-      } members]`
-    );
+
+    let logstring = `${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`;
+    if (current_servers[i].memberCount >= 5000)
+      logstring += ' (user overload)';
+
+    console.log(logstring);
   }
+
   console.log("--------------------------------------------");
   console.log(`A total of [${members_reached}] Discord users reached.`);
   console.log("--------------------------------------------");
@@ -86,10 +85,6 @@ function status_updater() {
 
   const helpfile = require("./commands/bot/help.js");
   const invitefile = require("./commands/bot/invite.js");
-  // bot.user.setStatus("dnd");
-  // bot.user.setActivity(`bila me programar.`, {
-  //     type: 'WATCHING'
-  // });
 
   bot.user.setActivity(
     `${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${
