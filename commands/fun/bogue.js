@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args) => {
-
+    let filename = '';
+    let attachment;
     switch (args[0]) {
         case 'prime':
-            let filename = 'bogueprime.jpg';
-            let attachment = new Discord.Attachment(filename);
+            filename = 'bogueprime.jpg';
+            attachment = new Discord.Attachment(filename);
 
             await message.channel.send(new Discord.RichEmbed()
                 .setTitle("Bogue Prime")
@@ -14,8 +15,8 @@ module.exports.run = async (bot, message, args) => {
                 .setColor("#00FF00"));
             break;
         case 'pixel':
-            let filename = 'boguepixel.jpg';
-            let attachment = new Discord.Attachment(filename);
+            filename = 'boguepixel.jpg';
+            attachment = new Discord.Attachment(filename);
 
             await message.channel.send(new Discord.RichEmbed()
                 .setTitle("Bogue Pixel")
@@ -24,8 +25,8 @@ module.exports.run = async (bot, message, args) => {
                 .setColor("#00FF00"));
             break;
         default:
-            let filename = 'bogue.jpg';
-            let attachment = new Discord.Attachment(filename);
+            filename = 'bogue.jpg';
+            attachment = new Discord.Attachment(filename);
 
             await message.channel.send(new Discord.RichEmbed()
                 .setTitle("Bogue")
