@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
         switch (args[0]) {
             case 'serverlist': {
                 try {
-                    return message.channel.send("```" + guildstring + `\nUm total de [${membercount}] usuários alcançados` + "```");
+                    message.channel.send("```" + guildstring + `\nUm total de [${membercount}] usuários alcançados` + "```");
                 } catch (e) {
                     console.log("--------------------------------------------");
                     console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
