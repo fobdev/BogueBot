@@ -15,7 +15,8 @@ module.exports.run = async (bot, message, args) => {
         try {
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();
-                return message.channel.bulkDelete(del_arg, true);
+                message.channel.bulkDelete(del_arg, true);
+                return console.log(`[${del_arg}] messages removed from server [${message.guild.name}]`);
             } else
                 return message.channel.send(new Discord.RichEmbed()
                     .setDescription("Usuário não tem permissão para excluir mensagens.")
