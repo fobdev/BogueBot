@@ -477,16 +477,14 @@ async function play(bot, message, song, user_url) {
 	if (serverQueue.songs.length !== 2) remaining_pl += 's';
 	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} ${remaining_pl})`;
 
-	var music_embed = new Discord.RichEmbed()
+	// Music embed end
+	message.channel.send(new Discord.RichEmbed()
 		.setAuthor(author_str, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.setThumbnail(song.thumbnail)
-		.setColor("#00FF00");
-
-	// Music embed end
-	message.channel.send(music_embed);
+		.setColor("#00FF00"));
 
 	serverQueue.streamdispatcher.on('end', async (reason) => {
 		// Session end based on priority from higher to lower:
