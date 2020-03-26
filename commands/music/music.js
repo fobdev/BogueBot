@@ -142,8 +142,12 @@ module.exports.run = async (bot, message, args) => {
 				try {
 					videos = await youtube.searchVideos(search, search_limit);
 				} catch (e) {
+					console.log(`Stream failed to initialize in server [${serverQueue.guildname}]`)
 					return message.channel.send(new Discord.RichEmbed()
 						.setTitle("Ocorreu um erro na busca.")
+						.setDescription(`Pode ocorrer do comando de música estar passando por problemas.
+						Se você não conseguir reproduzir um vídeo mesmo enviando o link, mande um feedback de erro:
+						` + "```>feedback```")
 						.setColor("#FF0000"));
 				}
 
