@@ -90,7 +90,7 @@ function status_updater() {
     `${botconfig.prefix}${helpfile.help.name} | ${botconfig.prefix}${
       invitefile.help.name
     }` +
-    ` | ${numeral(members_reached).format()} usuários | ${cmd_counter} ${cmd_plural}`, {
+    ` | ${numeral(members_reached).format()} membros | ${cmd_counter} ${cmd_plural}`, {
       type: "PLAYING"
     }
   );
