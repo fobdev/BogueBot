@@ -7,8 +7,16 @@ module.exports.run = async (bot, message, args, serverQueue) => {
       .setDescription("Não tem nada sendo tocado no momento.")
       .setColor("#FF0000"));
 
-  if (serverQueue.streamdispatcher.speaking) {
-    var sv_volume = serverQueue.connection.dispatcher.volume;
+  // safer verification of speaking
+  let isSpeaking;
+  try {
+    isSpeaking = serverQueue.streamdispatcher.speaking;
+  } catch (e) {
+    return console.log(e + 'Nothing is speaking, error triggered.');
+  }
+
+  if (isSpaeaking) {
+    let sv_volume = serverQueue.connection.dispatcher.volume;
     if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 
     if (sv_volume === 1) {
@@ -29,6 +37,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         .setColor("#FF0000"));
     }
   } else {
+    console.log('Nothing speaking error triggered.');
     return message.channel.send(new Discord.RichEmbed()
       .setDescription("Não tem nada sendo tocado no momento.")
       .setColor("#FF0000"));
