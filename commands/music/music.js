@@ -522,7 +522,7 @@ async function play(bot, message, song, user_url) {
 
 			return message.channel.send(new Discord.RichEmbed()
 				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-				.setFooter(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '>feedback'`, bot.user.displayAvatarURL)
 				.setColor("#00FF00"));
 		}
 
