@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, args) => {
                 .setColor('#FF0000'));
         }
 
-        return message.channel.send(Discord.RichEmbed()
+        return message.channel.send(new Discord.RichEmbed()
             .addField(`Usuário **${ban_user.displayName}** banido.`, `| ${ban_user} | ID: ${ban_user.id}`)
             .setThumbnail(ban_user.user.displayAvatarURL)
             .setColor("#00FF00")
