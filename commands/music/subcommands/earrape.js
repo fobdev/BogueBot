@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
     return console.log(e + 'Nothing is speaking, error triggered.');
   }
 
-  if (isSpaeaking) {
+  if (isSpeaking) {
     let sv_volume = serverQueue.connection.dispatcher.volume;
     if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 

@@ -52,7 +52,6 @@ module.exports.run = async (bot, message, args) => {
 	if (queue.size > 0)
 		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
 
-
 	// quick subcommand for developers to verify the amount of servers using the streaming service
 	if (args[0] == 'stream-status') {
 		if (message.author.id == '244270921286811648') {
