@@ -6,36 +6,22 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!user_avatar) {
 		if (sv_icon === 'server') {
-			message.channel.send("d:" + message.guild.iconURL);
-
-			if (message.guild.iconURL.includes(".webp")) {
-				return message.channel.send(message.guild.iconURL.replace(".webp", ".gif"));
-			} else {
-				return message.channel.send(new Discord.RichEmbed()
-					.setTitle(`Ícone do servidor ${message.guild.name}`)
-					.setImage(message.guild.iconURL)
-					.setColor("#00FF00"));
-			}
-		}
-
-		if (message.author.displayAvatarURL.endsWith(".gif")) {
-			return message.channel.send(message.author.displayAvatarURL);
-		} else {
 			return message.channel.send(new Discord.RichEmbed()
-				.setTitle(`Avatar de **${message.author.username}**`)
-				.setImage(message.author.displayAvatarURL)
+				.setTitle(`Ícone do servidor ${message.guild.name}`)
+				.setImage(message.guild.iconURL("gif"))
 				.setColor("#00FF00"));
 		}
-	}
 
-	if (user_avatar.user.displayAvatarURL.endsWith(".gif")) {
-		return message.channel.send(user_avatar.user.displayAvatarURL);
-	} else {
 		return message.channel.send(new Discord.RichEmbed()
-			.setTitle(`Avatar de **${user_avatar.user.username}**`)
-			.setImage(user_avatar.user.displayAvatarURL)
+			.setTitle(`Avatar de **${message.author.username}**`)
+			.setImage(message.author.displayAvatarURL("gif"))
 			.setColor("#00FF00"));
 	}
+
+	return message.channel.send(new Discord.RichEmbed()
+		.setTitle(`Avatar de **${user_avatar.user.username}**`)
+		.setImage(user_avatar.user.displayAvatarURL("gif"))
+		.setColor("#00FF00"));
 }
 
 module.exports.help = {
