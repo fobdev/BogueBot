@@ -23,6 +23,7 @@ module.exports.run = async (bot, message, args) => {
                 .addField('Album', user.presence.game.assets.largeText, true)
                 .addField('Autor', user.presence.game.state, true)
                 .addField('Ouvir a música: ', `[${trackUrl}](${trackUrl})`, false)
+                .setDescription("Clique na thumbnail da capa para ve-la em alta resolução.")
                 .setColor(0x1ED760));
 
 
