@@ -8,19 +8,25 @@ module.exports.run = async (bot, message, args) => {
 		if (sv_icon === 'server') {
 			return message.channel.send(new Discord.RichEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
-				.setImage(message.guild.iconURL("gif"))
+				.setImage(message.guild.iconURL({
+					format: "gif"
+				}))
 				.setColor("#00FF00"));
 		}
 
 		return message.channel.send(new Discord.RichEmbed()
 			.setTitle(`Avatar de **${message.author.username}**`)
-			.setImage(message.author.displayAvatarURL("gif"))
+			.setImage(message.author.displayAvatarURL({
+				format: "gif"
+			}))
 			.setColor("#00FF00"));
 	}
 
 	return message.channel.send(new Discord.RichEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
-		.setImage(user_avatar.user.displayAvatarURL("gif"))
+		.setImage(user_avatar.user.displayAvatarURL({
+			format: "gif"
+		}))
 		.setColor("#00FF00"));
 }
 
