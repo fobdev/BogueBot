@@ -6,8 +6,9 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!user_avatar) {
 		if (sv_icon === 'server') {
+			message.channel.send("d:" + message.guild.iconURL);
+
 			if (message.guild.iconURL.includes(".webp")) {
-				// Do not generate a rich embed, instaed just send the message.
 				return message.channel.send(message.guild.iconURL.replace(".webp", ".gif"));
 			} else {
 				return message.channel.send(new Discord.RichEmbed()
