@@ -65,7 +65,7 @@ function servers_show() {
 
     let logstring = `${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`;
 
-    if (current_servers[i].memberCount >= 5000) {
+    if (current_servers[i].memberCount >= 10000) {
       logstring += ' (user overload)';
       overload_count += current_servers[i].memberCount;
     }
@@ -74,7 +74,7 @@ function servers_show() {
   }
 
   console.log("--------------------------------------------");
-  console.log(`A total of [${members_reached}] Discord users reached | [${members_reached - overload_count}] with non-overload guilds (below 5k users).`);
+  console.log(`A total of [${members_reached}] users reached | [${members_reached - overload_count}] with non-overload guilds (below 10k users).`);
   console.log("--------------------------------------------");
 }
 
