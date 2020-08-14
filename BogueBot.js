@@ -53,8 +53,10 @@ cmdload("games");
 function servers_show() {
   let current_servers = bot.guilds.array();
   let members_reached = 0;
+  let overload_count = 0;
   console.log("--------------------------------------------");
   console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
+
   // Get the name of all the servers
   for (let i = 0; i < current_servers.length; i++) {
     let leftzero = "";
@@ -62,14 +64,17 @@ function servers_show() {
     members_reached += current_servers[i].memberCount;
 
     let logstring = `${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`;
-    if (current_servers[i].memberCount >= 5000)
+
+    if (current_servers[i].memberCount >= 5000) {
       logstring += ' (user overload)';
+      overload_count += current_servers[i].memberCount;
+    }
 
     console.log(logstring);
   }
 
   console.log("--------------------------------------------");
-  console.log(`A total of [${members_reached}] Discord users reached.`);
+  console.log(`A total of [${members_reached}] Discord users reached | [${members_reached - overload_count}] with non-overload guilds (below 5k users).`);
   console.log("--------------------------------------------");
 }
 
