@@ -23,6 +23,6 @@
     "parse-time": "^0.1.4",
     "simple-youtube-api": "^5.1.1",
     "uws": "^99.0.0",
-    "ytdl-core": "^3.3.0"
+    "ytdl-core": "^4.0.3"
   }
 }
