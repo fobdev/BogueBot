@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
 		})
 	}
 
-	const voiceChannel = message.member.voice.connection;
+	const { voiceChannel } = message.member.channelID;
 	var serverQueue = queue.get(message.guild.id);
 	var url = args[0];
 	var isPlaylist = url.includes('list=');
