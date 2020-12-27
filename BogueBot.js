@@ -138,8 +138,8 @@ bot.on("guildCreate", guild => {
       "Bot criado por Bila, em ")
     .setTimestamp(bot.user.createdAt);
 
-  const bots_channel = guild.channels.find(ch => ch.name === "bots");
-  const music_channel = guild.channels.find(ch => ch.name === "music");
+  const bots_channel = guild.channels.cache.find(ch => ch.name === "bots");
+  const music_channel = guild.channels.cache.find(ch => ch.name === "music");
 
   if (bots_channel && bots_channel.type === "text") {
     bots_channel.send(welcome_embed);
@@ -170,7 +170,7 @@ bot.on("guildDelete", guild => {
 });
 
 bot.on("guildMemberRemove", member => {
-  const system_channel = member.guild.channels.find(
+  const system_channel = member.guild.channels.cache.find(
     ch => ch.id === member.guild.systemChannelID
   );
   if (system_channel) {
