@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args) => {
     if (message.author.id === "244270921286811648") {
 
         // fill up the guilds array.
-        let current_servers = bot.guilds.array();
+        let current_servers = bot.guilds.cache.array();
         let guildstring = "";
         let membercount = 0;
         for (let i = 0; i < current_servers.length; i++) {
