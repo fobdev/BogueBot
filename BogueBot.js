@@ -51,7 +51,7 @@ cmdload("music");
 cmdload("games");
 
 function servers_show() {
-  let current_servers = bot.guilds.array();
+  let current_servers = bot.guilds.cache.array();
   let members_reached = 0;
   let overload_count = 0;
   console.log("--------------------------------------------");
@@ -79,7 +79,7 @@ function servers_show() {
 }
 
 function status_updater() {
-  let current_servers = bot.guilds.array();
+  let current_servers = bot.guilds.cache.array();
   let members_reached = 0;
 
   for (let i = 0; i < current_servers.length; i++)
