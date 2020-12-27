@@ -112,7 +112,7 @@ bot.on("ready", async () => {
 bot.on("guildCreate", guild => {
   const help_file = require("./commands/bot/help.js");
   const music_file = require("./commands/music/music.js");
-  const welcome_embed = new Discord.RichEmbed()
+  const welcome_embed = new Discord.MessageEmbed()
     .setColor("#00FF00")
     .setAuthor(
       `Obrigado por adicionar o ${bot.user.username} ao servidor ${guild.name}!`,
@@ -210,7 +210,7 @@ bot.on("message", async message => {
     switch (rng) {
       case 0: {
         let bog_att = new Discord.Attachment('bog.png');
-        await message.channel.send(new Discord.RichEmbed()
+        await message.channel.send(new Discord.MessageEmbed()
           .setTitle(`Eu mesmo como como descobriu.`)
           .attachFile(bog_att)
           .setImage(`attachment://${'bog.png'}`)
@@ -219,7 +219,7 @@ bot.on("message", async message => {
       break;
     case 1: {
       let bog2_att = new Discord.Attachment('bog2.png');
-      await message.channel.send(new Discord.RichEmbed()
+      await message.channel.send(new Discord.MessageEmbed()
         .attachFile(bog2_att)
         .setImage(`attachment://${'bog2.png'}`)
         .setColor("#00FF00"));
@@ -243,7 +243,7 @@ bot.on("message", async message => {
       );
       return bot.generateInvite(8).then(link => {
         message.channel.send(
-          new Discord.RichEmbed()
+          new Discord.MessageEmbed()
           .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
           .setDescription(
             `Use esse convite para adiciona-lo ao seu servidor:

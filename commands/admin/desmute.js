@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
         let muterole = message.guild.roles.find(role => role.name === 'mutado');
 
         if (!desmute) {
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Uso incorreto do comando")
                 .setDescription("Tente usar ``" + `${botconfig.prefix}${this.help.name} ${this.help.arg}` + "``")
                 .setColor('#FF0000'));
@@ -15,11 +15,11 @@ module.exports.run = async (bot, message, args) => {
 
         if (desmute.roles.has(muterole.id)) {
             desmute.removeRole(muterole.id);
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${desmute.displayName}** foi desmutado.`)
                 .setColor("#00FF00"));
         } else {
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${desmute.displayName}** não está mutado.`)
                 .setColor("#FF0000"));
         }

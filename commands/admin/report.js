@@ -7,12 +7,12 @@ module.exports.run = async (bot, message, args) => {
     let reason = args.join(" ").slice(22);
 
     if (!r_user)
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`Usuário não encontrado no servidor **${message.guild.name}**.`)
             .setColor("#FF0000"));
 
     if (reason === "")
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .addField("Você deve especificar um motivo para denunciar um membro",
                 "``" + `${botconfig.prefix}${this.help.name} [${this.help.arg.join('] [')}]` + "``")
             .setColor("#FF0000"));
@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
         message.delete();
 
         // Message that goes to the guild owner
-        message.guild.owner.send(new Discord.RichEmbed()
+        message.guild.owner.send(new Discord.MessageEmbed()
             .setAuthor('Aviso de denúncia')
             .setTitle('Um usuário foi denunciado em seu servidor.')
             .setDescription(`Servidor: **${message.guild.name}**`)
@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FFE100'));
 
         // Message that goes to the guild
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setColor("#00FF00")
             .setTitle("Mensagem de denúncia enviada ao dono do servidor")
             .addField("Usuário", `| ${r_user} | ID: ${r_user.id}`)

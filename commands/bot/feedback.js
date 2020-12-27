@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
 
   if (!user_message)
     return message.channel.send(
-      new Discord.RichEmbed()
+      new Discord.MessageEmbed()
         .setTitle("Uso incorreto do comando")
         .setDescription(
           "Tente usar: ``" +
@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
     if (uarr[i].id == 244270921286811648) fobenga = uarr[i];
 
   fobenga.send(
-    new Discord.RichEmbed()
+    new Discord.MessageEmbed()
       .setColor("#0000FF")
       .setTitle("A user sent a feedback message!")
       .setThumbnail(message.author.displayAvatarURL)
@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
   );
 
   return message.channel.send(
-    new Discord.RichEmbed()
+    new Discord.MessageEmbed()
       .setColor("#0000FF")
       .setTitle("Uma mensagem de feedback foi enviada para bila#2863!")
       .setThumbnail(message.author.displayAvatarURL)

@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!user_avatar) {
 		if (sv_icon === 'server') {
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setImage(message.guild.iconURL)
 				.setColor("#00FF00"));
@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args) => {
 		if (message.author.displayAvatarURL.endsWith(".gif")) {
 			return message.channel.send(`Avatar de **${message.author}**\n` + message.author.displayAvatarURL)
 		} else {
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL)
 				.setColor("#00FF00"));
@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
 	if (user_avatar.user.displayAvatarURL.endsWith(".gif")) {
 		return message.channel.send(`Avatar de **${user_avatar.user}**\n` + user_avatar.user.displayAvatarURL)
 	} else {
-		return message.channel.send(new Discord.RichEmbed()
+		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL)
 			.setColor("#00FF00"));

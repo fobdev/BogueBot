@@ -4,7 +4,7 @@ const botconfig = require.main.require('./botconfig.json');
 module.exports.run = async (bot, message, args) => {
     const report_file = require('./report.js');
     if (!message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Você não tem permissões suficientes para isso')
             .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``"));
     }
@@ -13,14 +13,14 @@ module.exports.run = async (bot, message, args) => {
     let muterole = message.guild.roles.find(role => role.name === 'mutado');
 
     if (!mute) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
             .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
             .setColor('#FF0000'));
     }
 
     if (mute.hasPermission('ADMINISTRATOR')) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Permissões insuficientes')
             .setDescription("Você não pode silenciar um **administrador**.")
             .setColor("#FF0000"));
@@ -47,12 +47,12 @@ module.exports.run = async (bot, message, args) => {
     const desmute_file = require('./desmute');
     if (!mute.roles.find(role => role.name === 'mutado')) {
         mute.addRole(muterole.id);
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** foi silenciado.`)
             .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
             .setColor("#00FF00"));
     } else {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** já está silenciado.`)
             .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
             .setColor("#FF0000"));

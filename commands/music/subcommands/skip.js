@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 
 module.exports.run = async (bot, message, args, serverQueue) => {
     if (!serverQueue)
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Não tem nada tocando no momento.')
             .setColor("#FF0000"));
 

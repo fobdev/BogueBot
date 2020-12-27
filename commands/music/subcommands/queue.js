@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 swap(i, rand_pos, serverQueue.songs);
             }
 
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setColor('#00FF00')
                 .setTitle(`**${message.author.username}** randomizou a fila de **${message.guild.name}**`)
                 .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a fila completa."));
@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 var swappable = parseInt(args[2]);
             } catch (e) {
                 console.error(`${e}: invalid input in 'swap' command.`)
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Uso incorreto do comando')
                     .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1]` + "``" +
                         " para colocar [numero1] como próximo video a se reproduzir.")
@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             }
 
             if (swappable < 2 || swappable > serverQueue.songs.length) {
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Uso incorreto do comando')
                     .setDescription(`Use apenas valores entre **2** e **${serverQueue.songs.length - 1}**`)
                     .setColor("#FF0000"));
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             // Deletes the original video in the array 
             serverQueue.songs.splice(swappable + 1, 1);
 
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setDescription(`:arrow_up: **[${serverQueue.songs[1].title}](${serverQueue.songs[1].url})** reproduzindo a seguir.`)
                 .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
                 .setColor("#00FF00"));
@@ -59,14 +59,14 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     var swappable_e2 = parseInt(args[3]);
                 } catch (e) {
                     console.error(`${e}: invalid input in 'swap' command.`)
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Uso incorreto do comando')
                         .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                             " alterna a posição de dois vídeos na fila.")
                         .setColor('#FF0000'));
                 }
 
-                if (serverQueue.songs.length <= 2) return message.channel.send(new Discord.RichEmbed()
+                if (serverQueue.songs.length <= 2) return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Comando inválido')
                     .setDescription('Você precisa de pelo menos 2 músicas para serem alternadas na fila.')
                     .setColor('#FF0000'));
@@ -75,14 +75,14 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     swappable_e1 > serverQueue.songs.length ||
                     swappable_e2 < 1 ||
                     swappable_e2 > serverQueue.songs.length) {
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Uso incorreto do comando')
                         .setDescription(`Use apenas valores entre **1** e **${serverQueue.songs.length - 1}**`)
                         .setColor("#FF0000"));
                 }
 
                 if (swappable_e1 === swappable_e2) {
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setDescription('Você deve escolher posições diferentes.')
                         .setColor("#FF0000"));
                 }
@@ -99,7 +99,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 }
 
                 swap(swappable_e1, swappable_e2, serverQueue.songs);
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle(`Posição de vídeos alternadas`)
                     .setDescription(`**${first_arrow} [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})**\n` +
                         `**${second_arrow} [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})**`)
@@ -107,7 +107,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     .setColor("#00FF00"));
 
             } else {
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Uso incorreto do comando')
                     .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                         " alterna a posição de dois vídeos na fila.")
@@ -124,13 +124,13 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 }
 
                 if (!entry) {
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setDescription('**Você não especificou o video que quer excluir da fila.**')
                         .setColor("#FF0000"));
                 }
 
                 if (entry > 0 && entry <= serverQueue.songs.length) {
-                    message.channel.send(new Discord.RichEmbed()
+                    message.channel.send(new Discord.MessageEmbed()
                         .setDescription(`**[${serverQueue.songs[entry].title}](${serverQueue.songs[entry].url})**` +
                             ` foi removido da fila.`)
                         .setColor('#00FF00'));
@@ -138,7 +138,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     await serverQueue.songs.splice(entry, 1);
                     return;
                 } else {
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setDescription('**Não foram encontrados vídeos na fila com este número**')
                         .setColor('#FF000'));
                 }
@@ -147,23 +147,23 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 var end = parseInt(args[3]);
                 var amount = start - end;
 
-                if (start > end) return message.channel.send(new Discord.RichEmbed()
+                if (start > end) return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('O valor **final** deve ser maior que o valor **inicial**.')
                     .setDescription("Dessa vez, tente usar ``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} del ${end} ${start}` + "``")
                     .setColor('#FF0000'));
 
                 if (amount < 0) amount *= -1;
-                if (amount === 0) return message.channel.send(new Discord.RichEmbed()
+                if (amount === 0) return message.channel.send(new Discord.MessageEmbed()
                     .setDescription('Os valores precisam ser **diferentes**.')
                     .setColor('#FF0000'));
 
                 if (start > 0 && end <= serverQueue.songs.length) {
                     var deleted_entries = await serverQueue.songs.splice(start, amount + 1);
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setDescription(`Foram removidos **${deleted_entries.length}** vídeos da fila de **${message.guild.name}**`)
                         .setColor("#00FF00"));
 
-                } else return message.channel.send(new Discord.RichEmbed()
+                } else return message.channel.send(new Discord.MessageEmbed()
                     .setDescription(`Você deve colocar valores entre **1** e **${serverQueue.songs.length}**`)
                     .setColor('#FF0000'));
             }
@@ -171,17 +171,17 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
         if (args[1] === 'purge' || args[1] === 'pg') {
             if (!serverQueue)
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setDescription('Não tem nada sendo reproduzido no momento.')
                     .setColor('#FF0000'));
 
             if (serverQueue.songs.length > 1) {
                 await serverQueue.songs.splice(1);
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setDescription(`A Fila de **${message.guild.name}** foi excluída.`)
                     .setColor("#00FF00"));
             } else {
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setDescription(`Não tem nada na fila para ser excluído.`)
                     .setColor("#FF0000"));
             }
@@ -192,13 +192,13 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 serverQueue.songs.splice(0, parseInt(args[1] - 1));
 
                 serverQueue.streamdispatcher.end();
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle(`Fila pulada para a posição **${args[1]}**`)
                     .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a nova fila.")
                     .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
                     .setColor("#00FF00"));
             } else {
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setDescription(`**Use um valor que seja entre 1 e ${serverQueue.songs.length - 1}**`)
                     .setColor("#FF0000"));
             }
@@ -402,7 +402,7 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
                 console.error(e);
                 if (e != TypeError) {
                     console.error(e);
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setDescription('Não tem filas criadas neste servidor.')
                         .setColor("#FF0000"));
                 }
@@ -412,7 +412,7 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
         }
     } catch (e) {
         console.error(`${e} / Queue fatal error.`);
-        return message.channel.send(new Discord.RichEmbed().setTitle('Não tem nada sendo tocado no momento.')
+        return message.channel.send(new Discord.MessageEmbed().setTitle('Não tem nada sendo tocado no momento.')
             .setColor("#FF0000"));
     }
 }

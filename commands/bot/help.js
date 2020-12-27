@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args) => {
   const fun_commands = "[``" + fun_cmdarr.join(", ") + "``]";
   const game_commands = "[``" + games_cmdarr.join(", ") + "``]";
 
-  let help_embed = new Discord.RichEmbed()
+  let help_embed = new Discord.MessageEmbed()
     .setAuthor(
       `Comandos do ${bot.user.username}`,
       bot.user.displayAvatarURL,
@@ -116,7 +116,7 @@ module.exports.run = async (bot, message, args) => {
     });
 
     message.channel.send(
-      new Discord.RichEmbed()
+      new Discord.MessageEmbed()
       .setTitle(`Categoria ${args[0].toUpperCase()}`)
       .setDescription(`**${descr_str}**`)
       .setColor("#00FF00")
@@ -128,7 +128,7 @@ module.exports.run = async (bot, message, args) => {
     if (path.help.arg) havearg += ` [${path.help.arg.join("] [")}]`;
 
     return message.channel.send(
-      new Discord.RichEmbed()
+      new Discord.MessageEmbed()
       .addField(
         "Uso",
         "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``"
@@ -194,7 +194,7 @@ Você pode substituir '>music' por '>m', '>play' ou '>p'.` +
     }
     case "spotify": {
       return message.channel.send(
-        new Discord.RichEmbed()
+        new Discord.MessageEmbed()
         .addField("Uso", "``>spotify | >spotify [usuário] | >spotify art``")
         .addField("Descrição", "Exibe informações sobre o que o usuário está ouvindo no spofity.\n" +
           "``>spotify art`` exibe a arte do album que está sendo tocado no momento.")

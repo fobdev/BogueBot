@@ -21,7 +21,7 @@ module.exports.run = async (bot, message, args) => {
             dice_string += `Dado ${i + 1}: **${dices[i]}**\n`;
         }
 
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .addField('Resultado dos dados jogados', dice_string)
             .setColor("#00FF00"));
 

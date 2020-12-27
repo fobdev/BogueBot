@@ -56,7 +56,7 @@ module.exports.run = async (bot, message, args) => {
                                 guildsucess++;
                             }
 
-                            message.channel.send(new Discord.RichEmbed()
+                            message.channel.send(new Discord.MessageEmbed()
                                 .setTitle('Global Message details')
                                 .addField('Online users reached', online_total)
                                 .addField('Guilds received', guildsucess)
@@ -94,7 +94,7 @@ module.exports.run = async (bot, message, args) => {
             }
         })
     } else {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setDescription("**Você não tem permissão para usar este comando.**")
             .setColor('#FF0000'));
     }

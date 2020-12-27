@@ -5,7 +5,7 @@ const num_conv = require('number-to-words');
 module.exports.run = async (bot, message, args) => {
     let output = args.join(' ');
     if (!output)
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Uso incorreto do comando.')
             .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
             .setColor("#FF0000"));
@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
         await message.channel.send(bigtext_arr.join(''));
         return message.delete()
     } catch (e) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Ocorreu um erro ao enviar a mensagem.')
             .setColor('#FF0000'));
     }

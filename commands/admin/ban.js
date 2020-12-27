@@ -7,25 +7,25 @@ module.exports.run = async (bot, message, args) => {
 
     const report_file = require('./report.js');
     if (!message.guild.member(message.author).hasPermission('BAN_MEMBERS'))
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Você não tem permissão para banir membros desse servidor.')
             .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
             .setColor('#FF0000'));
 
     if (!ban_user)
-        return message.channel.send(Discord.RichEmbed()
+        return message.channel.send(Discord.MessageEmbed()
             .setTitle(`Usuário não encontrado no servidor **${message.guild.name}**.`)
             .setDescription('Use **@** para identificar o usuário corretamente.')
             .setColor("#FF0000"));
 
     if (ban_user.hasPermission('ADMINISTRATOR')) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${ban_user.displayName}** é administrador desse servidor e não pode ser expulso.`)
             .setColor("#FF0000"));
     }
 
     if (ban_reason === "")
-        return message.channel.send(Discord.RichEmbed()
+        return message.channel.send(Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
             .setColor("#FF0000")
             .addField("Você deve adicionar o motivo pelo qual está banindo esse usuário",
@@ -36,13 +36,13 @@ module.exports.run = async (bot, message, args) => {
         try {
             await message.guild.member(ban_user).ban(ban_reason);
         } catch (e) {
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Permissões insuficientes para banir **${ban_user.displayName}**.`)
                 .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
                 .setColor('#FF0000'));
         }
 
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .addField(`Usuário **${ban_user.displayName}** banido.`, `| ${ban_user} | ID: ${ban_user.id}`)
             .setThumbnail(ban_user.user.displayAvatarURL)
             .setColor("#00FF00")

@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
             for (let i = 0; i < allguilds.length; i++)
                 svlist_str += `[${i}]${allguilds[i].name}\n`;
 
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle('All guilds by instance number:')
                 .setDescription(svlist_str))
         }
@@ -49,7 +49,7 @@ module.exports.run = async (bot, message, args) => {
         console.log(log_string);
     }
 
-    let guild_embed = new Discord.RichEmbed()
+    let guild_embed = new Discord.MessageEmbed()
         .setAuthor(`${server.name}`, server.iconURL)
         .setColor("#FF8800")
         .setThumbnail(server.iconURL)

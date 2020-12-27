@@ -8,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
             filename = 'bogueprime.jpg';
             attachment = new Discord.Attachment(filename);
 
-            await message.channel.send(new Discord.RichEmbed()
+            await message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Bogue Prime")
                 .attachFile(attachment)
                 .setImage(`attachment://${filename}`)
@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
             filename = 'boguepixel.jpg';
             attachment = new Discord.Attachment(filename);
 
-            await message.channel.send(new Discord.RichEmbed()
+            await message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Bogue Pixel")
                 .attachFile(attachment)
                 .setImage(`attachment://${filename}`)
@@ -28,7 +28,7 @@ module.exports.run = async (bot, message, args) => {
             filename = 'bogue.jpg';
             attachment = new Discord.Attachment(filename);
 
-            await message.channel.send(new Discord.RichEmbed()
+            await message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Bogue")
                 .attachFile(attachment)
                 .setImage(`attachment://${filename}`)

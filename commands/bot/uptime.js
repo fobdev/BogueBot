@@ -25,7 +25,7 @@ function ms_convert(ms, bot) {
 }
 
 module.exports.run = async (bot, message, args) => {
-  return message.channel.send(new Discord.RichEmbed().addField(`Tempo restarte do ${bot.user.username} até a próxima reinicialização.`,
+  return message.channel.send(new Discord.MessageEmbed().addField(`Tempo restarte do ${bot.user.username} até a próxima reinicialização.`,
       ms_convert(fullday - bot.uptime, bot))
     .setColor("#00FF00"));
 }

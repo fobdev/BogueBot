@@ -7,7 +7,7 @@ const genius = new GeniusImport.Client(genius_key);
 module.exports.run = async (bot, message, args, serverQueue) => {
   // 1 - Get the current music playing with the serverQueue variable.
   if (!serverQueue) {
-    return message.channel.send(new Discord.RichEmbed()
+    return message.channel.send(new Discord.MessageEmbed()
       .setTitle("Uso incorreto do comando.")
       .setDescription("Não tem nada sendo tocado no momento.")
       .setColor("#FF0000"));
@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
   console.log(lyrics);
 
   // 2 - Set the title of the song to the search query of the Node.JS package that handles lyrics.
-  // 3 - Output the lyrics in a RichEmbed().
+  // 3 - Output the lyrics in a MessageEmbed().
 };
 
 module.exports.help = {

@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
     console.log("--------------------------------------------");
 
     return bot.generateInvite(8)
-        .then(link => message.channel.send(new Discord.RichEmbed()
+        .then(link => message.channel.send(new Discord.MessageEmbed()
             .setDescription(`Link de autenticação do ${bot.user.username}`)
             .setColor("#00FF00")
             .setThumbnail(bot.user.displayAvatarURL)

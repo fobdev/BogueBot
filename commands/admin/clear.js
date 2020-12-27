@@ -8,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
     if (del_arg > 1)
         messages = "mensagens";
 
-    const delfail_embed = new Discord.RichEmbed()
+    const delfail_embed = new Discord.MessageEmbed()
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send(delfail_embed);
     } else {
         try {
-            const perm_embed = new Discord.RichEmbed()
+            const perm_embed = new Discord.MessageEmbed()
                 .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
 
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {

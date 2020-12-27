@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
   try {
     var dispatchertime_seconds = Math.floor(serverQueue.streamdispatcher.time / 1000);
   } catch (e) {
-    return message.channel.send(new Discord.RichEmbed()
+    return message.channel.send(new Discord.MessageEmbed()
       .setDescription("Não tem nada sendo tocado no momento.")
       .setColor("#FF0000"));
   }
@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
   if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = "**🔴 Livestream**";
 
-  var now_playing_embed = new Discord.RichEmbed()
+  var now_playing_embed = new Discord.MessageEmbed()
     .setAuthor(`${bot.user.username} Now Playing`, bot.user.displayAvatarURL)
     .addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`)
     .addField("Tempo", `${isLivestream}`, true)

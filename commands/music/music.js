@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args) => {
 			console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
 			return message.channel.send(`[${queue.size}] instances of stream running.`);
 		} else
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle('Erro')
 				.setDescription('Comando apenas para desenvolvedores.')
 				.setColor('#FF0000'));
@@ -86,7 +86,7 @@ module.exports.run = async (bot, message, args) => {
 
 	if (!voiceChannel) {
 		console.log('[USER ERROR] message.author not in a voice channel.')
-		return message.channel.send(new Discord.RichEmbed()
+		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle("Você **precisa estar em um canal de voz** para usar os comandos de música.")
 			.setColor("FF0000"));
 	}
@@ -99,7 +99,7 @@ module.exports.run = async (bot, message, args) => {
 
 			if (videosarray) {
 				message.delete();
-				let pl_out_embed = new Discord.RichEmbed()
+				let pl_out_embed = new Discord.MessageEmbed()
 					.setTitle(`Playlist **${playlist.title}**`)
 					.setDescription(`Carregando **${videosarray.length}** videos da [playlist](${playlist.url}) de **[${playlist.channelTitle}](${playlist.channel.url})**`)
 					.setThumbnail(playlist.thumbnails.default.url)
@@ -107,7 +107,7 @@ module.exports.run = async (bot, message, args) => {
 
 				message.channel.send(pl_out_embed).then(async msg => {
 					await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
-					msg.edit(new Discord.RichEmbed()
+					msg.edit(new Discord.MessageEmbed()
 						.setTitle(pl_out_embed.title)
 						.setThumbnail(playlist.thumbnails.default.url)
 						.setDescription(`**[${videosarray.length} videos](${playlist.url})** foram adicionados à fila`)
@@ -119,7 +119,7 @@ module.exports.run = async (bot, message, args) => {
 			}
 		} catch (e) {
 			console.error(`${e}: Erro ao carregar playlist.`);
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle('Erro ao carregar playlist.')
 				.setColor('#FF0000'));
 		}
@@ -142,7 +142,7 @@ module.exports.run = async (bot, message, args) => {
 					videos = await youtube.searchVideos(search, search_limit);
 				} catch (e) {
 					console.log(`Stream failed to initialize in server [${serverQueue.guildname}]`)
-					return message.channel.send(new Discord.RichEmbed()
+					return message.channel.send(new Discord.MessageEmbed()
 						.setTitle("Ocorreu um erro na busca.")
 						.setDescription(`Pode ocorrer do comando de música estar passando por problemas.
 						Se você não conseguir reproduzir um vídeo mesmo enviando o link, mande um feedback de erro:
@@ -167,7 +167,7 @@ module.exports.run = async (bot, message, args) => {
 							try {
 								user_msgcollector.stop();
 								await bot_msgcollector.collected.deleteAll();
-								return message.channel.send(new Discord.RichEmbed()
+								return message.channel.send(new Discord.MessageEmbed()
 									.setDescription(`A busca por **${search}** foi cancelada`)
 									.setColor("#FF0000"))
 							} catch (e) {
@@ -187,7 +187,7 @@ module.exports.run = async (bot, message, args) => {
 							});
 						}
 						case 'no_video': {
-							return message.channel.send(new Discord.RichEmbed()
+							return message.channel.send(new Discord.MessageEmbed()
 								.setDescription(`🚫 Não foram encontrados resultados para **'${search}'**`)
 								.setColor('#FF0000'));
 						}
@@ -195,7 +195,7 @@ module.exports.run = async (bot, message, args) => {
 							return;
 						default: {
 							await bot_msgcollector.collected.deleteAll();
-							return message.channel.send(new Discord.RichEmbed()
+							return message.channel.send(new Discord.MessageEmbed()
 								.setDescription(`A busca por **${search}** expirou.`)
 								.setColor("#FF0000"));
 						}
@@ -205,7 +205,7 @@ module.exports.run = async (bot, message, args) => {
 				// Gets the user input and gets a video from search.
 				if (videos.length > 0) {
 					// Prints all the videos found in the search (controlled by search_limit).
-					var search_embed = new Discord.RichEmbed()
+					var search_embed = new Discord.MessageEmbed()
 						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
 						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 						.setColor("#00FF00");
@@ -258,7 +258,7 @@ module.exports.run = async (bot, message, args) => {
 								video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 							} catch (e) {
 								console.error('Error selecting video');
-								return message.channel.send(new Discord.RichEmbed()
+								return message.channel.send(new Discord.MessageEmbed()
 									.setTitle("Ocorreu um erro ao selecionar o vídeo.")
 									.setColor("#FF0000"));
 							}
@@ -282,7 +282,7 @@ module.exports.run = async (bot, message, args) => {
 					subcmd_map.get(url) ? subcmd_map.get(url).run(bot, message, args, serverQueue, url) : undefined;
 				} catch (e) {
 					console.error(`[USER ERROR] The bot is not in a voice channel.`);
-					return message.channel.send(new Discord.RichEmbed()
+					return message.channel.send(new Discord.MessageEmbed()
 						.setDescription('O bot não está em nenhum canal de voz.')
 						.setColor('#FF0000'));
 				}
@@ -326,14 +326,14 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 				const error_lim = 2;
 				if (unavailable_videos <= error_lim) {
 					console.error(`${e}: ${videosarray[v].title}.`);
-					message.channel.send(new Discord.RichEmbed()
+					message.channel.send(new Discord.MessageEmbed()
 						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
 						.setColor("#FF0000"));
 				}
 
 				if (unavailable_videos == error_lim) {
 					console.error(`SPAM: Stopped sending messages because of spam.`);
-					message.channel.send(new Discord.RichEmbed()
+					message.channel.send(new Discord.MessageEmbed()
 						.setTitle('Vários erros detectados')
 						.setDescription('Parando de emitir erros para evitar spam.')
 						.setColor('#FF0000'));
@@ -346,7 +346,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		song_info = await youtube.getVideoByID(video.id);
 	} catch (e) {
 		console.error(`${e}: [${message.author.username}] Tried to call song info with no song`);
-		return message.channel.send(new Discord.RichEmbed()
+		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle('🚫 Não tem músicas sendo tocadas no momento.')
 			.setColor("#FF0000"));
 	}
@@ -366,7 +366,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 		};
 	} catch (e) {
 		console.error(e);
-		return message.channel.send(new Discord.RichEmbed()
+		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle("Este vídeo não está disponível, não foi adicionado à fila.")
 			.setColor('#FF0000'));
 	}
@@ -405,7 +405,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 			queue.delete(message.guild.id);
 
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle("Não foi possível conectar ao canal de voz.")
 				.setColor("#FF0000"));
 		}
@@ -448,7 +448,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			Full queue length: ${module.exports.util.timing(fullqueue_length)}
 			Users listening: ${users_inchannel.length - 1}`);
 
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
 				.addField("Foi adicionado à fila", `**[${song.title}](${song.url})**`)
 				.addField(`Duração`, `${isLivestream}`, true)
@@ -481,7 +481,7 @@ async function play(bot, message, song, user_url) {
 	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} ${remaining_pl})`;
 
 	// Music embed end
-	message.channel.send(new Discord.RichEmbed()
+	message.channel.send(new Discord.MessageEmbed()
 		.setAuthor(author_str, bot.user.displayAvatarURL)
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Duração", `${isLivestream}`, true)
@@ -499,7 +499,7 @@ async function play(bot, message, song, user_url) {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			const helpfile = require('../bot/help.js');
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
 				.setColor('#FFAA00'));
 		}
@@ -508,7 +508,7 @@ async function play(bot, message, song, user_url) {
 			await serverQueue.voiceChannel.leave();
 			queue.delete(message.guild.id);
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
 				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
 				.setColor("#00FF00"));
@@ -519,14 +519,14 @@ async function play(bot, message, song, user_url) {
 			queue.delete(message.guild.id);
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
-			return message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
 				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '>feedback'`, bot.user.displayAvatarURL)
 				.setColor("#00FF00"));
 		}
 
 		if (reason === 'skipped') {
-			await message.channel.send(new Discord.RichEmbed()
+			await message.channel.send(new Discord.MessageEmbed()
 				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
 				.setColor("#00FF00"));
 			await serverQueue.songs.shift();
@@ -569,7 +569,7 @@ module.exports.util = {
 						try {
 							return r_tbnl += current_song.thumbnails.default.url;
 						} catch (e) {
-							message.channel.send(new Discord.RichEmbed()
+							message.channel.send(new Discord.MessageEmbed()
 								.setDescription('Não há nenhuma thumbnail disponível para este vídeo.')
 								.setColor('#FF000'));
 							return console.error('no thumbnail available');

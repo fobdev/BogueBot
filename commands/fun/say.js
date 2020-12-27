@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
     let output = args.join(' ');
 
     if (!output)
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Uso incorreto do comando')
             .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
             .setColor('#FF0000'));

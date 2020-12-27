@@ -4,7 +4,7 @@ const botconfig = require.main.require("./botconfig.json");
 module.exports.run = async (bot, message, args) => {
     const music = require('../music/music.js');
 
-    return message.channel.send(new Discord.RichEmbed()
+    return message.channel.send(new Discord.MessageEmbed()
         .setTitle(`Atualizações recentes do ${bot.user.username}.`)
         .setColor("#00FF00")
         .addField('Comando de música',

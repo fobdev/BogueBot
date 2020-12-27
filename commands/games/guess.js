@@ -4,7 +4,7 @@ let serversmap = new Map(); // List all the servers that the game is running
 
 module.exports.run = async (bot, message, args) => {
     if (serversmap.has(message.guild.id)) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Erro')
             .setDescription('Já existe uma instância do jogo rodando neste servidor.')
             .setColor("#FF0000"));
@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     let random_number = Math.floor(Math.random() * (gameconfig.maximum - gameconfig.minimum + 1)) + gameconfig.minimum;
-    message.channel.send(new Discord.RichEmbed()
+    message.channel.send(new Discord.MessageEmbed()
         .setTitle('Descubra o número secreto')
         .setDescription(`Seu numero secreto está entre **${gameconfig.minimum}** e **${gameconfig.maximum}.**
         Você tem ${gameconfig.tries} chances de acerta-lo.
@@ -42,13 +42,13 @@ module.exports.run = async (bot, message, args) => {
     await console.log(`Guess game started at server [${message.guild.name}] | answer: ${random_number}`);
     game_collector.on('collect', u_msg => {
         if (parseInt(u_msg.content) > gameconfig.maximum)
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle('Valor superior ao máximo')
                 .setDescription(`**${u_msg.content}** é maior que o valor máximo de **${gameconfig.maximum}**`)
                 .setColor('#FF0000'))
 
         if (parseInt(u_msg.content) < gameconfig.minimum)
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle('Valor inferior ao mínimo')
                 .setDescription(`**${u_msg.content}** é menor que o valor mínimo de **${gameconfig.minimum}**`)
                 .setColor('#FF0000'))
@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
         if (parseInt(u_msg.content) < random_number) {
             gameconfig.trycount++;
             gameconfig.tries--;
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${u_msg.content}** é **menor** que o numero secreto, tente novamente.`)
                 .setDescription(`${gameconfig.tries} ${tryplural}.`)
                 .setColor("#0000FF"))
@@ -90,7 +90,7 @@ module.exports.run = async (bot, message, args) => {
         if (parseInt(u_msg.content) > random_number) {
             gameconfig.trycount++;
             gameconfig.tries--;
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${u_msg.content}** é **maior** que o numero secreto, tente novamente.`)
                 .setDescription(`${gameconfig.tries} ${tryplural}.`)
                 .setColor("#0000FF"))
@@ -104,19 +104,19 @@ module.exports.run = async (bot, message, args) => {
         console.log(`Guess game ended at server [${message.guild.name}].`);
         switch (reason) {
             case 'gameover':
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Game Over!')
                     .setDescription(`Você perdeu todas as suas tentativas.
                     O número secreto era **${random_number}**.`)
                     .setColor('#FF0000'));
             case 'forced':
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Game Over!')
                     .setDescription(`Jogo terminado pelo usuário.
                     O número secreto era **${random_number}**.`)
                     .setColor('#FF0000'));
             case 'win':
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Vitória')
                     .setDescription('Parabéns, você acertou o numero secreto!')
                     .addField('Estatísticas',
@@ -126,7 +126,7 @@ module.exports.run = async (bot, message, args) => {
                     **Título:** ${gameconfig.title}`)
                     .setColor('#00FF00'));
             default:
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Game Over!')
                     .setDescription(`O jogo excedeu o limite de tempo de 5 minutos.
                     O número secreto era **${random_number}**.`)

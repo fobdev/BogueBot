@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
     let user1 = message.guild.member(message.mentions.users.firstKey());
     let user2 = message.guild.member(message.mentions.users.lastKey());
     if (!args[0] || (!args[0] && !args[1]) || !args[1] || args.length > 2) {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Uso incorreto do comando.')
             .setDescription("Tente usar: ``" + botconfig.prefix + this.help.name + ` [${this.help.arg.join('][')}]` + "``")
             .setColor("#FF0000"));
@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
                 img.write(filename, async () => {
                     // send
                     let attachment = new Discord.Attachment(filename);
-                    await message.channel.send(new Discord.RichEmbed()
+                    await message.channel.send(new Discord.MessageEmbed()
                         .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
                 })
             });
         } catch (e) {
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Erro ao criar o couple.")
                 .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
                 .setColor("#FF0000"));
@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
                 img.write(filename, async () => {
                     // send
                     let attachment = new Discord.Attachment(filename);
-                    await message.channel.send(new Discord.RichEmbed()
+                    await message.channel.send(new Discord.MessageEmbed()
                         .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args) => {
                 })
             });
         } catch (e) {
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Erro ao criar o couple.")
                 .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
                 .setColor("#FF0000"));

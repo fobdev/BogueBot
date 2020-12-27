@@ -11,12 +11,12 @@ module.exports.run = async (bot, message, args) => {
         const spotifyEmoji = 'https://cdn.discordapp.com/emojis/408668371039682560.png';
 
         if (args[0] == 'art')
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Arte do album ${user.presence.game.assets.largeText}, de ${user.presence.game.state}`)
                 .setImage(trackImgURL)
                 .setColor("#00FF00"));
         else
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setAuthor(`Música que ${user.username} está ouvindo no Spotify.`, spotifyEmoji)
                 .setThumbnail(trackImgURL)
                 .addField('Nome', user.presence.game.details, true)
@@ -30,7 +30,7 @@ module.exports.run = async (bot, message, args) => {
 
 
     } else {
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Erro no comando.")
             .setDescription("Não consigo ver nada relacionado a spotify no status do usuário.")
             .setColor("#FF0000"));

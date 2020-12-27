@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                     console.log("--------------------------------------------");
                     console.log(`A total of [${membercount}] Discord users reached.`);
                     console.log("--------------------------------------------");
-                    return message.channel.send(new Discord.RichEmbed()
+                    return message.channel.send(new Discord.MessageEmbed()
                         .setTitle("Lista de servidores muito grande.")
                         .setDescription("A lista de servidores foi enviada para a HerokuCLI pois a lista é maior que o limite de 2000 caracteres.")
                         .setColor('#FFFF00'));
@@ -43,14 +43,14 @@ module.exports.run = async (bot, message, args) => {
             if (args[1]) {
                 try {
                     current_servers[parseInt(args[1] - 1)].leave().then(g => {
-                        message.channel.send(new Discord.RichEmbed()
+                        message.channel.send(new Discord.MessageEmbed()
                             .setTitle('Comando executado com sucesso.')
                             .setDescription(`BogueBot saiu do servidor [${g}]`)
                             .setColor("#00FF00"));
                         console.log(`Boguebot left the guild [${g}]`)
                     });
                 } catch (e) {
-                    message.channel.send(new Discord.RichEmbed()
+                    message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Erro ao sair do servidor.')
                         .setDescription("Verifique corretamente a entrada numérica e tente novamente.\nLogs de erros enviados ao HerokuCLI.")
                         .setColor('#FF0000'));
@@ -60,7 +60,7 @@ module.exports.run = async (bot, message, args) => {
                 }
 
             } else {
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Erro no comando.')
                     .setDescription("É necessário selecionar um servidor (numero) para sair.")
                     .setColor("#FF0000"));
@@ -68,14 +68,14 @@ module.exports.run = async (bot, message, args) => {
         }
         break;
         default:
-            return message.channel.send(new Discord.RichEmbed()
+            return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Erro no comando.")
                 .setDescription("Selecione uma ação: \n1 - serverlist\n2 - leaveserver")
                 .setColor("#FF0000"));
         }
     } else {
         return message.channel.send(
-            new Discord.RichEmbed()
+            new Discord.MessageEmbed()
             .setDescription("Comando disponível apenas para desenvolvedores do BogueBot.")
             .setColor("#FF0000")
         );

@@ -3,7 +3,7 @@ const botconfig = require.main.require("./botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     let del_arg = args.join(" ");
-    const delfail_embed = new Discord.RichEmbed()
+    const delfail_embed = new Discord.MessageEmbed()
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.bulkDelete(del_arg, true);
                 return console.log(`[${del_arg}] messages removed from server [${message.guild.name}]`);
             } else
-                return message.channel.send(new Discord.RichEmbed()
+                return message.channel.send(new Discord.MessageEmbed()
                     .setDescription("Usuário não tem permissão para excluir mensagens.")
                     .setColor("#FF0000"));
         } catch (e) {

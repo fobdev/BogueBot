@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
         return message.reply(`seu numero é **${Math.floor(Math.random() * 100 + 1)}**`);
 
     if (minimum < 1 || !minimum)
-        return message.channel.send(new Discord.RichEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Uso incorreto do comando')
             .setDescription(
                 '``' + `${botconfig.prefix}${this.help.name}` + '``\n' +
