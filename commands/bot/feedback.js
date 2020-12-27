@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
 
   // Get Fobenga [User] Object
   let fobenga;
-  let uarr = message.client.users.array();
+  let uarr = message.client.users.cache.array();
   for (let i = 0; i < uarr.length; i++)
     if (uarr[i].id == 244270921286811648) fobenga = uarr[i];
 

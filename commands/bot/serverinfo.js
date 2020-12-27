@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args) => {
     if (message.author.id === '244270921286811648' && args[0]) {
-        let allguilds = bot.guilds.array();
+        let allguilds = bot.guilds.cache.array();
         let guildpoint;
         if (args[0] !== 'list') {
             guildpoint = args[0];
@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
         }
     } else server = message.guild;
 
-    let members = server.members.array();
+    let members = server.members.cache.array();
     let online_count = 0;
     for (let i = 0; i < members.length; i++) {
         let member_status = members[i].presence.status;
@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
     let syschannel = server.systemChannel;
     if (!syschannel) syschannel = 'Indisponível';
 
-    let channels_array = server.channels.array();
+    let channels_array = server.channels.cache.array();
     let text_channels = 0;
     let voice_channels = 0;
     for (let i = 0; i < channels_array.length; i++) {
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
         if (channels_array[i].type === 'voice') voice_channels++;
     }
 
-    let membersarray = server.members.array();
+    let membersarray = server.members.cache.array();
 
     console.log(`\n${server.name} USERS INFORMATION`)
     for (let i = 0; i < membersarray.length; i++) {
@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args) => {
     if (server === message.guild)
         guild_embed
         .addField('Canal Principal', syschannel, true)
-        .addField('Cargos', server.roles.array().join(', '))
+        .addField('Cargos', server.roles.cache.array().join(', '))
     else
         guild_embed
         .addField('Canal Principal', 'Informação indisponível para outros servidores.', true)

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-    var current_servers = bot.guilds.array();
+    var current_servers = bot.guilds.cache.array();
 
     let members_reached = 0;
     console.log("--------------------------------------------");
