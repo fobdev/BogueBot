@@ -89,7 +89,7 @@ module.exports.run = async (bot, message, args) => {
 	var video;
 	var videos;
 
-	if (!voiceChannel) {
+	if (voiceChannel.status != 0) {
 		console.log('[USER ERROR] message.author not in a voice channel.')
 		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle("Você **precisa estar em um canal de voz** para usar os comandos de música.")
