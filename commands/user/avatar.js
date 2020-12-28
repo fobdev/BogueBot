@@ -4,20 +4,17 @@ module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
 	let argument = args.join(" ");
 	
-	function strEndsWith(str, suffix) {
-		return str.match(suffix+"$")==suffix;
-	}
-
-
 	if (!user_avatar) {
 		if (argument === 'server') {
+			console.log(message.author.displayAvatarURL);
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setImage(message.guild.iconURL({format: 'gif'}))
 				.setColor("#00FF00"));
 		} 
 		
-		if (strEndsWith(message.author.displayAvatarURL, ".gif")) {
+		console.log(`gif: ${message.author.displayAvatarURL({format: 'gif'})}\nnormal: ${message.author.displayAvatarURL}`)
+		if (message.author.displayAvatarURL.endsWith(".gif")) {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL({format: 'gif'}))
@@ -31,12 +28,14 @@ module.exports.run = async (bot, message, args) => {
 			
 	}
 	
-	if (strEndsWith(user_avatar.user.displayAvatarURL, ".gif")) {
+	console.log(`gif: ${user_avatar.user.displayAvatarURL({format: 'gif'})}\nnormal: ${user_avatar.user.displayAvatarURL}`)
+	if (user_avatar.user.displayAvatarURL.endsWith(".gif")) {
 		return message.channel.send(new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setImage(user_avatar.user.displayAvatarURL({format: 'gif'}))
 		.setColor("#00FF00"));
 	} else {
+		console.log(`gif: ${user_avatar.user.displayAvatarURL({format: 'gif'})}\nnormal: ${user_avatar.user.displayAvatarURL}`)
 		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL)
