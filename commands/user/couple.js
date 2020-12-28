@@ -17,28 +17,37 @@ module.exports.run = async (bot, message, args) => {
     let filename = `couple_${message.id}.png`;
     if (firstmention_id != user1.user.id) {
         try {
-            console.log('Couple image processing...')
             await mergeImg([user2.user.displayAvatarURL({format: 'jpg'}), user1.user.displayAvatarURL({format: 'jpg'})]).then((img) => {
-                console.log(`Couple image generated sucessfully as [${filename}] locally.`);
+                console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    await message.channel.send(new Discord.MessageAttachment(filename));
-                    
-                    /*
-                    let attachment = new Discord.MessageAttachment(filename);
+                    try{
+                       // let attachment = new Discord.MessageAttachment(filename);
                     await message.channel.send(new Discord.MessageEmbed()
                         .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
-                        .attachFile(attachment)
+                        .attachFiles([new Discord.MessageAttachment(filename)])
                         .setImage(`attachment://${filename}`)
                         .setColor("#00FF00"));
-                    */
+                       
+                        // await message.channel.send(new Discord.MessageAttachment(filename))
+                        console.log('[FILE SEND] File sucessfully sent to guild.');
+                    } catch(e){
+                        console.log(`[FILE SEND ERROR]: ` + e);
+                    }
+                    
+                    // let attachment = new Discord.MessageAttachment(filename);
+                    await message.channel.send(new Discord.MessageEmbed()
+                        .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
+                        .attachFiles([new Discord.MessageAttachment(filename)])
+                        .setImage(`attachment://${filename}`)
+                        .setColor("#00FF00"));
                     
                     // await message.channel.send(new Discord.MessageAttachment(filename));
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
-                            console.log(`Error in deleting file ${filename}: ${e}`);
-                        else return console.log(`File [${filename}] deleted sucessfully.`);
+                            console.log(`[FILE ERROR] Error in deleting file ${filename}: ${e}`);
+                        else return console.log(`[FILE DELETE] File [${filename}] deleted sucessfully.`);
                     })
                 })
             });
@@ -52,25 +61,21 @@ module.exports.run = async (bot, message, args) => {
     } else {
         try {
             await mergeImg([user1.user.displayAvatarURL({format: 'jpg'}), user2.user.displayAvatarURL({format: 'jpg'})]).then((img) => {
-                console.log(`Couple image generated sucessfully as [${filename}] locally.`);
+                console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    
-                    await message.channel.send(new Discord.MessageAttachment(filename))
-                    /*
-                    let attachment = new Discord.MessageAttachment(filename);
-                    await message.channel.send(new Discord.MessageEmbed()
-                        .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
-                        .attachFile(attachment)
-                        .setImage(`attachment://${filename}`)
-                        .setColor("#00FF00")); 
-                    */
+                    try{
+                        await message.channel.send(new Discord.MessageAttachment(filename))
+                        console.log('[FILE SEND] File sucessfully sent to guild.');
+                    } catch(e){
+                        console.log(`[FILE SEND ERROR]: ` + e);
+                    }
                     
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
-                            console.log(`Error in deleting file ${filename}: ${e}`);
-                        else return console.log(`File [${filename}] deleted sucessfully.`);
+                            console.log(`[FILE ERROR] Error in deleting file ${filename}: ${e}`);
+                        else return console.log(`[FILE DELETE] File [${filename}] deleted sucessfully.`);
                     })
                 })
             });
