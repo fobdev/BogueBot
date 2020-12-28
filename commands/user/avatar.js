@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const validurl = require("valid-url");
+const https = require("https");
 
 module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
@@ -23,9 +24,15 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00"));
 	}
 
-	let uavt = user_avatar.user.displayAvatarURL({
+	https.get(user_avatar.user.displayAvatarURL({
 		format: 'gif'
-	});
+	}), (res) => {
+		console.log(`statusCode from user GIF: ${res.statusCode}`)
+	})
+
+	https.get(user_avatar.user.displayAvatarURL(), (res) => {
+		console.log(`statusCode from default: ${res.statusCode}`)
+	})
 
 	if (validurl.isUri(uavt)) {
 		console.log(`validated! ${uavt}`);
