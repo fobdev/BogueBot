@@ -43,6 +43,7 @@ module.exports.run = async (bot, message, args) => {
                 })
             });
         } catch (e) {
+            console.log(e)
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Erro ao criar o couple.")
                 .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
@@ -74,6 +75,7 @@ module.exports.run = async (bot, message, args) => {
                 })
             });
         } catch (e) {
+            console.log(e);
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Erro ao criar o couple.")
                 .setDescription("Ocorreu um erro inesperado ao criar o couple, tente de novo mudando a ordem das imagens ou escolhendo outro usuário.")
