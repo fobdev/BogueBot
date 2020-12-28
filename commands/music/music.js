@@ -41,10 +41,12 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 //		available at: github.com/fobenga 		//
 //////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
-	/*
-	message.channel.send("O comando de música está em manutenção no momento por conta de mudanças na API do Discord.");
+	
+	message.channel.send(new Discord.MessageEmbed()
+	.setTitle("Manutenção da API")
+	.setDescription("O comando de música está indisponível no momento.")
+	.setFooter("Sem prazo de retorno"));
 	return;
-	*/
 	
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
 	let subcmd_arr = new Array();
