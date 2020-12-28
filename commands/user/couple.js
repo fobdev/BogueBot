@@ -65,7 +65,12 @@ module.exports.run = async (bot, message, args) => {
                 img.write(filename, async () => {
                     // send
                     try{
-                        await message.channel.send(new Discord.MessageAttachment(filename))
+                        await message.channel.send(new Discord.MessageEmbed()
+                            .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
+                            .attachFiles([new Discord.MessageAttachment(filename)])
+                            .setImage(`attachment://${filename}`)
+                            .setColor("#00FF00"));
+                        //await message.channel.send(new Discord.MessageAttachment(filename))
                         console.log('[FILE SEND] File sucessfully sent to guild.');
                     } catch(e){
                         console.log(`[FILE SEND ERROR]: ` + e);
