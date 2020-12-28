@@ -6,19 +6,12 @@ module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
 	let argument = args.join(" ");
 	let isURLValid = true;
-	let gifGuildURL = message.guild.iconURL({
-		format: 'gif'
-	});
-	let gifAuthorURL = message.author.displayAvatarURL({
-		format: 'gif'
-	});
-	let gifUserURL = user_avatar.user.displayAvatarURL({
-		format: 'gif'
-	});
 
 	// in the case of no mentions
 	if (!user_avatar) {
 		if (argument === 'server') {
+
+
 			https.get((gifGuildURL), (res) => {
 				if (res.statusCode != 200)
 					isURLValid = false;
@@ -27,6 +20,10 @@ module.exports.run = async (bot, message, args) => {
 			let serverEmbed = new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setColor("#00FF00");
+			let gifGuildURL = message.guild.iconURL({
+				format: 'gif'
+			});
+
 			if (isURLValid)
 				return message.channel.send(serverEmbed.setImage(gifGuildURL));
 			else
@@ -40,6 +37,9 @@ module.exports.run = async (bot, message, args) => {
 			let authorEmbed = new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setColor("#00FF00");
+			let gifAuthorURL = message.author.displayAvatarURL({
+				format: 'gif'
+			});
 			if (isURLValid)
 				message.channel.send(authorEmbed.setImage(gifAuthorURL));
 			else
@@ -55,6 +55,9 @@ module.exports.run = async (bot, message, args) => {
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setColor("#00FF00");
+	let gifUserURL = user_avatar.user.displayAvatarURL({
+		format: 'gif'
+	});
 	if (isURLValid)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
 	else
