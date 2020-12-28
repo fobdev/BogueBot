@@ -3,6 +3,11 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
 	let argument = args.join(" ");
+	
+	function strEndsWith(str, suffix) {
+		return str.match(suffix+"$")==suffix;
+	}
+
 
 	if (!user_avatar) {
 		if (argument === 'server') {
@@ -12,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00"));
 		} 
 		
-		if (message.author.displayAvatarURL.endsWith(".gif")) {
+		if (strEndsWith(message.author.displayAvatarURL, ".gif")) {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL({format: 'gif'}))
@@ -26,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
 			
 	}
 	
-	if (user_avatar.user.displayAvatarURL.endsWith(".gif")) {
+	if (strEndsWith(user_avatar.user.displayAvatarURL, ".gif")) {
 		return message.channel.send(new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setImage(user_avatar.user.displayAvatarURL({format: 'gif'}))
