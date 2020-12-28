@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
     switch (args[0]) {
         case 'prime':
             filename = 'bogueprime.jpg';
-            attachment = new Discord.Attachment(filename);
+            attachment = new Discord.MessageAttachment(filename);
 
             await message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Bogue Prime")
@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args) => {
             break;
         case 'pixel':
             filename = 'boguepixel.jpg';
-            attachment = new Discord.Attachment(filename);
+            attachment = new Discord.MessageAttachment(filename);
 
             await message.channel.send(new Discord.MessageEmbed()
                 .setTitle("Bogue Pixel")
