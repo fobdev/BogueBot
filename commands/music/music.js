@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
 	message.channel.send(new Discord.MessageEmbed()
 	.setTitle("Manutenção da API")
 	.setDescription("O comando de música está indisponível no momento.")
-	.setFooter("Sem prazo de retorno"));
+	.setColor("#FF0000"));
 	return;
 	
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
