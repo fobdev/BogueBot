@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
     if (firstmention_id != user1.user.id) {
         try {
             console.log('Couple image processing...')
-            await mergeImg([user2.user.displayAvatarURL({format: jpg}) + "?size=8192", user1.user.displayAvatarURL({format: jpg}) + "?size=8192"]).then((img) => {
+            await mergeImg([user2.user.displayAvatarURL({format: 'jpg'}) + "?size=8192", user1.user.displayAvatarURL({format: 'jpg'}) + "?size=8192"]).then((img) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
@@ -51,7 +51,7 @@ module.exports.run = async (bot, message, args) => {
         }
     } else {
         try {
-            await mergeImg([user1.user.displayAvatarURL({format: jpg}) + "?size=8192", user2.user.displayAvatarURL({format: jpg}) + "?size=8192"]).then((img) => {
+            await mergeImg([user1.user.displayAvatarURL({format: 'jpg'}) + "?size=8192", user2.user.displayAvatarURL({format: 'jpg'}) + "?size=8192"]).then((img) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
