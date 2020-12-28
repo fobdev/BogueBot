@@ -14,6 +14,7 @@ module.exports.run = async (bot, message, args) => {
 				format: 'gif'
 			});
 			https.get((gifGuildURL), (res) => {
+				console.log(`statuscode: ${res.statusCode}`)
 				if (res.statusCode != 200)
 					isURLValid = false;
 			})
@@ -23,11 +24,11 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00");
 
 			if (isURLValid) {
-				console.log(`VALIDATED! url: ${gifGuildURL}`)
+				console.log(`VALIDATED! url: ${gifGuildURL} [isURLValid: ${isURLValid}]`)
 				return message.channel.send(serverEmbed.setImage(gifGuildURL));
 
 			} else {
-				console.log(`NOT VALIDATED! url: ${gifGuildURL}\nSHOULD USE: ${message.guild.iconURL()}`)
+				console.log(`NOT VALIDATED! url: ${gifGuildURL} [isURLValid: ${isURLValid}]\nSHOULD USE: ${message.guild.iconURL()}`)
 				return message.channel.send(serverEmbed.setImage(message.guild.iconURL()));
 			}
 		} else {
@@ -35,6 +36,7 @@ module.exports.run = async (bot, message, args) => {
 				format: 'gif'
 			});
 			https.get((gifAuthorURL), (res) => {
+				console.log(`statuscode: ${res.statusCode}`)
 				if (res.statusCode != 200)
 					isURLValid = false;
 			})
@@ -56,6 +58,7 @@ module.exports.run = async (bot, message, args) => {
 		format: 'gif'
 	});
 	https.get((gifUserURL), (res) => {
+		console.log(`statuscode: ${res.statusCode}`)
 		if (res.statusCode != 200)
 			isURLValid = false;
 	})
