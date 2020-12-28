@@ -10,8 +10,6 @@ module.exports.run = async (bot, message, args) => {
 	// in the case of no mentions
 	if (!user_avatar) {
 		if (argument === 'server') {
-
-
 			let gifGuildURL = message.guild.iconURL({
 				format: 'gif'
 			});
@@ -24,10 +22,14 @@ module.exports.run = async (bot, message, args) => {
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setColor("#00FF00");
 
-			if (isURLValid)
+			if (isURLValid) {
+				console.log(`VALIDATED! url: ${gifGuildURL}`)
 				return message.channel.send(serverEmbed.setImage(gifGuildURL));
-			else
+
+			} else {
+				console.log(`NOT VALIDATED! url: ${gifGuildURL}\nSHOULD USE: ${message.guild.iconURL()}`)
 				return message.channel.send(serverEmbed.setImage(message.guild.iconURL()));
+			}
 		} else {
 			let gifAuthorURL = message.author.displayAvatarURL({
 				format: 'gif'
@@ -40,10 +42,13 @@ module.exports.run = async (bot, message, args) => {
 			let authorEmbed = new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setColor("#00FF00");
-			if (isURLValid)
-				message.channel.send(authorEmbed.setImage(gifAuthorURL));
-			else
-				message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL()));
+			if (isURLValid) {
+				console.log(`VALIDATED! url: ${gifAuthorURL}`)
+				return message.channel.send(authorEmbed.setImage(gifAuthorURL));
+			} else {
+				console.log(`NOT VALIDATED! url: ${gifAuthorURL}\nSHOULD USE: ${message.author.displayAvatarURL()}`)
+				return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL()));
+			}
 		}
 	}
 
@@ -58,10 +63,13 @@ module.exports.run = async (bot, message, args) => {
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setColor("#00FF00");
-	if (isURLValid)
+	if (isURLValid) {
+		console.log(`VALIDATED! url: ${gifUserURL}`)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
-	else
+	} else {
+		console.log(`NOT VALIDATED! url: ${gifGuildURL}\nSHOULD USE ${user_avatar.user.displayAvatarURL()}`)
 		return message.channel.send(userEmbed.setImage(user_avatar.user.displayAvatarURL()))
+	}
 }
 
 module.exports.help = {
