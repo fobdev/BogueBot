@@ -41,7 +41,7 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 //		available at: github.com/fobenga 		//
 //////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
-	
+	console.log(">Attempt to use music command");
 	message.channel.send(new Discord.MessageEmbed()
 	.setTitle("Manutenção da API")
 	.setDescription("O comando de música está indisponível no momento.")
