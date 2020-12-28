@@ -4,56 +4,61 @@ module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
 	let argument = args.join(" ");
 
-
 	// in the case of no mentions
 	if (!user_avatar) {
 		if (argument === 'server')
 			try {
-				return message.channel.send(new Discord.MessageEmbed()
+				message.channel.send(new Discord.MessageEmbed()
 					.setTitle(`Ícone do servidor ${message.guild.name}`)
 					.setImage(message.guild.iconURL({
 						format: 'gif'
 					}))
 					.setColor("#00FF00"));
+				return;
 			} catch (e) {
 				console.log("Image was not a gif, using original.");
-				return message.channel.send(new Discord.MessageEmbed()
+				message.channel.send(new Discord.MessageEmbed()
 					.setTitle(`Ícone do servidor ${message.guild.name}`)
 					.setImage(message.guild.iconURL())
 					.setColor("#00FF00"));
+				return;
 			}
 
 	} else {
 		try {
-			return message.channel.send(new Discord.MessageEmbed()
+			message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL())
 				.setColor("#00FF00"));
+			return;
 		} catch (e) {
 			console.log("Image was not a gif, using original.");
-			return message.channel.send(new Discord.MessageEmbed()
+			message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL({
 					format: "gif"
 				}))
 				.setColor("#00FF00"));
+			return;
 		}
 	}
 
 	// in the case of mentions
 	try {
-		return message.channel.send(new Discord.MessageEmbed()
+		message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL({
 				format: "gif"
 			}))
 			.setColor("#00FF00"));
+		return;
 	} catch (e) {
 		console.log("Image was not a gif, using original.");
-		return message.channel.send(new Discord.MessageEmbed()
+		message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL())
 			.setColor("#00FF00"));
+		return;
 	}
 
 }
