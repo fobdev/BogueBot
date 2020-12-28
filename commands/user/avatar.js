@@ -8,11 +8,13 @@ module.exports.run = async (bot, message, args) => {
 	if (!user_avatar) {
 		if (argument === 'server')
 			try {
+				let filename = message.guild.iconURL({
+					format: 'gif'
+				});
 				message.channel.send(new Discord.MessageEmbed()
 					.setTitle(`Ícone do servidor ${message.guild.name}`)
-					.setImage(message.guild.iconURL({
-						format: 'gif'
-					}))
+					.attachFiles([new Discord.MessageAttachment(filename)])
+					.setImage(`attachment://${filename}`)
 					.setColor("#00FF00"));
 				return;
 			} catch (e) {
@@ -26,9 +28,13 @@ module.exports.run = async (bot, message, args) => {
 
 	} else {
 		try {
+			let filename = message.author.displayAvatarURL({
+				format: 'gif'
+			});
 			message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
-				.setImage(message.author.displayAvatarURL())
+				.attachFiles([new Discord.MessageAttachment(filename)])
+				.setImage(`attachment://${filename}`)
 				.setColor("#00FF00"));
 			return;
 		} catch (e) {
@@ -45,11 +51,13 @@ module.exports.run = async (bot, message, args) => {
 
 	// in the case of mentions
 	try {
+		let filename = user_avatar.user.displayAvatarURL({
+			format: 'gif'
+		});
 		message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
-			.setImage(user_avatar.user.displayAvatarURL({
-				format: "gif"
-			}))
+			.attachFiles([new Discord.MessageAttachment(filename)])
+			.setImage(`attachment://${filename}`)
 			.setColor("#00FF00"));
 		return;
 	} catch (e) {
