@@ -22,12 +22,17 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
+                    await message.channel.send(new Discord.MessageAttachment(filename));
+                    
+                    /*
                     let attachment = new Discord.MessageAttachment(filename);
                     await message.channel.send(new Discord.MessageEmbed()
                         .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
                         .setColor("#00FF00"));
+                    */
+                    
                     // await message.channel.send(new Discord.MessageAttachment(filename));
                     // delete
                     fs.unlink(`./${filename}`, err => {
@@ -49,13 +54,17 @@ module.exports.run = async (bot, message, args) => {
                 console.log(`Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
+                    
+                    await message.channel.send(new Discord.MessageAttachment(filename))
+                    /*
                     let attachment = new Discord.MessageAttachment(filename);
                     await message.channel.send(new Discord.MessageEmbed()
                         .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                         .attachFile(attachment)
                         .setImage(`attachment://${filename}`)
-                        .setColor("#00FF00"));
-                    //await message.channel.send(new Discord.MessageAttachment(filename))
+                        .setColor("#00FF00")); 
+                    */
+                    
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
