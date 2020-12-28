@@ -6,15 +6,13 @@ module.exports.run = async (bot, message, args) => {
 	
 	if (!user_avatar) {
 		if (argument === 'server') {
-			console.log(message.author.displayAvatarURL);
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setImage(message.guild.iconURL({format: 'gif'}))
 				.setColor("#00FF00"));
 		} 
 		
-		console.log(`gif: ${message.author.displayAvatarURL({format: 'gif'})}\nnormal: ${message.author.displayAvatarURL}`)
-		if (message.author.displayAvatarURL.endsWith(".gif")) {
+		if (message.author.displayAvatarURL().endsWith(".gif")) {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setImage(message.author.displayAvatarURL({format: 'gif'}))
@@ -28,17 +26,15 @@ module.exports.run = async (bot, message, args) => {
 			
 	}
 	
-	console.log(`gif: ${user_avatar.user.displayAvatarURL({format: 'gif'})}\nnormal: ${user_avatar.user.displayAvatarURL}`)
-	if (user_avatar.user.displayAvatarURL.endsWith(".gif")) {
+	if (user_avatar.user.displayAvatarURL().endsWith(".gif")) {
 		return message.channel.send(new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setImage(user_avatar.user.displayAvatarURL({format: 'gif'}))
 		.setColor("#00FF00"));
 	} else {
-		console.log(`gif: ${user_avatar.user.displayAvatarURL({format: 'gif'})}\nnormal: ${user_avatar.user.displayAvatarURL}`)
 		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
-			.setImage(user_avatar.user.displayAvatarURL)
+			.setImage(user_avatar.user.displayAvatarURL())
 			.setColor("#00FF00"));
 	}
 	
