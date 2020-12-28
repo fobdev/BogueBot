@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 function userAvatar(message, validURL, uAvatar) {
-	let gifUserURL = user_avatar.user.displayAvatarURL({
+	let gifUserURL = uAvatar.user.displayAvatarURL({
 		format: 'gif'
 	});
 
