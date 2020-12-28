@@ -5,34 +5,13 @@ module.exports.run = async (bot, message, args) => {
     let attachment;
     switch (args[0]) {
         case 'prime':
-            filename = 'bogueprime.jpg';
-            attachment = new Discord.MessageAttachment(filename);
-
-            await message.channel.send(new Discord.MessageEmbed()
-                .setTitle("Bogue Prime")
-                .attachFile(attachment)
-                .setImage(`attachment://${filename}`)
-                .setColor("#00FF00"));
+            await message.channel.send(new Discord.MessageAttachment('bogueprime.jpg'));
             break;
         case 'pixel':
-            filename = 'boguepixel.jpg';
-            attachment = new Discord.MessageAttachment(filename);
-
-            await message.channel.send(new Discord.MessageEmbed()
-                .setTitle("Bogue Pixel")
-                .attachFile(attachment)
-                .setImage(`attachment://${filename}`)
-                .setColor("#00FF00"));
+            await message.channel.send(new Discord.MessageAttachment('boguepixel.jpg'));
             break;
         default:
-            filename = 'bogue.jpg';
-            attachment = new Discord.Attachment(filename);
-
-            await message.channel.send(new Discord.MessageEmbed()
-                .setTitle("Bogue")
-                .attachFile(attachment)
-                .setImage(`attachment://${filename}`)
-                .setColor("#00FF00"));
+            await message.channel.send(new Discord.MessageAttachment('bogue.jpg'));
             break;
     }
 }
