@@ -22,6 +22,15 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00"));
 	}
 
+
+	try {
+		let gifverif = user_avatar.user.displayAvatarURL({
+			format: 'gif'
+		});
+	} catch (e) {
+		console.log(e);
+	}
+
 	return message.channel.send(new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setImage(user_avatar.user.displayAvatarURL({
