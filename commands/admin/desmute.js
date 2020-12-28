@@ -4,7 +4,7 @@ const botconfig = require.main.require("./botconfig.json");
 module.exports.run = async (bot, message, args) => {
     if (message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
         let desmute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        let muterole = message.guild.roles.find(role => role.name === 'mutado');
+        let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
 
         if (!desmute) {
             return message.channel.send(new Discord.MessageEmbed()
@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
                 .setColor('#FF0000'));
         }
 
-        if (desmute.roles.has(muterole.id)) {
+        if (desmute.roles.cache.has(muterole.id)) {
             desmute.removeRole(muterole.id);
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${desmute.displayName}** foi desmutado.`)

@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     let mute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    let muterole = message.guild.roles.find(role => role.name === 'mutado');
+    let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
 
     if (!mute) {
         return message.channel.send(new Discord.MessageEmbed()
@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     const desmute_file = require('./desmute');
-    if (!mute.roles.find(role => role.name === 'mutado')) {
+    if (!mute.roles.cache.find(role => role.name === 'mutado')) {
         mute.addRole(muterole.id);
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** foi silenciado.`)
