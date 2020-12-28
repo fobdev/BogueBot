@@ -12,12 +12,13 @@ module.exports.run = async (bot, message, args) => {
 		if (argument === 'server') {
 			let gifGuildURL = message.guild.iconURL({
 				format: 'gif'
-			});
-			https.get((gifGuildURL), (res) => {
-				console.log(`statuscode: ${res.statusCode}`)
-				if (res.statusCode != 200)
-					isURLValid = false;
-			})
+			}); {
+				https.get((gifGuildURL), async (res) => {
+					console.log(`statuscode: ${res.statusCode}`);
+					if (res.statusCode != 200)
+						isURLValid = false;
+				})
+			}
 
 			let serverEmbed = new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
@@ -34,12 +35,13 @@ module.exports.run = async (bot, message, args) => {
 		} else {
 			let gifAuthorURL = message.author.displayAvatarURL({
 				format: 'gif'
-			});
-			https.get((gifAuthorURL), (res) => {
-				console.log(`statuscode: ${res.statusCode}`)
-				if (res.statusCode != 200)
-					isURLValid = false;
-			})
+			}); {
+				https.get((gifAuthorURL), async (res) => {
+					console.log(`statuscode: ${res.statusCode}`)
+					if (res.statusCode != 200)
+						isURLValid = false;
+				})
+			}
 
 			let authorEmbed = new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
@@ -56,12 +58,13 @@ module.exports.run = async (bot, message, args) => {
 
 	let gifUserURL = user_avatar.user.displayAvatarURL({
 		format: 'gif'
-	});
-	https.get((gifUserURL), (res) => {
-		console.log(`statuscode: ${res.statusCode}`)
-		if (res.statusCode != 200)
-			isURLValid = false;
-	})
+	}); {
+		https.get((gifUserURL), async (res) => {
+			console.log(`statuscode: ${res.statusCode}`)
+			if (res.statusCode != 200)
+				isURLValid = false;
+		})
+	}
 
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
