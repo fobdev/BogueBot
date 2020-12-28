@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const validurl = require("valid-url");
 
 module.exports.run = async (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
@@ -22,21 +23,21 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00"));
 	}
 
-
-	try {
-		let gifverif = user_avatar.user.displayAvatarURL({
+	if (validurl.isUri(user_avatar.user.displayAvatarURL({
 			format: 'gif'
-		});
-	} catch (e) {
-		console.log(e);
+		}))) {
+		return message.channel.send(new Discord.MessageEmbed()
+			.setTitle(`Avatar de **${user_avatar.user.username}**`)
+			.setImage(user_avatar.user.displayAvatarURL({
+				format: 'gif'
+			}))
+			.setColor('#00FF00'))
+	} else {
+		return message.channel.send(new Discord.MessageEmbed()
+			.setTitle(`Avatar de **${user_avatar.user.username}**`)
+			.setImage(user_avatar.user.displayAvatarURL())
+			.setColor('#00FF00'))
 	}
-
-	return message.channel.send(new Discord.MessageEmbed()
-		.setTitle(`Avatar de **${user_avatar.user.username}**`)
-		.setImage(user_avatar.user.displayAvatarURL({
-			format: 'gif'
-		}))
-		.setColor('#00FF00'))
 }
 module.exports.help = {
 	name: "avatar",
