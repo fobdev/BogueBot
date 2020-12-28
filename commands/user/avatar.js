@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const validurl = require("valid-url");
 const https = require("https");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = (bot, message, args) => {
 	let user_avatar = message.guild.member(message.mentions.users.first());
 	let argument = args.join(" ");
 	let isURLValid = true;
@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
 			let gifGuildURL = message.guild.iconURL({
 				format: 'gif'
 			}); {
-				https.get((gifGuildURL), async (res) => {
+				https.get((gifGuildURL), (res) => {
 					console.log(`statuscode: ${res.statusCode}`);
 					if (res.statusCode != 200)
 						isURLValid = false;
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
 	let gifUserURL = user_avatar.user.displayAvatarURL({
 		format: 'gif'
 	}); {
-		https.get((gifUserURL), async (res) => {
+		https.get((gifUserURL), (res) => {
 			console.log(`statuscode: ${res.statusCode}`)
 			if (res.statusCode != 200)
 				isURLValid = false;
