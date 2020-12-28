@@ -23,9 +23,12 @@ module.exports.run = async (bot, message, args) => {
 				.setColor("#00FF00"));
 	}
 
-	if (validurl.isUri(user_avatar.user.displayAvatarURL({
-			format: 'gif'
-		}))) {
+	let uavt = user_avatar.user.displayAvatarURL({
+		format: 'gif'
+	});
+
+	if (validurl.isUri(uavt)) {
+		console.log(`validated! ${uavt}`);
 		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL({
@@ -33,6 +36,7 @@ module.exports.run = async (bot, message, args) => {
 			}))
 			.setColor('#00FF00'))
 	} else {
+		console.log(`not validated! ${uavt}`);
 		return message.channel.send(new Discord.MessageEmbed()
 			.setTitle(`Avatar de **${user_avatar.user.username}**`)
 			.setImage(user_avatar.user.displayAvatarURL())
