@@ -11,15 +11,19 @@ module.exports.run = async (bot, message, args) => {
 				.setImage(message.guild.iconURL())
 				.setColor("#00FF00"));
 
+		console.log(`original 1: ${message.author.displayAvatarURL()}`);
+
 		if (message.author.displayAvatarURL().endsWith(".gif")) {
 			let attachPic = message.author.displayAvatarURL({
 				format: "gif"
 			});
-			return message.channel.send(new Discord.MessageEmbed()
+			console.log(`original 2: ${message.author.displayAvatarURL()}`);
+			message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.attachFiles([new Discord.MessageAttachment(attachPic)])
 				.setImage(`attachment://${attachPic}`)
 				.setColor("#00FF00"));
+			console.log(`after sending: ${message.author.displayAvatarURL()}`);
 		} else {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
