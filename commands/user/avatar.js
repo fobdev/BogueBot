@@ -7,68 +7,27 @@ module.exports.run = async (bot, message, args) => {
 	// in the case of no mentions
 	if (!user_avatar) {
 		if (argument === 'server')
-			try {
-				let filename = message.guild.iconURL({
+			return message.channel.send(new Discord.MessageEmbed()
+				.setTitle(`Ícone do servidor ${message.guild.name}`)
+				.setImage(message.guild.iconURL({
 					format: 'gif'
-				});
-				message.channel.send(new Discord.MessageEmbed()
-					.setTitle(`Ícone do servidor ${message.guild.name}`)
-					.attachFiles([new Discord.MessageAttachment(filename)])
-					.setImage(`attachment://${filename}`)
-					.setColor("#00FF00"));
-				return;
-			} catch (e) {
-				console.log("Image was not a gif, using original.");
-				message.channel.send(new Discord.MessageEmbed()
-					.setTitle(`Ícone do servidor ${message.guild.name}`)
-					.setImage(message.guild.iconURL())
-					.setColor("#00FF00"));
-				return;
-			}
-
-	} else {
-		try {
-			let filename = message.author.displayAvatarURL({
-				format: 'gif'
-			});
-			message.channel.send(new Discord.MessageEmbed()
-				.setTitle(`Avatar de **${message.author.username}**`)
-				.attachFiles([new Discord.MessageAttachment(filename)])
-				.setImage(`attachment://${filename}`)
-				.setColor("#00FF00"));
-			return;
-		} catch (e) {
-			console.log("Image was not a gif, using original.");
-			message.channel.send(new Discord.MessageEmbed()
-				.setTitle(`Avatar de **${message.author.username}**`)
-				.setImage(message.author.displayAvatarURL({
-					format: "gif"
 				}))
 				.setColor("#00FF00"));
-			return;
-		}
+		else
+			return message.channel.send(new Discord.MessageEmbed()
+				.setTitle(`Avatar de **${message.author.username}**`)
+				.setImage(message.author.displayAvatarURL({
+					format: 'gif'
+				}))
+				.setColor("#00FF00"));
 	}
 
-	// in the case of mentions
-	try {
-		let filename = user_avatar.user.displayAvatarURL({
+	return message.channel.send(new Discord.MessageEmbed()
+		.setTitle(`Avatar de **${user_avatar.user.username}**`)
+		.setImage(user_avatar.user.displayAvatarURL({
 			format: 'gif'
-		});
-		message.channel.send(new Discord.MessageEmbed()
-			.setTitle(`Avatar de **${user_avatar.user.username}**`)
-			.attachFiles([new Discord.MessageAttachment(filename)])
-			.setImage(`attachment://${filename}`)
-			.setColor("#00FF00"));
-		return;
-	} catch (e) {
-		console.log("Image was not a gif, using original.");
-		message.channel.send(new Discord.MessageEmbed()
-			.setTitle(`Avatar de **${user_avatar.user.username}**`)
-			.setImage(user_avatar.user.displayAvatarURL())
-			.setColor("#00FF00"));
-		return;
-	}
-
+		}))
+		.setColor('#00FF00'))
 }
 module.exports.help = {
 	name: "avatar",
