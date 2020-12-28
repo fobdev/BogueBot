@@ -12,6 +12,9 @@ module.exports.run = async (bot, message, args) => {
 		if (argument === 'server') {
 
 
+			let gifGuildURL = message.guild.iconURL({
+				format: 'gif'
+			});
 			https.get((gifGuildURL), (res) => {
 				if (res.statusCode != 200)
 					isURLValid = false;
@@ -20,15 +23,15 @@ module.exports.run = async (bot, message, args) => {
 			let serverEmbed = new Discord.MessageEmbed()
 				.setTitle(`Ícone do servidor ${message.guild.name}`)
 				.setColor("#00FF00");
-			let gifGuildURL = message.guild.iconURL({
-				format: 'gif'
-			});
 
 			if (isURLValid)
 				return message.channel.send(serverEmbed.setImage(gifGuildURL));
 			else
 				return message.channel.send(serverEmbed.setImage(message.guild.iconURL()));
 		} else {
+			let gifAuthorURL = message.author.displayAvatarURL({
+				format: 'gif'
+			});
 			https.get((gifAuthorURL), (res) => {
 				if (res.statusCode != 200)
 					isURLValid = false;
@@ -37,9 +40,6 @@ module.exports.run = async (bot, message, args) => {
 			let authorEmbed = new Discord.MessageEmbed()
 				.setTitle(`Avatar de **${message.author.username}**`)
 				.setColor("#00FF00");
-			let gifAuthorURL = message.author.displayAvatarURL({
-				format: 'gif'
-			});
 			if (isURLValid)
 				message.channel.send(authorEmbed.setImage(gifAuthorURL));
 			else
@@ -47,6 +47,9 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
+	let gifUserURL = user_avatar.user.displayAvatarURL({
+		format: 'gif'
+	});
 	https.get((gifUserURL), (res) => {
 		if (res.statusCode != 200)
 			isURLValid = false;
@@ -55,9 +58,6 @@ module.exports.run = async (bot, message, args) => {
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${user_avatar.user.username}**`)
 		.setColor("#00FF00");
-	let gifUserURL = user_avatar.user.displayAvatarURL({
-		format: 'gif'
-	});
 	if (isURLValid)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
 	else
