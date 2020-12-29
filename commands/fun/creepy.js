@@ -3,8 +3,13 @@ const lunicode = require('lunicode');
 
 module.exports.run = async (bot, message, args) => {
     let input = args.join(' ');
-    await message.delete();
-    return message.channel.send(lunicode.tools.creepify.encode(input));
+    try {
+        // tries to delete but pass it if doesn't have permissions
+        await message.delete();
+        return message.channel.send(lunicode.tools.creepify.encode(input));
+    } catch (e) {
+        return message.channel.send(lunicode.tools.creepify.encode(input));
+    }
 }
 
 module.exports.help = {
