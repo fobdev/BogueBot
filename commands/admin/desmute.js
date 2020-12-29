@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
         }
 
         if (desmute.roles.cache.has(muterole.id)) {
-            desmute.removeRole(muterole.id);
+            desmute.role.remove(muterole.id);
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`**${desmute.displayName}** foi desmutado.`)
                 .setColor("#00FF00"));

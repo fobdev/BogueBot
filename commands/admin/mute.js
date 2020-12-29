@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
             .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``"));
     }
 
-    let mute = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let mute = message.guild.member(message.mentions.users.first());
     let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
 
     if (!mute) {
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args) => {
                 permissions: []
             });
 
-            message.guild.channels.forEach(async (channel, id) => {
+            message.guild.channels.cache.forEach(async (channel, id) => {
                 await channel.overwritePermissions(muterole, {
                     SEND_MESSAGES: false
                 });
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
 
     const desmute_file = require('./desmute');
     if (!mute.roles.cache.find(role => role.name === 'mutado')) {
-        mute.addRole(muterole.id);
+        mute.roles.add(muterole.id);
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** foi silenciado.`)
             .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
