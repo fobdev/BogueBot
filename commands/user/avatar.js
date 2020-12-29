@@ -11,22 +11,21 @@ module.exports.run = async (bot, message, args) => {
 				format: 'gif'
 			});
 
-			https.get((gifGuildURL), (res) => {
-				console.log(`statuscode: ${res.statusCode}`);
+			return https.get((gifGuildURL), (res) => {
 				if (res.statusCode != 200)
-					return guildAvatar(message, false, gifGuildURL);
-				else return guildAvatar(message, true, gifGuildURL);
+					guildAvatar(message, false, gifGuildURL);
+				else guildAvatar(message, true, gifGuildURL);
 			})
+
 		} else {
 			let gifAuthorURL = message.author.displayAvatarURL({
 				format: 'gif'
 			});
 
-			https.get((gifAuthorURL), async (res) => {
-				console.log(`statuscode: ${res.statusCode}`)
+			return https.get((gifAuthorURL), async (res) => {
 				if (res.statusCode != 200)
-					return authorAvatar(message, false, gifAuthorURL);
-				else return authorAvatar(message, true, gifAuthorURL);
+					authorAvatar(message, false, gifAuthorURL);
+				else authorAvatar(message, true, gifAuthorURL);
 			})
 		}
 	}
@@ -34,11 +33,10 @@ module.exports.run = async (bot, message, args) => {
 	let gifUserURL = user_avatar.user.displayAvatarURL({
 		format: 'gif'
 	});
-	https.get((gifUserURL), (res) => {
-		console.log(`statuscode: ${res.statusCode}`)
+	return https.get((gifUserURL), (res) => {
 		if (res.statusCode != 200)
-			return userAvatar(message, false, user_avatar, gifUserURL)
-		else return userAvatar(message, true, user_avatar, gifUserURL);
+			userAvatar(message, false, user_avatar, gifUserURL)
+		else userAvatar(message, true, user_avatar, gifUserURL);
 	})
 }
 
@@ -46,11 +44,10 @@ function userAvatar(message, validURL, uAvatar, gifUserURL) {
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${uAvatar.user.username}**`)
 		.setColor("#00FF00");
-	if (validURL) {
+	if (validURL)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
-	} else {
+	else
 		return message.channel.send(userEmbed.setImage(uAvatar.user.displayAvatarURL()))
-	}
 }
 
 function guildAvatar(message, validURL, gifGuildURL) {
@@ -58,22 +55,21 @@ function guildAvatar(message, validURL, gifGuildURL) {
 		.setTitle(`Ícone do servidor ${message.guild.name}`)
 		.setColor("#00FF00");
 
-	if (validURL) {
+	if (validURL)
 		return message.channel.send(serverEmbed.setImage(gifGuildURL));
-	} else {
+	else
 		return message.channel.send(serverEmbed.setImage(message.guild.iconURL()));
-	}
 }
 
 function authorAvatar(message, validURL, gifAuthorURL) {
 	let authorEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${message.author.username}**`)
 		.setColor("#00FF00");
-	if (validURL) {
+	if (validURL)
 		return message.channel.send(authorEmbed.setImage(gifAuthorURL));
-	} else {
+	else
 		return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL()));
-	}
+
 }
 
 module.exports.help = {
