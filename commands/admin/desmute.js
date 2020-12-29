@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
         }
 
 
-        console.log(message.channel.permissionsFor(desmute));
+        console.log(message.channel.permissionsFor(desmute).has('SEND_MESSAGES'));
         if (!desmute.hasPermission('SEND_MESSAGES')) {
             try {
                 message.channel.overwritePermissions([{
