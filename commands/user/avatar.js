@@ -47,7 +47,7 @@ function userAvatar(message, validURL, uAvatar, gifUserURL) {
 	if (validURL)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
 	else
-		return message.channel.send(userEmbed.setImage(uAvatar.user.displayAvatarURL()))
+		return message.channel.send(userEmbed.setImage(uAvatar.user.displayAvatarURL() + '?size=512'))
 }
 
 function guildAvatar(message, validURL, gifGuildURL) {
@@ -58,7 +58,7 @@ function guildAvatar(message, validURL, gifGuildURL) {
 	if (validURL)
 		return message.channel.send(serverEmbed.setImage(gifGuildURL));
 	else
-		return message.channel.send(serverEmbed.setImage(message.guild.iconURL()));
+		return message.channel.send(serverEmbed.setImage(message.guild.iconURL() + '?size=512'));
 }
 
 function authorAvatar(message, validURL, gifAuthorURL) {
@@ -68,7 +68,7 @@ function authorAvatar(message, validURL, gifAuthorURL) {
 	if (validURL)
 		return message.channel.send(authorEmbed.setImage(gifAuthorURL));
 	else
-		return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL()));
+		return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL() + '?size=512'));
 
 }
 
