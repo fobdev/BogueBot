@@ -10,49 +10,58 @@ module.exports.run = async (bot, message, args) => {
     }
 
     let mute = message.guild.member(message.mentions.users.first());
-    let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
+    // let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
 
-    if (!mute) {
+    if (!mute)
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
             .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
             .setColor('#FF0000'));
-    }
-
-    if (mute.hasPermission('ADMINISTRATOR'))
+    else if (mute.hasPermission('ADMINISTRATOR'))
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Permissões insuficientes')
             .setDescription("Você não pode silenciar um **administrador**.")
             .setColor("#FF0000"));
-
-    if (!muterole) {
+    else {
         try {
-            muterole = await message.guild.roles.create({
-                name: "mutado",
-                color: "#000000",
-                permissions: []
-            });
-
-            message.guild.channel.overwritePermissions([{
+            message.channel.overwritePermissions([{
                 id: mute.id,
                 deny: ['SEND_MESSAGES']
             }])
-
-            /*
-            message.guild.channels.cache.each(async (channel, id) => {
-                await channel.overwritePermissions(muterole, {
-                    SEND_MESSAGES: false
-                });
-            });
-            */
         } catch (e) {
-            console.error(e);
+            return console.log(e);
         }
     }
 
+    // if (!muterole) {
+    //     try {
+    //         /*
+    //         muterole = await message.guild.roles.create({
+    //             name: "mutado",
+    //             color: "#000000",
+    //             permissions: []
+    //         });
+    //         */
+
+    //         message.channel.overwritePermissions([{
+    //             id: mute.id,
+    //             deny: ['SEND_MESSAGES']
+    //         }])
+
+    //         message.guild.channels.cache.each(async (channel, id) => {
+    //             await channel.overwritePermissions(muterole, {
+    //                 SEND_MESSAGES: false
+    //             });
+    //         });
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    // }
+
+
     const desmute_file = require('./desmute');
     if (!mute.roles.cache.find(role => role.name === 'mutado')) {
-        mute.roles.add(muterole.id);
+        // mute.roles.add(muterole.id);
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** foi silenciado.`)
             .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
