@@ -19,22 +19,21 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
     }
 
-    if (mute.hasPermission('ADMINISTRATOR')) {
+    if (mute.hasPermission('ADMINISTRATOR'))
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Permissões insuficientes')
             .setDescription("Você não pode silenciar um **administrador**.")
             .setColor("#FF0000"));
-    }
 
     if (!muterole) {
         try {
-            muterole = await message.guild.createRole({
+            muterole = await message.guild.roles.create({
                 name: "mutado",
                 color: "#000000",
                 permissions: []
             });
 
-            message.guild.channels.cache.forEach(async (channel, id) => {
+            message.guild.channels.cache.each(async (channel, id) => {
                 await channel.overwritePermissions(muterole, {
                     SEND_MESSAGES: false
                 });
