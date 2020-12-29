@@ -220,7 +220,8 @@ bot.on("message", async message => {
         .attachFiles(bog_att)
         .setImage(`attachment://${'bogue.jpg'}`)
         .setColor("#00FF00"));
-    }
+    } else
+      return message.channel.send(answers[rng]);
   }
 
   if (message.author.id === bot.user.id) {
