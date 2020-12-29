@@ -110,6 +110,12 @@ bot.on("ready", async () => {
 });
 
 bot.on("guildCreate", guild => {
+  // Get Fobenga [User] Object
+  let fobenga;
+  let uarr = message.client.users.cache.array();
+  for (let i = 0; i < uarr.length; i++)
+    if (uarr[i].id == 244270921286811648) fobenga = uarr[i];
+
   const help_file = require("./commands/bot/help.js");
   const music_file = require("./commands/music/music.js");
   const welcome_embed = new Discord.MessageEmbed()
@@ -135,7 +141,7 @@ bot.on("guildCreate", guild => {
     )
     .addBlankField()
     .setFooter("Você é um administrador deste servidor, por isso recebeu esta mesagem. \n" +
-      "Bot criado por Bila, em ")
+      `Bot criado por ${fobenga.tag}, em `)
     .setTimestamp(bot.user.createdAt);
 
   const bots_channel = guild.channels.cache.find(ch => ch.name === "bots");
@@ -197,9 +203,9 @@ bot.on("message", async message => {
   if (message.content.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
     let answers = ['bog.png', 'bog2.png', 'iae', 'salve', 'tmj', 'oi', 'ói',
-      'fala', 'bog', 'bila', 'José', 'TMJ',
-      '?', '?????', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-      'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk',
+      'fala', 'bog', 'bila', 'José', 'TMJ', 'pfv me deixa em paz cara todo dia isso meu deus do ceu',
+      '?', '?????', 'markov fdp', 'aaah vamo nessa!', '01100010 01101001 01101100 01100001', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
+      'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
       'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
       'tamo juntó', 'vó', 'VÓ', 'porque', 'para de me chamar por favor', 'nao tenho nada pra voce',
       'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu'
