@@ -31,7 +31,8 @@ module.exports.run = async (bot, message, args) => {
 	}
 
 	let gifUserURL = user_avatar.user.displayAvatarURL({
-		format: 'gif'
+		format: 'gif',
+		size: 256
 	});
 	return https.get((gifUserURL), (res) => {
 		if (res.statusCode != 200)
@@ -45,9 +46,11 @@ function userAvatar(message, validURL, uAvatar, gifUserURL) {
 		.setTitle(`:frame_photo: Avatar de **${uAvatar.user.username}**`)
 		.setColor("#00FF00");
 	if (validURL)
-		return message.channel.send(userEmbed.setImage(gifUserURL + '?size=256'))
+		return message.channel.send(userEmbed.setImage(gifUserURL))
 	else
-		return message.channel.send(userEmbed.setImage(uAvatar.user.displayAvatarURL() + '?size=512'))
+		return message.channel.send(userEmbed.setImage(uAvatar.user.displayAvatarURL({
+			size: 512
+		})))
 }
 
 function guildAvatar(message, validURL, gifGuildURL) {
@@ -56,9 +59,11 @@ function guildAvatar(message, validURL, gifGuildURL) {
 		.setColor("#00FF00");
 
 	if (validURL)
-		return message.channel.send(serverEmbed.setImage(gifGuildURL + '?size=256'));
+		return message.channel.send(serverEmbed.setImage(gifGuildURL));
 	else
-		return message.channel.send(serverEmbed.setImage(message.guild.iconURL() + '?size=512'));
+		return message.channel.send(serverEmbed.setImage(message.guild.iconURL({
+			size: 512
+		})));
 }
 
 function authorAvatar(message, validURL, gifAuthorURL) {
@@ -66,9 +71,11 @@ function authorAvatar(message, validURL, gifAuthorURL) {
 		.setTitle(`:frame_photo: Avatar de **${message.author.username}**`)
 		.setColor("#00FF00");
 	if (validURL)
-		return message.channel.send(authorEmbed.setImage(gifAuthorURL + '?size=256'));
+		return message.channel.send(authorEmbed.setImage(gifAuthorURL));
 	else
-		return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL() + '?size=512'));
+		return message.channel.send(authorEmbed.setImage(message.author.displayAvatarURL({
+			size: 512
+		})));
 
 }
 
