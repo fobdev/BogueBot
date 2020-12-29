@@ -23,7 +23,6 @@ module.exports.run = async (bot, message, args) => {
     else {
         if (!message.channel.permissionsFor(mute).has('SEND_MESSAGES'))
             return message.channel.send(new Discord.MessageEmbed()
-                .setTitle("Erro")
                 .setDescription(`**${mute.displayName}** já está silenciado.`)
                 .setColor("#FF0000"))
         else
@@ -38,17 +37,10 @@ module.exports.run = async (bot, message, args) => {
     }
 
     const desmute_file = require('./desmute');
-    if (!mute.roles.cache.find(role => role.name === 'mutado')) {
-        return message.channel.send(new Discord.MessageEmbed()
-            .setTitle(`**${mute.displayName}** foi silenciado.`)
-            .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
-            .setColor("#00FF00"));
-    } else {
-        return message.channel.send(new Discord.MessageEmbed()
-            .setTitle(`**${mute.displayName}** já está silenciado.`)
-            .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
-            .setColor("#FF0000"));
-    }
+    return message.channel.send(new Discord.MessageEmbed()
+        .setTitle(`**${mute.displayName}** foi silenciado.`)
+        .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
+        .setColor("#00FF00"));
 }
 
 

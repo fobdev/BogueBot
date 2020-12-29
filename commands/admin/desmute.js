@@ -14,18 +14,15 @@ module.exports.run = async (bot, message, args) => {
         if (!message.channel.permissionsFor(desmute).has('SEND_MESSAGES')) {
             try {
                 message.channel.permissionOverwrites.get(desmute.id).delete();
-                // message.channel.overwritePermissions({
-                //     id: desmute.id
-                // });
             } catch (e) {
                 return console.log(e);
             }
             return message.channel.send(new Discord.MessageEmbed()
-                .setTitle(`**${desmute.displayName}** foi desmutado.`)
+                .setDescription(`**${desmute.displayName}** foi desmutado.`)
                 .setColor("#00FF00"));
         } else
             return message.channel.send(new Discord.MessageEmbed()
-                .setTitle(`**${desmute.displayName}** não está mutado.`)
+                .setDescription(`**${desmute.displayName}** não está mutado.`)
                 .setColor("#FF0000"));
     }
 }
