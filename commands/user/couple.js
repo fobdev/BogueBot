@@ -17,22 +17,26 @@ module.exports.run = async (bot, message, args) => {
     let filename = `couple_${message.id}.png`;
     if (firstmention_id != user1.user.id) {
         try {
-            await mergeImg([user2.user.displayAvatarURL({format: 'jpg'}), user1.user.displayAvatarURL({format: 'jpg'})]).then((img) => {
+            await mergeImg([user2.user.displayAvatarURL({
+                format: 'jpg'
+            }), user1.user.displayAvatarURL({
+                format: 'jpg'
+            })]).then((img) => {
                 console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    try{
-                    await message.channel.send(new Discord.MessageEmbed()
-                        .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
-                        .attachFiles([new Discord.MessageAttachment(filename)])
-                        .setImage(`attachment://${filename}`)
-                        .setColor("#00FF00"));
-                       
+                    try {
+                        await message.channel.send(new Discord.MessageEmbed()
+                            .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
+                            .attachFiles([new Discord.MessageAttachment(filename)])
+                            .setImage(`attachment://${filename}`)
+                            .setColor("#00FF00"));
+
                         console.log('[FILE SEND] File sucessfully sent to guild.');
-                    } catch(e){
+                    } catch (e) {
                         console.log(`[FILE SEND ERROR]: ` + e);
                     }
-                    
+
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
@@ -50,21 +54,25 @@ module.exports.run = async (bot, message, args) => {
         }
     } else {
         try {
-            await mergeImg([user1.user.displayAvatarURL({format: 'jpg'}), user2.user.displayAvatarURL({format: 'jpg'})]).then((img) => {
+            await mergeImg([user1.user.displayAvatarURL({
+                format: 'jpg'
+            }), user2.user.displayAvatarURL({
+                format: 'jpg'
+            })]).then((img) => {
                 console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
-                    try{
+                    try {
                         await message.channel.send(new Discord.MessageEmbed()
                             .setTitle(`${user1.displayName} :heart: ${user2.displayName}`)
                             .attachFiles([new Discord.MessageAttachment(filename)])
                             .setImage(`attachment://${filename}`)
                             .setColor("#00FF00"));
                         console.log('[FILE SEND] File sucessfully sent to guild.');
-                    } catch(e){
+                    } catch (e) {
                         console.log(`[FILE SEND ERROR]: ` + e);
                     }
-                    
+
                     // delete
                     fs.unlink(`./${filename}`, err => {
                         if (err)
