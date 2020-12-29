@@ -18,11 +18,11 @@ module.exports.run = async (bot, message, args) => {
 				else return guildAvatar(message, true, gifGuildURL);
 			})
 		} else {
-			https.get((gifAuthorURL), async (res) => {
-				let gifAuthorURL = message.author.displayAvatarURL({
-					format: 'gif'
-				});
+			let gifAuthorURL = message.author.displayAvatarURL({
+				format: 'gif'
+			});
 
+			https.get((gifAuthorURL), async (res) => {
 				console.log(`statuscode: ${res.statusCode}`)
 				if (res.statusCode != 200)
 					return authorAvatar(message, false, gifAuthorURL);
@@ -31,11 +31,10 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
+	let gifUserURL = uAvatar.user.displayAvatarURL({
+		format: 'gif'
+	});
 	https.get((gifUserURL), (res) => {
-		let gifUserURL = uAvatar.user.displayAvatarURL({
-			format: 'gif'
-		});
-
 		console.log(`statuscode: ${res.statusCode}`)
 		if (res.statusCode != 200)
 			return userAvatar(message, false, user_avatar, gifUserURL)
