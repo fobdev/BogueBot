@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
             return message.channel.send(new Discord.MessageEmbed()
                 .setDescription(`:arrow_up: **[${serverQueue.songs[1].title}](${serverQueue.songs[1].url})** reproduzindo a seguir.`)
-                .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+                .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
                 .setColor("#00FF00"));
         }
 
@@ -103,7 +103,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     .setTitle(`Posição de vídeos alternadas`)
                     .setDescription(`**${first_arrow} [${serverQueue.songs[swappable_e1].title}](${serverQueue.songs[swappable_e1].url})**\n` +
                         `**${second_arrow} [${serverQueue.songs[swappable_e2].title}](${serverQueue.songs[swappable_e2].url})**`)
-                    .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+                    .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
                     .setColor("#00FF00"));
 
             } else {
@@ -195,7 +195,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 return message.channel.send(new Discord.MessageEmbed()
                     .setTitle(`Fila pulada para a posição **${args[1]}**`)
                     .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a nova fila.")
-                    .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+                    .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
                     .setColor("#00FF00"));
             } else {
                 return message.channel.send(new Discord.MessageEmbed()

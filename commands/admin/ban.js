@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args) => {
 
         return message.channel.send(new Discord.MessageEmbed()
             .addField(`Usuário **${ban_user.displayName}** banido.`, `| ${ban_user} | ID: ${ban_user.id}`)
-            .setThumbnail(ban_user.user.displayAvatarURL)
+            .setThumbnail(ban_user.user.displayAvatarURL())
             .setColor("#00FF00")
             .addField("Motivo", ban_reason)
             .setFooter(`Banido por ${message.author.username}`));

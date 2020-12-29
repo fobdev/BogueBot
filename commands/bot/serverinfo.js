@@ -60,7 +60,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('Online', online_count, true)
         .addField('Região', server.region, true)
         .addField('Canais', `${text_channels} texto / ${voice_channels} voz`, true)
-        .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL, true)
+        .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL(), true)
 
     if (server === message.guild)
         guild_embed

@@ -37,8 +37,8 @@ module.exports.run = async (bot, message, args) => {
 
         return message.channel.send(new Discord.MessageEmbed()
             .addField("Usuário foi expulso do servidor", `${kick_user}`)
-            .setThumbnail(kick_user.user.displayAvatarURL)
-            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL)
+            .setThumbnail(kick_user.user.displayAvatarURL())
+            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL())
             .setColor("#00FF00"));
     } else {
         try {
@@ -53,8 +53,8 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send(new Discord.MessageEmbed()
             .addField("Usuário foi expulso do servidor", `${kick_user}`)
             .addField("Motivo", `${kick_reason}`)
-            .setThumbnail(kick_user.user.displayAvatarURL)
-            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL)
+            .setThumbnail(kick_user.user.displayAvatarURL())
+            .setFooter(`Expulso por ${message.author.username}`, message.author.displayAvatarURL())
             .setColor("#00FF00"));
     }
 

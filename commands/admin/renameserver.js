@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
             .setTitle('Nome alterado com sucesso.')
             .setDescription(`Nome do servidor alterado de **${message.guild.name}** para **${newname}**`)
             .setColor("#00FF00")
-            .setFooter(`Alterado por ${message.author.username}`, message.author.displayAvatarURL));
+            .setFooter(`Alterado por ${message.author.username}`, message.author.displayAvatarURL()));
     } else {
         return message.channel.send(new Discord.MessageEmbed()
             .setDescription("O usuário não tem permissão para executar esse comando.")

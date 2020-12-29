@@ -120,7 +120,7 @@ module.exports.run = async (bot, message, args) => {
 						.setDescription(`**[${videosarray.length} videos](${playlist.url})** foram adicionados à fila`)
 						.addField('\u200B', "Use ``" +
 							`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
-						.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL)
+						.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL())
 						.setColor('#00FF00'));
 				});
 			}
@@ -213,8 +213,8 @@ module.exports.run = async (bot, message, args) => {
 				if (videos.length > 0) {
 					// Prints all the videos found in the search (controlled by search_limit).
 					var search_embed = new Discord.MessageEmbed()
-						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL)
-						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL())
+						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
 						.setColor("#00FF00");
 
 					var nullstr;
@@ -456,13 +456,13 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			Users listening: ${users_inchannel.length - 1}`);
 
 			return message.channel.send(new Discord.MessageEmbed()
-				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL)
+				.setAuthor(`${bot.user.username} Music Player`, bot.user.displayAvatarURL())
 				.addField("Foi adicionado à fila", `**[${song.title}](${song.url})**`)
 				.addField(`Duração`, `${isLivestream}`, true)
 				.addField(`Posição`, `${serverQueue.songs.length - 1}`, true)
 				.addField('\u200B', verify_qlenstr)
 				.setThumbnail(song.thumbnail)
-				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL)
+				.setFooter(`Adicionado por ${message.author.username}`, message.author.displayAvatarURL())
 				.setColor("#00FF00")
 				.setURL(song.url));
 		}
@@ -489,7 +489,7 @@ async function play(bot, message, song, user_url) {
 
 	// Music embed end
 	message.channel.send(new Discord.MessageEmbed()
-		.setAuthor(author_str, bot.user.displayAvatarURL)
+		.setAuthor(author_str, bot.user.displayAvatarURL())
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
@@ -517,7 +517,7 @@ async function play(bot, message, song, user_url) {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 			return message.channel.send(new Discord.MessageEmbed()
 				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL)
+				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
 				.setColor("#00FF00"));
 		}
 
@@ -528,7 +528,7 @@ async function play(bot, message, song, user_url) {
 
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '>feedback'`, bot.user.displayAvatarURL)
+				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '>feedback'`, bot.user.displayAvatarURL())
 				.setColor("#00FF00"));
 		}
 

@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
   if (parseInt(serverQueue.songs[0].length) === 0) isLivestream = "**🔴 Livestream**";
 
   var now_playing_embed = new Discord.MessageEmbed()
-    .setAuthor(`${bot.user.username} Now Playing`, bot.user.displayAvatarURL)
+    .setAuthor(`${bot.user.username} Now Playing`, bot.user.displayAvatarURL())
     .addField("♪ Agora tocando", `**[${current_music.title}](${current_music.url})**`)
     .addField("Tempo", `${isLivestream}`, true)
     .addField("Adicionado por", `[${current_music.author}]`, true)

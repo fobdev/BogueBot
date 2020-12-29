@@ -26,8 +26,8 @@ module.exports.run = async (bot, message, args) => {
             .setDescription(`Servidor: **${message.guild.name}**`)
             .addField("Usuário", `| ${r_user} | ID: ${r_user.id}`)
             .addField("Motivo", reason)
-            .setThumbnail(r_user.user.displayAvatarURL)
-            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL)
+            .setThumbnail(r_user.user.displayAvatarURL())
+            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL())
             .setColor('#FFE100'));
 
         // Message that goes to the guild
@@ -36,8 +36,8 @@ module.exports.run = async (bot, message, args) => {
             .setTitle("Mensagem de denúncia enviada ao dono do servidor")
             .addField("Usuário", `| ${r_user} | ID: ${r_user.id}`)
             .addField("Motivo", reason)
-            .setThumbnail(r_user.user.displayAvatarURL)
-            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL));
+            .setThumbnail(r_user.user.displayAvatarURL())
+            .setFooter(`Denunciado por ${message.author.username}`, message.author.displayAvatarURL()));
     }
 }
 

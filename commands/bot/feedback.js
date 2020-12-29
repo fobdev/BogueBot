@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
     new Discord.MessageEmbed()
       .setColor("#0000FF")
       .setTitle("A user sent a feedback message!")
-      .setThumbnail(message.author.displayAvatarURL)
+      .setThumbnail(message.author.displayAvatarURL())
       .setDescription(user_message)
       .addField(
         "Sent by user:",
@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args) => {
     new Discord.MessageEmbed()
       .setColor("#0000FF")
       .setTitle("Uma mensagem de feedback foi enviada para bila#2863!")
-      .setThumbnail(message.author.displayAvatarURL)
+      .setThumbnail(message.author.displayAvatarURL())
       .setDescription(user_message)
       .addField(
         "Enviado por:",

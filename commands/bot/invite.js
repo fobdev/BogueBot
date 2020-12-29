@@ -22,7 +22,7 @@ module.exports.run = async (bot, message, args) => {
         .then(link => message.channel.send(new Discord.MessageEmbed()
             .setDescription(`Link de autenticação do ${bot.user.username}`)
             .setColor("#00FF00")
-            .setThumbnail(bot.user.displayAvatarURL)
+            .setThumbnail(bot.user.displayAvatarURL())
             .addField(`Use esse link para adicionar ${bot.user.username}` +
                 " em qualquer servidor:",
                 `${link}`)));

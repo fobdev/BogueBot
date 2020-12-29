@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
     } else {
         try {
             const perm_embed = new Discord.MessageEmbed()
-                .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL);
+                .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL());
 
             if (message.guild.member(message.author).hasPermission('MANAGE_MESSAGES')) {
                 await message.delete();

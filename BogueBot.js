@@ -116,7 +116,7 @@ bot.on("guildCreate", guild => {
     .setColor("#00FF00")
     .setAuthor(
       `Obrigado por adicionar o ${bot.user.username} ao servidor ${guild.name}!`,
-      bot.user.displayAvatarURL
+      bot.user.displayAvatarURL()
     )
     .addBlankField()
     .setDescription(

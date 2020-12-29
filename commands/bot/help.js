@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args) => {
   let help_embed = new Discord.MessageEmbed()
     .setAuthor(
       `Comandos do ${bot.user.username}`,
-      bot.user.displayAvatarURL,
+      bot.user.displayAvatarURL(),
       "https://github.com/Fobenga"
     )
     .setDescription(
