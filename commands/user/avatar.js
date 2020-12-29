@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
 		}
 	}
 
-	let gifUserURL = uAvatar.user.displayAvatarURL({
+	let gifUserURL = user_avatar.user.displayAvatarURL({
 		format: 'gif'
 	});
 	https.get((gifUserURL), (res) => {
