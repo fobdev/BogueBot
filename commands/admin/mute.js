@@ -21,14 +21,20 @@ module.exports.run = async (bot, message, args) => {
             .setDescription("Você não pode silenciar um **administrador**.")
             .setColor("#FF0000"));
     else {
-        try {
-            message.channel.overwritePermissions([{
-                id: mute.id,
-                deny: ['SEND_MESSAGES']
-            }])
-        } catch (e) {
-            return console.log(e);
-        }
+        if (!message.channel.permissionsFor(mute).has('SEND_MESSAGES'))
+            return message.channel.send(new Discord.MessageEmbed()
+                .setTitle("Erro")
+                .setDescription(`**${mute.displayName}** já está silenciado.`)
+                .setColor("#FF0000"))
+        else
+            try {
+                message.channel.overwritePermissions([{
+                    id: mute.id,
+                    deny: ['SEND_MESSAGES']
+                }])
+            } catch (e) {
+                return console.log(e);
+            }
     }
 
     const desmute_file = require('./desmute');
