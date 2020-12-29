@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
         if (!message.channel.permissionsFor(desmute).has('SEND_MESSAGES'))
             try {
                 message.channel.overwritePermissions([{
-                    id: mute.id,
+                    id: desmute.id,
                     allow: ['SEND_MESSAGES']
                 }])
             } catch (e) {
