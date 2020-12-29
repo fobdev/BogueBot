@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, args) => {
 
 function userAvatar(message, validURL, uAvatar, gifUserURL) {
 	let userEmbed = new Discord.MessageEmbed()
-		.setTitle(`Avatar de **${uAvatar.user.username}**`)
+		.setTitle(`:frame_photo: Avatar de **${uAvatar.user.username}**`)
 		.setColor("#00FF00");
 	if (validURL)
 		return message.channel.send(userEmbed.setImage(gifUserURL))
@@ -52,7 +52,7 @@ function userAvatar(message, validURL, uAvatar, gifUserURL) {
 
 function guildAvatar(message, validURL, gifGuildURL) {
 	let serverEmbed = new Discord.MessageEmbed()
-		.setTitle(`Ícone do servidor ${message.guild.name}`)
+		.setTitle(`:frame_photo: Ícone do servidor ${message.guild.name}`)
 		.setColor("#00FF00");
 
 	if (validURL)
@@ -63,7 +63,7 @@ function guildAvatar(message, validURL, gifGuildURL) {
 
 function authorAvatar(message, validURL, gifAuthorURL) {
 	let authorEmbed = new Discord.MessageEmbed()
-		.setTitle(`Avatar de **${message.author.username}**`)
+		.setTitle(`:frame_photo: Avatar de **${message.author.username}**`)
 		.setColor("#00FF00");
 	if (validURL)
 		return message.channel.send(authorEmbed.setImage(gifAuthorURL));
