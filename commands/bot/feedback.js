@@ -7,13 +7,13 @@ module.exports.run = async (bot, message, args) => {
   if (!user_message)
     return message.channel.send(
       new Discord.MessageEmbed()
-        .setTitle("Uso incorreto do comando")
-        .setDescription(
-          "Tente usar: ``" +
-            `${botconfig.prefix}${this.help.name} [${this.help.arg}]` +
-            "``"
-        )
-        .setColor("#FF0000")
+      .setTitle("Uso incorreto do comando")
+      .setDescription(
+        "Tente usar: ``" +
+        `${botconfig.prefix}${this.help.name} [${this.help.arg}]` +
+        "``"
+      )
+      .setColor("#FF0000")
     );
 
   // Get Fobenga [User] Object
@@ -24,38 +24,37 @@ module.exports.run = async (bot, message, args) => {
 
   fobenga.send(
     new Discord.MessageEmbed()
-      .setColor("#0000FF")
-      .setTitle("A user sent a feedback message!")
-      .setThumbnail(message.author.displayAvatarURL())
-      .setDescription(user_message)
-      .addField(
-        "Sent by user:",
-        `${message.author.username} (${message.author.tag})`
-      )
-      .addField("Sent from guild:", message.guild.name)
-      .setFooter("Message sent")
-      .setTimestamp(message.createdTimestamp)
+    .setColor("#0000FF")
+    .setTitle("A user sent a feedback message!")
+    .setThumbnail(message.author.displayAvatarURL())
+    .setDescription(user_message)
+    .addField(
+      "Sent by user:",
+      `${message.author.username} (${message.author.tag})`
+    )
+    .addField("Sent from guild:", message.guild.name)
+    .setFooter("Message sent")
+    .setTimestamp(message.createdTimestamp)
   );
 
   return message.channel.send(
     new Discord.MessageEmbed()
-      .setColor("#0000FF")
-      .setTitle("Uma mensagem de feedback foi enviada para bila#2863!")
-      .setThumbnail(message.author.displayAvatarURL())
-      .setDescription(user_message)
-      .addField(
-        "Enviado por:",
-        `${message.author.username} (${message.author.tag})`
-      )
-      .addField("Enviado do servidor:", message.guild.name)
-      .setFooter("Enviada em")
-      .setTimestamp(message.createdTimestamp)
+    .setColor("#0000FF")
+    .setTitle(`Uma mensagem de feedback foi enviada para ${fobenga.tag}`)
+    .setThumbnail(message.author.displayAvatarURL())
+    .setDescription(user_message)
+    .addField(
+      "Enviado por:",
+      `${message.author.username} (${message.author.tag})`
+    )
+    .addField("Enviado do servidor:", message.guild.name)
+    .setFooter("Enviada em")
+    .setTimestamp(message.createdTimestamp)
   );
 };
 
 module.exports.help = {
   name: "feedback",
-  descr:
-    "Use este comando para enviar uma sugestão de comando para o administrador do bot. (bila#2863)",
+  descr: `Use este comando para enviar uma sugestão de comando para o administrador do bot.`,
   arg: ["mensagem"]
 };
