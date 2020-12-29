@@ -10,6 +10,9 @@ module.exports.run = async (bot, message, args) => {
         case 'pixel':
             await message.channel.send(new Discord.MessageAttachment('boguepixel.jpg'));
             break;
+        case 'line':
+            await message.channel.send(new Discord.MessageAttachment('bogueline.png'));
+            break;
         default:
             await message.channel.send(new Discord.MessageAttachment('bogue.jpg'));
             break;
