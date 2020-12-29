@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
             try {
                 message.channel.overwritePermissions([{
                     id: desmute.id
-                }]).delete('');
+                }]).then(channel => channel.overwritePermissions.delete());
             } catch (e) {
                 return console.log(e);
             }
