@@ -25,6 +25,6 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: 'roll',
-    descr: 'Rola um número entre dois valores ou entre 1 e 100 se nenhum valor for explicitado.'.',
+    descr: 'Rola um número entre dois valores ou entre 1 e 100 se nenhum valor for explicitado.',
     arg: ['minimo', 'maximo']
 }
