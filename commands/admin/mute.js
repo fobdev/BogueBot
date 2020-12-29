@@ -33,11 +33,18 @@ module.exports.run = async (bot, message, args) => {
                 permissions: []
             });
 
+            message.guild.channel.overwritePermissions([{
+                id: mute.id,
+                deny: ['SEND_MESSAGES']
+            }])
+
+            /*
             message.guild.channels.cache.each(async (channel, id) => {
                 await channel.overwritePermissions(muterole, {
                     SEND_MESSAGES: false
                 });
             });
+            */
         } catch (e) {
             console.error(e);
         }
