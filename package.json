@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bufferutil": "^4.0.2",
+    "canvas": "^2.6.1",
     "discord.js": "^12.5.1",
     "genius-lyrics": "^4.1.4",
     "i18n": "^0.13.2",
