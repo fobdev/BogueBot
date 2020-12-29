@@ -88,7 +88,6 @@ function wrapText(context, text, x, y, maxWidth, lineHeightRatio, fromBottom, fo
     let lineHeight = _lineHeightRatio * fontSize;
     console.log('lineH', lineHeight, lineHeightRatio, fontSize);
     let lines = [];
-    let y = y;
     let line = '';
     let words = text.split(' ');
 
