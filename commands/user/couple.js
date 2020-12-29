@@ -19,9 +19,9 @@ module.exports.run = async (bot, message, args) => {
         try {
             await mergeImg([user2.user.displayAvatarURL({
                 format: 'jpg'
-            }), user1.user.displayAvatarURL({
+            } + '?size=256'), user1.user.displayAvatarURL({
                 format: 'jpg'
-            })]).then((img) => {
+            } + '?size=256')]).then((img) => {
                 console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
@@ -56,9 +56,9 @@ module.exports.run = async (bot, message, args) => {
         try {
             await mergeImg([user1.user.displayAvatarURL({
                 format: 'jpg'
-            }), user2.user.displayAvatarURL({
+            } + '?size=256'), user2.user.displayAvatarURL({
                 format: 'jpg'
-            })]).then((img) => {
+            } + '?size=256')]).then((img) => {
                 console.log(`[FILE CREATE] Couple image generated sucessfully as [${filename}] locally.`);
                 img.write(filename, async () => {
                     // send
