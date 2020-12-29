@@ -7,35 +7,43 @@ module.exports.run = async (bot, message, args) => {
 	// in the case of no mentions
 	if (!user_avatar) {
 		if (args.join(" ") === 'server') {
+			let gifGuildURL = message.guild.iconURL({
+				format: 'gif'
+			});
+
 			https.get((gifGuildURL), (res) => {
 				console.log(`statuscode: ${res.statusCode}`);
 				if (res.statusCode != 200)
-					return guildAvatar(message, false);
-				else return guildAvatar(message, true);
+					return guildAvatar(message, false, gifGuildURL);
+				else return guildAvatar(message, true, gifGuildURL);
 			})
 		} else {
 			https.get((gifAuthorURL), async (res) => {
+				let gifAuthorURL = message.author.displayAvatarURL({
+					format: 'gif'
+				});
+
 				console.log(`statuscode: ${res.statusCode}`)
 				if (res.statusCode != 200)
-					return authorAvatar(message, false);
-				else return authorAvatar(message, true);
+					return authorAvatar(message, false, gifAuthorURL);
+				else return authorAvatar(message, true, gifAuthorURL);
 			})
 		}
 	}
 
 	https.get((gifUserURL), (res) => {
+		let gifUserURL = uAvatar.user.displayAvatarURL({
+			format: 'gif'
+		});
+
 		console.log(`statuscode: ${res.statusCode}`)
 		if (res.statusCode != 200)
-			return userAvatar(message, false, user_avatar)
-		else return userAvatar(message, true, user_avatar);
+			return userAvatar(message, false, user_avatar, gifUserURL)
+		else return userAvatar(message, true, user_avatar, gifUserURL);
 	})
 }
 
-function userAvatar(message, validURL, uAvatar) {
-	let gifUserURL = uAvatar.user.displayAvatarURL({
-		format: 'gif'
-	});
-
+function userAvatar(message, validURL, uAvatar, gifUserURL) {
 	let userEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${uAvatar.user.username}**`)
 		.setColor("#00FF00");
@@ -46,11 +54,7 @@ function userAvatar(message, validURL, uAvatar) {
 	}
 }
 
-function guildAvatar(message, validURL) {
-	let gifGuildURL = message.guild.iconURL({
-		format: 'gif'
-	});
-
+function guildAvatar(message, validURL, gifGuildURL) {
 	let serverEmbed = new Discord.MessageEmbed()
 		.setTitle(`Ícone do servidor ${message.guild.name}`)
 		.setColor("#00FF00");
@@ -62,11 +66,7 @@ function guildAvatar(message, validURL) {
 	}
 }
 
-function authorAvatar(message, validURL) {
-	let gifAuthorURL = message.author.displayAvatarURL({
-		format: 'gif'
-	});
-
+function authorAvatar(message, validURL, gifAuthorURL) {
 	let authorEmbed = new Discord.MessageEmbed()
 		.setTitle(`Avatar de **${message.author.username}**`)
 		.setColor("#00FF00");
