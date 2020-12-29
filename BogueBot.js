@@ -208,7 +208,7 @@ bot.on("message", async message => {
       'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
       'me chamou.. .w. .w. w..aaaaaaaaaaaaaa44444aaaaaaa', 'quem e vc', 'me deixa', 'vou te suicidar', 'pq',
       'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'nao tenho nada pra voce',
-      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w'
+      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w', 'ȃ̸̦̩̦̙̓̌̍̉̈́̀͋̋̒̾͜͠ͅ ̸̨̢̨͖͚̝̩̼̓͑̈́̽̎p̴̼̝̀̃̓̉̽̊͝ọ̶̞̞͕̇̽̿̇̔͂̇r̵̞̞͔̿̓́́̓̎̄̅̈́̐̍͂̚͝͝r̴̜̼͈̼̗̣̗̦̰͔̱͐͒̇́͐̾̌̍̌̚̚͠å̴͎̗̤̩̩̼̮̅̃̐̓̍̌̎̀̐̕͜͜ ̴̡̡̨͙͉̖̞̭͖̥̱͇͇̯͖̾̊͂͊͝d̸͕̝͈͖̭̪̦̘̙̮̰̹̃̃̾̌̔͑̐̈́̕͘͠e̴̛̩̮̥̹̳͖͖̊̈́̒̚͠ ̵̡͎͍̪̭̗̙̯̞̳́̿̌̇̒͂̚̚u̶̗̺͌̏̿̑̅́̐̿̂͘͠͠m̵̯̓̓̄̃̎̾̓ ̸̧̡̛͙̰̱̝͔̩̜̯̺͍̳̅̋̾͆͌̏͊͌̀͆̔b̶̧͇̰͍́o̸̖̞̣̭̮̜͉̼̯͗̇̑̎̎̔̾̃̕ǵ̵̰̺̰͈̝̯̙̜͇͔̙̹̗͑̌̂́̓̎̒̾͂̍͑͝ứ̴̤͓̟̮̝͉͓͎̦̞̤̤̻̄̑̀͜e̵̡̢̘͍̘̯̜̼̎̃̓͊̑̔͊̚͜͝ͅb̶̧̨̨̪̜̮̤̓̍́̂̉̄̒͂͜ͅo̷̧̟̟̎̊̃͑͋̐̅̆̂͋̌̂ť̷̡̤͖̹̅̏̔̂̉̿͝'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
