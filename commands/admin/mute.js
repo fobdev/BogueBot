@@ -10,8 +10,6 @@ module.exports.run = async (bot, message, args) => {
     }
 
     let mute = message.guild.member(message.mentions.users.first());
-    // let muterole = message.guild.roles.cache.find(role => role.name === 'mutado');
-
     if (!mute)
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
@@ -33,35 +31,8 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
-    // if (!muterole) {
-    //     try {
-    //         /*
-    //         muterole = await message.guild.roles.create({
-    //             name: "mutado",
-    //             color: "#000000",
-    //             permissions: []
-    //         });
-    //         */
-
-    //         message.channel.overwritePermissions([{
-    //             id: mute.id,
-    //             deny: ['SEND_MESSAGES']
-    //         }])
-
-    //         message.guild.channels.cache.each(async (channel, id) => {
-    //             await channel.overwritePermissions(muterole, {
-    //                 SEND_MESSAGES: false
-    //             });
-    //         });
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
-
-
     const desmute_file = require('./desmute');
     if (!mute.roles.cache.find(role => role.name === 'mutado')) {
-        // mute.roles.add(muterole.id);
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`**${mute.displayName}** foi silenciado.`)
             .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
