@@ -202,37 +202,24 @@ bot.on("message", async message => {
 
   if (message.content.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
-    let answers = ['bog.png', 'bog2.png', 'iae', 'salve', 'tmj', 'oi', 'ói',
+    let answers = ['bog_img', 'iae', 'salve', 'tmj', 'oi', 'ói',
       'fala', 'bog', 'bila', 'José', 'TMJ', 'pfv me deixa em paz cara todo dia isso meu deus do ceu',
-      '?', '?????', 'markov fdp', 'aaah vamo nessa!', '01100010 01101001 01101100 01100001', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-      'slv', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
-      'me chamou', 'quem e vc', 'me deixa', 'vou me suicidar', 'pq',
-      'tamo juntó', 'vó', 'VÓ', 'porque', 'para de me chamar por favor', 'nao tenho nada pra voce',
-      'qual a sua', 'k', 'mae puta', 'oi gente', 'IAE', 'eu mesmo como descobriu'
+      '?', '??w???', 'markov fdp', 'aaah vamo nessa!', '01100010 01101001 01101100 01100001', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
+      'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
+      'me chamou.. .w. .w. w..aaaaaaaaaaaaaa44444aaaaaaa', 'quem e vc', 'me deixa', 'vou te suicidar', 'pq',
+      'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'nao tenho nada pra voce',
+      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
 
-    switch (rng) {
-      case 0: {
-        let bog_att = new Discord.Attachment('bog.png');
-        await message.channel.send(new Discord.MessageEmbed()
-          .setTitle(`Eu mesmo como como descobriu.`)
-          .attachFile(bog_att)
-          .setImage(`attachment://${'bog.png'}`)
-          .setColor("#00FF00"));
-      }
-      break;
-    case 1: {
-      let bog2_att = new Discord.Attachment('bog2.png');
+    if (rng == 'bog_img') {
+      let bog_att = new Discord.MessageAttachment('bogue.jpg');
       await message.channel.send(new Discord.MessageEmbed()
-        .attachFile(bog2_att)
-        .setImage(`attachment://${'bog2.png'}`)
+        .setTitle(`Eu mesmo como como descobriu.`)
+        .attachFiles(bog_att)
+        .setImage(`attachment://${'bogue.jpg'}`)
         .setColor("#00FF00"));
-    }
-    break;
-    default:
-      return message.channel.send(answers[rng]);
     }
   }
 
