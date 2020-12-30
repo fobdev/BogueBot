@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
     let user = message.mentions.users.first() || message.author;
     let spotifyActivity = user.presence.activities.find(activity => activity.name = 'Spotify');
+    console.log(spotifyActivity);
     if (spotifyActivity) {
         let trackImgURL = `https://i.scdn.co/image/${spotifyActivity.assets.largeImage.slice(8)}`;
         const spotifyEmoji = 'https://cdn.discordapp.com/emojis/408668371039682560.png';
