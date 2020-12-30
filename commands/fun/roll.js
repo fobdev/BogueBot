@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-    name: 'random',
-    descr: 'Mostra um numero aleatório entre dois valores.',
+    name: 'roll',
+    descr: 'Rola um número entre dois valores ou entre 1 e 100 se nenhum valor for explicitado.',
     arg: ['minimo', 'maximo']
 }
