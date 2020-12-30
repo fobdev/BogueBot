@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args) => {
-	var ping = await bot.ping;
+	var ping = await bot.ws.ping;
 	return message.channel.send(new Discord.MessageEmbed()
 		.setDescription(`**${bot.user.username} Ping: ${Math.floor(ping)}ms**`)
 		.setColor("#00FF00"));
