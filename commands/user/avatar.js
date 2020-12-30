@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
 					dynamic: true,
 					size: 512
 				}))
-				.setColor("#FF0000"))
+				.setColor("#00FF00"))
 		} else {
 			// shows avatar from the message sender
 			return message.channel.send(new Discord.MessageEmbed()
