@@ -195,12 +195,13 @@ bot.on("guildMemberRemove", member => {
 
 bot.on("message", async message => {
   let prefix = botconfig.prefix;
-  let messageArray = message.content.split(" ");
+  let messageArray = message.content.split(" ").toLowerCase();
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
   let command_file = bot.commands.get(cmd.slice(prefix.length));
 
-  if (message.content.includes('bog') && !message.content.includes(prefix)) {
+  let bogcheck = message.content.toLowerCase();
+  if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
     let answers = ['bog_img', 'iae', 'salve', 'tmj', 'oi', 'ói',
       'fala', 'bog', 'bila', 'José', 'TMJ', 'pfv me deixa em paz cara todo dia isso meu deus do ceu',
