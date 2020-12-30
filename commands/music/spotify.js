@@ -2,10 +2,8 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
     let user = message.mentions.users.first() || message.author;
-    if (user.presence.game !== null &&
-        user.presence.game.type === 2 &&
-        user.presence.game.name === 'Spotify' &&
-        user.presence.game.assets !== null) {
+    if (user.presence.activities.type == 'LISTENING' &&
+        user.presence.activities.name == 'Spotify') {
         let trackImgURL = `https://i.scdn.co/image/${user.presence.game.assets.largeImage.slice(8)}`;
         let trackUrl = `https://open.spotify.com/track/${user.presence.game.syncID}`;
         const spotifyEmoji = 'https://cdn.discordapp.com/emojis/408668371039682560.png';
@@ -25,16 +23,11 @@ module.exports.run = async (bot, message, args) => {
                 .addField('Ouvir a música: ', `[${trackUrl}](${trackUrl})`, false)
                 .setDescription("Clique na thumbnail da capa para ve-la em alta resolução.")
                 .setColor(0x1ED760));
-
-
-
-
-    } else {
+    } else
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Erro no comando.")
             .setDescription("Não consigo ver nada relacionado a spotify no status do usuário.")
             .setColor("#FF0000"));
-    }
 }
 
 module.exports.help = {
