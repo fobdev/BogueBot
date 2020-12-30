@@ -195,7 +195,7 @@ bot.on("guildMemberRemove", member => {
 
 bot.on("message", async message => {
   let prefix = botconfig.prefix;
-  let messageArray = message.content.split(" ").toLowerCase();
+  let messageArray = message.content.toLowerCase().split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
   let command_file = bot.commands.get(cmd.slice(prefix.length));
