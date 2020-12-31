@@ -99,7 +99,9 @@ module.exports.run = async (bot, message, args) => {
 
     game_collector.on('end', (msg, reason) => {
         serversmap.delete(message.guild.id);
-        bot_collector.collected.deleteAll();
+        bot_collector.collected.each(message => {
+            message.delete();
+        })
         bot_collector.stop();
         console.log(`Guess game ended at server [${message.guild.name}].`);
         switch (reason) {
