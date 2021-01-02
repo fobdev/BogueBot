@@ -236,7 +236,9 @@ bot.on("message", async message => {
       console.log(
         `[${message.author.username}] Direct Message: ${message.content}`
       );
-      return bot.generateInvite(8).then(link => {
+      return bot.generateInvite({
+        permissions: ['ADMINISTRATOR']
+      }).then(link => {
         message.channel.send(
           new Discord.MessageEmbed()
           .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
