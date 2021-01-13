@@ -55,13 +55,17 @@ module.exports.run = async (bot, message, args) => {
         .setColor("#FF8800")
         .setThumbnail(server.iconURL)
         .addField('ID do servidor', server.id)
-        .addField('Dono', `${await server.owner.displayName} (${await server.owner.user.tag})`, true)
-        .addField('ID do dono', await server.ownerID, true)
         .addField('Quantidade de membros', server.memberCount, true)
         .addField('Online', online_count, true)
         .addField('Região', server.region, true)
         .addField('Canais', `${text_channels} texto / ${voice_channels} voz`, true)
-        .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL(), true)
+
+
+    if (server.owner) {
+        guild_embed.addField('Dono', `${await server.owner.displayName} (${await server.owner.user.tag})`, true)
+            .addField('ID do dono', await server.ownerID, true)
+            .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL(), true)
+    }
 
     let arrayshow_limit = 10;
     let roles_array = server.roles.cache.array();
