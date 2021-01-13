@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
 
     if (!ban_user)
-        return message.channel.send(Discord.MessageEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle(`Usuário não encontrado no servidor **${message.guild.name}**.`)
             .setDescription('Use **@** para identificar o usuário corretamente.')
             .setColor("#FF0000"));
@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     if (ban_reason === "")
-        return message.channel.send(Discord.MessageEmbed()
+        return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
             .setColor("#FF0000")
             .addField("Você deve adicionar o motivo pelo qual está banindo esse usuário",
