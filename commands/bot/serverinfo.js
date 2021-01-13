@@ -62,10 +62,17 @@ module.exports.run = async (bot, message, args) => {
         .addField('Canais', `${text_channels} texto / ${voice_channels} voz`, true)
         .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL(), true)
 
+    let roles_array = server.roles.cache.array();
+    let r_array_string = roles_array.join(', ');
+    if (roles_array.size >= 10) {
+        roles_array = server.roles.cache.array().slice(10);
+        r_array_string = `${roles_array} + ${roles_array.size - 10} cargos`;
+    }
+
     if (server === message.guild)
         guild_embed
         .addField('Canal Principal', syschannel, true)
-        .addField('Cargos', server.roles.cache.array().join(', '))
+        .addField('Cargos', `${r_array_string}`)
     else
         guild_embed
         .addField('Canal Principal', 'Informação indisponível para outros servidores.', true)
