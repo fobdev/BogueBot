@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (bot, message, args) => {
+    let server;
     if (message.author.id === '244270921286811648' && args[0]) {
         let allguilds = bot.guilds.cache.array();
         let guildpoint;
         if (args[0] !== 'list') {
             guildpoint = args[0];
-            var server = allguilds[guildpoint];
+            server = allguilds[guildpoint];
         } else if (args[0] === 'list') {
             let svlist_str = ``;
 
@@ -62,11 +63,13 @@ module.exports.run = async (bot, message, args) => {
         .addField('Canais', `${text_channels} texto / ${voice_channels} voz`, true)
         .setFooter(`Criado em ${server.createdAt}`, server.owner.user.displayAvatarURL(), true)
 
+    let arrayshow_limit = 10;
     let roles_array = server.roles.cache.array();
+    console.log(server.roles.cache.array().length);
     let r_array_string = roles_array.join(', ');
-    if (roles_array.size >= 10) {
-        roles_array = server.roles.cache.array().slice(10);
-        r_array_string = `${roles_array} + ${roles_array.size - 10} cargos`;
+    if (roles_array.length > arrayshow_limit) {
+        roles_array = server.roles.cache.array().slice(arrayshow_limit);
+        r_array_string = `${roles_array.join(', ')} + ${roles_array.length - arrayshow_limit} cargos`;
     }
 
     if (server === message.guild)
