@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const botconfig = require.main.require("./botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
-    let ban_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let ban_user = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0]));
     let ban_reason = args.join(" ").slice(args[0].length + 1); // slices the length of the ID and the space after it
 
     const report_file = require('./report.js');
