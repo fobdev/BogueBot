@@ -67,7 +67,7 @@ module.exports.run = async (bot, message, args) => {
     let roles_array = server.roles.cache.array();
     let r_array_string = roles_array.join(', ');
     if (roles_array.length > arrayshow_limit) {
-        roles_array = server.roles.cache.array().slice(arrayshow_limit);
+        roles_array = server.roles.cache.array().slice(0, 11);
         r_array_string = `${roles_array.join(', ')} + ${roles_array.length - arrayshow_limit} cargos`;
     }
 
