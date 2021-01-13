@@ -55,8 +55,8 @@ module.exports.run = async (bot, message, args) => {
         .setColor("#FF8800")
         .setThumbnail(server.iconURL)
         .addField('ID do servidor', server.id)
-        .addField('Dono', `${server.owner.displayName} (${server.owner.user.tag})`, true)
-        .addField('ID do dono', server.ownerID, true)
+        .addField('Dono', `${await server.owner.displayName} (${await server.owner.user.tag})`, true)
+        .addField('ID do dono', await server.ownerID, true)
         .addField('Quantidade de membros', server.memberCount, true)
         .addField('Online', online_count, true)
         .addField('Região', server.region, true)
@@ -65,7 +65,6 @@ module.exports.run = async (bot, message, args) => {
 
     let arrayshow_limit = 10;
     let roles_array = server.roles.cache.array();
-    console.log(server.roles.cache.array().length);
     let r_array_string = roles_array.join(', ');
     if (roles_array.length > arrayshow_limit) {
         roles_array = server.roles.cache.array().slice(arrayshow_limit);
