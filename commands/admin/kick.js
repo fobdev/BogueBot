@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
     }
 
-    let kick_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let kick_user = message.guild.member(message.mentions.users.first());
     let kick_reason = args.join(" ").slice(args[0].length + 1);
 
     if (!kick_user)
