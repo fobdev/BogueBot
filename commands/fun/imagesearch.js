@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
                     // compute other results
                     for (let i = 0; i < unfiltered.length; i++) {
                         fetch(unfiltered[i].url).then(errorHandler).then(response => {
-                            if (response.status == 200)
+                            if (response.status == 200 && res[i].url != unfiltered[i].url)
                                 res.push(unfiltered[i]);
                         }).catch(error => null)
                     }
