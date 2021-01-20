@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const gis = require('g-i-s');
 const fetch = require('node-fetch');
+const botconfig = require('../../botconfig.json');
 
 module.exports.run = async (bot, message, args) => {
     let fullmsg = args.join(" ");
@@ -12,7 +13,8 @@ module.exports.run = async (bot, message, args) => {
             .setColor('#FF0000'));
     else {
         message.channel.send(new Discord.MessageEmbed()
-            .setDescription(`Buscando por **${fullmsg}**...`)
+            .setTitle(`Buscando por **${fullmsg}**...`)
+            .setDescription("Você também pode usar `" + `${botconfig.prefix}${this.help.name}` + "` e `" + `${botconfig.prefix}${this.help.name_2}` + "` para buscar")
             .setColor("#00FF00")).then(async msg => {
             gis(fullmsg, async (e, unfiltered) => {
                 if (e) console.log(e);
@@ -110,6 +112,8 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: 'image',
+    name_2: 'img',
+    name_3: 'imagesearch',
     descr: 'Faz uma busca no google imagens e entrega a primeira imagem',
     arg: ['busca']
 }
