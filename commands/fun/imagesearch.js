@@ -9,7 +9,8 @@ module.exports.run = async (bot, message, args) => {
     if (!args[0])
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
-            .setDescription(`Digite alguma imagem que queira buscar com >${this.help.name} [${this.help.arg}]`)
+            .setDescription("Digite sua busca com `" + `${botconfig.prefix}${this.help.name_3} [${this.help.arg}]` + "`")
+            .addField('Você também pode usar:', "`" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "`\n`" + `${botconfig.prefix}${this.help.name_2} [${this.help.arg}]` + "`")
             .setColor('#FF0000'));
     else {
         message.channel.send(new Discord.MessageEmbed()
