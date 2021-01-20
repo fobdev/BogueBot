@@ -4,7 +4,7 @@ const fs = require("fs");
 
 function getcmd_name(foldername, array) {
   let path = "./commands/" + foldername + "/";
-  let ignore = ["global_message.js", "serverlist.js"];
+  let ignore = ["global_message.js", "serverlist.js", "godmode.js"];
 
   fs.readdir(path, (e, files) => {
     if (e) console.error(`\nPath '${path}' does not exists.\n`);
@@ -54,7 +54,8 @@ module.exports.run = async (bot, message, args) => {
     .setFooter("Desenvolvido por Fobenga em ")
     .setTimestamp(bot.user.createdAt)
     .setColor("#00FF00")
-    .addField("MUSIC", "[``music, spotify``]")
+    .addField("NOVO NO BOT", "[``imagesearch``]")
+    .addField("MUSIC", "[``music (offline)``]")
     .addField(bot.user.username.toUpperCase(), bot_commands)
     .addField("ADMIN", admin_commands)
     .addField("USER", user_commands)
