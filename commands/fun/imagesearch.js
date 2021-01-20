@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
                     if (image_index != 0)
                         msg.react('⬅');
 
-                    if (image_index != res.length)
+                    if (image_index != res.length - 1)
                         msg.react('➡');
 
                     let reactions = msg.createReactionCollector((reaction, user) => (reaction.emoji.name === '➡' || (reaction.emoji.name === '⬅')) && user.id != bot.user.id, {
@@ -92,7 +92,7 @@ module.exports.run = async (bot, message, args) => {
                         if (image_index != 0)
                             msg.react('⬅');
 
-                        if (image_index != res.length)
+                        if (image_index != res.length - 1)
                             msg.react('➡');
                     });
 
