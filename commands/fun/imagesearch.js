@@ -63,25 +63,26 @@ module.exports.run = async (bot, message, args) => {
                         msg.react('➡');
 
                     let reactions = msg.createReactionCollector((reaction, user) => (reaction.emoji.name === '➡' || (reaction.emoji.name === '⬅')) && user.id != bot.user.id, {
-                        time: 5 * 60 * 1000 // 5 min cd
+                        time: 3 * 60 * 1000 // 3 min inactivity
                     });
 
                     reactions.on('collect', async r => {
                         // next image
                         if (r.emoji.name == '➡') {
                             image_index++;
-                            console.log(`url: ${res[image_index].url} | wxh: ${res[image_index].width}x${res[image_index].height}`);
+                            reactions.resetTimer();
+                            // console.log(`url: ${res[image_index].url} | wxh: ${res[image_index].width}x${res[image_index].height}`);
                             await msg.edit(new Discord.MessageEmbed()
                                 .setTitle(`Resultados para **${fullmsg}** (${image_index + 1}/${res.length})`)
                                 .setImage(await res[image_index].url)
                                 .setColor("#00FF00"));
                         }
 
-
                         // previous image
                         if (r.emoji.name == '⬅') {
                             image_index--;
-                            console.log(`url: ${res[image_index].url} | wxh: ${res[image_index].width}x${res[image_index].height}`);
+                            reactions.resetTimer();
+                            // console.log(`url: ${res[image_index].url} | wxh: ${res[image_index].width}x${res[image_index].height}`);
                             await msg.edit(new Discord.MessageEmbed()
                                 .setTitle(`Resultados para **${fullmsg}** (${image_index + 1}/${res.length})`)
                                 .setImage(await res[image_index].url)
@@ -89,6 +90,7 @@ module.exports.run = async (bot, message, args) => {
                         }
 
                         msg.reactions.removeAll();
+
                         if (image_index != 0)
                             msg.react('⬅');
 
