@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-let Canvas = require('canvas')
-
 module.exports.run = async (bot, message, args) => {
     switch (args[0]) {
         case 'prime':
