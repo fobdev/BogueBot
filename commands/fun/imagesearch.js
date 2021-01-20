@@ -22,8 +22,8 @@ module.exports.run = async (bot, message, args) => {
                     msg.react('⬅');
                     msg.react('➡');
 
-                    let reactions = msg.createReactionCollector((reaction, user) => (reaction.emoji.name === '➡' || (reaction.emoji.name === '⬅')) && user.id === message.author.id, {
-                        time: 5 * 60 * 1000
+                    let reactions = msg.createReactionCollector((reaction, user) => (reaction.emoji.name === '➡' || (reaction.emoji.name === '⬅')) && user.id != bot.user.id, {
+                        time: 5 * 60 * 1000 // 5 min cd
                     });
 
                     let image_index = 0;
@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
                             if (image_index > res.length - 1)
                                 image_index = 0;
                             await msg.edit(new Discord.MessageEmbed()
-                                .setTitle(`Resultados para **${fullmsg}** ${image_index + 1}/${res.length}`)
+                                .setTitle(`Resultados para **${fullmsg}** (${image_index + 1}/${res.length})`)
                                 .setImage(res[image_index].url)
                                 .setColor("#00FF00"));
                         }
@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
                                     image_index++;
                                 }
                             await msg.edit(new Discord.MessageEmbed()
-                                .setTitle(`Resultados para **${fullmsg}** ${image_index + 1}/${res.length}`)
+                                .setTitle(`Resultados para **${fullmsg}** (${image_index + 1}/${res.length})`)
                                 .setImage(res[image_index].url)
                                 .setColor("#00FF00"));
                         }
