@@ -115,6 +115,6 @@ module.exports.help = {
     name: 'image',
     name_2: 'img',
     name_3: 'imagesearch',
-    descr: 'Faz uma busca no google imagens e entrega a primeira imagem',
+    descr: 'Realiza uma busca de imagens e gifs.',
     arg: ['busca']
 }
