@@ -203,7 +203,7 @@ bot.on("message", async message => {
   let bogcheck = message.content.toLowerCase();
   if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
-    let answers = ['bog_img', 'iae', 'salve', 'tmj', 'oi', 'ói',
+    let answers = ['iae', 'salve', 'tmj', 'oi', 'ói',
       'fala', 'bog', 'bila', 'José', 'TMJ', 'pfv me deixa em paz cara todo dia isso meu deus do ceu',
       '?', '??w???', 'markov fdp', 'aaah vamo nessa!', '01100010 01101001 01101100 01100001', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
       'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
@@ -214,15 +214,7 @@ bot.on("message", async message => {
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
 
-    if (rng == 'bog_img') {
-      let bog_att = new Discord.MessageAttachment('bogue.jpg');
-      await message.channel.send(new Discord.MessageEmbed()
-        .setTitle(`Eu mesmo como como descobriu.`)
-        .attachFiles(bog_att)
-        .setImage(`attachment://${'bogue.jpg'}`)
-        .setColor("#00FF00"));
-    } else
-      return message.channel.send(answers[rng]);
+    return message.channel.send(answers[rng]);
   }
 
   if (message.author.id === bot.user.id) {
