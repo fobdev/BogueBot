@@ -60,10 +60,10 @@ module.exports.run = async (bot, message, args) => {
                         .setColor("#00FF00"));
 
                     if (image_index != 0)
-                        msg.react('⬅');
+                        await msg.react('⬅');
 
                     if (image_index != res.length - 1)
-                        msg.react('➡');
+                        await msg.react('➡');
 
                     let reactions = msg.createReactionCollector((reaction, user) => (reaction.emoji.name === '➡' || (reaction.emoji.name === '⬅')) && user.id != bot.user.id, {
                         time: 3 * 60 * 1000 // 3 min inactivity
@@ -95,10 +95,10 @@ module.exports.run = async (bot, message, args) => {
                         msg.reactions.removeAll();
 
                         if (image_index != 0)
-                            msg.react('⬅');
+                            await msg.react('⬅');
 
                         if (image_index != res.length - 1)
-                            msg.react('➡');
+                            await msg.react('➡');
                     });
 
                     reactions.on('end', r => {
