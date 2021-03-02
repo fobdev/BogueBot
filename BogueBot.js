@@ -204,7 +204,7 @@ bot.on("message", async message => {
   if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
     let answers = ['iae', 'salve', 'tmj', 'oi', 'ói', 'o teufi', 'calvin', 'guegui', 'né', 'o boga',
-      'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', '01100010 01101001 01101100 01100001',
+      'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', 'valeu',
       '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
       'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
       'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
