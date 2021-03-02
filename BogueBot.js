@@ -203,13 +203,13 @@ bot.on("message", async message => {
   let bogcheck = message.content.toLowerCase();
   if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
     // randomizes a set of messages that the bot can send
-    let answers = ['iae', 'salve', 'tmj', 'oi', 'ói',
-      'fala', 'bog', 'bila', 'José', 'TMJ', 'pfv me deixa em paz cara todo dia isso meu deus do ceu',
-      '?', '??w???', 'markov fdp', 'aaah vamo nessa!', '01100010 01101001 01101100 01100001', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-      'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', 'pppppppppppppppppppppppppppppppp', 'setembro',
-      'me chamou.. .w. .w. w..aaaaaaaaaaaaaa44444aaaaaaa', 'quem e vc', 'me deixa', 'vou te suicidar', 'pq',
+    let answers = ['iae', 'salve', 'tmj', 'oi', 'ói', 'o teufi', 'calvin', 'guegui', 'né', 'o boga',
+      'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', '01100010 01101001 01101100 01100001',
+      '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
+      'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
+      'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
       'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'nao tenho nada pra voce',
-      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w', 'ȃ̸̦̩̦̙̓̌̍̉̈́̀͋̋̒̾͜͠ͅ ̸̨̢̨͖͚̝̩̼̓͑̈́̽̎p̴̼̝̀̃̓̉̽̊͝ọ̶̞̞͕̇̽̿̇̔͂̇r̵̞̞͔̿̓́́̓̎̄̅̈́̐̍͂̚͝͝r̴̜̼͈̼̗̣̗̦̰͔̱͐͒̇́͐̾̌̍̌̚̚͠å̴͎̗̤̩̩̼̮̅̃̐̓̍̌̎̀̐̕͜͜ ̴̡̡̨͙͉̖̞̭͖̥̱͇͇̯͖̾̊͂͊͝d̸͕̝͈͖̭̪̦̘̙̮̰̹̃̃̾̌̔͑̐̈́̕͘͠e̴̛̩̮̥̹̳͖͖̊̈́̒̚͠ ̵̡͎͍̪̭̗̙̯̞̳́̿̌̇̒͂̚̚u̶̗̺͌̏̿̑̅́̐̿̂͘͠͠m̵̯̓̓̄̃̎̾̓ ̸̧̡̛͙̰̱̝͔̩̜̯̺͍̳̅̋̾͆͌̏͊͌̀͆̔b̶̧͇̰͍́o̸̖̞̣̭̮̜͉̼̯͗̇̑̎̎̔̾̃̕ǵ̵̰̺̰͈̝̯̙̜͇͔̙̹̗͑̌̂́̓̎̒̾͂̍͑͝ứ̴̤͓̟̮̝͉͓͎̦̞̤̤̻̄̑̀͜e̵̡̢̘͍̘̯̜̼̎̃̓͊̑̔͊̚͜͝ͅb̶̧̨̨̪̜̮̤̓̍́̂̉̄̒͂͜ͅo̷̧̟̟̎̊̃͑͋̐̅̆̂͋̌̂ť̷̡̤͖̹̅̏̔̂̉̿͝'
+      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
