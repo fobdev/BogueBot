@@ -208,8 +208,8 @@ bot.on("message", async message => {
       '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
       'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
       'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
-      'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'nao tenho nada pra voce',
-      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'w', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
+      'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'bobó',
+      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'vlw', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
     ];
     let rng = Math.floor(Math.random() * answers.length);
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
