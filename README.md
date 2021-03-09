@@ -1,5 +1,5 @@
 # BogueBot
-General porpuse discord bot made with discord.js <br>
+General porpuse discord bot made with discord.js
 
 Name/pic are just a meme - all funcions and commands works properly<br><br>
 
