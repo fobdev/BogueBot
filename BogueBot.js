@@ -217,6 +217,18 @@ bot.on("message", async message => {
     return message.channel.send(answers[rng]);
   }
 
+  if ((message.content === 'vó' || message.content === 'VÓ') && !message.author.bot) {
+    if (message.content === 'VÓ') {
+      let vocaps_ans = ['VÓ DE QUEM CARA PARA DE GRITAR', 'VÓ DE QUEM', 'COMO ASSIM VÓ', 'PQ TA GRITANDO VÓ CARA VÓ DE QUEM', 'VÓ'];
+      let vocapsrng = Math.floor(Math.random() * vocaps_ans.length);
+      return message.channel.send(vocaps_ans[vocapsrng]).then(() => console.log(`[${message.author.username}] said >VÓ< at [${message.guild.name}]`));
+    } else {
+      let vo_ans = ['vó de quem cara', 'como assim vó cara, vó de quem', 'como assim vó', 'pq vó q q tem a ver uma vó', 'VÓ', 'vó', 'vò'];
+      let vorng = Math.floor(Math.random() * vo_ans.length);
+      return message.channel.send(vo_ans[vorng]).then(() => console.log(`[${message.author.username}] said >vó< at [${message.guild.name}]`));
+    }
+  }
+
   if (message.author.id === bot.user.id) {
     cmd_counter++;
     status_updater();
