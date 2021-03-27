@@ -3,12 +3,10 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const botconfig = require.main.require('./botconfig.json');
-const helper = require.main.require('./core/helper.js');
 const fs = require('fs');
 
 // Keys and Maps 
-const ytkey = helper.loadKeys("youtube_key");
-const youtube = new YouTubeAPI(ytkey);
+const youtube = new YouTubeAPI(process.env.youtube_key);
 const queue = new Map();
 const subcmd_map = new Discord.Collection();
 
@@ -43,11 +41,11 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 module.exports.run = async (bot, message, args) => {
 	console.log(">Attempt to use music command");
 	message.channel.send(new Discord.MessageEmbed()
-	.setTitle("Manutenção da API")
-	.setDescription("O comando de música está indisponível no momento.")
-	.setColor("#FF0000"));
+		.setTitle("Manutenção da API")
+		.setDescription("O comando de música está indisponível no momento.")
+		.setColor("#FF0000"));
 	return;
-	
+
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
 	let subcmd_arr = new Array();
 	subcmd_map.forEach((value, key) => {

@@ -1,10 +1,8 @@
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
-const helper = require("./core/helper");
 const fs = require("fs");
 const numeral = require("numeral");
 let cmd_counter = 0;
-let bot_token = helper.loadKeys("token");
 
 const bot = new Discord.Client({
   disableEveryone: true
@@ -274,4 +272,4 @@ bot.on("message", async message => {
   }
 });
 
-bot.login(bot_token);
+bot.login(process.env.token);
