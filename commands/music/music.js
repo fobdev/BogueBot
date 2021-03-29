@@ -83,7 +83,6 @@ module.exports.run = async (bot, message, args) => {
 	let serverQueue = this.queue.get(message.guild.id);
 	let url = args[0];
 	let isPlaylist = url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/);
-	let isVideoURL = url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/watch(.*)$/);
 	let search = args.join(" ");
 	let video;
 	let videos;
@@ -135,24 +134,18 @@ module.exports.run = async (bot, message, args) => {
 			return message.channel.send(output_error).then(console.error(e));
 		}
 	} else {
-		if (isVideoURL) {
-			try {
-				video = await youtube.getVideo(url);
-				await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
-			} catch (e) {
-				console.log(`${e}: Error ocurred trying to parse URL`);
-				return message.channel.send(new Discord.MessageEmbed()
-					.setTitle('Ocorreu um erro ao carregar a URL')
-					.setDescription('Tente pesquisar pelo título do vídeo ou adicionar uma URL válida')
-					.setColor("#FF0000"));
-			}
-
+		try {
+			video = await youtube.getVideo(url);
+			this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 			try {
 				message.delete();
 			} catch (e) {
 				console.error('Error deleting URL message.');
 			}
-		} else {
+
+		} catch (error) {
+			console.error(`${error}: Transferred to search querry`);
+
 			// If the inputted message is not a subcommand, searchs a video.
 			if (subcmd_arr.indexOf(args[0]) < 0) {
 				// Tro to get the args[0] string and puts the string in the search engine.
