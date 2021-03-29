@@ -1,9 +1,17 @@
 const Discord = require("discord.js");
+const music = require('../music');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
   if (serverQueue) {
     try {
-      await serverQueue.streamdispatcher.end("left");
+      await serverQueue.streamdispatcher.destroy();
+      music.queue.delete(message.guild.id);
+      serverQueue.voiceChannel.leave();
+
+      return message.channel.send(new Discord.MessageEmbed()
+        .setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei a fila do servidor.`)
+        .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
+        .setColor("#00FF00"));
     } catch (e) {
       console.error("Error ocurred when leaving the voice channel:");
       console.error(`${e}`);

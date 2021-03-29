@@ -3,11 +3,21 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const botconfig = require.main.require('./botconfig.json');
+// const helper = require.main.require('./core/helper.js');
 const fs = require('fs');
+const help_file = require('../bot/help.js');
+const {
+	options
+} = require("numeral");
+const {
+	parseURL
+} = require("simple-youtube-api/src/util");
 
 // Keys and Maps 
-const youtube = new YouTubeAPI(process.env.youtube_key);
-const queue = new Map();
+// const ytkey = helper.loadKeys("youtube_key");
+const youtube = new YouTubeAPI('AIzaSyDIKUD2WatP-lZw5M0HCJ5oULlf5vmmdcI');
+// const youtube = new YouTubeAPI(ytkey);
+module.exports.queue = new Map();
 const subcmd_map = new Discord.Collection();
 
 // Subcommands loader
@@ -39,12 +49,12 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 //		available at: github.com/fobenga 		//
 //////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
-	console.log(">Attempt to use music command");
-	message.channel.send(new Discord.MessageEmbed()
-		.setTitle("Manutenção da API")
-		.setDescription("O comando de música está indisponível no momento.")
-		.setColor("#FF0000"));
-	return;
+	// console.log(">Attempt to use music command");
+	// message.channel.send(new Discord.MessageEmbed()
+	// 	.setTitle("Manutenção da API")
+	// 	.setDescription("O comando de música está indisponível no momento.")
+	// 	.setColor("#FF0000"));
+	// return;
 
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
 	let subcmd_arr = new Array();
@@ -53,15 +63,15 @@ module.exports.run = async (bot, message, args) => {
 	})
 
 	let servers_pl = 'server';
-	if (queue.size !== 1) servers_pl += 's';
-	if (queue.size > 0)
-		console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
+	if (this.queue.size !== 1) servers_pl += 's';
+	if (this.queue.size > 0)
+		console.log(`[MUSIC]: Streaming to ${this.queue.size} ${servers_pl}`);
 
 	// quick subcommand for developers to verify the amount of servers using the streaming service
 	if (args[0] == 'stream-status') {
 		if (message.author.id == '244270921286811648') {
-			console.log(`[MUSIC]: Streaming to ${queue.size} ${servers_pl}`);
-			return message.channel.send(`[${queue.size}] instances of stream running.`);
+			console.log(`[MUSIC]: Streaming to ${this.queue.size} ${servers_pl}`);
+			return message.channel.send(`[${this.queue.size}] instances of stream running.`);
 		} else
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle('Erro')
@@ -69,9 +79,7 @@ module.exports.run = async (bot, message, args) => {
 				.setColor('#FF0000'));
 	}
 
-
 	if (!args[0]) {
-		let help_file = require('../bot/help.js')
 		return message.channel.send(`${botconfig.prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
 				msg.delete();
@@ -81,57 +89,64 @@ module.exports.run = async (bot, message, args) => {
 		})
 	}
 
-	const voiceChannel = message.member.voice.connection;
-	var serverQueue = queue.get(message.guild.id);
-	var url = args[0];
-	var isPlaylist = url.includes('list=');
-	var search = args.join(" ");
-	var video;
-	var videos;
+	const voiceChannel = await message.member.voice.channel;
+	let serverQueue = this.queue.get(message.guild.id);
+	let url = args[0];
+	let isPlaylist = url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/);
+	let search = args.join(" ");
+	let video;
+	let videos;
 
-	if (voiceChannel.status != 0) {
-		console.log('[USER ERROR] message.author not in a voice channel.')
+	if (!voiceChannel)
 		return message.channel.send(new Discord.MessageEmbed()
-			.setTitle("Você **precisa estar em um canal de voz** para usar os comandos de música.")
-			.setColor("FF0000"));
-	}
+			.setTitle(`${message.author.username} não está em nenhum canal de voz`)
+			.setDescription('Você deve estar em um canal de voz para usar os comandos de música')
+			.setColor("#FF0000"));
 
 	// Playlist support
 	if (isPlaylist) {
+		return message.channel.send(new Discord.MessageEmbed()
+			.setTitle("Erro")
+			.setDescription('O suporte a playlists do YouTube e Spotify não está disponível no momento')
+			.setColor('#FFFF00'));
+
+		const output_error = new Discord.MessageEmbed()
+			.setTitle('Erro ao carregar playlist.')
+			.setColor('#FF0000');
 		try {
-			const playlist = await youtube.getPlaylist(url);
-			const videosarray = await playlist.getVideos();
+			youtube.getPlaylistByID(url.split('list=')[1]).then(async playlist => {
+				if (playlist) {
+					console.log(`Playlist ${playlist.title} added to the queue.`);
 
-			if (videosarray) {
-				message.delete();
-				let pl_out_embed = new Discord.MessageEmbed()
-					.setTitle(`Playlist **${playlist.title}**`)
-					.setDescription(`Carregando **${videosarray.length}** videos da [playlist](${playlist.url}) de **[${playlist.channelTitle}](${playlist.channel.url})**`)
-					.setThumbnail(playlist.thumbnails.default.url)
-					.setColor('#00FF00');
+					await playlist.getVideos().then(async videosarray => {
+						await message.delete();
+						let pl_out_embed = new Discord.MessageEmbed()
+							.setTitle(`Playlist **${playlist.title}**`)
+							.setDescription(`Carregando **${videosarray.length}** videos da [playlist](${playlist.url}) de **[${playlist.channelTitle}](${playlist.channel.url})**`)
+							.setThumbnail(playlist.thumbnails.default.url)
+							.setColor('#00FF00');
 
-				message.channel.send(pl_out_embed).then(async msg => {
-					await video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
-					msg.edit(new Discord.MessageEmbed()
-						.setTitle(pl_out_embed.title)
-						.setThumbnail(playlist.thumbnails.default.url)
-						.setDescription(`**[${videosarray.length} videos](${playlist.url})** foram adicionados à fila`)
-						.addField('\u200B', "Use ``" +
-							`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
-						.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL())
-						.setColor('#00FF00'));
-				});
-			}
+						message.channel.send(pl_out_embed).then(async msg => {
+							await this.video_player(bot, message, undefined, serverQueue, voiceChannel, videosarray, url);
+							msg.edit(new Discord.MessageEmbed()
+								.setTitle(pl_out_embed.title)
+								.setThumbnail(playlist.thumbnails.default.url)
+								.setDescription(`**[${videosarray.length - this.unavailable_videos} videos](${playlist.url})** foram adicionados à fila`)
+								.addField('\u200B', "Use ``" +
+									`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+								.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL())
+								.setColor('#00FF00'));
+						});
+					}).catch(e => message.channel.send(output_error).then(console.log(`${e}: Erro ao carregar os vídeos`)));
+				}
+			}).catch(e => message.channel.send(output_error).then(console.log(`${e}: The playlist is private or doesn't exist.`)))
 		} catch (e) {
-			console.error(`${e}: Erro ao carregar playlist.`);
-			return message.channel.send(new Discord.MessageEmbed()
-				.setTitle('Erro ao carregar playlist.')
-				.setColor('#FF0000'));
+			return message.channel.send(output_error).then(console.error(e));
 		}
 	} else {
 		try {
 			video = await youtube.getVideo(url);
-			await video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
+			await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 			try {
 				message.delete();
 			} catch (e) {
@@ -146,7 +161,9 @@ module.exports.run = async (bot, message, args) => {
 				try {
 					videos = await youtube.searchVideos(search, search_limit);
 				} catch (e) {
-					console.log(`Stream failed to initialize in server [${serverQueue.guildname}]`)
+					console.log(e);
+
+					// console.log(`Stream failed to initialize in server [${serverQueue.guildname}]`)
 					return message.channel.send(new Discord.MessageEmbed()
 						.setTitle("Ocorreu um erro na busca.")
 						.setDescription(`Pode ocorrer do comando de música estar passando por problemas.
@@ -157,21 +174,32 @@ module.exports.run = async (bot, message, args) => {
 
 				// Message Collectors for getting all the bot/user messages and delete them later if needed.
 				// Current Time Out: 30s
-				var bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
+				let bot_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === bot.user.id, {
 					time: 1000 * 30
 				})
+
+				let user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+					time: 1000 * 30
+				});
 
 				bot_msgcollector.on('end', async (messages, reason) => {
 					switch (reason) {
 						case 'sucess': {
-							await bot_msgcollector.collected.deleteAll();
-							await user_msgcollector.collected.deleteAll();
+							bot_msgcollector.collected.each(msg => {
+								msg.delete();
+							});
+
+							user_msgcollector.collected.each(msg => {
+								msg.delete();
+							});
 							return;
 						}
 						case 'cancelled': {
 							try {
 								user_msgcollector.stop();
-								await bot_msgcollector.collected.deleteAll();
+								bot_msgcollector.collected.each(msg => {
+									msg.delete();
+								});
 								return message.channel.send(new Discord.MessageEmbed()
 									.setDescription(`A busca por **${search}** foi cancelada`)
 									.setColor("#FF0000"))
@@ -181,8 +209,12 @@ module.exports.run = async (bot, message, args) => {
 							}
 						}
 						case 'incorrect_answer': {
-							await bot_msgcollector.collected.deleteAll();
-							await user_msgcollector.collected.deleteAll();
+							bot_msgcollector.collected.each(msg => {
+								msg.delete();
+							});
+							user_msgcollector.collected.each(msg => {
+								msg.delete();
+							});
 							return message.channel.send('>help music').then(msg => {
 								try {
 									msg.delete();
@@ -199,7 +231,9 @@ module.exports.run = async (bot, message, args) => {
 						case 'playlist':
 							return;
 						default: {
-							await bot_msgcollector.collected.deleteAll();
+							bot_msgcollector.collected.each(msg => {
+								msg.delete();
+							});
 							return message.channel.send(new Discord.MessageEmbed()
 								.setDescription(`A busca por **${search}** expirou.`)
 								.setColor("#FF0000"));
@@ -210,16 +244,16 @@ module.exports.run = async (bot, message, args) => {
 				// Gets the user input and gets a video from search.
 				if (videos.length > 0) {
 					// Prints all the videos found in the search (controlled by search_limit).
-					var search_embed = new Discord.MessageEmbed()
+					let search_embed = new Discord.MessageEmbed()
 						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL())
 						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
 						.setColor("#00FF00");
 
-					var nullstr;
+					let nullstr;
 					for (let i = 0; i < videos.length; i++) {
-						var current_video = await youtube.getVideo(videos[i].url);
+						let current_video = await youtube.getVideo(videos[i].url);
 
-						var isLivestream = `Duração: ${module.exports.util.timing(current_video.durationSeconds)}`;
+						let isLivestream = `Duração: ${module.exports.util.timing(current_video.durationSeconds)}`;
 						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
 						if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
@@ -233,7 +267,7 @@ module.exports.run = async (bot, message, args) => {
 						.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
 							'Esta mensagem expirará em 30 segundos.'));
 
-					var user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+					let user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
 						time: 1000 * 30
 					});
 
@@ -242,8 +276,8 @@ module.exports.run = async (bot, message, args) => {
 						if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
 							if (msg.content === 'c') {
 								try {
-									await bot_msgcollector.stop('cancelled');
-									await user_msgcollector.stop('cancelled');
+									bot_msgcollector.stop('cancelled');
+									user_msgcollector.stop('cancelled');
 									return;
 								} catch (e) {
 									console.error('Error stopping message collectors.');
@@ -254,13 +288,13 @@ module.exports.run = async (bot, message, args) => {
 								video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
 
 								try {
-									await user_msgcollector.stop('sucess');
-									await bot_msgcollector.stop('sucess');
+									user_msgcollector.stop('sucess');
+									bot_msgcollector.stop('sucess');
 								} catch (e) {
 									console.error('Error handling the stop off all collectors.');
 								}
 
-								video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
+								this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 							} catch (e) {
 								console.error('Error selecting video');
 								return message.channel.send(new Discord.MessageEmbed()
@@ -269,16 +303,16 @@ module.exports.run = async (bot, message, args) => {
 							}
 						} else {
 							// If didn't verified, restart the search with new collectors
-							await bot_msgcollector.stop('incorrect_answer');
-							await user_msgcollector.stop('incorrect_answer');
+							bot_msgcollector.stop('incorrect_answer');
+							user_msgcollector.stop('incorrect_answer');
 							return;
 						}
 					})
 				} else {
 					if (isPlaylist)
-						await bot_msgcollector.stop('playlist');
+						bot_msgcollector.stop('playlist');
 					else
-						await bot_msgcollector.stop('no_video');
+						bot_msgcollector.stop('no_video');
 
 					return;
 				}
@@ -296,18 +330,17 @@ module.exports.run = async (bot, message, args) => {
 	}
 }
 
-async function video_player(bot, message, video, serverQueue, voiceChannel, videosarray = [], user_url) {
+module.exports.video_player = async (bot, message, video, serverQueue, voiceChannel, videosarray = [], user_url) => {
 	// Collect all the information from the 'video' variable
-	var unavailable_videos = 0;
-	var song_info;
-	var song_playlist = new Array();
+	let song_info;
+	let song_playlist = new Array();
+	module.exports.unavailable_videos = 0;
 
 	if (videosarray.length !== 0) {
 		for (let v = 0; v < videosarray.length; v++) {
 			try {
 				song_info = await youtube.getVideoByID(videosarray[v].id);
-
-				let tbnl = await module.exports.util.thumbnail_getter(song_info);
+				let tbnl = this.util.thumbnail_getter(song_info);
 				if (song_info) {
 					song_playlist[v] = {
 						id: videosarray[v].id,
@@ -326,23 +359,8 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 
 				video = videosarray[v];
 			} catch (e) {
-				unavailable_videos++;
-
-				const error_lim = 2;
-				if (unavailable_videos <= error_lim) {
-					console.error(`${e}: ${videosarray[v].title}.`);
-					message.channel.send(new Discord.MessageEmbed()
-						.setDescription(`Video **[${videosarray[v].title}](${videosarray[v].url})** indisponível e não adicionado.`)
-						.setColor("#FF0000"));
-				}
-
-				if (unavailable_videos == error_lim) {
-					console.error(`SPAM: Stopped sending messages because of spam.`);
-					message.channel.send(new Discord.MessageEmbed()
-						.setTitle('Vários erros detectados')
-						.setDescription('Parando de emitir erros para evitar spam.')
-						.setColor('#FF0000'));
-				}
+				console.log(`${e}: Errors detected trying to add videos.`);
+				this.unavailable_videos++;
 			}
 		}
 	}
@@ -356,9 +374,10 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			.setColor("#FF0000"));
 	}
 
+	let song, tbnl;
 	try {
-		let tbnl = await module.exports.util.thumbnail_getter(song_info);
-		var song = {
+		tbnl = module.exports.util.thumbnail_getter(song_info);
+		song = {
 			id: video.id,
 			title: song_info.title,
 			url: video.url,
@@ -388,27 +407,28 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			playing: true
 		};
 
-		queue.set(message.guild.id, queueConstruct);
+		this.queue.set(message.guild.id, queueConstruct);
 		if (videosarray.length !== 0) {
 			for (let i = 0; i < videosarray.length; i++) {
 				if (song_playlist[i]) {
-					await queueConstruct.songs.push(song_playlist[i]);
+					queueConstruct.songs.push(song_playlist[i]);
 				}
 			}
 		} else {
-			await queueConstruct.songs.push(song);
+			queueConstruct.songs.push(song);
 		}
 
+		let connection;
 		try {
-			var connection = await voiceChannel.join();
-			queueConstruct.connection = connection;
+			connection = await voiceChannel.join();
 
-			play(bot, message, queueConstruct.songs[0], user_url);
+			queueConstruct.connection = connection;
+			this.play(bot, message, queueConstruct.songs[0], user_url);
 
 		} catch (e) {
 			console.error(`Bot could not join a voice channel: + ${e}`);
 
-			queue.delete(message.guild.id);
+			this.queue.delete(message.guild.id);
 
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle("Não foi possível conectar ao canal de voz.")
@@ -432,7 +452,7 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 			}
 		} else {
 			serverQueue.songs.push(song);
-			var isLivestream = `${module.exports.util.timing(song.length)}`;
+			let isLivestream = `${module.exports.util.timing(song.length)}`;
 			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 			let verify_qlenstr = "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa."
@@ -467,16 +487,16 @@ async function video_player(bot, message, video, serverQueue, voiceChannel, vide
 	}
 }
 
-async function play(bot, message, song, user_url) {
-	var serverQueue = queue.get(message.guild.id);
-	serverQueue.streamdispatcher = await serverQueue.connection.playStream(ytdl(song.url, {
+module.exports.play = async (bot, message, song, user_url) => {
+	let serverQueue = this.queue.get(message.guild.id);
+	serverQueue.streamdispatcher = await serverQueue.connection.play(ytdl(song.url, {
 		filter: 'audioonly',
 		quality: 'highestaudio',
 		highWaterMark: 1024 * 1024 * 2 // 2 MB Audio Buffer
 	}));
 
 	// Music embed start
-	var isLivestream = `${module.exports.util.timing(song.length)}`;
+	let isLivestream = `${module.exports.util.timing(song.length)}`;
 	if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
 	let author_str = `${bot.user.username} Music Player`;
@@ -485,22 +505,31 @@ async function play(bot, message, song, user_url) {
 	if (serverQueue.songs.length !== 2) remaining_pl += 's';
 	if (serverQueue.songs.length > 1) author_str += ` (${serverQueue.songs.length - 1} ${remaining_pl})`;
 
-	// Music embed end
-	message.channel.send(new Discord.MessageEmbed()
+	let musicEmbed = new Discord.MessageEmbed()
 		.setAuthor(author_str, bot.user.displayAvatarURL())
 		.addField("♪ Agora tocando", `**[${song.title}](${song.url})**`)
 		.addField("Duração", `${isLivestream}`, true)
 		.addField("Adicionado por", `[<@${song.authorID}>]`, true)
 		.setThumbnail(song.thumbnail)
-		.setColor("#00FF00"));
+		.setColor("#00FF00");
+	// Music embed end
 
-	serverQueue.streamdispatcher.on('end', async (reason) => {
-		// Session end based on priority from higher to lower:
+	if (serverQueue.songs.length >= 1)
+		message.channel.send(musicEmbed);
+
+	serverQueue.streamdispatcher.on('speaking', async (isSpeaking) => {
+		if (!isSpeaking)
+			if (serverQueue.songs.length > 0) {
+				this.play(bot, message, serverQueue.songs[0], null);
+				serverQueue.songs.shift();
+			}
+		else
+			this.queue.delete(message.guild.id);
 
 		let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
 		if (songcalled_voicechannel.length < 2) {
 			serverQueue.voiceChannel.leave();
-			queue.delete(message.guild.id);
+			this.queue.delete(message.guild.id);
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			const helpfile = require('../bot/help.js');
@@ -509,37 +538,18 @@ async function play(bot, message, song, user_url) {
 				.setColor('#FFAA00'));
 		}
 
-		if (reason === 'left') {
-			await serverQueue.voiceChannel.leave();
-			queue.delete(message.guild.id);
-			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
-			return message.channel.send(new Discord.MessageEmbed()
-				.setDescription(`Saí do canal de voz **${serverQueue.voiceChannel}** e apaguei minha fila.`)
-				.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
-				.setColor("#00FF00"));
-		}
+		if (serverQueue.songs.length < 1) {
+			await serverQueue.streamdispatcher.destroy();
+			serverQueue.voiceChannel.leave();
 
-		if (serverQueue.songs.length <= 1) {
-			await serverQueue.voiceChannel.leave();
-			queue.delete(message.guild.id);
+			this.queue.delete(message.guild.id);
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			return message.channel.send(new Discord.MessageEmbed()
-				.setTitle(`Todos os vídeos da fila de **${message.guild.name}** foram reproduzidos, saindo do canal de voz.`)
-				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '>feedback'`, bot.user.displayAvatarURL())
-				.setColor("#00FF00"));
+				.setTitle('Todos os vídeos da fila foram tocados, saindo do canal de voz...')
+				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${botconfig.prefix}feedback'`, bot.user.displayAvatarURL())
+				.setColor('#00FF00'));
 		}
-
-		if (reason === 'skipped') {
-			await message.channel.send(new Discord.MessageEmbed()
-				.setDescription(`**${message.author.username}** pulou **[${serverQueue.songs[0].title}](${serverQueue.songs[0].url})**`)
-				.setColor("#00FF00"));
-			await serverQueue.songs.shift();
-			return play(bot, message, serverQueue.songs[0], user_url);
-		}
-
-		await serverQueue.songs.shift();
-		play(bot, message, serverQueue.songs[0], user_url);
 	});
 
 	serverQueue.streamdispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));

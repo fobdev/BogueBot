@@ -7,15 +7,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
       .setDescription("Não tem nada sendo tocado no momento.")
       .setColor("#FF0000"));
 
-  // safer verification of speaking
-  let isSpeaking;
-  try {
-    isSpeaking = serverQueue.streamdispatcher.speaking;
-  } catch (e) {
-    return console.log(e + 'Nothing is speaking, error triggered.');
-  }
-
-  if (isSpeaking) {
+  if (serverQueue.streamdispatcher.volumeEditable) {
     let sv_volume = serverQueue.connection.dispatcher.volume;
     if (sv_volume !== 1) serverQueue.connection.dispatcher.setVolume(1);
 
