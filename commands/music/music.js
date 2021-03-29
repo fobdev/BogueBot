@@ -150,8 +150,6 @@ module.exports.run = async (bot, message, args) => {
 			}
 
 		} catch (error) {
-			console.error(`${error}: Transferred to search querry`);
-
 			// If the inputted message is not a subcommand, searchs a video.
 			if (subcmd_arr.indexOf(args[0]) < 0) {
 				// Tro to get the args[0] string and puts the string in the search engine.
