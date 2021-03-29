@@ -241,6 +241,10 @@ module.exports.run = async (bot, message, args) => {
 				if (videos.length > 1) {
 					if (url.match(ytvideo_regex)) {
 						video = await youtube.getVideoByID(videos[0].id);
+
+						user_msgcollector.stop('sucess');
+						bot_msgcollector.stop('sucess');
+
 						await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 					} else {
 						// Prints all the videos found in the search (controlled by search_limit).
