@@ -3,11 +3,6 @@ const Music = require('../music.js')
 const botconfig = require.main.require('./botconfig.json');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
-    return message.channel.send(new Discord.MessageEmbed()
-        .setTitle('A função de fila está em manutenção no momento')
-        .setDescription('Tente novamente em algumas horas.')
-        .setColor("#FF0000"));
-
     try {
         function swap(e1, e2, a) {
             var t = a[e1];
@@ -268,7 +263,7 @@ Use '<' ou '>' para navegar pelas páginas da fila.` + "```";
                     var new_header = "```md\n" +
                         `Fila de ${message.guild.name} ${page_str}
 ========================================================================
-Agora Tocando: [${songs_array[0].title}](${Music.util.timing(parseInt(Math.floor(serverQueue.streamdispatcher.time / 1000)))} / ${Music.util.timing(songs_array[0].length)})
+Agora Tocando: [${songs_array[0].title}](${Music.util.timing(parseInt(Math.floor(serverQueue.streamdispatcher.streamTime / 1000)))} / ${Music.util.timing(songs_array[0].length)})
 
 `;
 
@@ -298,12 +293,17 @@ Agora Tocando: [${songs_array[0].title}](${Music.util.timing(parseInt(Math.floor
 
                 function new_footer_f(song_array, autoupdate_str) {
                     var new_length = 0
+                    let vword_plural = '';
+
+                    if (song_array.length == 1) vword_plural += 'vídeo';
+                    else vword_plural += 'vídeos';
+
                     for (let i = 0; i < song_array.length; i++) {
                         new_length += parseInt(song_array[i].length);
                     }
 
                     var new_footer = `
-Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}] vídeos | ${autoupdate_str}
+Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}] ${vword_plural} | ${autoupdate_str}
 ------------------------------------------------------------------------` + "```";
 
                     return new_footer;
@@ -311,38 +311,46 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
 
                 // Update the queue message everytime a bot message is received.
                 botmessage_collector.on('collect', bot_msg => {
-                    var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 
-                    if (new_content_f(current_page, serverQueue.songs).length === 0) current_page = 0;
-
-                    let dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
-                        new_content_f(current_page, serverQueue.songs) +
-                        new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
-
-                    var new_navhelp = "```Interação cancelada, peça uma nova fila para continuar.```";
-
-                    if (usermessage_navigator.ended) {
-                        if (page_amount > 1)
-                            botmessage_collector.collected.array()[0].edit(dynamic_update + new_navhelp);
-                        else
-                            botmessage_collector.collected.array()[0].edit(dynamic_update);
+                    // close all collectors if array is empty
+                    if (serverQueue.songs.length < 2) {
+                        console.log('closing all collectors');
+                        botmessage_collector.stop();
+                        usermessage_navigator.stop();
+                        console.log('all collectors closed sucessfully');
                     } else {
-                        if (page_amount > 1)
-                            botmessage_collector.collected.array()[0].edit(dynamic_update + queue_nav_help);
-                        else
-                            botmessage_collector.collected.array()[0].edit(dynamic_update);
-                    }
+                        var new_page_amount = Math.ceil(((serverQueue.songs.length - 1) / page_size));
 
-                    if (page_amount > 1) {
-                        dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
-                            new_content_f(current_page, serverQueue.songs) +
-                            new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + queue_nav_help;
-                    } else {
-                        dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
+                        if (new_content_f(current_page, serverQueue.songs).length === 0) current_page = 0;
+
+                        let dynamic_update = new_header_f(current_page, new_page_amount, serverQueue.songs) +
                             new_content_f(current_page, serverQueue.songs) +
                             new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
-                    }
 
+                        var new_navhelp = "```Interação cancelada, peça uma nova fila para continuar.```";
+
+                        if (usermessage_navigator.ended) {
+                            if (page_amount > 1)
+                                botmessage_collector.collected.array()[0].edit(dynamic_update + new_navhelp);
+                            else
+                                botmessage_collector.collected.array()[0].edit(dynamic_update);
+                        } else {
+                            if (page_amount > 1)
+                                botmessage_collector.collected.array()[0].edit(dynamic_update + queue_nav_help);
+                            else
+                                botmessage_collector.collected.array()[0].edit(dynamic_update);
+                        }
+
+                        if (page_amount > 1) {
+                            dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
+                                new_content_f(current_page, serverQueue.songs) +
+                                new_footer_f(serverQueue.songs, 'Autoupdate [ON]') + queue_nav_help;
+                        } else {
+                            dynamic_update += new_header_f(current_page, new_page_amount, serverQueue.songs) +
+                                new_content_f(current_page, serverQueue.songs) +
+                                new_footer_f(serverQueue.songs, 'Autoupdate [ON]');
+                        }
+                    }
                 });
 
                 botmessage_collector.on('end', () => {
@@ -350,7 +358,7 @@ Tempo total da fila: [${Music.util.timing(new_length)}] | [${song_array.length}]
                     // Go back to the first page
                     let final_page = new_header_f(0, Math.ceil(((serverQueue.songs.length - 1) / page_size)), serverQueue.songs) +
                         new_content_f(0, serverQueue.songs) +
-                        new_footer_f(serverQueue.songs, 'Autoupdate [OFF]') + "```O tempo de navegação da mensagem expirou```";
+                        new_footer_f(serverQueue.songs, 'Autoupdate [OFF]');
 
                     botmessage_collector.collected.array()[0].edit(final_page);
                 })
