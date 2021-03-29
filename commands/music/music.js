@@ -240,7 +240,7 @@ module.exports.run = async (bot, message, args) => {
 				})
 
 				// Gets the user input and gets a video from search.
-				if (videos.length > 0) {
+				if (videos.length > 1) {
 					// Prints all the videos found in the search (controlled by search_limit).
 					let search_embed = new Discord.MessageEmbed()
 						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL())
@@ -306,6 +306,10 @@ module.exports.run = async (bot, message, args) => {
 							return;
 						}
 					})
+				} else if (videos.length == 1) {
+					// plays the only result for the search
+					video = await youtube.getVideoByID(videos[0].id);
+					this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 				} else {
 					if (isPlaylist)
 						bot_msgcollector.stop('playlist');
