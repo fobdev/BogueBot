@@ -83,9 +83,15 @@ module.exports.run = async (bot, message, args) => {
 	let serverQueue = this.queue.get(message.guild.id);
 	let url = args[0];
 	let isPlaylist = url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/);
+	let ytvideo_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
 	let search = args.join(" ");
 	let video;
 	let videos;
+
+	yt_parseURL = (url) => {
+		let match = url.match(ytvideo_regex);
+		return (match && match[7].length == 11) ? match[7] : false;
+	}
 
 	if (!voiceChannel)
 		return message.channel.send(new Discord.MessageEmbed()
@@ -134,12 +140,6 @@ module.exports.run = async (bot, message, args) => {
 			return message.channel.send(output_error).then(console.error(e));
 		}
 	} else {
-		yt_parseURL = (url) => {
-			let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-			let match = url.match(regExp);
-			return (match && match[7].length == 11) ? match[7] : false;
-		}
-
 		try {
 			video = await youtube.getVideoByID(yt_parseURL(url));
 			await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
@@ -239,71 +239,76 @@ module.exports.run = async (bot, message, args) => {
 
 				// Gets the user input and gets a video from search.
 				if (videos.length > 1) {
-					// Prints all the videos found in the search (controlled by search_limit).
-					let search_embed = new Discord.MessageEmbed()
-						.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL())
-						.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
-						.setColor("#00FF00");
+					if (url.match(ytvideo_regex)) {
+						video = await youtube.getVideoByID(videos[i].id);
+						await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
+					} else {
+						// Prints all the videos found in the search (controlled by search_limit).
+						let search_embed = new Discord.MessageEmbed()
+							.setAuthor(`${bot.user.username} Music Player Search`, bot.user.displayAvatarURL())
+							.setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
+							.setColor("#00FF00");
 
-					let nullstr;
-					for (let i = 0; i < videos.length; i++) {
-						let current_video = await youtube.getVideo(videos[i].url);
+						let nullstr;
+						for (let i = 0; i < videos.length; i++) {
+							let current_video = await youtube.getVideo(videos[i].url);
 
-						let isLivestream = `Duração: ${module.exports.util.timing(current_video.durationSeconds)}`;
-						if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
+							let isLivestream = `Duração: ${module.exports.util.timing(current_video.durationSeconds)}`;
+							if (current_video.durationSeconds === 0) isLivestream = '**🔴 Livestream**';
 
-						if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
-						else nullstr = '\u200B';
+							if (i === 0) nullstr = `Resultados para a busca de '**${search}**'`;
+							else nullstr = '\u200B';
 
-						search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
-							`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
-					}
-
-					message.channel.send(search_embed
-						.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
-							'Esta mensagem expirará em 30 segundos.'));
-
-					let user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-						time: 1000 * 30
-					});
-
-					user_msgcollector.on('collect', async msg => {
-						// Verify if the message is a number between all listed videos or is a cancel command
-						if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
-							if (msg.content === 'c') {
-								try {
-									bot_msgcollector.stop('cancelled');
-									user_msgcollector.stop('cancelled');
-									return;
-								} catch (e) {
-									console.error('Error stopping message collectors.');
-								}
-							}
-							// Try to get the selected video ID and set it in the 'video' var
-							try {
-								video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
-
-								try {
-									user_msgcollector.stop('sucess');
-									bot_msgcollector.stop('sucess');
-								} catch (e) {
-									console.error('Error handling the stop off all collectors.');
-								}
-
-								this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
-							} catch (e) {
-								console.error('Error selecting video');
-								return message.channel.send(new Discord.MessageEmbed()
-									.setTitle("Ocorreu um erro ao selecionar o vídeo.")
-									.setColor("#FF0000"));
-							}
-						} else {
-							// If didn't verified, restart the search with new collectors
-							bot_msgcollector.stop('incorrect_answer');
-							user_msgcollector.stop('incorrect_answer');
-							return;
+							search_embed.addField(nullstr, `${i + 1} - **[${current_video.title}](${current_video.url})**\n` +
+								`${isLivestream} **|** Canal: [${current_video.channel.title}](${current_video.channel.url})`);
 						}
-					})
+
+						message.channel.send(search_embed
+							.addField("**Selecione um vídeo da busca respondendo com o numero correspondente.**",
+								'Esta mensagem expirará em 30 segundos.'));
+
+						let user_msgcollector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+							time: 1000 * 30
+						});
+
+						user_msgcollector.on('collect', async msg => {
+							// Verify if the message is a number between all listed videos or is a cancel command
+							if ((parseInt(msg.content) > 0 && parseInt(msg.content) <= search_limit) || msg.content === 'c') {
+								if (msg.content === 'c') {
+									try {
+										bot_msgcollector.stop('cancelled');
+										user_msgcollector.stop('cancelled');
+										return;
+									} catch (e) {
+										console.error('Error stopping message collectors.');
+									}
+								}
+								// Try to get the selected video ID and set it in the 'video' var
+								try {
+									video = await youtube.getVideoByID(videos[(parseInt(msg.content) - 1)].id);
+
+									try {
+										user_msgcollector.stop('sucess');
+										bot_msgcollector.stop('sucess');
+									} catch (e) {
+										console.error('Error handling the stop off all collectors.');
+									}
+
+									this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
+								} catch (e) {
+									console.error('Error selecting video');
+									return message.channel.send(new Discord.MessageEmbed()
+										.setTitle("Ocorreu um erro ao selecionar o vídeo.")
+										.setColor("#FF0000"));
+								}
+							} else {
+								// If didn't verified, restart the search with new collectors
+								bot_msgcollector.stop('incorrect_answer');
+								user_msgcollector.stop('incorrect_answer');
+								return;
+							}
+						})
+					}
 				} else if (videos.length == 1) {
 					// plays the only result for the search
 					video = await youtube.getVideoByID(videos[0].id);
