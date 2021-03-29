@@ -135,7 +135,7 @@ module.exports.run = async (bot, message, args) => {
 		}
 	} else {
 		try {
-			video = await youtube.getVideo(url);
+			video = await youtube.getVideo(url).catch(e => console.log(`${e}: Error found parsing URL`));
 			this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 			try {
 				message.delete();
