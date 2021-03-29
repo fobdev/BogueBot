@@ -61,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
 	if (args[0] == 'stream-status') {
 		if (message.author.id == '244270921286811648') {
 			console.log(`[MUSIC]: Streaming to ${this.queue.size} ${servers_pl}`);
-			return message.channel.send(`[${this.queue.size}] instances of stream running.`);
+			return message.channel.send(`[${this.queue.size}] streaming instances running.`);
 		} else
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle('Erro')
@@ -244,6 +244,12 @@ module.exports.run = async (bot, message, args) => {
 
 						user_msgcollector.stop('sucess');
 						bot_msgcollector.stop('sucess');
+
+						try {
+							message.delete();
+						} catch (e) {
+							console.error('Error deleting URL message.');
+						}
 
 						await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 					} else {
