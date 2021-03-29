@@ -3,20 +3,10 @@ const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const botconfig = require.main.require('./botconfig.json');
-// const helper = require.main.require('./core/helper.js');
 const fs = require('fs');
 const help_file = require('../bot/help.js');
-const {
-	options
-} = require("numeral");
-const {
-	parseURL
-} = require("simple-youtube-api/src/util");
+const youtube = new YouTubeAPI(process.env.youtube_key);
 
-// Keys and Maps 
-// const ytkey = helper.loadKeys("youtube_key");
-const youtube = new YouTubeAPI('AIzaSyDIKUD2WatP-lZw5M0HCJ5oULlf5vmmdcI');
-// const youtube = new YouTubeAPI(ytkey);
 module.exports.queue = new Map();
 const subcmd_map = new Discord.Collection();
 
