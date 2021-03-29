@@ -134,9 +134,15 @@ module.exports.run = async (bot, message, args) => {
 			return message.channel.send(output_error).then(console.error(e));
 		}
 	} else {
+		yt_parseURL = (url) => {
+			let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+			let match = url.match(regExp);
+			return (match && match[7].length == 11) ? match[7] : false;
+		}
+
 		try {
-			video = await youtube.getVideo(url).catch(e => console.log(`${e}: Error found parsing URL`));
-			this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
+			video = await youtube.getVideoByID(yt_parseURL(url));
+			await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 			try {
 				message.delete();
 			} catch (e) {
