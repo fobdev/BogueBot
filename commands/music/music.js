@@ -307,6 +307,10 @@ module.exports.run = async (bot, message, args) => {
 				} else if (videos.length == 1) {
 					// plays the only result for the search
 					video = await youtube.getVideoByID(videos[0].id);
+
+					user_msgcollector.stop('sucess');
+					bot_msgcollector.stop('sucess');
+
 					this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
 				} else {
 					if (isPlaylist)
