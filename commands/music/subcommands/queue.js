@@ -3,6 +3,11 @@ const Music = require('../music.js')
 const botconfig = require.main.require('./botconfig.json');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
+    return message.channel.send(new Discord.MessageEmbed()
+        .setTitle('A função de fila está em manutenção no momento')
+        .setDescription('Tente novamente em algumas horas.')
+        .setColor("#FF0000"));
+
     try {
         function swap(e1, e2, a) {
             var t = a[e1];
