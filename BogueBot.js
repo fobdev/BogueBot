@@ -237,7 +237,8 @@ bot.on("message", async message => {
     console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
 
     return message.channel.send(answers[rng]);
-  }
+  } else if (bogcheck.includes('bog') && bogcheck.includes('prefix'))
+    return message.channel.send(`o prefixo desse servidor é ${prefix}`);
 
   if ((message.content === 'vó' || message.content === 'VÓ') && !message.author.bot) {
     if (message.content === 'VÓ') {
