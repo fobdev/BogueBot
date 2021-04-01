@@ -14,8 +14,7 @@ module.exports.run = async (bot, message, args) => {
                     return message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Prefixo modificado com sucesso')
                         .setDescription("O novo prefixo do servidor é ```" + args[0] + "```")
-                        .setFooter('Se você se esquecer do prefixo, é só tirar e colocar o bot do servidor.')
-                        .setAuthor(`A porra de um ${bot.user.username}, agora usando ${args[0]}`, bot.user.displayAvatarURL())
+                        .setFooter('Se você se esquecer do prefixo, é só tirar e colocar o bot do servidor.', bot.user.displayAvatarURL())
                         .setColor('#00FF00'));
                 })
         } catch (e) {
