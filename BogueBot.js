@@ -224,21 +224,25 @@ bot.on("message", async message => {
 
   let bogcheck = message.content.toLowerCase();
   if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
-    // randomizes a set of messages that the bot can send
-    let answers = ['iae', 'salve', 'tmj', 'oi', 'ói', 'o teufi', 'calvin', 'guegui', 'né', 'o boga',
-      'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', 'valeu',
-      '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-      'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
-      'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
-      'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'bobó',
-      'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'vlw', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
-    ];
-    let rng = Math.floor(Math.random() * answers.length);
-    console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
+    if (bogcheck.includes('bog') && bogcheck.includes('prefix')) {
+      return message.channel.send(`o prefixo desse servidor é ${prefix}`);
+    } else {
+      // randomizes a set of messages that the bot can send
+      let answers = ['iae', 'salve', 'tmj', 'oi', 'ói', 'o teufi', 'calvin', 'guegui', 'né', 'o boga',
+        'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', 'valeu',
+        '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
+        'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
+        'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
+        'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'bobó',
+        'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'vlw', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
+      ];
+      let rng = Math.floor(Math.random() * answers.length);
+      console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
 
-    return message.channel.send(answers[rng]);
-  } else if (bogcheck.includes('bog') && bogcheck.includes('prefix'))
-    return message.channel.send(`o prefixo desse servidor é ${prefix}`);
+      return message.channel.send(answers[rng]);
+    }
+  }
+
 
   if ((message.content === 'vó' || message.content === 'VÓ') && !message.author.bot) {
     if (message.content === 'VÓ') {
