@@ -4,6 +4,15 @@ const fs = require("fs");
 const numeral = require("numeral");
 let cmd_counter = 0;
 
+const SQL = require('pg');
+module.exports.db = new SQL.Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
+this.db.connect();
+
 const bot = new Discord.Client({
   disableEveryone: true
 });
@@ -106,6 +115,15 @@ bot.on("ready", async () => {
 });
 
 bot.on("guildCreate", guild => {
+  // add id and default prefix to database
+  try {
+    db.query('INSERT INTO guild(id, prefix) VALUES ($1, $2);', [guild.id, prefix])
+      .then(() => console.log(`joined guild: insert ${guild.id} into db with default prefix`));
+  } catch (e) {
+    console.log(`${e}: JOIN error in database from guild ${guild.id}`);
+  }
+
+
   // Get Fobenga [User] Object
   let fobenga;
   let uarr = message.client.users.cache.array();
@@ -164,6 +182,14 @@ bot.on("guildCreate", guild => {
 });
 
 bot.on("guildDelete", guild => {
+  // remove id from database
+  try {
+    db.query('DELETE FROM guild WHERE id=$1;', [guild.id])
+      .then(() => console.log(`left guild: removed entry ${guild.id} from db`));
+  } catch (e) {
+    console.log(`${e}: LEAVE error in database from guild ${guild.id}`);
+  }
+
   servers_show();
   status_updater();
   return console.log(
