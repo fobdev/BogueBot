@@ -283,7 +283,7 @@ bot.on("message", async message => {
   }
 
 
-  console.log(`cmd[0]: ${cmd[0]}`);
+  console.log(`cmd[prefix.length]: ${cmd[prefix.length]}`);
   console.log(`prefix: ${prefix}`);
   if (cmd[prefix.length] === prefix) {
     if (command_file) {
