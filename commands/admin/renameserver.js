@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     if (message.guild.member(message.author).hasPermission('MANAGE_GUILD')) {
         var newname = args.join(" ");
 
@@ -10,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
                 .setTitle("Uso incorreto do comando")
                 .setColor("#FF0000")
                 .addField("O nome do servidor deve ter entre 2 a 100 caracteres.",
-                    "**Tente usar: **``" + `${botconfig.prefix}${this.help.name} [novo nome]` + "``"));
+                    "**Tente usar: **``" + `${prefix}${this.help.name} [novo nome]` + "``"));
         }
 
         try {

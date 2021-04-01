@@ -2,14 +2,16 @@ const Discord = require("discord.js");
 const botconfig = require.main.require("./botconfig.json");
 const mergeImg = require('merge-img');
 const fs = require('fs');
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     let user1 = message.guild.member(message.mentions.users.firstKey());
     let user2 = message.guild.member(message.mentions.users.lastKey());
     if (!args[0] || (!args[0] && !args[1]) || !args[1] || args.length > 2) {
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Uso incorreto do comando.')
-            .setDescription("Tente usar: ``" + botconfig.prefix + this.help.name + ` [${this.help.arg.join('][')}]` + "``")
+            .setDescription("Tente usar: ``" + prefix + this.help.name + ` [${this.help.arg.join('][')}]` + "``")
             .setColor("#FF0000"));
     }
 

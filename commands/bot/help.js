@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
 const fs = require("fs");
+const main = require('../../BogueBot.js');
+
 
 function getcmd_name(foldername, array) {
   let path = "./commands/" + foldername + "/";
@@ -35,6 +36,7 @@ getcmd_name("fun", fun_cmdarr);
 getcmd_name("games", games_cmdarr);
 
 module.exports.run = async (bot, message, args) => {
+  let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
   const admin_commands = "[``" + admin_cmdarr.join(", ") + "``]";
   const bot_commands = "[``" + bot_cmdarr.join(", ") + "``]";
   const user_commands = "[``" + user_cmdarr.join(", ") + "``]";
@@ -64,19 +66,19 @@ module.exports.run = async (bot, message, args) => {
     .addField(
       "\u200B",
       "**Use ``" +
-      `${botconfig.prefix}${this.help.name} [comando]` +
+      `${prefix}${this.help.name} [comando]` +
       "`` para ajuda sobre determinado comando\n" +
       "Use ``" +
-      `${botconfig.prefix}${this.help.name} [categoria]` +
+      `${prefix}${this.help.name} [categoria]` +
       "`` para ajuda sobre determinada categoria**"
     )
     .addField(
       "Exemplos",
       "``" +
-      `${botconfig.prefix}${this.help.name} music` +
+      `${prefix}${this.help.name} music` +
       "`` exibe todos os comandos de música\n" +
       "``" +
-      `${botconfig.prefix}${this.help.name} ban` +
+      `${prefix}${this.help.name} ban` +
       "`` exibe as informações do comando 'ban'"
     );
 
@@ -108,11 +110,11 @@ module.exports.run = async (bot, message, args) => {
       if (cmd_file.help.arg) {
         descr_str +=
           "``" +
-          `${botconfig.prefix}${key} [${cmd_file.help.arg.join("] [")}]` +
+          `${prefix}${key} [${cmd_file.help.arg.join("] [")}]` +
           "`` " +
           `${value}\n`;
       } else {
-        descr_str += "``" + `${botconfig.prefix}${key}` + "`` " + `${value}\n`;
+        descr_str += "``" + `${prefix}${key}` + "`` " + `${value}\n`;
       }
     });
 
@@ -132,7 +134,7 @@ module.exports.run = async (bot, message, args) => {
       new Discord.MessageEmbed()
       .addField(
         "Uso",
-        "``" + `${botconfig.prefix}${args[0]}${havearg}` + "``"
+        "``" + `${prefix}${args[0]}${havearg}` + "``"
       )
       .addField("Descrição", path.help.descr)
       .setColor("#00FF00")

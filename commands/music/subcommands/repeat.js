@@ -1,7 +1,8 @@
 const Discord = require('discord.js')
-const botconfig = require.main.require('./botconfig.json');
+const Music = require('../music.js');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
+    let prefix = await (await Music.main.db.query('SELECT prefix FROM guild WHERE id=$1;', [message.guild.id])).rows[0].prefix;
     if (!serverQueue) return message.channel.send(new Discord.MessageEmbed()
         .setDescription('Não tem nada tocando no momento.')
         .setColor('$FF0000'));
@@ -33,7 +34,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
         } else {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle('Uso incorreto do comando.')
-                .setDescription("Tente usar: ``" + `${botconfig.prefix}${this.help.name} [${this.help.arg[0]}]` + "``")
+                .setDescription("Tente usar: ``" + `${prefix}${this.help.name} [${this.help.arg[0]}]` + "``")
                 .setColor('#FF0000'));
         }
     }

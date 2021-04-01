@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
-const botconfig = require.main.require('./botconfig.json');
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     let fullmsg = args.join(" ");
     let minimum = parseInt(args[0]);
 
@@ -12,9 +13,9 @@ module.exports.run = async (bot, message, args) => {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle('Uso incorreto do comando')
                 .setDescription(
-                    '``' + `${botconfig.prefix}${this.help.name}` + '``\n' +
-                    '``' + `${botconfig.prefix}${this.help.name} [${this.help.arg[1]}]` + '``\n' +
-                    '``' + `${botconfig.prefix}${this.help.name} [${this.help.arg.join('] [')}]` + '``')
+                    '``' + `${prefix}${this.help.name}` + '``\n' +
+                    '``' + `${prefix}${this.help.name} [${this.help.arg[1]}]` + '``\n' +
+                    '``' + `${prefix}${this.help.name} [${this.help.arg.join('] [')}]` + '``')
                 .setColor('#FF0000'));
         else if (!minimum)
             return message.channel.send(`**${message.author.username}** rolou **${Math.floor(Math.random() * 100 + 1)}**`);

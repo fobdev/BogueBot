@@ -1,13 +1,14 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     let del_arg = args.join(" ");
     const delfail_embed = new Discord.MessageEmbed()
         .setTitle("Uso incorreto do comando")
         .setColor("#FF0000")
         .addField("No mínimo 1 mensagem e no máximo 100 mensagens podem ser excluídas.",
-            "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [${this.help.arg[0]}]` + "``");
+            "**Tenta usar: **``" + `${prefix}${this.help.name} [${this.help.arg[0]}]` + "``");
 
     if (del_arg > 100 || del_arg <= 0) {
         return message.channel.send(delfail_embed);

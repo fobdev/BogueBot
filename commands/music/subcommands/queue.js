@@ -3,6 +3,8 @@ const Music = require('../music.js')
 const botconfig = require.main.require('./botconfig.json');
 
 module.exports.run = async (bot, message, args, serverQueue) => {
+    let prefix = await (await Music.main.db.query('SELECT prefix FROM guild WHERE id=$1;', [message.guild.id])).rows[0].prefix;
+
     try {
         function swap(e1, e2, a) {
             var t = a[e1];
@@ -19,7 +21,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             return message.channel.send(new Discord.MessageEmbed()
                 .setColor('#00FF00')
                 .setTitle(`**${message.author.username}** randomizou a fila de **${message.guild.name}**`)
-                .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a fila completa."));
+                .setDescription("``" + `${prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a fila completa."));
         }
 
         if (args[1] === 'next' && args[2]) {
@@ -29,7 +31,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 console.error(`${e}: invalid input in 'swap' command.`)
                 return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Uso incorreto do comando')
-                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1]` + "``" +
+                    .setDescription("``" + `${prefix}${Music.help.name} ${module.exports.help.name} position [numero1]` + "``" +
                         " para colocar [numero1] como próximo video a se reproduzir.")
                     .setColor('#FF0000'));
             }
@@ -61,7 +63,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                     console.error(`${e}: invalid input in 'swap' command.`)
                     return message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Uso incorreto do comando')
-                        .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
+                        .setDescription("``" + `${prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                             " alterna a posição de dois vídeos na fila.")
                         .setColor('#FF0000'));
                 }
@@ -109,7 +111,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
             } else {
                 return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Uso incorreto do comando')
-                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
+                    .setDescription("``" + `${prefix}${Music.help.name} ${module.exports.help.name} position [numero1] [numero2]` + "``" +
                         " alterna a posição de dois vídeos na fila.")
                     .setColor('#FF0000'));
             }
@@ -149,7 +151,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
 
                 if (start > end) return message.channel.send(new Discord.MessageEmbed()
                     .setTitle('O valor **final** deve ser maior que o valor **inicial**.')
-                    .setDescription("Dessa vez, tente usar ``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name} del ${end} ${start}` + "``")
+                    .setDescription("Dessa vez, tente usar ``" + `${prefix}${Music.help.name} ${module.exports.help.name} del ${end} ${start}` + "``")
                     .setColor('#FF0000'));
 
                 if (amount < 0) amount *= -1;
@@ -194,7 +196,7 @@ module.exports.run = async (bot, message, args, serverQueue) => {
                 serverQueue.streamdispatcher.end();
                 return message.channel.send(new Discord.MessageEmbed()
                     .setTitle(`Fila pulada para a posição **${args[1]}**`)
-                    .setDescription("``" + `${botconfig.prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a nova fila.")
+                    .setDescription("``" + `${prefix}${Music.help.name} ${module.exports.help.name}` + "`` para ver a nova fila.")
                     .setFooter(`Chamado por ${message.author.username}`, message.author.displayAvatarURL())
                     .setColor("#00FF00"));
             } else {

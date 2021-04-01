@@ -1,21 +1,22 @@
 const Discord = require('discord.js');
 const gis = require('g-i-s');
 const fetch = require('node-fetch');
-const botconfig = require('../../botconfig.json');
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     let fullmsg = args.join(" ");
 
     if (!args[0])
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
-            .setDescription("Digite sua busca com `" + `${botconfig.prefix}${this.help.name_3} [${this.help.arg}]` + "`")
-            .addField('Você também pode usar:', "`" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "`\n`" + `${botconfig.prefix}${this.help.name_2} [${this.help.arg}]` + "`")
+            .setDescription("Digite sua busca com `" + `${prefix}${this.help.name_3} [${this.help.arg}]` + "`")
+            .addField('Você também pode usar:', "`" + `${prefix}${this.help.name} [${this.help.arg}]` + "`\n`" + `${prefix}${this.help.name_2} [${this.help.arg}]` + "`")
             .setColor('#FF0000'));
     else {
         message.channel.send(new Discord.MessageEmbed()
             .setTitle(`Buscando por **${fullmsg}**...`)
-            .setDescription("Você também pode usar `" + `${botconfig.prefix}${this.help.name}` + "` e `" + `${botconfig.prefix}${this.help.name_2}` + "` para buscar")
+            .setDescription("Você também pode usar `" + `${prefix}${this.help.name}` + "` e `" + `${prefix}${this.help.name_2}` + "` para buscar")
             .setColor("#00FF00")).then(async msg => {
             gis(fullmsg, async (e, unfiltered) => {
                 if (e) console.log(e);

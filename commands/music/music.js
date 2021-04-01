@@ -2,11 +2,11 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
-const botconfig = require.main.require('./botconfig.json');
 const fs = require('fs');
 const help_file = require('../bot/help.js');
 const youtube = new YouTubeAPI(process.env.youtube_key);
 
+module.exports.main = require('../../BogueBot.js');
 module.exports.queue = new Map();
 const subcmd_map = new Discord.Collection();
 
@@ -46,6 +46,8 @@ module.exports.run = async (bot, message, args) => {
 	// 	.setColor("#FF0000"));
 	// return;
 
+	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
+
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
 	let subcmd_arr = new Array();
 	subcmd_map.forEach((value, key) => {
@@ -70,7 +72,7 @@ module.exports.run = async (bot, message, args) => {
 	}
 
 	if (!args[0]) {
-		return message.channel.send(`${botconfig.prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
+		return message.channel.send(`${prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
 				msg.delete();
 			} catch (e) {
@@ -129,7 +131,7 @@ module.exports.run = async (bot, message, args) => {
 								.setThumbnail(playlist.thumbnails.default.url)
 								.setDescription(`**[${videosarray.length - this.unavailable_videos} videos](${playlist.url})** foram adicionados à fila`)
 								.addField('\u200B', "Use ``" +
-									`${botconfig.prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
+									`${prefix}${module.exports.help.name} queue` + "`` para ver a fila completa.")
 								.setFooter(`Adicionados por ${message.author.username}`, message.author.displayAvatarURL())
 								.setColor('#00FF00'));
 						});
@@ -351,6 +353,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.video_player = async (bot, message, video, serverQueue, voiceChannel, videosarray = [], user_url) => {
 	// Collect all the information from the 'video' variable
+	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
 	let song_info;
 	let song_playlist = new Array();
 	module.exports.unavailable_videos = 0;
@@ -474,10 +477,11 @@ module.exports.video_player = async (bot, message, video, serverQueue, voiceChan
 			let isLivestream = `${module.exports.util.timing(song.length)}`;
 			if (parseInt(song.length) === 0) isLivestream = '**🔴 Livestream**';
 
-			let verify_qlenstr = "``" + `[${botconfig.prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa."
+
+			let verify_qlenstr = "``" + `[${prefix}${module.exports.help.name_2} q]` + "`` para ver a fila completa."
 
 			if (serverQueue.songs.length > 2)
-				verify_qlenstr += "\n``[" + `${botconfig.prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.";
+				verify_qlenstr += "\n``[" + `${prefix}${module.exports.help.name_2} q next ${serverQueue.songs.length - 1}]` + "`` para tocar este video a seguir.";
 
 			let fullqueue_length = 0;
 			let users_inchannel = serverQueue.voiceChannel.members.array();
@@ -507,6 +511,7 @@ module.exports.video_player = async (bot, message, video, serverQueue, voiceChan
 }
 
 module.exports.play = async (bot, message, song, user_url) => {
+	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
 	let serverQueue = this.queue.get(message.guild.id);
 	serverQueue.streamdispatcher = await serverQueue.connection.play(ytdl(song.url, {
 		filter: 'audioonly',
@@ -553,7 +558,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 
 			const helpfile = require('../bot/help.js');
 			return message.channel.send(new Discord.MessageEmbed()
-				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${botconfig.prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
+				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
 				.setColor('#FFAA00'));
 		}
 
@@ -566,7 +571,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 
 			return message.channel.send(new Discord.MessageEmbed()
 				.setTitle('Todos os vídeos da fila foram tocados, saindo do canal de voz...')
-				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${botconfig.prefix}feedback'`, bot.user.displayAvatarURL())
+				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${prefix}feedback'`, bot.user.displayAvatarURL())
 				.setColor('#00FF00'));
 		}
 	});

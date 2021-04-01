@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
+
     let ban_user = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0]));
     let ban_reason = args.join(" ").slice(args[0].length + 1); // slices the length of the ID and the space after it
 
@@ -9,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
     if (!message.guild.member(message.author).hasPermission('BAN_MEMBERS'))
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Você não tem permissão para banir membros desse servidor.')
-            .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+            .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
             .setColor('#FF0000'));
 
     if (!ban_user)
@@ -29,8 +31,8 @@ module.exports.run = async (bot, message, args) => {
             .setTitle("Uso incorreto do comando")
             .setColor("#FF0000")
             .addField("Você deve adicionar o motivo pelo qual está banindo esse usuário",
-                "**Tenta usar: **``" + `${botconfig.prefix}${this.help.name} [@usuário] [motivo]` +
-                "``**\nOu usa: **``" + `${botconfig.prefix}${this.help.name} ban` +
+                "**Tenta usar: **``" + `${prefix}${this.help.name} [@usuário] [motivo]` +
+                "``**\nOu usa: **``" + `${prefix}${this.help.name} ban` +
                 "``**\npara informação detalhada sobre o comando**"));
     else {
         try {
@@ -38,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
         } catch (e) {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Permissões insuficientes para banir **${ban_user.displayName}**.`)
-                .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+                .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
                 .setColor('#FF0000'));
         }
 

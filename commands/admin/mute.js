@@ -1,19 +1,20 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require('./botconfig.json');
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     const report_file = require('./report.js');
     if (!message.guild.member(message.author).hasPermission('MANAGE_ROLES')) {
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Você não tem permissões suficientes para isso')
-            .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``"));
+            .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``"));
     }
 
     let mute = message.guild.member(message.mentions.users.first());
     if (!mute)
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle("Uso incorreto do comando")
-            .setDescription("``" + `${botconfig.prefix}${this.help.name} [${this.help.arg}]` + "``")
+            .setDescription("``" + `${prefix}${this.help.name} [${this.help.arg}]` + "``")
             .setColor('#FF0000'));
     else if (mute.hasPermission('ADMINISTRATOR'))
         return message.channel.send(new Discord.MessageEmbed()
@@ -39,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
     const desmute_file = require('./desmute');
     return message.channel.send(new Discord.MessageEmbed()
         .setTitle(`**${mute.displayName}** foi silenciado.`)
-        .setDescription("Use ``" + `${botconfig.prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
+        .setDescription("Use ``" + `${prefix}${desmute_file.help.name} @${mute.displayName}` + "`` para desmuta-lo.")
         .setColor("#00FF00"));
 }
 

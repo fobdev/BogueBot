@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+  let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
   let user_message = args.join(" ");
 
   if (!user_message)
@@ -10,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
       .setTitle("Uso incorreto do comando")
       .setDescription(
         "Tente usar: ``" +
-        `${botconfig.prefix}${this.help.name} [${this.help.arg}]` +
+        `${prefix}${this.help.name} [${this.help.arg}]` +
         "``"
       )
       .setColor("#FF0000")

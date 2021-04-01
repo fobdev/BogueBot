@@ -216,7 +216,7 @@ bot.on("guildMemberRemove", member => {
 });
 
 bot.on("message", async message => {
-  let prefix = botconfig.prefix;
+  let prefix = await (await this.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
   let messageArray = message.content.toLowerCase().split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];

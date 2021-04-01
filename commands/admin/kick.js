@@ -1,12 +1,13 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require('./botconfig.json');
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     const report_file = require('./report.js');
     if (!message.guild.member(message.author).hasPermission('KICK_MEMBERS')) {
         return message.channel.send(new Discord.MessageEmbed()
             .setTitle('Você não tem permissão para expulsar membros desse servidor.')
-            .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+            .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
             .setColor('#FF0000'));
     }
 
@@ -31,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
         } catch (e) {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Permissões insuficientes para expulsar **${kick_user.displayName}**.`)
-                .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+                .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
                 .setColor('#FF0000'));
         }
 
@@ -46,7 +47,7 @@ module.exports.run = async (bot, message, args) => {
         } catch (e) {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Permissões insuficientes para expulsar **${kick_user.displayName}**.`)
-                .setDescription("Ao invés disso, use ``" + `${botconfig.prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
+                .setDescription("Ao invés disso, use ``" + `${prefix}${report_file.help.name} [${report_file.help.arg.join('] [')}]` + "``")
                 .setColor('#FF0000'));
         }
 

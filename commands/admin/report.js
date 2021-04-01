@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const botconfig = require.main.require("./botconfig.json");
+const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
-
+    let prefix = await (await main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
     let r_user = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     let reason = args.join(" ").slice(22);
 
@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     if (reason === "")
         return message.channel.send(new Discord.MessageEmbed()
             .addField("Você deve especificar um motivo para denunciar um membro",
-                "``" + `${botconfig.prefix}${this.help.name} [${this.help.arg.join('] [')}]` + "``")
+                "``" + `${prefix}${this.help.name} [${this.help.arg.join('] [')}]` + "``")
             .setColor("#FF0000"));
     else {
         message.delete();
