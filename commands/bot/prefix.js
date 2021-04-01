@@ -13,14 +13,15 @@ module.exports.run = async (bot, message, args) => {
                 .then(() => {
                     return message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Prefixo modificado com sucesso')
-                        .setDescription("O novo prefixo do servidor é ```" + args[0] + "```.")
-                        .setColor('#FF0000'));
+                        .setDescription("O novo prefixo do servidor é ```" + args[0] + "```")
+                        .setFooter('Se você se esquecer do prefixo, é só tirar e colocar o bot do servidor.')
+                        .setColor('#00FF00'));
                 })
         } catch (e) {
             return message.channel.send(new Discord.MessageEmbed()
                 .setTitle(`Erro ao trocar o prefixo do servidor`)
                 .setDescription(`Ocorreu um erro, tente novamente usando outro prefixo.`)
-                .setColor(`#FF000`));
+                .setColor(`#FF0000`));
         }
     }
 }
