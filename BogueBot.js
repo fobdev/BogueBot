@@ -218,10 +218,13 @@ bot.on("guildMemberRemove", member => {
 bot.on("message", async message => {
   let prefix = await (await this.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
   console.log(`current guild prefix: ${prefix}`);
-  let messageArray = message.content.toLowerCase().split(" ");
+  let messageArray = message.content.split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
   let command_file = bot.commands.get(cmd.slice(prefix.length));
+
+  console.log(`msgarray: ${messageArray}`);
+  console.log(`msgarray[0]: ${messageArray[0]}`);
 
   let bogcheck = message.content.toLowerCase();
   if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
@@ -279,6 +282,9 @@ bot.on("message", async message => {
     }
   }
 
+
+  console.log(`cmd[0]: ${cmd[0]}`);
+  console.log(`prefix: ${prefix}`);
   if (cmd[0] === prefix) {
     if (command_file) {
       console.log(
