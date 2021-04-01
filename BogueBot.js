@@ -283,9 +283,9 @@ bot.on("message", async message => {
   }
 
 
-  console.log(`cmd[prefix.length]: ${cmd[prefix.length]}`);
+  console.log(`cmd[prefix.length]: ${cmd.slice(0, prefix.length)}`);
   console.log(`prefix: ${prefix}`);
-  if (cmd[prefix.length] === prefix) {
+  if (cmd.slice(0, prefix.length) === prefix) {
     if (command_file) {
       console.log(
         `\nUser [${message.author.username}] sent [${message}]\nserver: [${
