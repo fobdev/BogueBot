@@ -557,6 +557,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
 			const helpfile = require('../bot/help.js');
+			console.log('[BOT LEFT]: There is no one in voice channel.');
 			return message.channel.send(new Discord.MessageEmbed()
 				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
 				.setColor('#FFAA00'));
