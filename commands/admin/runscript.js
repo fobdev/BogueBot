@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         let current_servers = bot.guilds.cache.array();
         for (let i = 0; i < current_servers.length; i++) {
             try {
-                await main.db.query('UPDATE guild SET name=$1 WHERE id=$2', [current_servers[i].name, current_servers[i].id]);
+                await main.db.query('SET client_encoding TO UTF8;');
+                await main.db.query('UPDATE guild SET name=$1 WHERE id=$2;', [current_servers[i].name, current_servers[i].id]);
             } catch (e) {
                 console.log(`error naming guild id:${current_servers[i].id}`);
             }
