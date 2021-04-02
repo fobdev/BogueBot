@@ -3,10 +3,18 @@ const main = require('../../BogueBot.js');
 
 module.exports.run = async (bot, message, args) => {
     if (!args[0] || (args[0].length < 1 || args[0].length > 3)) {
-        return message.channel.send(new Discord.MessageEmbed()
-            .setTitle('Erro ao executar o comando')
-            .setDescription('Você precisa inserir um prefixo de até 3 caracteres.')
-            .setColor('#FF0000'));
+
+        if (!args[0])
+            return message.channel.send(new Discord.MessageEmbed()
+                .setTitle('Erro ao executar o comando')
+                .setDescription('Informe o novo prefixo que o bot usará nesse servidor.')
+                .setColor('#FF0000'));
+        else {
+            return message.channel.send(new Discord.MessageEmbed()
+                .setTitle('Erro ao executar o comando')
+                .setDescription('O tamanho do novo prefixo deve ser entre 1 e 3 caracteres.')
+                .setColor('#FF0000'));
+        }
     } else {
         try {
             main.db.query('UPDATE guild SET prefix=$1 WHERE id=$2;', [args[0], message.guild.id])

@@ -99,7 +99,7 @@ function status_updater() {
   const invitefile = require("./commands/bot/invite.js");
 
   bot.user.setActivity(
-    `${botconfig.prefix}${helpfile.help.name} | >music` +
+    `${botconfig.prefix}${helpfile.help.name} | >music | >prefix | >invite` +
     ` | ${numeral(members_reached).format()} membros | ${cmd_counter} ${cmd_plural}`, {
       type: "PLAYING"
     }
