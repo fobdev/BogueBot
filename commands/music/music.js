@@ -543,16 +543,50 @@ module.exports.play = async (bot, message, song, user_url) => {
 	if (serverQueue.songs.length >= 1)
 		message.channel.send(musicEmbed);
 
-	serverQueue.streamdispatcher.on('speaking', async (isSpeaking) => {
-		if (!isSpeaking)
-			if (serverQueue.songs.length > 0) {
-				this.play(bot, message, serverQueue.songs[0], null);
-				serverQueue.songs.shift();
-			}
-		else
+
+	serverQueue.streamdispatcher.on('start', () => {
+		if (serverQueue.songs.length > 0) {
+			this.play(bot, message, serverQueue.songs[0], null);
+			serverQueue.songs.shift();
+		} else
 			this.queue.delete(message.guild.id);
 
-		let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
+		if (songcalled_voicechannel.length < 2) {
+			serverQueue.voiceChannel.leave();
+			this.queue.delete(message.guild.id);
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+
+			const helpfile = require('../bot/help.js');
+			console.log('[BOT LEFT]: There is no one in voice channel.');
+			return message.channel.send(new Discord.MessageEmbed()
+				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
+				.setColor('#FFAA00'));
+		}
+
+		if (serverQueue.songs.length < 1) {
+			await serverQueue.streamdispatcher.destroy();
+			serverQueue.voiceChannel.leave();
+
+			this.queue.delete(message.guild.id);
+			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+
+			return message.channel.send(new Discord.MessageEmbed()
+				.setTitle('Todos os vídeos da fila foram tocados, saindo do canal de voz...')
+				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${prefix}feedback'`, bot.user.displayAvatarURL())
+				.setColor('#00FF00'));
+		}
+	})
+
+	serverQueue.streamdispatcher.on('speaking', async (isSpeaking) => {
+		// if (!isSpeaking)
+		// 	if (serverQueue.songs.length > 0) {
+		// 		this.play(bot, message, serverQueue.songs[0], null);
+		// 		serverQueue.songs.shift();
+		// 	}
+		// else
+		// 	this.queue.delete(message.guild.id);
+
+		// let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
 
 		// removed functionality due to bugs: require a current channel verification if the bot is moved
 
@@ -568,18 +602,18 @@ module.exports.play = async (bot, message, song, user_url) => {
 		// 		.setColor('#FFAA00'));
 		// }
 
-		if (serverQueue.songs.length < 1) {
-			await serverQueue.streamdispatcher.destroy();
-			serverQueue.voiceChannel.leave();
+		// if (serverQueue.songs.length < 1) {
+		// 	await serverQueue.streamdispatcher.destroy();
+		// 	serverQueue.voiceChannel.leave();
 
-			this.queue.delete(message.guild.id);
-			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+		// 	this.queue.delete(message.guild.id);
+		// 	console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
-			return message.channel.send(new Discord.MessageEmbed()
-				.setTitle('Todos os vídeos da fila foram tocados, saindo do canal de voz...')
-				.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${prefix}feedback'`, bot.user.displayAvatarURL())
-				.setColor('#00FF00'));
-		}
+		// 	return message.channel.send(new Discord.MessageEmbed()
+		// 		.setTitle('Todos os vídeos da fila foram tocados, saindo do canal de voz...')
+		// 		.setFooter(`${bot.user.username} Music Player: se houver algum erro de execução, notifique o desenvolvedor com o comando '${prefix}feedback'`, bot.user.displayAvatarURL())
+		// 		.setColor('#00FF00'));
+		// }
 	});
 
 	serverQueue.streamdispatcher.on('error', error => console.error(`A error ocurred in the dispatcher: ${error}`));
