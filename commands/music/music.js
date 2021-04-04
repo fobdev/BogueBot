@@ -544,7 +544,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 		message.channel.send(musicEmbed);
 
 
-	serverQueue.streamdispatcher.on('start', async () => {
+	serverQueue.streamdispatcher.on('start', () => {
 		if (serverQueue.songs.length > 0) {
 			this.play(bot, message, serverQueue.songs[0], null);
 			serverQueue.songs.shift();
@@ -566,7 +566,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 		// }
 
 		if (serverQueue.songs.length < 1) {
-			await serverQueue.streamdispatcher.destroy();
+			serverQueue.streamdispatcher.destroy();
 			serverQueue.voiceChannel.leave();
 
 			this.queue.delete(message.guild.id);
