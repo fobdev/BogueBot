@@ -552,18 +552,18 @@ module.exports.play = async (bot, message, song, user_url) => {
 			this.queue.delete(message.guild.id);
 
 
-		let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
-		if (songcalled_voicechannel.length < 2) {
-			serverQueue.voiceChannel.leave();
-			this.queue.delete(message.guild.id);
-			console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
+		// let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
+		// if (songcalled_voicechannel.length < 2) {
+		// 	serverQueue.voiceChannel.leave();
+		// 	this.queue.delete(message.guild.id);
+		// 	console.log(`[STREAM] Stream from ${serverQueue.guildname} has finished.`);
 
-			const helpfile = require('../bot/help.js');
-			console.log('[BOT LEFT]: There is no one in voice channel.');
-			return message.channel.send(new Discord.MessageEmbed()
-				.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
-				.setColor('#FFAA00'));
-		}
+		// 	const helpfile = require('../bot/help.js');
+		// 	console.log('[BOT LEFT]: There is no one in voice channel.');
+		// 	return message.channel.send(new Discord.MessageEmbed()
+		// 		.setDescription(`Não tem ninguém em **${serverQueue.voiceChannel}**, saindo do canal de voz.`, "Use ``" + `${prefix}${helpfile.help.name} ${module.exports.help.name}` + "`` para ajuda.")
+		// 		.setColor('#FFAA00'));
+		// }
 
 		if (serverQueue.songs.length < 1) {
 			await serverQueue.streamdispatcher.destroy();
