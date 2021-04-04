@@ -577,12 +577,13 @@ module.exports.play = async (bot, message, song, user_url) => {
 		}
 	})
 
+
+	serverQueue.streamdispatcher.on('newSession', async () => {
+		console.log('session changed');
+	})
+
+
 	serverQueue.streamdispatcher.on('speaking', async (isSpeaking) => {
-		if (songcalled_voicechannel.newSession)
-			console.log('session changed');
-
-
-
 		// if (!isSpeaking)
 		// 	if (serverQueue.songs.length > 0) {
 		// 		this.play(bot, message, serverQueue.songs[0], null);
@@ -592,7 +593,6 @@ module.exports.play = async (bot, message, song, user_url) => {
 		// 	this.queue.delete(message.guild.id);
 
 		// let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
-
 		// removed functionality due to bugs: require a current channel verification if the bot is moved
 
 		// if (songcalled_voicechannel.length < 2) {
