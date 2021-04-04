@@ -551,6 +551,8 @@ module.exports.play = async (bot, message, song, user_url) => {
 		} else
 			this.queue.delete(message.guild.id);
 
+
+		let songcalled_voicechannel = serverQueue.voiceChannel.members.array();
 		if (songcalled_voicechannel.length < 2) {
 			serverQueue.voiceChannel.leave();
 			this.queue.delete(message.guild.id);
