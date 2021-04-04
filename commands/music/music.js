@@ -544,7 +544,7 @@ module.exports.play = async (bot, message, song, user_url) => {
 		message.channel.send(musicEmbed);
 
 
-	serverQueue.streamdispatcher.on('start', () => {
+	serverQueue.streamdispatcher.on('start', async () => {
 		if (serverQueue.songs.length > 0) {
 			this.play(bot, message, serverQueue.songs[0], null);
 			serverQueue.songs.shift();
