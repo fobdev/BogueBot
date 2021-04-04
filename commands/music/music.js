@@ -39,12 +39,14 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 //		available at: github.com/fobenga 		//
 //////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
-	console.log(">Attempt to use music command");
-	message.channel.send(new Discord.MessageEmbed()
-		.setTitle("Manutenção da API")
-		.setDescription("O comando de musica está em manutenção no momento, tente novamente mais tarde.")
-		.setColor("#FFFF00"));
-	return;
+	if (message.author.id != '244270921286811648') {
+		console.log(">Attempt to use music command");
+		message.channel.send(new Discord.MessageEmbed()
+			.setTitle("Manutenção da API")
+			.setDescription("O comando de música está indisponível no momento.")
+			.setColor("#FFFF00"));
+		return;
+	}
 
 	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
 
