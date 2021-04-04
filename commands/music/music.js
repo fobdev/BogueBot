@@ -578,6 +578,11 @@ module.exports.play = async (bot, message, song, user_url) => {
 	})
 
 	serverQueue.streamdispatcher.on('speaking', async (isSpeaking) => {
+		if (songcalled_voicechannel.newSession)
+			console.log('session changed');
+
+
+
 		// if (!isSpeaking)
 		// 	if (serverQueue.songs.length > 0) {
 		// 		this.play(bot, message, serverQueue.songs[0], null);
