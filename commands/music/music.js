@@ -4,7 +4,7 @@ const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const fs = require('fs');
 const help_file = require('../bot/help.js');
-const youtube = new YouTubeAPI(process.env.youtube_key);
+const youtube = new YouTubeAPI(`AIzaSyDIKUD2WatP-lZw5M0HCJ5oULlf5vmmdcI`);
 
 module.exports.main = require('../../BogueBot.js');
 module.exports.queue = new Map();
@@ -39,12 +39,12 @@ fs.readdir('commands/music/subcommands/', (e, files) => {
 //		available at: github.com/fobenga 		//
 //////////////////////////////////////////////////
 module.exports.run = async (bot, message, args) => {
-	// console.log(">Attempt to use music command");
-	// message.channel.send(new Discord.MessageEmbed()
-	// 	.setTitle("Manutenção da API")
-	// 	.setDescription("O comando de música está indisponível no momento.")
-	// 	.setColor("#FF0000"));
-	// return;
+	console.log(">Attempt to use music command");
+	message.channel.send(new Discord.MessageEmbed()
+		.setTitle("Manutenção da API")
+		.setDescription("O comando de musica está em manutenção no momento, tente novamente mais tarde.")
+		.setColor("#FFFF00"));
+	return;
 
 	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
 
