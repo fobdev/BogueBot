@@ -99,7 +99,7 @@ function status_updater() {
   const invitefile = require("./commands/bot/invite.js");
 
   bot.user.setActivity(
-    `${botconfig.prefix}${helpfile.help.name} | >music | >prefix | >invite` +
+    `${botconfig.prefix}${helpfile.help.name}` +
     ` | ${numeral(members_reached).format()} membros | ${cmd_counter} ${cmd_plural}`, {
       type: "PLAYING"
     }
@@ -288,7 +288,7 @@ bot.on("message", async message => {
       console.log(
         `\nUser [${message.author.username}] sent [${message}]\nserver: [${
           message.guild.name
-        }]\nchannel: #${message.channel.name}`
+        }] [${prefix}]\nchannel: #${message.channel.name}`
       );
       try {
         command_file.run(bot, message, args);
