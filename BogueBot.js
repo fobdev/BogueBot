@@ -229,6 +229,8 @@ bot.on("message", async (message) => {
     message.guild.id,
   ]);
 
+  console.log(`current state of prefix: ${prefix}`);
+  
   let messageArray = message.content.split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
