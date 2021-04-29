@@ -4,17 +4,17 @@ const fs = require("fs");
 const numeral = require("numeral");
 let cmd_counter = 0;
 
-const SQL = require('pg');
+const SQL = require("pg");
 module.exports.db = new SQL.Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
-  }
-})
+    rejectUnauthorized: false,
+  },
+});
 this.db.connect();
 
 const bot = new Discord.Client({
-  disableEveryone: true
+  disableEveryone: true,
 });
 
 bot.commands = new Discord.Collection();
@@ -29,11 +29,11 @@ function cmdload(folder) {
         `\n=====\nThe directory ${path.toLowerCase()} does not exist.\n=====`
       );
 
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
+    let jsfile = files.filter((f) => f.split(".").pop() === "js");
     if (jsfile.length < 1) throw new Error("Could not find commands.");
 
     console.log(`\n=== Loading ${type.toLowerCase()} ===`);
-    jsfile.forEach(f => {
+    jsfile.forEach((f) => {
       let props = require(path + f);
       console.log(`[FILE LOAD SUCESS]: ${f}`);
 
@@ -62,7 +62,9 @@ function servers_show() {
   let members_reached = 0;
   let overload_count = 0;
   console.log("--------------------------------------------");
-  console.log(`Connected to [${current_servers.length}] servers.\nServer List:`);
+  console.log(
+    `Connected to [${current_servers.length}] servers.\nServer List:`
+  );
 
   // Get the name of all the servers
   for (let i = 0; i < current_servers.length; i++) {
@@ -70,10 +72,12 @@ function servers_show() {
     if (i < 9) leftzero += "0";
     members_reached += current_servers[i].memberCount;
 
-    let logstring = `${leftzero}${i + 1} - [${current_servers[i]}] [${current_servers[i].memberCount} members]`;
+    let logstring = `${leftzero}${i + 1} - [${current_servers[i]}] [${
+      current_servers[i].memberCount
+    } members]`;
 
     if (current_servers[i].memberCount >= 10000) {
-      logstring += ' (user overload)';
+      logstring += " (user overload)";
       overload_count += current_servers[i].memberCount;
     }
 
@@ -81,7 +85,11 @@ function servers_show() {
   }
 
   console.log("--------------------------------------------");
-  console.log(`A total of [${members_reached}] users reached | [${members_reached - overload_count}] with non-overload guilds (below 10k users).`);
+  console.log(
+    `A total of [${members_reached}] users reached | [${
+      members_reached - overload_count
+    }] with non-overload guilds (below 10k users).`
+  );
   console.log("--------------------------------------------");
 }
 
@@ -100,8 +108,11 @@ function status_updater() {
 
   bot.user.setActivity(
     `${botconfig.prefix}${helpfile.help.name}` +
-    ` | ${numeral(members_reached).format()} membros | ${cmd_counter} ${cmd_plural}`, {
-      type: "PLAYING"
+      ` | ${numeral(
+        members_reached
+      ).format()} membros | ${cmd_counter} ${cmd_plural}`,
+    {
+      type: "PLAYING",
     }
   );
 }
@@ -114,15 +125,20 @@ bot.on("ready", async () => {
   return;
 });
 
-bot.on("guildCreate", guild => {
+bot.on("guildCreate", (guild) => {
   // add id and default prefix to database
   try {
-    db.query('INSERT INTO guild(id, prefix) VALUES ($1, $2);', [guild.id, prefix])
-      .then(() => console.log(`joined guild: insert ${guild.id} into db with default prefix`));
+    db.query("INSERT INTO guild(id, prefix) VALUES ($1, $2);", [
+      guild.id,
+      prefix,
+    ]).then(() =>
+      console.log(
+        `joined guild: insert ${guild.id} into db with default prefix`
+      )
+    );
   } catch (e) {
     console.log(`${e}: JOIN error in database from guild ${guild.id}`);
   }
-
 
   // Get Fobenga [User] Object
   let fobenga;
@@ -140,26 +156,22 @@ bot.on("guildCreate", guild => {
     )
     .addBlankField()
     .setDescription(
-      `**${botconfig.prefix}${
-        help_file.help.name
-      }** para todas os comandos disponíveis.\n`
+      `**${botconfig.prefix}${help_file.help.name}** para todas os comandos disponíveis.\n`
     )
     .addField(
       `Use o prefixo '${botconfig.prefix}' para se comunicar comigo.`,
-      `**${botconfig.prefix}${
-        music_file.help.name
-      }** para usar os comandos de música\n` +
-      `Ou **${botconfig.prefix}${help_file.help.name} ${
-          music_file.help.name
-        }** para ajuda sobre os comandos de música.`
+      `**${botconfig.prefix}${music_file.help.name}** para usar os comandos de música\n` +
+        `Ou **${botconfig.prefix}${help_file.help.name} ${music_file.help.name}** para ajuda sobre os comandos de música.`
     )
     .addBlankField()
-    .setFooter("Você é um administrador deste servidor, por isso recebeu esta mesagem. \n" +
-      `Bot criado por ${fobenga.tag}, em `)
+    .setFooter(
+      "Você é um administrador deste servidor, por isso recebeu esta mesagem. \n" +
+        `Bot criado por ${fobenga.tag}, em `
+    )
     .setTimestamp(bot.user.createdAt);
 
-  const bots_channel = guild.channels.cache.find(ch => ch.name === "bots");
-  const music_channel = guild.channels.cache.find(ch => ch.name === "music");
+  const bots_channel = guild.channels.cache.find((ch) => ch.name === "bots");
+  const music_channel = guild.channels.cache.find((ch) => ch.name === "music");
 
   if (bots_channel && bots_channel.type === "text") {
     bots_channel.send(welcome_embed);
@@ -181,11 +193,12 @@ bot.on("guildCreate", guild => {
   status_updater();
 });
 
-bot.on("guildDelete", guild => {
+bot.on("guildDelete", (guild) => {
   // remove id from database
   try {
-    db.query('DELETE FROM guild WHERE id=$1;', [guild.id])
-      .then(() => console.log(`left guild: removed entry ${guild.id} from db`));
+    db.query("DELETE FROM guild WHERE id=$1;", [guild.id]).then(() =>
+      console.log(`left guild: removed entry ${guild.id} from db`)
+    );
   } catch (e) {
     console.log(`${e}: LEAVE error in database from guild ${guild.id}`);
   }
@@ -197,62 +210,141 @@ bot.on("guildDelete", guild => {
   );
 });
 
-bot.on("guildMemberRemove", member => {
+bot.on("guildMemberRemove", (member) => {
   const system_channel = member.guild.channels.cache.find(
-    ch => ch.id === member.guild.systemChannelID
+    (ch) => ch.id === member.guild.systemChannelID
   );
   if (system_channel) {
     if (member.guild.member(bot.user).hasPermission("ADMINISTRATOR")) {
       system_channel.send(`${member} (**${member.user.tag}**) saiu.`);
       console.log(
-        `[MEMBER LEAVE] member [${
-          member.user.username
-        }] leave message successfully sent to ${
-          member.guild.name
-        } system channel.`
+        `[MEMBER LEAVE] member [${member.user.username}] leave message successfully sent to ${member.guild.name} system channel.`
       );
     }
   }
 });
 
-bot.on("message", async message => {
-  let prefix = await (await this.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
+bot.on("message", async (message) => {
+  let prefix = await await this.db.query(
+    "SELECT prefix FROM guild WHERE id=$1",
+    [message.guild.id]
+  ).rows[0].prefix;
   let messageArray = message.content.split(" ");
   let args = messageArray.slice(1);
   let cmd = messageArray[0];
   let command_file = bot.commands.get(cmd.slice(prefix.length));
 
   let bogcheck = message.content.toLowerCase();
-  if (bogcheck.includes('bog') && !message.content.includes(prefix)) {
-    if (bogcheck.includes('bog') && bogcheck.includes('prefix')) {
+  if (bogcheck.includes("bog") && !message.content.includes(prefix)) {
+    if (bogcheck.includes("bog") && bogcheck.includes("prefix")) {
       return message.channel.send(`o prefixo desse servidor é ${prefix}`);
     } else {
       // randomizes a set of messages that the bot can send
-      let answers = ['iae', 'salve', 'tmj', 'oi', 'ói', 'o teufi', 'calvin', 'guegui', 'né', 'o boga',
-        'fala', 'bog', 'bila', 'José', 'TMJ', 'salve familha', 'valeu',
-        '?', '??w???', 'oxente', 'aaah vamo nessa!', 'fdp', 'oiiiii', 'me deixa em paz', 'mattos b',
-        'sauve', 'oq voce quer', 'me esquece', 'oie', 'kkkk', "puts.. '", 'n te conheco',
-        'chaaaama fio', 'bom dia', 'me deixa', 'oxe painho', 'pq', 'vixe kkkk',
-        'tamo juntó', 'vó', 'VÓ', 'porque', 'me deixa em paz?', 'bobó',
-        'qual a sua', 'kk', 'mae puta', 'oi gente', 'hum', 'obrigada', 'vlw', 'kk ah mas vou responder s', 'kkkkkk tmj', ':p', ':3', 'qual foi kk'
+      let answers = [
+        "iae",
+        "salve",
+        "tmj",
+        "oi",
+        "ói",
+        "o teufi",
+        "calvin",
+        "guegui",
+        "né",
+        "o boga",
+        "fala",
+        "bog",
+        "bila",
+        "José",
+        "TMJ",
+        "salve familha",
+        "valeu",
+        "?",
+        "??w???",
+        "oxente",
+        "aaah vamo nessa!",
+        "fdp",
+        "oiiiii",
+        "me deixa em paz",
+        "mattos b",
+        "sauve",
+        "oq voce quer",
+        "me esquece",
+        "oie",
+        "kkkk",
+        "puts.. '",
+        "n te conheco",
+        "chaaaama fio",
+        "bom dia",
+        "me deixa",
+        "oxe painho",
+        "pq",
+        "vixe kkkk",
+        "tamo juntó",
+        "vó",
+        "VÓ",
+        "porque",
+        "me deixa em paz?",
+        "bobó",
+        "qual a sua",
+        "kk",
+        "mae puta",
+        "oi gente",
+        "hum",
+        "obrigada",
+        "vlw",
+        "kk ah mas vou responder s",
+        "kkkkkk tmj",
+        ":p",
+        ":3",
+        "qual foi kk",
       ];
       let rng = Math.floor(Math.random() * answers.length);
-      console.log(`[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`);
+      console.log(
+        `[Passive Mention]: [${message.author.username}] said [${message.content}] @ [${message.guild.name}], bot: [${answers[rng]}].`
+      );
 
       return message.channel.send(answers[rng]);
     }
   }
 
-
-  if ((message.content === 'vó' || message.content === 'VÓ') && !message.author.bot) {
-    if (message.content === 'VÓ') {
-      let vocaps_ans = ['VÓ DE QUEM CARA PARA DE GRITAR', 'VÓ DE QUEM', 'COMO ASSIM VÓ', 'PQ TA GRITANDO VÓ CARA VÓ DE QUEM', 'VÓ'];
+  if (
+    (message.content === "vó" || message.content === "VÓ") &&
+    !message.author.bot
+  ) {
+    if (message.content === "VÓ") {
+      let vocaps_ans = [
+        "VÓ DE QUEM CARA PARA DE GRITAR",
+        "VÓ DE QUEM",
+        "COMO ASSIM VÓ",
+        "PQ TA GRITANDO VÓ CARA VÓ DE QUEM",
+        "VÓ",
+      ];
       let vocapsrng = Math.floor(Math.random() * vocaps_ans.length);
-      return message.channel.send(vocaps_ans[vocapsrng]).then(() => console.log(`[${message.author.username}] said >VÓ< at [${message.guild.name}]`));
+      return message.channel
+        .send(vocaps_ans[vocapsrng])
+        .then(() =>
+          console.log(
+            `[${message.author.username}] said >VÓ< at [${message.guild.name}]`
+          )
+        );
     } else {
-      let vo_ans = ['vó de quem cara', 'como assim vó cara, vó de quem', 'como assim vó', 'pq vó q q tem a ver uma vó', 'VÓ', 'vó', 'vò'];
+      let vo_ans = [
+        "vó de quem cara",
+        "como assim vó cara, vó de quem",
+        "como assim vó",
+        "pq vó q q tem a ver uma vó",
+        "VÓ",
+        "vó",
+        "vò",
+      ];
       let vorng = Math.floor(Math.random() * vo_ans.length);
-      return message.channel.send(vo_ans[vorng]).then(() => console.log(`[${message.author.username}] said >vó< at [${message.guild.name}]`));
+      return message.channel
+        .send(vo_ans[vorng])
+        .then(() =>
+          console.log(
+            `[${message.author.username}] said >vó< at [${message.guild.name}]`
+          )
+        );
     }
   }
 
@@ -267,28 +359,28 @@ bot.on("message", async message => {
       console.log(
         `[${message.author.username}] Direct Message: ${message.content}`
       );
-      return bot.generateInvite({
-        permissions: ['ADMINISTRATOR']
-      }).then(link => {
-        message.channel.send(
-          new Discord.MessageEmbed()
-          .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
-          .setDescription(
-            `Use esse convite para adiciona-lo ao seu servidor:
+      return bot
+        .generateInvite({
+          permissions: ["ADMINISTRATOR"],
+        })
+        .then((link) => {
+          message.channel.send(
+            new Discord.MessageEmbed()
+              .setTitle(`O ${bot.user.username} funciona apenas em servidores.`)
+              .setDescription(
+                `Use esse convite para adiciona-lo ao seu servidor:
                 **${link}**`
-          )
-          .setColor("#FFFFFF")
-        );
-      });
+              )
+              .setColor("#FFFFFF")
+          );
+        });
     }
   }
 
   if (cmd.slice(0, prefix.length) === prefix) {
     if (command_file) {
       console.log(
-        `\nUser [${message.author.username}] sent [${message}]\nserver: [${
-          message.guild.name
-        }] [${prefix}]\nchannel: #${message.channel.name}`
+        `\nUser [${message.author.username}] sent [${message}]\nserver: [${message.guild.name}] [${prefix}]\nchannel: #${message.channel.name}`
       );
       try {
         command_file.run(bot, message, args);
