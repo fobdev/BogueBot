@@ -1,4 +1,4 @@
-// Dependencies
+// dependencies
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
@@ -10,7 +10,7 @@ module.exports.main = require('../../BogueBot.js');
 module.exports.queue = new Map();
 const subcmd_map = new Discord.Collection();
 
-// Subcommands loader
+// subcommands loader
 fs.readdir('commands/music/subcommands/', (e, files) => {
 	if (e)
 		console.error(e)
@@ -48,6 +48,7 @@ module.exports.run = async (bot, message, args) => {
 		return;
 	}
 
+	// guild prefix loader
 	let prefix = await (await this.main.db.query('SELECT prefix FROM guild WHERE id=$1', [message.guild.id])).rows[0].prefix;
 
 	// Adds all the subcommands to a array to be verified later if it is a command or not.
@@ -56,12 +57,12 @@ module.exports.run = async (bot, message, args) => {
 		subcmd_arr.push(key);
 	})
 
+	// logs the amount of streaming services
 	let servers_pl = 'server';
 	if (this.queue.size !== 1) servers_pl += 's';
 	if (this.queue.size > 0)
 		console.log(`[MUSIC]: Streaming to ${this.queue.size} ${servers_pl}`);
 
-	// quick subcommand for developers to verify the amount of servers using the streaming service
 	if (args[0] == 'stream-status') {
 		if (message.author.id == '244270921286811648') {
 			console.log(`[MUSIC]: Streaming to ${this.queue.size} ${servers_pl}`);
@@ -73,6 +74,7 @@ module.exports.run = async (bot, message, args) => {
 				.setColor('#FF0000'));
 	}
 
+	// runs a help command in case there is no argument
 	if (!args[0]) {
 		return message.channel.send(`${prefix}${help_file.help.name} ${this.help.name}`).then(msg => {
 			try {
@@ -144,6 +146,7 @@ module.exports.run = async (bot, message, args) => {
 			return message.channel.send(output_error).then(console.error(e));
 		}
 	} else {
+		// plays the inputted url if isn't a search nor a subcommand
 		try {
 			video = await youtube.getVideoByID(yt_parseURL(url));
 			await this.video_player(bot, message, video, serverQueue, voiceChannel, undefined, url);
