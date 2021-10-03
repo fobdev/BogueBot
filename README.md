@@ -1,7 +1,7 @@
-### DISCONTINUED --- 
-## the current version does not work with the new Discord.JS API
+# DISCONTINUED --- 
+### the current version does not work with the new Discord.JS API
 
-# BogueBot
+## BogueBot
 General porpuse discord bot made with discord.js
 
 Name/pic are just a meme - all funcions and commands works properly
