@@ -1,5 +1,5 @@
 # DISCONTINUED --- 
-### the current version does not work with the new Discord.JS API
+# [New client is here!](https://github.com/fobdev/Bogus)
 
 ## BogueBot
 General porpuse discord bot made with discord.js
